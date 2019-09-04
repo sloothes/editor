@@ -145,13 +145,12 @@
 
 				document.body.appendChild( player.dom );
                 player.dom.style.cssText = "position:absolute;top:0;left:0;";  // important!
-                
 
 				if ( json.project.editable === true ) {
 
 					var button = document.createElement( "div" );
 					button.id = "edit";
-					button.textContent = "EDIT";
+					button.textContent = "EDIT CODE";
 					button.addEventListener( "click", function ( event ) {
 
 						var url = location.href.split( "/" ).slice( 0, - 1 ).join( "/" );
