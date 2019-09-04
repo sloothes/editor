@@ -15,8 +15,16 @@
 
         <link rel="stylesheet" href="/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/bootbox-dialoges.css">
-        <link rel="stylesheet" href="/css/jquery.Jcrop.css">
+        <link rel="stylesheet" href="/css/side-panels.css">
         <link rel="stylesheet" href="/css/joystick.css">
+        <link rel="stylesheet" href="/css/spectrum.css">
+        <link rel="stylesheet" href="/css/colorpicker.css">
+        <link rel="stylesheet" href="/css/jquery-ui.css">
+        <link rel="stylesheet" href="/css/alerts.css">
+        <link rel="stylesheet" href="/css/panel-ui.css">
+        <link rel="stylesheet" href="/css/photoswipe.css">
+        <link rel="stylesheet" href="/css/photoswipe/default-skin.css">
+
 
 		<style>
 
@@ -54,11 +62,19 @@
 
 		</style>
 
+        <script>var debugMode = true;</script>
+        <script src="/socketcluster.js"></script>
+        <script src="/sc-codec-min-bin.js"></script>
+
         <script src="/js/jquery.min.js"></script>
         <script src="/js/jquery-ui.js"></script>
         <script src="/js/jquery.Jcrop.js"></script>
         <script src="/js/bootbox.min.js"></script>
         <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/DeviceDetector.js"></script>
+        <script src="/js/hammer.js"></script>
+        <script src="/js/photoswipe.js"></script>
+        <script src="/js/photoswipe-ui-default.js"></script>
 
 	</head>
 
@@ -130,5 +146,57 @@
 			});
 
 		</script>
+
+        <section class="mbr-section" id="body-section">
+
+            <div  id="right-side" class="side-panel"style="top:0;">
+                <div id="right-side-pinbtn" title="click this to pin/unpin panel"></div>
+
+                <div id="right-side-content" style="overflow-x:hidden;">
+
+                    <div id="rightside-navpill-bar" class="side-holder" style="margin-bottom:20px;">
+
+                            <ul id="nav-pill-tabs" class="nav nav-tabs nav-pills" style="overflow-y:hidden;max-width:300px;">
+
+                                <li class role="presentation"><a href="#control-tab"  data-toggle="pill" class="pills right-pill right-pill-control">Control</a></li>
+                                <li class role="presentation"><a href="#outfit-tab"   data-toggle="pill" class="pills right-pill right-pill-outfit">Outfit</a></li>
+                                <li class role="presentation"><a href="#material-tab" data-toggle="pill" class="pills right-pill right-pill-material">Material</a></li>
+                                <li class role="presentation"><a href="#texture-tab"  data-toggle="pill" class="pills right-pill right-pill-texture">Texture</a></li>
+                                <li class role="presentation"><a href="#product-tab"  data-toggle="pill" class="pills right-pill right-pill-product">Product</a></li>
+                                <li class role="presentation"><a href="#download-uv"  data-toggle="pill" class="pills right-pill right-pill-uvs">UVs</a></li>
+
+                            </ul>
+
+                    </div>
+
+                    <div id="right-side-panel" class="tab-content">
+
+                        <div id="control-tab"  class="component-pane tab-pane fade in active"></div>
+                        <div id="outfit-tab"   class="component-pane tab-pane fade"></div>
+                        <div id="material-tab" class="component-pane tab-pane fade"></div>
+                        <div id="texture-tab"  class="component-pane tab-pane fade"></div>
+                        <div id="product-tab"  class="component-pane tab-pane fade"></div>
+                        <div id="download-uv"  class="component-pane tab-pane fade"></div>
+
+                        <div id="material-edit-tab" class="component-pane tab-pane fade"></div>
+                        <div id="material-select-tab" class="component-pane tab-pane fade"></div>
+                        <div id="login-tab" class="component-pane tab-pane fade"></div>
+
+                        <div id="product-edit-tab" class="component-pane tab-pane fade"></div>
+                        <div id="product-buy-tab" class="component-pane tab-pane fade"></div>
+                        <div id="helpers-tab" class="component-pane tab-pane fade"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="middle" id="dialog-panel">
+                <div id="dialog-container" style="max-width:350px;max-height:600px;"></div>
+            </div>
+
+        </section>
+
 	</body>
 </html>
