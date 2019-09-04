@@ -140,6 +140,8 @@
 				player.play();
 
 				document.body.appendChild( player.dom );
+                player.dom.style.cssText = "position:absolute;top:0;left:0;";  // important!
+                
 
 				if ( json.project.editable === true ) {
 
