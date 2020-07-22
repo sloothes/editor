@@ -54,7 +54,7 @@
 
 //	create-texture.js
 
-	(function(viewer,input,button,droplist,textures_entities){
+	(function(viewer,input,button,entity_droplist,textures_entities){
 
 		var interval;
 
@@ -95,6 +95,8 @@
 
 				
 
+			//	Enter edit mode.
+				callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = String(texture.id) );
 
 			});
 
@@ -116,7 +118,7 @@
 		null, // textureViewer,
 		TabUI.Texture.tab.querySelector("input#texture-file-input"), // input,
 		TabUI.Texture.tab.querySelector("div#texture-create-button"), // button,
-		TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // droplist.
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
 		textures_entities // entity_manager.
 	);
 
