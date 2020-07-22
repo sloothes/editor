@@ -356,6 +356,62 @@
 
 //	===================================================================================================================  //
 
+//	map-droplist-ui.js
+
+	(function( tab ){
+
+	//	Texture map droplist.
+	//	var tab = TabUI.Texture.tab;
+
+		var row = document.createElement("h3");
+		row.textContent = "select:";
+		row.style.cssText = "height:30px;"
+
+		var select = document.createElement("select");
+		select.id = "texture-map-droplist";
+		select.style.cssText = "width:170px;color:#000;float:right;"
+		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
+		+ "font-size:20px;margin-left:10px;margin-right:15px;";
+
+		var keys = ",";
+		keys += "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,"
+		keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+
+		keys.split(",").forEach(function( name ){
+			var option = document.createElement("option");
+			option.text = name;
+			option.value = name;
+			select.appendChild( option );
+		});
+
+		row.appendChild( select );
+		tab.appendChild( row );
+
+	})( TabUI.Texture.tab );
+
+//	replace-map-ui.js
+
+	(function( tab ){
+
+	//	Replace material map button.
+	//	var tab = TabUI.Texture.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:40px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "replace-map-button";
+		button.textContent = "Replace Material Map";
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Texture.tab );
+
+//	===================================================================================================================  //
+
 //	create-texture-ui.js
 
 	(function( tab ){
@@ -425,27 +481,6 @@
 		input.id = "image-file-input";
 		input.style.cssText = "display:none;";
 		button.appendChild( input );
-
-		row.appendChild( button );
-		tab.appendChild( row );
-
-	})( TabUI.Texture.tab );
-
-//	replace-map-ui.js
-
-	(function( tab ){
-
-	//	Replace material map button.
-	//	var tab = TabUI.Texture.tab;
-
-		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "replace-map-button";
-		button.textContent = "Replace Material Map";
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 
 		row.appendChild( button );
 		tab.appendChild( row );
