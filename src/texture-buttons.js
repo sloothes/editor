@@ -181,21 +181,22 @@
 
 //	save-texture.js
 
-	(function(database,save_button,entity_droplist){
+	(function(db,save_button,entity_droplist){
 
 		var Geometries, Materials, Textures, Images, Shapes;
-	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
 
-	//	Images = database.collection("images");
-	//	Textures = database.collection("textures");
-	//	Materials = database.collection("materials");
-	//	Geometries = database.collection("geometries");
+	//	Images = db.collection("images");
+	//	Textures = db.collection("textures");
+	//	Materials = db.collection("materials");
+	//	Geometries = db.collection("geometries");
+	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
 
 		watch( save_button, "onclick", function( property, event, value ){
 
+		//	if ( !db ) return;
 			var texture = getTextureByEntityId(); if ( !texture ) return;
-		//	Images = database.collection("images"); if ( !Images ) return;
-		//	Textures = database.collection("textures"); if ( !Textures ) return;
+		//	Images = db.collection("images"); if ( !Images ) return;
+		//	Textures = db.collection("textures"); if ( !Textures ) return;
 
 			var meta = { textures:{}, images:{} };
 			var json = texture.toJSON(meta); debugMode && console.log( meta );
@@ -216,7 +217,7 @@
 		});
 
 	})(
-		metaDB, // database,
+		null, // metaDB, // database,
 		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);
