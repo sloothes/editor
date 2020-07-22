@@ -248,7 +248,7 @@
 				//	insert.
 					else collection.insert( data, function(err){ 
 						if (err) throw err;
-						console.log( "image data saved!" );
+						console.log( "image inserted!" );
 					});
 
 				}).catch(function(err){
@@ -287,7 +287,7 @@
 				//	insert.
 					else collection.insert( data, function(err){ 
 						if (err) throw err;
-						console.log( "texture data saved!" );
+						console.log( "texture inserted!" );
 					});
 
 				}).catch(function(err){
