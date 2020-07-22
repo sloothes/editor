@@ -217,6 +217,7 @@
 								collection.update({_id:doc._id}, {$set:data}, function(err){
 									if (err) throw err; console.log("image updated!");
 								});
+								return true;
 							},
 
 							function(err){
@@ -255,6 +256,7 @@
 								collection.update({_id:doc._id}, {$set:data}, function(err){
 									if (err) throw err; console.log("texture updated!");
 								});
+								return true;
 							},
 
 							function(err){
@@ -273,7 +275,7 @@
 							console.error(err);
 						});
 
-					})( images[key] );
+					})( textures[key] );
 
 				}
 
