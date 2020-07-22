@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<title>ECS Editor (alpha 0.1.3)</title>
+
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<link rel="stylesheet" href="/css/joystick.css">
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/bootbox-dialoges.css">
+		<link rel="stylesheet" href="/css/jcrop.css">
+
+		<script src="/js/watch.js"></script>
+		<script src="/js/Objectid.js"></script>
+		<script src="/js/jquery.min.js"></script> 
+		<script src="/js/system.min.js"></script>
+		<script src="/js/signals.min.js"></script>
+		<script src="/js/inflate.min.js"></script>
+		<script src="/js/zangodb.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/hold-event.min.js"></script>
+		<script src="/js/jcrop.js"></script>
+
+		<style>
+
+			body {
+				margin: 0px;
+				font-size: 13px;
+				font-family: sans-serif;
+				background-repeat: repeat;
+				background-image: url("https://i.imgur.com/rnZZU0i.png") !important;
+				overflow: hidden;
+			}
+
+			#loading-bar {
+				width:100%;
+				height:100%;
+				top:0; left:0;
+				position:fixed;
+				display:flex;
+				align-items:center;
+				justify-content:center;
+			}
+
+			.middle > * {
+				top:0; 
+				left:0;
+				right:0;
+				bottom:0;
+				margin:auto;
+				position:absolute;
+			}
+
+			#joystick1 {
+				right: calc(40px + 370px);
+			}
+			
+			#jumpButton {
+				right: calc(105px + 370px);
+			}
+
+			.btn-matcap,
+			.btn-terrain {
+				padding:0;
+				float:left;
+				width:55px;
+				height:55px;
+				border:1px solid;
+				border-radius:4px;
+				margin-right:4px;
+				margin-bottom:4px;
+				display:inline-block;
+			}
+
+			.btn-matcap + .btn-matcap,
+			.btn-terrain + .btn-terrain {
+				margin-right:4px;
+			}
+
+		</style>
+	</head>
+
+	<body ontouchstart="">
+
+		<script src="/editor/js/TabUI.js"></script>
+
+		<script>
+			const debugMode = true;
+			const Signal = signals.Signal;
+			const RAD2DEG = 57.29577951308232;
+			const DEG2RAD = 0.017453292519943295;
+			document.body.appendChild( createSidePanel() );
+		</script>
+
+		<script src="/editor/js/three.js"></script>
+		<script src="/editor/js/MeshWalk.js"></script>
+		<script src="/editor/js/UVsDebug.js"></script>
+		<script src="/editor/js/FBXLoader.js"></script>
+		<script src="/editor/js/VirtualInput.js"></script>
+		<script src="/editor/js/KeyboardState.js"></script>
+		<script src="/editor/js/EditorControls.js"></script>
+		<script src="/editor/js/camera-controls.js"></script>
+		<script src="/editor/js/SubdivisionModifier.js"></script>
+		<script src="/editor/js/three-pathfinding.umd.js"></script>
+
+		<script src="/threejs/r96/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/GLTFExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/STLExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/OBJExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/ColladaExporter.js"></script>
+
+	<!-- Water.js -->
+
+		<script src="/editor/js/Ocean_fft.js"></script>
+		<script src="/editor/js/MirrorRenderer.js"></script>
+		<script src="/editor/js/WaterMaterial.js"></script>
+
+	<!-- Engine.js -->
+
+		<script src="/editor/core/helpers.js"></script>
+		<script src="/editor/core/keyboard.js"></script>
+		<script src="/editor/core/enviroment.js"></script>
+		<script src="/editor/core/localPlayer.js"></script>
+		<script src="/editor/core/cameraControls.js"></script>
+		<script src="/editor/core/keyboardState.js"></script>
+		<script src="/editor/core/keyInputControls.js"></script>
+		<script src="/editor/core/joystickControls.js"></script>
+
+	<!-- Editor.js -->
+
+		<script src="/editor/src/EntityManager.js"></script>
+		<script src="/editor/src/MaterialManager.js"></script>
+		<script src="/editor/src/TexturesManager.js"></script>
+		<script src="/editor/src/UndoArray.js"></script>
+		<script src="/editor/src/editor-meta.js"></script>
+		<script src="/editor/src/editor-tab-ui.js"></script>
+		<script src="/editor/src/geometry-tab-ui.js"></script>
+		<script src="/editor/src/material-tab-ui.js"></script>
+		<script src="/editor/src/textures-tab-ui.js"></script>
+		<script src="/editor/src/skydome-tab-ui.js"></script>
+		<script src="/editor/src/watchers-call-ui.js"></script>
+		<script src="/editor/src/entities-helpers.js"></script>
+		<script src="/editor/src/TextureEditor.js"></script>
+		<script src="/editor/src/MaterialEditor.js"></script>
+		<script src="/editor/src/Object3DEditor.js"></script>
+		<script src="/editor/src/RigidObjects.js"></script>
+		<script src="/editor/src/editor-droplists.js"></script>
+		<script src="/editor/src/edges-helper.js"></script>
+		<script src="/editor/src/octree-helpers.js"></script>
+		<script src="/editor/src/geometry-buttons.js"></script>
+		<script src="/editor/src/geometry-inputs.js"></script>
+		<script src="/editor/src/editor-buttons.js"></script>
+		<script src="/editor/src/rigid-objects-buttons.js"></script>
+		<script src="/editor/src/editor-key-inputs.js"></script>
+		<script src="/editor/src/editor-mouse-inputs.js"></script>
+		<script src="/editor/src/editor-manager.js"></script>
+		<script src="/editor/src/editor-systems.js"></script>
+		<script src="/editor/src/material-droplists.js"></script>
+		<script src="/editor/src/material-manager.js"></script>
+		<script src="/editor/src/material-buttons.js"></script>
+		<script src="/editor/src/material-key-inputs.js"></script>
+		<script src="/editor/src/material-mouse-inputs.js"></script>
+		<script src="/editor/src/texture-droplists.js"></script>
+		<script src="/editor/src/texture-manager.js"></script>
+		<script src="/editor/src/texture-buttons.js"></script>
+		<script src="/editor/src/texture-key-inputs.js"></script>
+		<script src="/editor/src/texture-mouse-inputs.js"></script>
+
+		<script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</script>
+
+		<script>
+
+		/*
+
+		//	Geometry bounding sphere center helper.
+
+			const centerhelper = (function(){
+
+				var object = new THREE.Object3D(); // helper.
+				var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
+
+			//	cycle.
+
+				(function(){
+					var cycleGeometry = new THREE.CircleGeometry(5,32).rotateX(-Math.PI/2);
+					var geometry = new THREE.EdgesGeometry( cycleGeometry );
+					var segments = new THREE.LineSegments( geometry, material );
+					object.add( segments );
+				})();
+
+			//	haircross.
+
+				(function(){
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( -10, 0, 0 ),
+						new THREE.Vector3(  10, 0, 0 )
+					);
+					var segments = new THREE.LineSegments( geometry, material );
+					object.add( segments );
+				})();
+
+				(function(){
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( 0, 0, -10 ),
+						new THREE.Vector3( 0, 0,  10 )
+					);
+					var segments = new THREE.LineSegments( geometry, material );
+					object.add( segments );
+				})();
+
+				return object;
+			})();
+
+		*/
+
+		</script>
+
+		<script>
+
+		//	Background.
+
+			(function(scene,textures_entities){
+
+				if (!scene || Number(THREE.REVISION) < 78) return;
+
+				var urls = [
+					"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
+					"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
+					"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
+					"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
+					"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
+					"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
+				];
+
+				var loader = new THREE.CubeTextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				loader.load( urls, function(texture){
+					scene.background = texture;
+					scene.background.needsUpdate = true;
+					textures_entities && textures_entities.add(texture);
+				});
+
+			})( scene, textures_entities );
+
+		</script>
+
+		<script>
+
+		//  Skydome.
+
+			const skydome = (function(scene,entities,material_entities,textures_entities){
+
+				var loader = new THREE.TextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				var geometry = new THREE.SphereGeometry( 2000, 64, 32 );
+				var texture = loader.load( "https://i.imgur.com/IMVEV3T.jpg" );
+				texture.wrapS = texture.wrapT = 1000; texture.name="skydome";
+				var material = new THREE.MeshBasicMaterial({
+					map:texture,transparent:false,opacity:1,side:1,
+				}); var dome = new THREE.Mesh( geometry, material );
+				dome.scale.set(0.10,0.08,0.10); dome.name = "skydome";
+				scene.add(dome); entities && entities.add(dome);
+				textures_entities && textures_entities.add(texture);
+				material_entities && material_entities.add(material);
+				return dome;
+
+			})(scene, entities, material_entities, textures_entities);
+
+		</script>
+
+		<script>
+
+		//  Water.
+
+			const water = (function(renderer,camera,scene,light,textures_entities){
+
+				var waterNormals = loadTexture("https://i.imgur.com/gd4Gr7Q.png");
+				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				textures_entities && textures_entities.add(waterNormals);
+
+			//  the water effect.
+				return new THREE.Water(renderer, camera, scene, {
+					textureWidth:256,  textureHeight:256,
+					waterNormals:waterNormals, alpha:0.9,
+					sunDirection:light.position.normalize(),
+					sunColor:0xffffff,  waterColor:0x001e0f,
+					betaVersion:0, side:2,
+				});
+
+				function loadTexture( url, mapping) {
+					var loader = new THREE.TextureLoader();
+					loader.setCrossOrigin( "anonymous" );
+					var texture = loader.load( url );
+					if ( mapping ) texture.mapping = mapping;
+					return texture;
+				}
+
+			})( renderer, camera, scene, cameraLight, textures_entities );
+
+			const watermirror = (function( scene,water,material_entities,entities ){
+
+				material_entities && material_entities.add(water.material);
+				var material = water.material; // entities && entities.add(water); 
+				var geometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
+				var mirror = new THREE.Mesh( geometry, material );
+				mirror.add(water); mirror.name = "water mirror";
+				mirror.rotation.x = -Math.PI/2; 
+				mirror.position.y = -0.01;
+				scene.add(mirror);
+
+				var clock = new THREE.Clock();
+				(function render(){
+					var dt = clock.getDelta();
+					requestFrameID = requestAnimationFrame( render );
+					water.material.uniforms.time.value += Math.max(dt, 1/60);
+					water.render();
+				})();
+
+				return mirror;
+
+			})( scene, water, material_entities, entities );
+
+		</script>
+
+		<script>
+
+			TabUI.Editor.role.classList.add("active");
+			TabUI.Editor.tab.classList.add("in","active");
+			groundHelper.visible = !groundHelper.visible; 
+
+			entities.add(ground);
+			entities.add(groundHelper);
+			entities.add(localPlayer.getObjectByName("playerhelper"));
+
+			cameraControls.setLatLon(5.128, 270.675);
+			localPlayer.controller.movementSpeed = 20;
+			localPlayer.controller.center.set(-85,2,-2);
+
+		</script>
+
+		<script>
+
+		//	deck 0.
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=110, h=0.5, d=60, x=-2, y=-h/2, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=100, h=0.5, d=50, x=-2, y=-0, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0_floor"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+/*
+		//	Water path.
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=2.5, h=0.5, d=200, x=-85, y=-h/2, z=100;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "water path"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+*/
+		</script>
+
+	</body>
+</html>

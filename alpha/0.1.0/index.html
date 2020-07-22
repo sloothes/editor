@@ -1,0 +1,2197 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<title>Editor Yatch (alpha 0.1)</title>
+
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<link rel="stylesheet" href="./css/joystick.css">
+		<link rel="stylesheet" href="./css/bootstrap.min.css">
+		<link rel="stylesheet" href="./css/bootbox-dialoges.css">
+		<link rel="stylesheet" href="./css/jcrop.css">
+
+		<script src="./js/watch.js"></script>
+		<script src="./js/Objectid.js"></script>
+		<script src="./js/jquery.min.js"></script> 
+		<script src="./js/system.min.js"></script>
+		<script src="./js/signals.min.js"></script>
+		<script src="./js/inflate.min.js"></script>
+		<script src="./js/zangodb.min.js"></script>
+		<script src="./js/bootstrap.min.js"></script>
+		<script src="./js/hold-event.min.js"></script>
+		<script src="./js/jcrop.js"></script>
+
+		<style>
+
+			body {
+				margin: 0px;
+				font-size: 13px;
+				font-family: sans-serif;
+				background-repeat: repeat;
+				background-image: url("https://i.imgur.com/rnZZU0i.png") !important;
+				overflow: hidden;
+			}
+
+			#loading-bar {
+				width:100%;
+				height:100%;
+				top:0; left:0;
+				position:fixed;
+				display:flex;
+				align-items:center;
+				justify-content:center;
+			}
+
+			.middle > * {
+				top:0; 
+				left:0;
+				right:0;
+				bottom:0;
+				margin:auto;
+				position:absolute;
+			}
+
+			#joystick1 {
+				right: calc(40px + 370px);
+			}
+			
+			#jumpButton {
+				right: calc(105px + 370px);
+			}
+
+			.btn-matcap,
+			.btn-terrain {
+				padding:0;
+				float:left;
+				width:55px;
+				height:55px;
+				border:1px solid;
+				border-radius:4px;
+				margin-right:4px;
+				margin-bottom:4px;
+				display:inline-block;
+			}
+
+			.btn-matcap + .btn-matcap,
+			.btn-terrain + .btn-terrain {
+				margin-right:4px;
+			}
+
+		</style>
+	</head>
+
+	<body ontouchstart="">
+
+		<script src="./js/TabUI.js"></script>
+
+		<script>
+			const debugMode = true;
+			const Signal = signals.Signal;
+			document.body.appendChild( createSidePanel() );
+		</script>
+
+		<script src="./js/three.js"></script>
+		<script src="./js/MeshWalk.js"></script>
+		<script src="./js/UVsDebug.js"></script>
+		<script src="./js/FBXLoader.js"></script>
+		<script src="./js/VirtualInput.js"></script>
+		<script src="./js/KeyboardState.js"></script>
+		<script src="./js/EditorControls.js"></script>
+		<script src="./js/camera-controls.js"></script>
+		<script src="./js/SubdivisionModifier.js"></script>
+		<script src="./js/three-pathfinding.umd.js"></script>
+
+		<script src="./water/Ocean_fft.js"></script>
+		<script src="./water/MirrorRenderer.js"></script>
+		<script src="./water/WaterMaterial.js"></script>
+
+		<script src="./core/helpers.js"></script>
+		<script src="./core/keyboard.js"></script>
+		<script src="./core/enviroment.js"></script>
+		<script src="./core/localPlayer.js"></script>
+		<script src="./core/cameraControls.js"></script>
+		<script src="./core/keyboardState.js"></script>
+		<script src="./core/keyInputControls.js"></script>
+		<script src="./core/joystickControls.js"></script>
+
+		<script src="./editor/EntityManager.js"></script>
+		<script src="./editor/MaterialManager.js"></script>
+		<script src="./editor/TexturesManager.js"></script>
+		<script src="./editor/UndoArray.js"></script>
+		<script	src="./editor/editor-tab-ui.js"></script>
+		<script	src="./editor/geometry-tab-ui.js"></script>
+		<script	src="./editor/material-tab-ui.js"></script>
+		<script	src="./editor/textures-tab-ui.js"></script>
+		<script src="./editor/entity-manager-helpers.js"></script>
+
+	<!-- script src="/yatch/editor/EditorTab.js"></script -->
+	<!-- script src="/yatch/editor/MaterialTab.js"></script -->
+	<!-- script src="/yatch/editor/TexturesTab.js"></script -->
+
+		<script>
+
+		//	input-watchers-call.js
+
+			(function(){
+
+				function onInputChangeWatchersCall( input ){
+
+					watch( input, "onchange", function( prop, event, value ){ 
+						debugMode && console.log({item:input,event:event,value:value}); // debug.
+					});
+
+					input.addEventListener( "change", function(){
+						this.blur(); callWatchers( this, "onchange", "change", this.value );
+					});
+
+				}
+
+			//	inputs.
+
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("input#editor-text-input") );             // text_input,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("input#editor-value-input") );            // value_input,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("input#texture-text-input") );           // text_input,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("input#texture-value-input") );          // value_input,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-text-input") );         // text_input,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-value-input") );        // value_input,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("input#editor-vector-x-input") );         // editor_vector_x,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("input#editor-vector-y-input") );         // editor_vector_y,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("input#editor-vector-z-input") );         // editor_vector_z,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("input#editor-vector-w-input") );         // editor_vector_w,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("input#texture-vector-x-input") );       // texture_vector_x,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("input#texture-vector-y-input") );       // texture_vector_y,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-vector-x-input") );     // material_vector_x,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-vector-y-input") );     // material_vector_y,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-color-r-input") );      // material_color_r,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-color-g-input") );      // material_color_g,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("input#material-color-b-input") );      // material_color_b,
+
+			//	selects.
+
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("select#editor-key-droplist") );          // key_droplist,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("select#editor-vector-droplist") );       // vector_droplist,
+				onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") );     // entity_droplist,
+				onInputChangeWatchersCall( TabUI.Geometry.tab.querySelector("select#geometry-type-droplist") );     // type_droplist,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-map-droplist") );      // map_droplist,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-keys-droplist") );     // keys_droplist,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-type-droplist") );     // type_droplist,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-color-droplist") );    // color_droplist,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-vector-droplist") );   // vector_droplist,
+				onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-entities-droplist") ); // entity_droplist,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#texture-key-droplist") );        // key_droplist,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#texture-vector-droplist") );     // vector_droplist,
+				onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#textures-entities-droplist") );  // entity_droplist,
+
+			})();
+
+		//	mouse-watchers-call.js
+
+			(function(entity_droplist,geometry_type,material_type,textures_droplist,material_droplist){
+
+				function onMouseClickWatchersCall( button, droplist ){
+
+					var interval;
+
+					watch( button, "onclick", function( prop, event, value ){ 
+						debugMode && console.log({item:button,property:prop,event:event,value:value}); // debug.
+					});
+
+				//	Call watchers.
+
+					button.addEventListener( "click", function(){ 
+						clearTimeout( interval );
+						interval = setTimeout(function(button){
+							callWatchers( button, "onclick", "click", droplist.value );
+						}, 250, this); 
+					});
+				}
+
+			//	editor-tab.
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-add-button"), entity_droplist );         // rigid_add,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-exit-mode"), entity_droplist );         // exit_mode,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-reset-button"), entity_droplist );      // vector_reset,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#matrix-needs-update"), entity_droplist );      // needs_update,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-remove-button"), entity_droplist );      // rigid_remove,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-value-increase"), material_droplist );   // increase,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-value-decrease"), material_droplist );   // decrease,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-x-increase"), entity_droplist );  // increase_x,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-y-increase"), entity_droplist );  // increase_y,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-z-increase"), entity_droplist );  // increase_z,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-w-increase"), entity_droplist );  // increase_w,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-x-decrease"), entity_droplist );  // decrease_x,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-y-decrease"), entity_droplist );  // decrease_y,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-z-decrease"), entity_droplist );  // decrease_z,
+				onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-vector-w-decrease"), entity_droplist );  // decrease_w,
+			//	geometry-tab.
+				onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#octree-add-button"), entity_droplist );      // octree_add,
+				onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#octree-remove-button"), entity_droplist );   // octree_remove,
+				onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-create-button"), geometry_type );   // geometry_create,
+				onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-clone-button"), entity_droplist );  // geometry_clone,
+				onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-remove-button"), entity_droplist ); // geometry_remove,
+			//	material-tab.
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-exit-mode"), material_droplist );        // material_exit,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-needs-update"), material_droplist );     // needs_update,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#create-material-button"), material_type );        // material_create,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#clone-material-button"), material_droplist );     // material_clone,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#remove-material-button"), material_droplist );    // material_remove,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-value-increase"), material_droplist );    // increase,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-value-decrease"), material_droplist );    // decrease,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-color-r-increase"), material_droplist );  // increase_r,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-color-g-increase"), material_droplist );  // increase_g,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-color-b-increase"), material_droplist );  // increase_b,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-color-r-decrease"), material_droplist );  // decrease_r,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-color-g-decrease"), material_droplist );  // decrease_g,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-color-b-decrease"), material_droplist );  // decrease_b,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-vector-x-increase"), material_droplist ); // increase_x,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-vector-y-increase"), material_droplist ); // increase_y,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-vector-x-decrease"), material_droplist ); // decrease_x,
+				onMouseClickWatchersCall( TabUI.Material.tab.querySelector("li#material-vector-y-decrease"), material_droplist ); // decrease_y,
+			//	texture-tab.
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-exit-mode"), textures_droplist );        // texture_exit,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-needs-update"), textures_droplist );     // needs_update,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#create-texture-button"), textures_droplist );    // texture_create,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#clone-texture-button"), textures_droplist );     // texture_clone,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-image-button"), textures_droplist );     // image_replace,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#remove-texture-button"), textures_droplist );    // texture_remove,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("li#texture-value-increase"), textures_droplist );    // increase,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("li#texture-value-decrease"), textures_droplist );    // decrease,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("li#texture-vector-x-increase"), textures_droplist ); // increase_x,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("li#texture-vector-y-increase"), textures_droplist ); // increase_y,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("li#texture-vector-x-decrease"), textures_droplist ); // decrease_x,
+				onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("li#texture-vector-y-decrease"), textures_droplist ); // decrease_y,
+
+			})( 
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"),    // entity_droplist,
+				TabUI.Geometry.tab.querySelector("select#geometry-type-droplist"),    // geometry_type,
+				TabUI.Material.tab.querySelector("select#material-type-droplist"),    // material_type,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // textures_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist") // material_droplist,
+			);
+
+		</script>
+
+		<script>
+
+		//	ObjectEditor.js
+
+			const RAD2DEG = 57.29577951308232;
+			const DEG2RAD = 0.017453292519943295;
+
+			function ObjectEditor(){
+				var object = new THREE.Object3D();
+				Object.setPrototypeOf( object, ObjectEditor.prototype );
+				return object; // important!
+			}
+
+			ObjectEditor.prototype = Object.create(THREE.Object3D.prototype); // important!
+
+			ObjectEditor.prototype.reset = function(){ 
+
+				var editor = this;
+				editor.copy( new THREE.Object3D() );
+				editor.uuid = THREE.Math.generateUUID();
+				editor.name = "object editor";
+			};
+
+			ObjectEditor.prototype.update = function( value ){ 
+
+			//	Copies the values of the target object3D of
+			//	scene. Does not updates the target object3D.
+			//	dependences: entities {scene},
+			//	param: a object3D id {string or number}.
+
+				var editor = this;
+
+			//	Reset editor.
+				editor.reset();
+
+			//	Get new object.
+				var object = getObjectByEntityId( value ); 
+				var isEditing = !!object; // boolean!
+
+			//	Update editor (copy).
+				object && editor.copy( object );
+
+			//	uuid.
+				if ( object ) editor.uuid = object.uuid; 
+				else editor.uuid = THREE.Math.generateUUID();
+
+			//	return boolean.
+			//	console.log("editor isEditing:", isEditing);
+				return isEditing; // boolean, important!
+
+			};
+
+			ObjectEditor.prototype.edit = function( value ){ 
+
+				var entity_droplist = document.querySelector("select#editor-entities-droplist");
+				entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = value );
+
+			};
+
+			ObjectEditor.prototype.exit = function(){ this.prototype.edit.call( this, "" ); };
+
+			const objectEditor = new ObjectEditor();
+		//	Note: When editor is not added in scene
+		//	doesn't update matrix/matrixWorld json.
+		//	When is added in scene updates matrixes.
+			scene.add( objectEditor ); // important!
+
+		</script>
+
+		<script>
+
+		//	rigid-object-helpers.js
+
+		//	CameraControls rigid objects,
+		//	keeps camera controls rigid objects on edit mode.
+		//	TODO: extends from Array class.
+
+			function RigidObjects(){
+				var array = new Array(0);
+				Object.setPrototypeOf( array, RigidObjects.prototype );
+				return array; // important!
+			}
+
+			RigidObjects.prototype = Object.create(Array.prototype);
+
+			RigidObjects.prototype.add = function( value ){
+
+				var object = getObjectByEntityId( value );
+
+				if ( object && this.findIndex( function( item ){ 
+					return item.id === object.id;
+				}) > -1 ) return; // already exists in rigidObjects.
+
+				object && object.isMesh && this.push( object );
+
+			};
+
+			RigidObjects.prototype.remove = function( value ){
+
+				var index = this.findIndex( 
+					function( object ){
+						return object.id === parseInt( value );
+					});
+
+				if ( index < 0 ) return; // not found!
+
+				this.splice( index, 1 );
+
+			};
+
+			const rigidObjects = new RigidObjects();
+
+		</script>
+
+		<script>
+
+		//	key-droplist.js
+
+			(function(editor,text_input,input,key_droplist,entity_droplist){
+
+				watch( key_droplist, "onchange", function( prop, event, key ){
+					switch ( key ) {
+						case "visible":
+						case "castShadow":
+						case "renderOrder":
+						case "receiveShadow":
+						case "frustumCulled":
+						case "matrixAutoUpdate":
+							input.value = editor[ key ];
+						break;
+						default:
+							text_input.value = editor[ key ];
+						break;
+					}
+				});
+
+			})(
+				objectEditor, // editor,
+				TabUI.Editor.tab.querySelector("input#editor-text-input"), // text_input,
+				TabUI.Editor.tab.querySelector("input#editor-value-input"), // input,
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"), // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+		</script>
+
+		<script>
+
+		//	vector-droplist.js
+
+			(function(editor,vector_x,vector_y,vector_z,vector_w,vector_droplist,entity_droplist){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				watch( vector_droplist, "onchange", function( prop, event, key ){
+					switch ( key ) {
+						case "position":
+							vector_w.value = "";
+							vector_x.value = editor[key].x.toFixed(2);
+							vector_y.value = editor[key].y.toFixed(2);
+							vector_z.value = editor[key].z.toFixed(2);
+						break;
+						case "rotation":
+							vector_w.value = editor[key].order;
+							vector_x.value = RAD2DEG*editor[key].x.toFixed(1);
+							vector_y.value = RAD2DEG*editor[key].y.toFixed(1);
+							vector_z.value = RAD2DEG*editor[key].z.toFixed(1);
+						break;
+						case "scale":
+							vector_x.value = editor[key].x.toFixed(3);
+							vector_y.value = editor[key].y.toFixed(3);
+							vector_z.value = editor[key].z.toFixed(3);
+							vector_w.value = ((editor[key].x+editor[key].y+editor[key].z)/3).toFixed(3);
+						break;
+						case "quaternion":
+							vector_x.value = editor[key].x.toFixed(3);
+							vector_y.value = editor[key].y.toFixed(3);
+							vector_z.value = editor[key].z.toFixed(3);
+							vector_w.value = editor[key].w.toFixed(3);
+						break;
+					}
+
+				});
+
+			})(
+				objectEditor, // editor,
+				TabUI.Editor.tab.querySelector("input#editor-vector-x-input"),  // vector_x,
+				TabUI.Editor.tab.querySelector("input#editor-vector-y-input"),  // vector_y,
+				TabUI.Editor.tab.querySelector("input#editor-vector-z-input"),  // vector_z,
+				TabUI.Editor.tab.querySelector("input#editor-vector-w-input"),  // vector_w,
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"), // vector_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+		</script>
+
+		<script>
+
+		//	entity-droplist.js
+
+		//	Keep last editor entity droplist value.
+
+			var latestEntityId; // keeps track of last entity droplist value.
+
+			(function( entity_droplist ){
+
+				const current = {value:""};
+
+			//	when you change lastEntity.value you can get the old value.
+				watch( current, "value", function(property, action, newValue, oldValue ){ latestEntityId = oldValue; });
+
+			//	Update current value.
+				watch( entity_droplist, "onchange", function( property, event, value ){ current.value = value; });
+
+			})( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") ); // entity_droplist.
+
+
+		//	Update object editor.
+
+			(function(editor,cameraControls,rigidObjects,localPlayer,keyInputControls,key_droplist,vector_droplist,entity_droplist){
+
+			//	Exit from edit mode.
+
+				function resetLatestEntityValue(){
+					entity_droplist.value = "";
+				}
+
+				function enableKeyInputControls(){
+					keyInputControls.isDisabled = false;
+				}
+
+				function disableKeyInputControls(){
+					keyInputControls.isDisabled = true;
+				}
+
+				function takeCameraControls( object, offset ){
+					cameraControls.trackObject = object;
+					cameraControls.offset.y = offset || 0;
+				}
+
+				function enableCameraRigidObjects(){
+					while (rigidObjects.length) {
+						var object = rigidObjects.shift();
+						object.isMesh && cameraControls.rigidObjects.push( object ); // cleanup.
+					}
+				}
+
+				function disableCameraRigidObjects(){
+					while (cameraControls.rigidObjects.length) {
+						var object = cameraControls.rigidObjects.shift()
+						object.isMesh && rigidObjects.push( object ); // cleanup.
+					}
+				}
+
+				function exitFromEditMode(){
+					editor.reset(); // important!
+					resetLatestEntityValue();
+					enableKeyInputControls();
+					enableCameraRigidObjects();
+					takeCameraControls( localPlayer );
+					return;
+				}
+
+			//
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+
+					if ( editor.update( value ) ) {
+
+					//	switchToEditMode.
+
+						var object = getObjectByEntityId( value );
+						if ( !object ) return exitFromEditMode();
+
+					//	camera controls offset.
+						if ( object.geometry && object.geometry.boundingSphere ) {
+							var offset = object.geometry.boundingSphere.center;
+							cameraControls.offset.copy( offset ); 
+							cameraControls.offset.y *= 0.5;
+						}
+
+					//	Disable camera rigid objects.
+						disableCameraRigidObjects();
+
+					//	editor take camera controls.
+						cameraControls.trackObject = editor; // or object?
+
+					//	Disable key input controls.
+						disableKeyInputControls(); // important!
+
+					} else {
+
+						exitFromEditMode();
+
+					}
+
+				//	Call droplist watchers anyway.
+					setTimeout(function(){
+						callWatchers( key_droplist, "onchange", "change", key_droplist.value );
+						callWatchers( vector_droplist, "onchange", "change", vector_droplist.value );
+					});
+
+				});
+
+			})(
+				objectEditor, cameraControls, rigidObjects, localPlayer, keyInputControls, 
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"),     // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),  // vector_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+/*
+		//	Call key droplist watchers.
+
+			(function(key_droplist,entity_droplist){
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					callWatchers( key_droplist, "onchange", "change", key_droplist.value );
+				});
+
+			})(
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"),     // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+		//	Call vector droplist watchers.
+
+			(function(vector_droplist,entity_droplist){
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					callWatchers( vector_droplist, "onchange", "change", vector_droplist.value );
+				});
+
+			})(
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),  // vector_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+*/
+
+		//	Call material entity droplist.
+
+			(function(entity_droplist){
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+
+				//	Get material entities droplist.
+					var selector = "select#material-entities-droplist";
+					var material_droplist = document.querySelector(selector); if (!material_droplist) return;
+
+				//	Get material id.
+					var object = getObjectByEntityId( value ); if ( !object ) 
+						return callWatchers( material_droplist, "onchange", "change", material_droplist.value = "" );
+
+					var material = object.material; if ( !material ) 
+						return callWatchers( material_droplist, "onchange", "change", material_droplist.value = "" );
+
+					material && callWatchers( material_droplist, "onchange", "change", material_droplist.value = String(material.id) );
+				});
+
+			})( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") ); // entity_droplist.
+
+
+		//	editor-helpers.
+
+			function exitEditMode( entity_droplist ){
+
+				entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = "" );
+			}
+
+		</script>
+
+		<script>
+
+		//	edges-helper.js, (mouse input callers).
+
+			(function( editor,scene,tab,entity_droplist ){
+
+				var edgeshelper;
+
+				function destroyEdgesHelper(){
+					if ( !edgeshelper ) return;
+					scene.remove( edgeshelper ); 
+					edgeshelper.geometry.dispose();
+					edgeshelper.material.dispose();
+					edgeshelper = undefined;
+				}
+
+				function createEdgesHelper( object ){
+
+					if ( !object ) return;
+					if ( !object.isMesh ) return;
+					if ( !object.geometry ) return;
+
+					var geometry = new THREE.EdgesGeometry( object.geometry );
+					var material = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
+					var helper = new THREE.LineSegments( geometry, material );
+					helper.scale.copy( object.scale );       // important!
+					helper.position.copy( object.position ); // important!
+					helper.rotation.copy( object.rotation ); // important!
+					helper.name = object.name + ":edgeshelper";
+				//	debugMode && console.log({"edges helper": helper})
+					scene.add( helper );
+					edgeshelper = helper;
+				}
+
+			//	Create/Remove edges helper.
+
+				watch( entity_droplist, "onchange", function( prop, event, value ){
+
+				//	Remove old edges helper.
+					destroyEdgesHelper(); // remove old helper.
+
+				//	Get object.
+					var object = getObjectByEntityId( value );
+
+				//	Create new edges helper.
+					object && createEdgesHelper( object ); // add new helper.
+				});
+
+			//	on input change.
+
+				function onInputChangeWatcher( input ){
+
+					watch( input, "onchange", function( prop, event, value ){ 
+						if  ( !edgeshelper ) return;
+						edgeshelper.copy( editor );
+						edgeshelper.visible = true;
+					});
+
+				}
+
+			//	on mouse click.
+
+				function onMouseClickWatcher( button ){
+
+					watch( button, "onclick", function( prop, event ){ 
+						if  ( !edgeshelper ) return;
+						edgeshelper.copy( editor );
+						edgeshelper.visible = true;
+					});
+
+				}
+
+				onInputChangeWatcher( tab.querySelector("input#editor-vector-x-input") ); // vector_x,
+				onInputChangeWatcher( tab.querySelector("input#editor-vector-y-input") ); // vector_y,
+				onInputChangeWatcher( tab.querySelector("input#editor-vector-z-input") ); // vector_z,
+				onInputChangeWatcher( tab.querySelector("input#editor-vector-w-input") ); // vector_w,
+
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-x-increase") ); // increase_x,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-y-increase") ); // increase_y,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-z-increase") ); // increase_z,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-w-increase") ); // increase_w,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-x-decrease") ); // decrease_x,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-y-decrease") ); // decrease_y,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-z-decrease") ); // decrease_z,
+				onMouseClickWatcher( tab.querySelector("li#editor-vector-w-decrease") ); // decrease_w,
+
+			})( objectEditor, scene, TabUI.Editor.tab, // editor, scene, tab,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist")  // entity_droplist.
+			);
+
+		</script>
+
+		<script>
+
+		//	octree-helpers.js
+
+			function getObjectsByGeometry( uuid ){
+				return scene.children.filter(function(child){
+					return child.geometry && child.geometry.uuid === uuid; // same geometry.
+				}).filter(function( object ){
+					return !localPlayer.getObjectById(object.id); // not localPlayer child.
+				});
+			}
+
+			function addtoOctree( value ){
+
+			//	DevNote: You have to add all objects with the 
+			//	same geometry.uuid. 
+			//	READ explanation at removefromOctree comments.
+
+				var object = getObjectByEntityId( value );
+
+				if ( !object ) return;
+				if ( !object.isMesh ) return;
+				if ( !object.geometry ) return;
+				if ( !object.geometry.isGeometry ) return;
+				if ( localPlayer.getObjectById(object.id) ) return; // localPlayer child.
+
+			//	Import to octree.
+			//	octree.importThreeMesh( object );
+			//	Import all objects with same geometry to octree.
+			//	READ explanation at removefromOctree() comments.
+
+				var uuid = object.geometry.uuid;
+				var meshes = getObjectsByGeometry(uuid);
+				while ( meshes.length ) {
+					octree.importThreeMesh( meshes.shift() );
+				}
+
+				return object; // important!
+			}
+
+			function removefromOctree( value ){
+
+			//	Removes from octree all objects (geometry
+			//	faces) that have the same geometry.uuid.
+			//	DevNote: It would be better if was using
+			//	mesh.uuid and not geometry.uuid. (TODO).
+
+				var object = getObjectByEntityId( value );
+
+				if ( !object ) return;
+				if ( !object.isMesh ) return;
+				if ( !object.geometry ) return;
+				if ( !object.geometry.isGeometry ) return;
+
+			//	Remove from octree.
+			//	DevNote: removes all object's geometry 
+			//	faces that have same geometry.uuid.
+				var uuid = object.geometry.uuid;
+				uuid && octree.removeThreeMesh( uuid );
+
+				return object; // important!
+			}
+
+			function updateOctree( value ){
+				var object = removefromOctree( value );
+
+				if ( !object ) return;
+				if ( !object.isMesh ) return;
+				if ( !object.geometry ) return;
+				if ( !object.geometry.isGeometry ) return;
+				if ( localPlayer.getObjectById(object.id) ) return; // localPlayer child.
+
+			//	Import to octree. 
+			//	octree.importThreeMesh( object );
+			//	Use addtoOctree() to import to octree.
+			//	READ explanation at removefromOctree() comments.
+
+				addtoOctree( value ); 
+			}
+
+			function octreeIncludes( uuid ){
+
+				var result;
+
+				octree.nodes.forEach(function (nodeDepth) {
+					if ( result ) return;
+					nodeDepth.forEach(function (node) {
+						if ( result ) return;
+						node.trianglePool.forEach(function (face) {
+							if ( result ) return;
+							if (face.meshID === uuid) result = true;
+						});
+					});
+				});
+
+				return result;
+			}
+
+		</script>
+
+		<script>
+
+		//	geometry-create-button.js
+
+			(function(create_button,type_droplist,entity_droplist,material_manager,entity_manager,scene){
+
+				watch( create_button, "onclick", function( prop, event, type ){
+
+				//	Get type.
+					if ( type === "" || type === undefined ) return;
+
+				//	Create geometry.
+					var geometry = new THREE[ type ]();
+					if ( geometry === undefined ) return;
+
+				//	Init params based on type.
+					switch (type) {
+						case "PlaneGeometry":
+							geometry.translate(0, 0.5, 0);
+						break;
+					//	case "BoxGeometry":
+					//	case "ConeGeometry":
+					//	case "TorusGeometry":
+					//	case "SphereGeometry":
+					//	case "CylinderGeometry":
+					//	case "OctahedronGeometry":
+					//	case "DodecahedronGeometry":
+					//	case "IcosahedronGeometry":
+					//	case "TetrahedronGeometry":
+					//	case "TorusKnotGeometry":
+					//	case "CircleGeometry":
+					//	case "RingGeometry":
+					//	break;
+					}
+
+				//	Create mesh.
+					var material = new THREE.MeshLambertMaterial({side:2});
+					var mesh = new THREE.Mesh(geometry, material);
+					mesh.name = type.replace("Geometry","");
+					scene.add( mesh );
+
+				//	Add entities.
+					entity_manager && entity_manager.add( mesh );
+					material_manager && material_manager.add( material );
+
+				//	Enter edit mode.
+					entity_droplist.value = String(mesh.id);
+					callWatchers(entity_droplist, "onchange", "change", entity_droplist.value );
+				});
+
+			})(
+				TabUI.Geometry.tab.querySelector("div#geometry-create-button"),    // create_button,
+				TabUI.Geometry.tab.querySelector("select#geometry-type-droplist"), // type_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				material_entities, entities, scene  // material_manager, entity_manager, scene.
+			);
+
+		//	geometry-clone-button.js
+
+			(function(clone_button,entity_droplist,entity_manager,scene){
+
+				watch( clone_button, "onclick", function( prop, event, value ){
+
+					if ( value === undefined || value === "" ) return;
+
+				//	Get source.
+					var source = getObjectByEntityId( Number(value) ); // id.
+					if ( !(source && source.isMesh && source.geometry) ) return;
+
+				//	Clone source.
+					if ( source.isMesh && source.geometry ) {
+
+					//	clone.
+						var mesh = source.clone();
+
+					//	rename.
+						if ( source.name ) 
+							mesh.name = source.name.replace(/:clone/g,"") + ":clone";
+						else
+							mesh.name = mesh.type.replace(/Geometry/g,"") + ":clone";
+
+					//	translate.
+						mesh.position.y += 1; // (m)
+
+					//	add to scene.
+						scene.add( mesh );
+
+					//	add to entities.
+						entity_manager.add( mesh );
+
+					//	enter to edit mode.
+						entity_droplist.value = String(mesh.id);
+						callWatchers(entity_droplist, "onchange", "change", entity_droplist.value );
+					}
+
+				});
+
+			})(
+				TabUI.Geometry.tab.querySelector("div#geometry-clone-button"),     // clone_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				entities, scene // entity_manager, scene.
+			);
+
+		//	geometry-remove-button.js
+
+			(function(remove_button,entity_droplist,entity_manager,rigid_objects,octree,scene,octreeIncludes,exitEditMode){
+
+				watch( remove_button, "onclick", function( prop, event, value ){
+
+					if ( value === undefined || value === "" ) return;
+
+					var object = getObjectByEntityId( Number(value) ); 
+					debugMode && console.log("remove object:", object);
+					if ( !object ) return entity_droplist.value = "";
+
+				//	remove octree.
+					if ( object.isMesh && object.geometry ) (function(){
+						var uuid = object.geometry.uuid;
+						octreeIncludes( uuid ) && octree.removeThreeMesh( uuid );
+					})();
+
+				//	remove object.
+					object.parent && object.parent.remove( object );
+
+				//	remove entity and option.
+					entity_manager && entity_manager.remove( object );
+
+				//	Remove from camera rigid objects.
+					rigid_objects.remove( Number(value) ); // id.
+				//	removefromRigidObjects( Number(value) ); // id.
+
+				//	Exit edit mode.
+					exitEditMode( entity_droplist );
+				});
+
+			})(
+				TabUI.Geometry.tab.querySelector("div#geometry-remove-button"),    // remove_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				entities, rigidObjects, octree, scene, // entity_manager, rigidObjects, scene,
+				octreeIncludes, exitEditMode // function, function.
+			);
+
+		</script>
+
+		<script>
+
+		//	octree-add-button.js
+
+			(function(add_button,entity_droplist,localPlayer,octree,scene,exitEditMode){
+
+				watch( add_button, "onclick", function( prop, event, value ){
+
+				//	DevNote: You have to add all objects with the 
+				//	same geometry.uuid. 
+				//	READ explanation at removefromOctree comments.
+
+					var object = getObjectByEntityId( value );
+
+					if ( !object ) return;
+					if ( !object.isMesh ) return;
+					if ( !object.geometry ) return;
+					if ( !object.geometry.isGeometry ) return;
+					if ( localPlayer.getObjectById(object.id) ) return; // localPlayer child.
+
+				//	Import to octree.
+				//	octree.importThreeMesh( object );
+				//	Import all objects with same geometry to octree.
+				//	READ explanation at removefromOctree() comments.
+					var uuid = object.geometry.uuid;
+					var meshes = getObjectsByGeometry(uuid);
+					while ( meshes.length ) {
+						octree.importThreeMesh( meshes.shift() );
+					}
+
+				//	Exit edit mode.
+					exitEditMode( entity_droplist );
+				});
+
+			})(
+				TabUI.Geometry.tab.querySelector("div#octree-add-button"),         // add_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				localPlayer, octree, scene, exitEditMode // localPlayer, octree, scene, function.
+			);
+
+		//	octree-remove-button.js
+
+			(function(remove_button,entity_droplist,octree,scene,exitEditMode){
+
+				watch( remove_button, "onclick", function( prop, event, value ){
+
+				//	Removes from octree all objects (geometry
+				//	faces) that have the same geometry.uuid.
+				//	DevNote: It would be better if was using
+				//	mesh.uuid and not geometry.uuid. (TODO).
+
+					var object = getObjectByEntityId( value );
+
+					if ( !object ) return;
+					if ( !object.isMesh ) return;
+					if ( !object.geometry ) return;
+					if ( !object.geometry.isGeometry ) return;
+
+				//	Remove from octree.
+				//	DevNote: removes all object's geometry 
+				//	faces that have same geometry.uuid.
+					var uuid = object.geometry.uuid;
+					uuid && octree.removeThreeMesh( uuid );
+
+				//	Exit edit mode.
+					exitEditMode( entity_droplist );
+				});
+
+			})(
+				TabUI.Geometry.tab.querySelector("div#octree-remove-button"),      // remove_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				octree, scene, exitEditMode //  octree, scene, function.
+			);
+
+		</script>
+
+		<script>
+
+		//	exit-edit-mode.js
+
+			(function(exit_button,entity_droplist,exitEditMode){
+
+				watch( exit_button, "onclick", function( prop, event, value ){
+
+					 exitEditMode( entity_droplist );
+				});
+
+			})( 
+				TabUI.Editor.tab.querySelector("div#editor-exit-mode"), // exit_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist.
+				exitEditMode // function.
+			 ); 
+
+		</script>
+
+		<script>
+
+		//	rigid-objects-add-button.js
+
+			(function(add_button,entity_droplist,rigidObjects,exitEditMode){
+
+				watch( add_button, "onclick", function( prop, event, value ){
+
+					var object = getObjectByEntityId( value );
+
+					if ( object && rigidObjects.findIndex( function( item ){ 
+						return item.id === object.id;
+					}) > -1 ) return; // already exists in rigidObjects.
+					object && object.isMesh && rigidObjects.push( object );
+
+				//	Exit edit mode.
+					exitEditMode( entity_droplist );
+				});
+
+			})(
+				TabUI.Editor.tab.querySelector("div#rigid-add-button"), // clone_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				rigidObjects, exitEditMode // rigidObjects, function.
+			);
+
+		//	rigid-objects-remove-button.js
+
+			(function(remove_button,entity_droplist,rigidObjects,exitEditMode){
+
+				watch( remove_button, "onclick", function( prop, event, value ){
+
+					var object = getObjectByEntityId( value );
+					var index = rigidObjects.findIndex( 
+						function( object ){
+							return object.id === parseInt( value );
+						});
+					if ( index < 0 ) return; // important!
+					rigidObjects.splice( index, 1 );
+
+				//	Exit edit mode.
+					exitEditMode( entity_droplist );
+				});
+
+			})(
+				TabUI.Editor.tab.querySelector("div#rigid-remove-button"), // clone_button,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				rigidObjects, exitEditMode // rigidObjects, function.
+			);
+
+		</script>
+
+		<script>
+
+		//	key-inputs.js
+
+			(function( editor,text_input,value_input,key_droplist,entity_droplist,undo_button ){
+			//	var keys = "uuid,name,visible,castShadow,renderOrder,receiveShadow,frustumCulled,matrixAutoUpdate";
+
+				watch( text_input, "onchange", function( prop, event, value ){
+
+					var key = key_droplist.value;
+
+					switch( key ){
+						case "uuid":
+							return text_input.value = editor[key];
+						break;
+						case "name":
+							if ( !value ) return text_input.value = editor[key];
+							return editor[key] = value;
+						break;
+					}
+				});
+
+				watch( value_input, "onchange", function( prop, event, value ){
+
+					var key = key_droplist.value;
+
+					switch( key ){
+					//	number.
+						case "renderOrder":
+							return value_input.value = editor[key];
+						break;
+					//	boolean.
+						case "visible":
+						case "castShadow":
+						case "receiveShadow":
+						case "frustumCulled":
+						case "matrixAutoUpdate":
+							if ( value === "0") return editor[key] = false;
+							else if ( value === "1") return editor[key] = true;
+							else if ( value.toLowerCase() === "true") return editor[key] = true;
+							else if ( value.toLowerCase() === "false") return editor[key] = false;
+							return value_input.value = editor[key];
+						break;
+					}
+				});
+
+			})( objectEditor,                                                      // editor,
+				TabUI.Editor.tab.querySelector("input#editor-text-input"),         // text_input,
+				TabUI.Editor.tab.querySelector("input#editor-value-input"),        // value_input,
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"),      // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				TabUI.Editor.tab.querySelector("div#editor-undo-button")           // undo_button.
+			);
+
+		//	key-inputs.js
+
+			(function( editor,vector_x,vector_y,vector_z,vector_w,vector_droplist,undo_button ){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				var key; watch( vector_droplist, "onchange", function( prop, event, value ){ key = value; });
+
+				function onVectorKeyInput( editor,v,input,undo_button ){
+
+					watch( input, "onchange", function( prop, event, value ){
+
+						value = Number(value); // var key = vector_droplist.value; 
+						if ( value === "" ) return input.value = editor[key][v];
+						if ( isNaN(value) ) return input.value = editor[key][v];
+
+						switch ( key ) {
+							case "position":
+								return editor[key][v] = value;
+							break;
+							case "rotation":
+								return editor[key][v] = DEG2RAD*value;
+							break;
+							case "scale":
+								if ( !value ) return input.value = editor[key][v].toFixed(3); // avoid 0.
+								return editor[key][v] = value;
+							break;
+							case "quaternion":
+								return input.value = editor[key][v].toFixed(3);
+							break;
+						}
+
+					});
+				}
+
+			//	onVectorKeyInput( editor,"x",vector_x,vector_droplist,undo_button );
+			//	onVectorKeyInput( editor,"y",vector_y,vector_droplist,undo_button );
+			//	onVectorKeyInput( editor,"z",vector_z,vector_droplist,undo_button );
+
+				watch( vector_x, "onchange", function( prop, event, value ){
+
+					value = Number(value); // var key = vector_droplist.value; 
+					if ( value === "" ) return vector_x.value = editor[key].x; 
+					if ( isNaN(value) ) return vector_x.value = editor[key].x; 
+
+					switch ( key ) {
+						case "position":
+							return editor[key].x = value;
+						break;
+						case "rotation":
+							return editor[key].x = DEG2RAD*value;
+						break;
+						case "scale":
+							if ( !value ) return vector_x.value = editor[key].x.toFixed(3); // avoid 0.
+							return editor[key].x = value;
+						break;
+						case "quaternion":
+							return vector_x.value = editor[key].x.toFixed(3);
+						break;
+					}
+
+				});
+
+				watch( vector_y, "onchange", function( prop, event, value ){
+
+					value = Number(value); // var key = vector_droplist.value; 
+					if ( value === "" ) return vector_y.value = editor[key].y; 
+					if ( isNaN(value) ) return vector_y.value = editor[key].y; 
+
+					switch ( key ) {
+						case "position":
+							return editor[key].y = value;
+						break;
+						case "rotation":
+							return editor[key].y = DEG2RAD*value;
+						break;
+						case "scale":
+							if ( !value ) return vector_y.value = editor[key].y.toFixed(3); // avoid 0.
+							return editor[key].y = value;
+						break;
+						case "quaternion":
+							return vector_y.value = editor[key].y.toFixed(3);
+						break;
+					}
+
+				});
+
+				watch( vector_z, "onchange", function( prop, event, value ){
+
+					value = Number(value); // var key = vector_droplist.value; 
+					if ( value === "" ) return vector_z.value = editor[key].z; 
+					if ( isNaN(value) ) return vector_z.value = editor[key].z; 
+
+					switch ( key ) {
+						case "position":
+							return editor[key].z = value;
+						break;
+						case "rotation":
+							return editor[key].z = DEG2RAD*value;
+						break;
+						case "scale":
+							if ( !value ) return vector_z.value = editor[key].z.toFixed(3); // avoid 0.
+							return editor[key].z = value;
+						break;
+						case "quaternion":
+							return vector_z.value = editor[key].z.toFixed(3);
+						break;
+					}
+
+				});
+
+				watch( vector_w, "onchange", function( prop, event, value ){
+
+					value = Number(value); // var key = vector_droplist.value; 
+
+					switch ( key ) {
+						case "position":
+							return vector_w.value = "";
+						break;
+						case "rotation":
+							return vector_w.value = editor[key].order;
+						break;
+						case "scale":
+							return vector_w.value = ((editor[key].x+editor[key].y+editor[key].z)/3).toFixed(3);
+						break;
+						case "quaternion":
+							return vector_w.value = editor[key].w;
+						break;
+					}
+				});
+
+			})( objectEditor,                                                      // editor,
+				TabUI.Editor.tab.querySelector("input#editor-vector-x-input"),     // vector_x,
+				TabUI.Editor.tab.querySelector("input#editor-vector-y-input"),     // vector_y,
+				TabUI.Editor.tab.querySelector("input#editor-vector-z-input"),     // vector_z,
+				TabUI.Editor.tab.querySelector("input#editor-vector-w-input"),     // vector_w,
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),   // vector_droplist,
+				TabUI.Editor.tab.querySelector("div#editor-undo-button")           // undo_button.
+			);
+
+		</script>
+
+		<script>
+
+		//	click-inputs.js
+
+			(function( editor,increase,decrease,key_droplist,entity_droplist,undo_button ){
+
+				var key; watch( key_droplist, "onchange", function( prop, event, value ){ key = value; });
+
+				watch( increase, "onclick", function( prop, event, value ){
+
+				//	var key = key_droplist.value;
+
+					switch( key ){
+						case "uuid":
+							return editor[key] = THREE.Math.generateUUID();
+						break;
+					//	number.
+						case "renderOrder":
+							return editor[key] += 1;
+						break;
+					//	boolean.
+						case "visible":
+						case "castShadow":
+						case "receiveShadow":
+						case "frustumCulled":
+						case "matrixAutoUpdate":
+							return editor[key] = !editor[key];
+						break;
+					}
+				});
+
+				watch( decrease, "onclick", function( prop, event, value ){
+
+				//	var key = key_droplist.value;
+
+					switch( key ){
+						case "uuid":
+							return editor[key] = THREE.Math.generateUUID();
+						break;
+					//	number.
+						case "renderOrder":
+							return editor[key] -= 1;
+						break;
+					//	boolean.
+						case "visible":
+						case "castShadow":
+						case "receiveShadow":
+						case "frustumCulled":
+						case "matrixAutoUpdate":
+							return editor[key] = !editor[key];
+						break;
+					}
+				});
+
+
+			})( objectEditor,                                                      // editor,
+				TabUI.Editor.tab.querySelector("li#editor-value-increase"),        // increase,
+				TabUI.Editor.tab.querySelector("li#editor-value-decrease"),        // decrease,
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"),      // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				TabUI.Editor.tab.querySelector("div#editor-undo-button")           // undo_button.
+			);
+
+		</script>
+
+		<script>
+
+		//	mouse-inputs.js
+
+			(function( editor,vector_x,vector_y,vector_z,increase_x,increase_y,increase_z,decrease_x,decrease_y,decrease_z,vector_droplist,entity_droplist,undo_button ){
+
+				function onVectorMouseInput( editor,v,input,increase,decrease,vector_droplist,entity_droplist,undo_button ){
+
+					var state, interval, dt = 20;
+					var meta = {geometries:{},materials:{},textures:{},images:{},shapes:{}};
+
+					const RAD2DEG = 57.29577951308232;
+					const DEG2RAD = 0.017453292519943295;
+
+				//	keep first mousedown event, ignore next events.
+
+					function onfirstMouseDown(){
+						state = {}; // reset.
+						if ( entity_droplist.value === "" ) return;
+						var key = state.key = vector_droplist.value;
+						state.value = editor[key][v];
+						state.json = editor.toJSON( meta );
+						this.removeEventListener( "mousedown", onfirstMouseDown );
+						debugMode && console.log( {state:state,meta:meta} ); // debug!
+					};
+
+				//	on mouse down.
+
+					function onMouseDown(){ 
+
+						clearTimeout( interval ); // important!
+
+						if ( entity_droplist.value === "" ) return;
+
+						var button = this;
+
+						interval = setTimeout( function update() {
+
+							var key = vector_droplist.value;
+
+							switch ( key ) {
+								case "position":
+									var p = 2, step = 1/Math.pow(10,p); // min = -100, max = 100;
+									var value = Number(editor[ key ][v]); // get value from editor.
+									if ( button === increase ) value += step;
+									if ( button === decrease ) value -= step;
+									editor[ key ][v] = round(value,6);
+									interval = setTimeout( update, dt );
+								break;
+								case "rotation":
+									var p = 1, step = 1/Math.pow(10,p), min = -180, max = 180;
+									var value = RAD2DEG * Number(editor[ key ][v]); // get value from editor.
+									if ( button === increase ) value = THREE.Math.clamp( value+step, min, max );
+									if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max );
+									editor[ key ][v] = round(DEG2RAD*value,6);
+									interval = setTimeout( update, dt );
+								break;
+								case "scale":
+									var p = 3, step = 1/Math.pow(10,p); // min = -100, max = 100;
+									var value = Number(editor[ key ][v]); // get value from editor.
+									if ( button === increase ) value += step;
+									if ( button === decrease ) value -= step;
+									editor[ key ][v] = round(value,6); // editor manager updates input value.
+									interval = setTimeout( update, dt );
+								break;
+							}
+
+						}, 500);
+
+					}
+
+				//	add undo.
+
+					function addtoUndo( state,key,value ){
+						if ( state.key !== key ) return; if ( state.value === value ) return;
+						if ( state.json ) { var json = JSON.parse(JSON.stringify(state.json)); undo_button.undo.unshift(json); }
+						debugMode && console.log( "undo:", undo_button.undo.length, "redo:", undo_button.redo.length ); return;
+					}
+
+				//	on mouse click.
+
+					function onMouseClick(){
+
+						clearTimeout( interval ); // important!
+
+						if ( entity_droplist.value === "" ) return;
+
+						var button = this;
+						var key = vector_droplist.value;
+
+						switch ( key ) {
+							case "position":
+								var p = 2, step = 1/Math.pow(10,p); // min = -100, max = 100;
+								var value = Number(editor[ key ][v]); // get value from editor.
+								if ( button === increase ) value += step;
+								if ( button === decrease ) value -= step;
+								editor[ key ][v] = round(value,6); 
+								interval = setTimeout( function( state,key,value ){ 
+								//	try{ addtoUndo( state,key,value ); } catch(err){;}
+									button.addEventListener( "mousedown", onfirstMouseDown );
+								}, 250, state,key,value);
+							break;
+							case "rotation":
+								var p = 1, step = 1/Math.pow(10,p), min = -180, max = 180;
+								var value = RAD2DEG * Number(editor[ key ][v]); // get value from editor.
+								if ( button === increase ) value = THREE.Math.clamp( value+step, min, max );
+								if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max );
+								editor[ key ][v] = round(DEG2RAD*value,6); 
+								interval = setTimeout( function( state,key,value ){ 
+								//	try{ addtoUndo( state,key,value ); } catch(err){;}
+									button.addEventListener( "mousedown", onfirstMouseDown );
+								}, 250, state,key,value);
+							break;
+							case "scale":
+								var p = 3, step = 1/Math.pow(10,p); // min = -100, max = 100;
+								var value = Number(editor[ key ][v]); // get value from editor.
+								if ( button === increase ) value += step;
+								if ( button === decrease ) value -= step;
+								editor[ key ][v] = round(value,6);
+								interval = setTimeout( function( state,key,value ){ 
+								//	try{ addtoUndo( state,key,value ); } catch(err){;}
+									button.addEventListener( "mousedown", onfirstMouseDown );
+								}, 250, state,key,value);
+							break;
+						}
+
+						debugMode && console.log( "on Mouse Click:", interval );
+					}
+
+					increase.addEventListener( "mousedown", onfirstMouseDown );
+					decrease.addEventListener( "mousedown", onfirstMouseDown );
+					increase.addEventListener( "mousedown", onMouseDown );
+					decrease.addEventListener( "mousedown", onMouseDown );
+					window.addEventListener( "mouseup", function (){ 
+						clearTimeout( interval ); }); // important!
+					increase.addEventListener( "click", onMouseClick );
+					decrease.addEventListener( "click", onMouseClick );
+
+				}
+
+				onVectorMouseInput( editor,"x",vector_x,increase_x,decrease_x,vector_droplist,entity_droplist,undo_button );
+				onVectorMouseInput( editor,"y",vector_y,increase_y,decrease_y,vector_droplist,entity_droplist,undo_button );
+				onVectorMouseInput( editor,"z",vector_z,increase_z,decrease_z,vector_droplist,entity_droplist,undo_button );
+
+			})( objectEditor,                                                      // editor,
+				TabUI.Editor.tab.querySelector("input#editor-vector-x-input"),     // vector_x,
+				TabUI.Editor.tab.querySelector("input#editor-vector-y-input"),     // vector_y,
+				TabUI.Editor.tab.querySelector("input#editor-vector-z-input"),     // vector_z,
+				TabUI.Editor.tab.querySelector("li#editor-vector-x-increase"),     // increase_x,
+				TabUI.Editor.tab.querySelector("li#editor-vector-y-increase"),     // increase_y,
+				TabUI.Editor.tab.querySelector("li#editor-vector-z-increase"),     // increase_z,
+				TabUI.Editor.tab.querySelector("li#editor-vector-x-decrease"),     // decrease_x,
+				TabUI.Editor.tab.querySelector("li#editor-vector-y-decrease"),     // decrease_y,
+				TabUI.Editor.tab.querySelector("li#editor-vector-z-decrease"),     // decrease_z,
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),   // vector_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				TabUI.Editor.tab.querySelector("div#editor-undo-button")           // undo_button.
+			);
+
+		//	vector-w mouse input.
+
+			(function( editor,vector_w,increase_w,decrease_w,vector_droplist,entity_droplist,undo_button ){
+
+				var state, interval, dt = 20;
+				var meta = {geometries:{},materials:{},textures:{},images:{},shapes:{}};
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+			//	keep first mousedown event, ignore next events.
+
+				function onfirstMouseDown(){
+					state = {}; // reset.
+					if ( entity_droplist.value === "" ) return;
+					var key = state.key = vector_droplist.value;
+					state.value = editor[key].w;
+					state.json = editor.toJSON( meta );
+					this.removeEventListener( "mousedown", onfirstMouseDown );
+					debugMode && console.log( {state:state,meta:meta} ); // debug!
+				};
+
+			//	on mouse down.
+
+				function onMouseDown(){ 
+
+					clearTimeout( interval ); // important!
+
+					if ( entity_droplist.value === "" ) return;
+
+					var button = this;
+
+					interval = setTimeout( function update() {
+
+						var key = vector_droplist.value;
+
+						switch ( key ) {
+							case "scale":
+								var p = 3, step = 1/Math.pow(10,p); // min = -100, max = 100;
+								if ( button === increase_w ) {
+									editor[ key ].x += step; // editor manager updates input value.
+									editor[ key ].y += step; // editor manager updates input value.
+									editor[ key ].z += step; // editor manager updates input value.
+								}
+								if ( button === decrease_w ) {
+									editor[ key ].x -= step; // editor manager updates input value.
+									editor[ key ].y -= step; // editor manager updates input value.
+									editor[ key ].z -= step; // editor manager updates input value.
+								}
+								interval = setTimeout( update, dt );
+							break;
+						}
+
+					}, 500);
+
+				}
+
+			//	add undo.
+
+				function addtoUndo( state,key,value ){
+					if ( state.key !== key ) return; if ( state.value === value ) return;
+					if ( state.json ) { var json = JSON.parse(JSON.stringify(state.json)); undo_button.undo.unshift(json); }
+					debugMode && console.log( "undo:", undo_button.undo.length, "redo:", undo_button.redo.length ); return;
+				}
+
+			//	on mouse click.
+
+				function onMouseClick(){
+
+					clearTimeout( interval ); // important!
+
+					if ( entity_droplist.value === "" ) return;
+
+					var button = this;
+
+					var key = vector_droplist.value;
+
+					switch ( key ) {
+						case "scale":
+							var p = 3, step = 1/Math.pow(10,p); // min = -100, max = 100;
+							var value = Number(editor[ key ].z); // get value from editor.
+							if ( button === increase_w ) {
+								editor[ key ].x += step; // editor manager updates input value.
+								editor[ key ].y += step; // editor manager updates input value.
+								editor[ key ].z += step; // editor manager updates input value.
+							}
+							if ( button === decrease_w ) {
+								editor[ key ].x -= step; // editor manager updates input value.
+								editor[ key ].y -= step; // editor manager updates input value.
+								editor[ key ].z -= step; // editor manager updates input value.
+							}
+							interval = setTimeout( function( state,key,value ){ 
+							//	try{ addtoUndo( state,key,value ); } catch(err){;}
+								button.addEventListener( "mousedown", onfirstMouseDown );
+							}, 250, state,key,value);
+						break;
+					}
+
+					debugMode && console.log( "on Mouse Click:", interval );
+				}
+
+				increase_w.addEventListener( "mousedown", onfirstMouseDown );
+				decrease_w.addEventListener( "mousedown", onfirstMouseDown );
+				increase_w.addEventListener( "mousedown", onMouseDown );
+				decrease_w.addEventListener( "mousedown", onMouseDown );
+				window.addEventListener( "mouseup", function (){
+					clearTimeout( interval ); // important!
+				});
+				increase_w.addEventListener( "click", onMouseClick );
+				decrease_w.addEventListener( "click", onMouseClick );
+
+			})(
+				objectEditor,                                                      // editor,
+				TabUI.Editor.tab.querySelector("input#editor-vector-w-input"),     // vector_w,
+				TabUI.Editor.tab.querySelector("li#editor-vector-w-increase"),     // increase_w,
+				TabUI.Editor.tab.querySelector("li#editor-vector-w-decrease"),     // decrease_w,
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),   // vector_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+				TabUI.Editor.tab.querySelector("div#editor-undo-button")           // undo_button.
+			);
+
+		</script>
+
+		<script>
+
+		//	editor-manager.js
+
+			(function(editor,vector_x,vector_y,vector_z,vector_w,vector_droplist,entity_droplist){
+
+				var object;
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+			//	Add a watcher to update object only when entity droplist changes.
+				watch( entity_droplist, "onchange", function( property, event, value ){
+				//	debugMode && console.log({item:entity_droplist,event:event,value:value});
+					object = getObjectByEntityId( value ); debugMode && console.log(object);
+				});
+
+				watch( editor.position, ["x","y","z"], function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+				//	debugMode && console.log({property:"position",key:key,value:value});
+				//	Update object ( value === editor.position[key] ).
+					if ( object && object.position ) object.position[key] = Number(value);
+				//	Display value.
+					if ( vector_droplist.value === "position" ) {
+						if ( key === "x" ) vector_x.value = value.toFixed(2);
+						if ( key === "y" ) vector_y.value = value.toFixed(2);
+						if ( key === "z" ) vector_z.value = value.toFixed(2);
+					}
+				});
+
+				watch( editor.rotation, ["_x","_y","_z"], function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+				//	debugMode && console.log({property:"rotation",key:key,value:value});
+				//	Update object ( value === editor.rotation[key] ).
+					if ( object && object.rotation && key === "_x" ) object.rotation.x = Number(value);		
+					if ( object && object.rotation && key === "_y" ) object.rotation.y = Number(value);		
+					if ( object && object.rotation && key === "_z" ) object.rotation.z = Number(value);		
+				//	Display value.
+					if ( vector_droplist.value === "rotation" ) {
+						if ( key === "_x" ) vector_x.value = (RAD2DEG*value).toFixed(1);
+						if ( key === "_y" ) vector_y.value = (RAD2DEG*value).toFixed(1);
+						if ( key === "_z" ) vector_z.value = (RAD2DEG*value).toFixed(1);
+					}
+				});
+
+				watch( editor.scale, ["x","y","z"], function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+				//	debugMode && console.log({property:"scale",key:key,value:value});
+				//	Update object ( value === editor.scale[key] ).
+					if ( object && object.scale ) object.scale[key] = Number(value); // todo: scale:0.
+				//	Display value.
+					if ( vector_droplist.value === "scale" ) {
+						if ( key === "x" ) vector_x.value = value.toFixed(3);
+						if ( key === "y" ) vector_y.value = value.toFixed(3);
+						if ( key === "z" ) vector_z.value = value.toFixed(3);
+						vector_w.value = ((editor.scale.x+editor.scale.y+editor.scale.z)/3).toFixed(3);
+					}
+				});
+		
+				watch( editor.quaternion, ["_x","_y","_z","_w"], function( key, action, value ){
+				//	var object = getObjectByEntityId();
+				//	debugMode && console.log({property:"quaternion",key:key,value:value});
+				//	DO NOT MODIFY QUATERNION (value === editor.quaternion[key]).
+				//	if ( object && object.quaternion && key === "_x" ) object.quaternion.x = Number(editor.quaternion[key]);		
+				//	if ( object && object.quaternion && key === "_y" ) object.quaternion.y = Number(editor.quaternion[key]);		
+				//	if ( object && object.quaternion && key === "_z" ) object.quaternion.z = Number(editor.quaternion[key]);		
+				//	if ( object && object.quaternion && key === "_w" ) object.quaternion.w = Number(editor.quaternion[key]);		
+				//	Display value.
+					if ( vector_droplist.value === "quaternion" ) {
+						if ( key === "_x" ) vector_x.value = value.toFixed(3);
+						if ( key === "_y" ) vector_y.value = value.toFixed(3);
+						if ( key === "_z" ) vector_z.value = value.toFixed(3);
+						if ( key === "_w" ) vector_w.value = value.toFixed(3);
+					}
+				});
+		
+			})(
+				objectEditor, // editor,
+				TabUI.Editor.tab.querySelector("input#editor-vector-x-input"),  // vector_x,
+				TabUI.Editor.tab.querySelector("input#editor-vector-y-input"),  // vector_y,
+				TabUI.Editor.tab.querySelector("input#editor-vector-z-input"),  // vector_z,
+				TabUI.Editor.tab.querySelector("input#editor-vector-w-input"),  // vector_w,
+				TabUI.Editor.tab.querySelector("select#editor-vector-droplist"), // vector_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+			(function(editor,input,value_input,key_droplist,entity_droplist){
+
+				var object;
+
+			//	Add a watcher to update object only when entity droplist changes.
+				watch( entity_droplist, "onchange", function( property, event, value ){
+				//	debugMode && console.log({item:entity_droplist,event:event,value:value});
+					object = getObjectByEntityId( value ); // debugMode && console.log(object);
+				});
+
+				watch( editor, "name", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					value_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+				watch( editor, "uuid", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					value_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+			})(
+				objectEditor, // editor,
+				TabUI.Editor.tab.querySelector("input#editor-text-input"), // input,
+				TabUI.Editor.tab.querySelector("input#editor-value-input"), // value_input,
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"), // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+			(function(editor,text_input,input,key_droplist,entity_droplist){
+
+				var object;
+
+			//	Add a watcher to update object only when entity droplist changes.
+				watch( entity_droplist, "onchange", function( property, event, value ){
+				//	debugMode && console.log({item:entity_droplist,event:event,value:value});
+					object = getObjectByEntityId( value ); // debugMode && console.log(object);
+				});
+
+				watch( editor, "visible", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					text_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+				watch( editor, "castShadow", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					text_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+				watch( editor, "renderOrder", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					text_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+				watch( editor, "receiveShadow", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					text_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+				watch( editor, "frustumCulled", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					text_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+				watch( editor, "matrixAutoUpdate", function( key, action, value ){
+				//	var object = getObjectByEntityId(); debugMode && console.log(object);
+					text_input.value = "";
+					if (object) object[ key ] = editor[ key ];
+					if ( key_droplist.value === key ) input.value = editor[ key ];
+				});
+
+			})(
+				objectEditor, // editor,
+				TabUI.Editor.tab.querySelector("input#editor-text-input"), // text_input,
+				TabUI.Editor.tab.querySelector("input#editor-value-input"), // input,
+				TabUI.Editor.tab.querySelector("select#editor-key-droplist"), // key_droplist,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+		</script>
+
+		<script>
+
+		//	key-inputs.js
+
+			(function(editor,keyboard,camera,cameraControls,entity_droplist){
+
+				var interval;
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				const clock = new THREE.Clock();
+				const keyCodes = keyboard.keyCodes;
+				const modifiers = keyboard.modifiers;
+				const LEFT=37, UP=38, RIGHT=39, DOWN=40;
+				const A=65, D=68, E=69, F=70, G=71, H=72, 
+					  Q=81, R=82, S=83, T=84, W=87, Y=89;
+
+				function modifierIsDown(){
+					return modifiers.alt   || modifiers.meta
+						|| modifiers.shift || modifiers.ctrl; 
+				}
+
+			//	EditorScalingSystem.
+
+				function EditorScalingSystem( dt ){
+
+					if ( keyCodes[G] ) {
+						editor.scale.x += dt;
+						editor.scale.y += dt;
+						editor.scale.z += dt;
+					}
+
+					else if ( keyCodes[F] ) {
+						editor.scale.x -= dt;
+						editor.scale.y -= dt;
+						editor.scale.z -= dt;
+					} 
+
+				}
+
+			//	EditorRotationSystem.
+
+				function EditorRotationSystem( dt ){
+
+					var rad = Math.max(dt, DEG2RAD);
+
+				//	Rotation (local coordinates).
+					keyCodes[W] && editor.rotateOnAxis( axisX,  rad );
+					keyCodes[S] && editor.rotateOnAxis( axisX, -rad );
+					keyCodes[A] && editor.rotateOnAxis( axisY, -rad );
+					keyCodes[D] && editor.rotateOnAxis( axisY,  rad );
+
+				//	Reset rotation.
+					keyCodes[R] && editor.rotation.set(0,0,0);
+					keyCodes[T] && editor.setRotationFromQuaternion(camera.quaternion);
+
+				}
+
+			//	EditorTranslationSystem.
+
+				function EditorTranslationSystem( dt ){
+
+					var UPDOWN = keyCodes[E] || keyCodes[Q];
+					var ARROWS = keyCodes[LEFT] || keyCodes[UP] || keyCodes[RIGHT] || keyCodes[DOWN];
+
+				//	Move up/down.
+
+					UPDOWN && (function(up, down){
+
+						var rad = 0;
+						var keyboardFrontAngle = 0;
+						var movementSpeed = Math.max(dt, 0.05);
+						var cameraFrontAngle = cameraControls.phi;
+						if ( up ) keyboardFrontAngle =  Math.PI/2;
+						if (down) keyboardFrontAngle = -Math.PI/2;
+						var direction = rad - cameraFrontAngle + keyboardFrontAngle;
+						var directionOnAxisY = Math.sin(direction);
+						var y = directionOnAxisY * movementSpeed;
+						editor.position.y += y; 
+
+					})( keyCodes[E], keyCodes[Q] );
+
+				//	Move left/right/forwards/backward
+
+					ARROWS && (function() {
+
+						var rad = 8 * Math.PI/4;  // keyboard input.
+						var movementSpeed = Math.max(dt, 0.05);
+						var cameraFrontAngle = cameraControls.getFrontAngle();
+						var keyboardFrontAngle = keyboard.frontAngle;
+						var direction = rad - cameraFrontAngle + keyboardFrontAngle;
+						var directionOnAxisX = -Math.sin(direction);
+						var directionOnAxisZ = -Math.cos(direction);
+						var x = directionOnAxisX * movementSpeed;
+						var z = directionOnAxisZ * movementSpeed;
+						editor.position.x += x; 
+						editor.position.z += z;
+
+					})();
+
+				}
+
+			//	Editor keyInput loop.
+
+				(function update(){
+
+					var dt = clock.getDelta();
+					requestFrameID = requestAnimationFrame( update );
+
+					if ( modifierIsDown() ) return;
+					if ( !entity_droplist.value ) return;
+
+					var SCALE  = keyCodes[F] || keyCodes[G];
+					var ROTATE = keyCodes[W] || keyCodes[A] || keyCodes[S] || keyCodes[D] || keyCodes[R] || keyCodes[T];
+					var MOVING = keyCodes[E] || keyCodes[Q] || keyCodes[LEFT] || keyCodes[UP] || keyCodes[RIGHT] || keyCodes[DOWN];
+
+					SCALE && EditorScalingSystem( dt );
+					ROTATE && EditorRotationSystem( dt );
+					MOVING && EditorTranslationSystem( dt );
+
+				})();
+
+			})( 
+				objectEditor, keyboard, camera, cameraControls, // editor, ...,
+				TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+			);
+
+		</script>
+
+		<script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</script>
+
+		<script>
+
+			TabUI.Editor.role.classList.add("active");
+			TabUI.Editor.tab.classList.add("in","active");
+			groundHelper.visible = !groundHelper.visible; 
+			entities.add(groundHelper);
+
+			cameraControls.setLatLon(5.128, 270.675);
+			localPlayer.controller.movementSpeed = 30;
+			localPlayer.controller.center.set(-85,2,-2);
+
+
+		</script>
+
+		<script>
+
+		//	Background.
+
+			(function(scene,textures_entities){
+
+				if (!scene || Number(THREE.REVISION) < 78) return;
+
+				var urls = [
+					"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
+					"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
+					"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
+					"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
+					"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
+					"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
+				];
+
+				var loader = new THREE.CubeTextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				loader.load( urls, function(texture){
+					scene.background = texture;
+					scene.background.needsUpdate = true;
+					textures_entities && textures_entities.add(texture);
+				});
+
+			})( scene, textures_entities );
+
+		</script>
+
+		<script>
+
+		//  Skydome.
+
+			const skydome = (function(scene,entities,material_entities,textures_entities){
+
+				var loader = new THREE.TextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				var geometry = new THREE.SphereGeometry( 2000, 64, 32 );
+				var texture = loader.load( "https://i.imgur.com/xQsNP0X.jpg" );
+				texture.wrapS = texture.wrapT = 1000; texture.offset.y = -0.01;
+				var material = new THREE.MeshBasicMaterial({
+					map:texture,transparent:true,opacity:0.8,side:1,
+				});
+				var dome = new THREE.Mesh( geometry, material );
+				dome.scale.set(0.10,0.08,0.10); dome.name = "skydome";
+				scene.add(dome); entities && entities.add(dome);
+				textures_entities && textures_entities.add(texture);
+				material_entities && material_entities.add(material);
+				return dome;
+
+			})(scene, entities, material_entities, textures_entities);
+
+		</script>
+
+		<script>
+
+		//  Water.
+
+			const water = (function(renderer,camera,scene,light,textures_entities){
+
+				var waterNormals = loadTexture("/tradecenter/textures/waternormals.jpg");
+				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				textures_entities && textures_entities.add(waterNormals);
+
+			//  the water effect.
+				return new THREE.Water(renderer, camera, scene, {
+					textureWidth:256,  textureHeight:256,
+					waterNormals:waterNormals, alpha:0.9,
+					sunDirection:light.position.normalize(),
+					sunColor:0xffffff,  waterColor:0x001e0f,
+					betaVersion:0, side:2,
+				});
+
+				function loadTexture( url, mapping) {
+					var loader = new THREE.TextureLoader();
+					loader.setCrossOrigin( "anonymous" );
+					var texture = loader.load( url );
+					if ( mapping ) texture.mapping = mapping;
+					return texture;
+				}
+
+			})( renderer, camera, scene, cameraLight, textures_entities );
+
+			const watermirror = (function( scene,water,material_entities,entities ){
+
+				material_entities && material_entities.add(water.material);
+				var material = water.material; entities && entities.add(water); 
+				var geometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
+				var mirror = new THREE.Mesh( geometry, material );
+				mirror.add(water); mirror.name = "water mirror";
+				mirror.rotation.x = -Math.PI/2;
+				mirror.position.y = -0.01;
+				scene.add(mirror);
+
+				var clock = new THREE.Clock();
+				(function render(){
+					var dt = clock.getDelta();
+					requestFrameID = requestAnimationFrame( render );
+					water.material.uniforms.time.value += Math.max(dt, 1/60);
+					water.render();
+				})();
+
+				return mirror;
+
+			})( scene, water, material_entities, entities );
+
+		</script>
+
+		<script>
+
+		//	deck 0.
+
+			(function(scene,octree,cameraControls,entities){
+				var w=110, h=0.5, d=60, x=-2, y=-h/2, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0";
+				mesh.visible = false;
+				mesh.position.set(x,y,z);
+				scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, entities );
+
+			(function(scene,octree,cameraControls,entities){
+				var w=100, h=0.5, d=50, x=-2, y=-0, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0_floor";
+				mesh.visible = false;
+				mesh.position.set(x,y,z);
+				scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, entities );
+
+		</script>
+
+		<script>
+
+		//	Water path.
+
+			(function(scene,octree,cameraControls,entities){
+				var w=2.5, h=0.5, d=200, x=-85, y=-h/2, z=100;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "water path";
+				mesh.visible = false;
+				mesh.position.set(x,y,z);
+				scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, entities );
+
+		</script>
+
+	</body>
+</html>

@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<title>Editor Yatch (alpha 0.1.2)</title>
+
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<link rel="stylesheet" href="/css/joystick.css">
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/bootbox-dialoges.css">
+		<link rel="stylesheet" href="/css/jcrop.css">
+
+		<script src="/js/watch.js"></script>
+		<script src="/js/Objectid.js"></script>
+		<script src="/js/jquery.min.js"></script> 
+		<script src="/js/system.min.js"></script>
+		<script src="/js/signals.min.js"></script>
+		<script src="/js/inflate.min.js"></script>
+		<script src="/js/zangodb.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/hold-event.min.js"></script>
+		<script src="/js/jcrop.js"></script>
+
+		<style>
+
+			body {
+				margin: 0px;
+				font-size: 13px;
+				font-family: sans-serif;
+				background-repeat: repeat;
+				background-image: url("https://i.imgur.com/rnZZU0i.png") !important;
+				overflow: hidden;
+			}
+
+			#loading-bar {
+				width:100%;
+				height:100%;
+				top:0; left:0;
+				position:fixed;
+				display:flex;
+				align-items:center;
+				justify-content:center;
+			}
+
+			.middle > * {
+				top:0; 
+				left:0;
+				right:0;
+				bottom:0;
+				margin:auto;
+				position:absolute;
+			}
+
+			#joystick1 {
+				right: calc(40px + 370px);
+			}
+			
+			#jumpButton {
+				right: calc(105px + 370px);
+			}
+
+			.btn-matcap,
+			.btn-terrain {
+				padding:0;
+				float:left;
+				width:55px;
+				height:55px;
+				border:1px solid;
+				border-radius:4px;
+				margin-right:4px;
+				margin-bottom:4px;
+				display:inline-block;
+			}
+
+			.btn-matcap + .btn-matcap,
+			.btn-terrain + .btn-terrain {
+				margin-right:4px;
+			}
+
+		</style>
+	</head>
+
+	<body ontouchstart="">
+
+		<script src="/ecs/js/TabUI.js"></script>
+
+		<script>
+			const debugMode = true;
+			const Signal = signals.Signal;
+			const RAD2DEG = 57.29577951308232;
+			const DEG2RAD = 0.017453292519943295;
+			document.body.appendChild( createSidePanel() );
+		</script>
+
+		<script src="/ecs/js/three.js"></script>
+		<script src="/ecs/js/MeshWalk.js"></script>
+		<script src="/ecs/js/UVsDebug.js"></script>
+		<script src="/ecs/js/FBXLoader.js"></script>
+		<script src="/ecs/js/VirtualInput.js"></script>
+		<script src="/ecs/js/KeyboardState.js"></script>
+		<script src="/ecs/js/EditorControls.js"></script>
+		<script src="/ecs/js/camera-controls.js"></script>
+		<script src="/ecs/js/SubdivisionModifier.js"></script>
+		<script src="/ecs/js/three-pathfinding.umd.js"></script>
+
+		<script src="/threejs/r96/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/GLTFExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/STLExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/OBJExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/ColladaExporter.js"></script>
+
+	<!-- Water.js -->
+
+		<script src="/three/Ocean_fft.js"></script>
+		<script src="/three/MirrorRenderer.js"></script>
+		<script src="/three/WaterMaterial.js"></script>
+
+	<!-- Engine.js -->
+
+		<script src="/ecs/engine/core/helpers.js"></script>
+		<script src="/ecs/engine/core/keyboard.js"></script>
+		<script src="/ecs/engine/core/enviroment.js"></script>
+		<script src="/ecs/engine/core/localPlayer.js"></script>
+		<script src="/ecs/engine/core/cameraControls.js"></script>
+		<script src="/ecs/engine/core/keyboardState.js"></script>
+		<script src="/ecs/engine/core/keyInputControls.js"></script>
+		<script src="/ecs/engine/core/joystickControls.js"></script>
+
+	<!-- Editor.js -->
+
+		<script src="/yatch/editor/EntityManager.js"></script>
+		<script src="/yatch/editor/MaterialManager.js"></script>
+		<script src="/yatch/editor/TexturesManager.js"></script>
+		<script src="/yatch/editor/UndoArray.js"></script>
+		<script	src="/yatch/editor/editor-tab-ui.js"></script>
+		<script	src="/yatch/editor/geometry-tab-ui.js"></script>
+		<script	src="/yatch/editor/material-tab-ui.js"></script>
+		<script	src="/yatch/editor/textures-tab-ui.js"></script>
+		<script src="/yatch/editor/watchers-call-ui.js"></script>
+		<script src="/yatch/editor/entities-helpers.js"></script>
+		<script src="/yatch/editor/TextureEditor.js"></script>
+		<script src="/yatch/editor/MaterialEditor.js"></script>
+		<script src="/yatch/editor/Object3DEditor.js"></script>
+		<script src="/yatch/editor/RigidObjects.js"></script>
+		<script src="/yatch/editor/editor-droplists.js"></script>
+		<script src="/yatch/editor/edges-helper.js"></script>
+		<script src="/yatch/editor/octree-helpers.js"></script>
+		<script src="/yatch/editor/geometry-buttons.js"></script>
+		<script src="/yatch/editor/editor-buttons.js"></script>
+		<script src="/yatch/editor/rigid-objects-buttons.js"></script>
+		<script src="/yatch/editor/editor-key-inputs.js"></script>
+		<script src="/yatch/editor/editor-mouse-inputs.js"></script>
+		<script src="/yatch/editor/editor-manager.js"></script>
+		<script src="/yatch/editor/editor-systems.js"></script>
+
+	<!-- script src="/yatch/editor/MaterialTab.js"></script -->
+
+		<script>
+
+		//	material-map-droplist.js
+
+			(function(editor,map_droplist,vector_x,vector_y,vector_droplist){
+
+				watch( map_droplist, "onchange", function( property, event, map ){
+
+					var key = vector_droplist.value;
+
+					if ( map !== "normalMap" )         [vector_x.value, vector_y.value] = ["",""];
+					else if ( key !== "normalScale" )  [vector_x.value, vector_y.value] = ["",""];
+					else if ( editor[map] == null)     [vector_x.value, vector_y.value] = ["",""];
+					else if ( editor[key] == null)     [vector_x.value, vector_y.value] = ["",""];
+					else if ( !editor[map].isTexture ) [vector_x.value, vector_y.value] = ["",""];
+					else if ( !editor[key].isVector2 ) [vector_x.value, vector_y.value] = ["",""];
+					else [ vector_x.value, vector_y.value ] = [ editor[key].x.toFixed(2), editor[key].y.toFixed(2) ];
+
+				});
+
+			//	Update texture entities droplist.
+				watch( map_droplist, "onchange", function( property, event, map ){
+					var entity_droplist = document.querySelector("select#textures-entities-droplist"); // texture editor droplist.
+					entity_droplist && editor[map] && callWatchers( entity_droplist, "onchange", "change", entity_droplist = String(editor[map].id) );
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("select#material-map-droplist"), // map_droplist.
+				TabUI.Material.tab.querySelector("input#material-vector-x-input"),  // vector_x,
+				TabUI.Material.tab.querySelector("input#material-vector-y-input"),  // vector_y,
+				TabUI.Material.tab.querySelector("select#material-vector-droplist") // vector_droplist.
+			);
+
+
+		//	material-key-droplist.js
+
+			(function(editor,text_input,value_input,key_droplist){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				watch( key_droplist, "onchange", function( property, event, key ){
+
+					switch ( typeof editor[key] ) {
+
+						case "string":
+							return text_input.value = editor[key];
+						break;
+
+						case "boolean":
+							return value_input.value = editor[key];
+						break;
+
+						case "number":
+
+							if ( key === "rotation" ) 
+
+								return value_input.value = (RAD2DEG*editor[key]).toFixed(1);
+
+							else if ( ("displacementScale,polygonOffsetUnits,polygonOffsetFactor,opacity,"
+							+ "alphaTest,reflectivity,refractionRatio,bumpScale,metalness,roughness,displacementBias,"
+							+ "aoMapIntensity,envMapIntensity,emissiveIntensity,lightMapIntensity,wireframeLinewidth,"
+							+ "linewidth,size,scale,gapSize,dashSize,shininess").split(",").includes(key) ) 
+
+								return value_input.value = editor[key].toFixed(2);
+
+							else 
+
+								return value_input.value = editor[key].toFixed(0);
+
+						break;
+					}
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"), // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"), // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist") // key_droplist.
+			);
+
+
+		//	material-vector-droplist.js
+
+			(function(editor,vector_x,vector_y,vector_droplist){
+
+				watch( vector_droplist, "onchange", function( property, event, key ){
+
+					if ( key === "" )                         [vector_x.value, vector_y.value] = ["",""];
+					else if ( editor[key] === undefined )     [vector_x.value, vector_y.value] = ["",""];
+					else if ( !editor[key].isVector2 )        [vector_x.value, vector_y.value] = ["",""];
+					else [ vector_x.value, vector_y.value ] = [ editor[key].x.toFixed(2), editor[key].y.toFixed(2) ];
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-vector-x-input"),  // vector_x,
+				TabUI.Material.tab.querySelector("input#material-vector-y-input"),  // vector_y,
+				TabUI.Material.tab.querySelector("select#material-vector-droplist") // vector_droplist.
+			);
+
+
+		//	material-color-droplist.js
+
+			(function(editor,color_r,color_g,color_b,color_droplist){
+
+				watch( color_droplist, "onchange", function( property, event, key ){
+
+					if ( key === "" )                     [color_r.value, color_g.value, color_b.value] = ["","",""];
+					else if ( editor[key] === undefined ) [color_r.value, color_g.value, color_b.value] = ["","",""];
+					else if ( !editor[key].isColor )      [color_r.value, color_g.value, color_b.value] = ["","",""];
+
+					else [ color_r.value, color_g.value, color_b.value ] = [ 
+						( 255*editor[ key ].r ).toFixed(0),
+						( 255*editor[ key ].g ).toFixed(0),
+						( 255*editor[ key ].b ).toFixed(0)
+					];
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-color-r-input"), // color_r,
+				TabUI.Material.tab.querySelector("input#material-color-g-input"), // color_g,
+				TabUI.Material.tab.querySelector("input#material-color-b-input"), // color_b,
+				TabUI.Material.tab.querySelector("select#material-color-droplist") // color_droplist.
+			);
+
+
+		//	material-entity-droplist.js
+
+			(function(editor,map_droplist,key_droplist,color_droplist,vector_droplist,entity_droplist,exitEditMode){
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+
+					editor.update( value );
+
+				//	Call droplist watchers.
+
+					callWatchers( map_droplist, "onchange", "change", map_droplist.value );
+					callWatchers( key_droplist, "onchange", "change", key_droplist.value );
+					callWatchers( color_droplist, "onchange", "change", color_droplist.value );
+					callWatchers( vector_droplist, "onchange", "change", vector_droplist.value );
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("select#material-map-droplist"),      // map_droplist.
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"),     // key_droplist.
+				TabUI.Material.tab.querySelector("select#material-color-droplist"),    // color_droplist.
+				TabUI.Material.tab.querySelector("select#material-vector-droplist"),   // vector_droplist.
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				exitEditMode   // function.
+			);
+
+		</script>
+
+		<script>
+
+		//	material-manager.js
+
+		//	Type. (DONT CHANGE MATERIAL TYPE).
+
+			(function( editor,text_input,value_input,key_droplist,type_droplist ){
+
+				watch( editor, "type", function( key, action, value ){
+					type_droplist.value = value; // dummy droplist.
+					if ( key_droplist.value === key ) text_input.value = value;
+				});
+
+			})( 
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"),     // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"),    // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"), // key_droplist,
+				TabUI.Material.tab.querySelector("select#material-type-droplist")  // type_droplist
+			);
+
+		//	Vectors.
+
+			(function( editor,vector_x,vector_y,vector_droplist,entity_droplist ){
+
+				var material;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					material = getMaterialByEntityId( value );
+				});
+
+			//	normalScale.
+
+				watch( editor, "normalScale",  function( key, action, value ){
+					var scale = editor.normalScale; //console.log("normalScale:", scale);
+					material && material.normalScale && material.normalScale.copy(scale);
+					if ( vector_droplist.value === "normalScale" ) {
+						vector_x.value = scale.x.toFixed(2);
+						vector_y.value = scale.y.toFixed(2);
+					}
+				});
+
+			})( 
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-vector-x-input"),    // vector_x,
+				TabUI.Material.tab.querySelector("input#material-vector-y-input"),    // vector_y,
+				TabUI.Material.tab.querySelector("select#material-vector-droplist"),  // vector_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist,
+			);
+
+		//	Colors.
+
+			(function( editor,color_r,color_g,color_b,color_droplist,entity_droplist ){
+
+				var material;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					material = getMaterialByEntityId( value );
+				});
+
+			//	color.
+
+				watch( editor, "color", function( key ){
+					var color = editor.color; //console.log("color:", color);
+					material && material.color && material.color.copy(color);
+					if ( color_droplist.value === "color" ) {
+						color_r.value = (255*color.r).toFixed(0);
+						color_g.value = (255*color.g).toFixed(0);
+						color_b.value = (255*color.b).toFixed(0);
+					}
+				});
+
+			//	emissive.
+
+				watch( editor, "emissive", function( key ){
+					var color = editor.emissive; //console.log("emissive:", color);
+					material && material.emissive && material.emissive.copy(color);
+					if ( color_droplist.value === "emissive" ) {
+						color_r.value = (255*color.r).toFixed(0);
+						color_g.value = (255*color.g).toFixed(0);
+						color_b.value = (255*color.b).toFixed(0);
+					}
+				});
+
+			//	specular.
+
+				watch( editor, "specular", function( key ){
+					var color = editor.specular; //console.log("specular:", color);
+					material && material.specular && material.specular.copy(color);
+					if ( color_droplist.value === "specular" ) {
+						color_r.value = (255*color.r).toFixed(0);
+						color_g.value = (255*color.g).toFixed(0);
+						color_b.value = (255*color.b).toFixed(0);
+					}
+				});
+
+			})( 
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-color-r-input"),     // color_r,
+				TabUI.Material.tab.querySelector("input#material-color-g-input"),     // color_g,
+				TabUI.Material.tab.querySelector("input#material-color-b-input"),     // color_b,
+				TabUI.Material.tab.querySelector("select#material-color-droplist"),   // color_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist,
+			);
+
+		//	Strings.
+
+			(function( editor,text_input,value_input,key_droplist,type_droplist,entity_droplist ){
+
+				var material;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					material = getMaterialByEntityId( value );
+				});
+
+				function update_material_value( key, action, value ){
+					if ( material ) material[key] = String(value);
+					if ( key_droplist.value === key ) text_input.value = value;
+				}
+
+				watch( editor, "name", update_material_value );
+				watch( editor, "uuid", update_material_value );
+				watch( editor, "linecap", update_material_value );
+				watch( editor, "linejoin", update_material_value );
+				watch( editor, "precision", update_material_value );
+				watch( editor, "wireframeLinecap", update_material_value );
+				watch( editor, "wireframeLinejoin", update_material_value );
+
+			})( 
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"),        // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"),       // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"),    // key_droplist,
+				TabUI.Material.tab.querySelector("select#material-type-droplist"),    // type_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist,
+			);
+
+		//	Boolean.
+
+			(function( editor,text_input,value_input,key_droplist,entity_droplist ){
+
+				var material;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					material = getMaterialByEntityId( value );
+				});
+
+				function update_material_value( key, action, value ){
+					if ( material ) material[key] = Boolean(value);
+					if ( key_droplist.value === key ) value_input.value = value; // display.
+				}
+
+				watch( editor, "fog", update_material_value );
+				watch( editor, "lights", update_material_value );
+				watch( editor, "visible", update_material_value );
+				watch( editor, "skinning", update_material_value );
+				watch( editor, "dithering", update_material_value );
+				watch( editor, "alphaTest", update_material_value );
+				watch( editor, "wireframe", update_material_value );
+				watch( editor, "depthTest", update_material_value );
+				watch( editor, "depthWrite", update_material_value );
+				watch( editor, "colorWrite", update_material_value );
+				watch( editor, "clipShadows", update_material_value );
+				watch( editor, "flatShading", update_material_value );
+				watch( editor, "transparent", update_material_value );
+				watch( editor, "morphTargets", update_material_value );
+				watch( editor, "morphNormals", update_material_value );
+				watch( editor, "polygonOffset", update_material_value );
+				watch( editor, "clipIntersection", update_material_value );
+				watch( editor, "premultipliedAlpha", update_material_value );
+
+			})( 
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"),        // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"),       // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"),    // key_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist,
+			);
+
+		//	Numbers.
+
+			(function( editor,text_input,value_input,key_droplist,entity_droplist ){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				var material; // important!
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					material = getMaterialByEntityId( value );
+				});
+
+				function update_material_value( key, action, value ){
+					if ( material ) material[key] = Number(value);
+					if ( key_droplist.value === key ) value_input.value = value.toFixed(2);
+				}
+
+				function update_material_constant( key, action, value ){
+					if ( material ) material[key] = Number(value);
+					if ( key_droplist.value === key ) value_input.value = value.toFixed(0);
+				}
+
+			//	Rad.
+
+				watch( editor, "rotation", function( key, action, value ){
+					if ( material ) material[key] = Number(value);
+					if ( key_droplist.value === key ) value_input.value = (RAD2DEG*value).toFixed(1);
+				});
+
+			//	Floats.
+
+				watch( editor, "opacity", update_material_value );
+				watch( editor, "overdraw", update_material_value );
+				watch( editor, "alphaTest", update_material_value );
+				watch( editor, "shininess", update_material_value ); // deprecated.
+				watch( editor, "bumpScale", update_material_value );
+				watch( editor, "metalness", update_material_value );
+				watch( editor, "roughness", update_material_value );
+				watch( editor, "reflectivity", update_material_value );
+				watch( editor, "refractionRatio", update_material_value );
+				watch( editor, "aoMapIntensity", update_material_value );
+				watch( editor, "envMapIntensity", update_material_value );
+				watch( editor, "emissiveIntensity", update_material_value );
+				watch( editor, "lightMapIntensity", update_material_value );
+				watch( editor, "displacementBias", update_material_value );
+				watch( editor, "displacementScale", update_material_value );
+				watch( editor, "polygonOffsetUnits", update_material_value );
+				watch( editor, "polygonOffsetFactor", update_material_value );
+
+			//	Constants.
+
+				watch( editor, "size", update_material_constant );
+				watch( editor, "side", update_material_constant );
+				watch( editor, "scale", update_material_constant );
+				watch( editor, "gapSize", update_material_constant );
+				watch( editor, "combine", update_material_constant );
+				watch( editor, "dashSize", update_material_constant );
+				watch( editor, "blending", update_material_constant );
+				watch( editor, "blendSrc", update_material_constant );
+				watch( editor, "blendDst", update_material_constant );
+				watch( editor, "depthFunc", update_material_constant );
+				watch( editor, "linewidth", update_material_constant );
+				watch( editor, "vertexColors", update_material_constant );
+				watch( editor, "normalMapType", update_material_constant );
+				watch( editor, "blendEquation", update_material_constant );
+				watch( editor, "blendSrcAlpha", update_material_constant );
+				watch( editor, "blendDstAlpha", update_material_constant );
+				watch( editor, "blendEquationAlpha", update_material_constant );
+				watch( editor, "wireframeLinewidth", update_material_constant );
+
+			})( 
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"),  // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"),  // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"), // key_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist,
+			);
+
+		</script>
+
+		<script>
+
+		//	material-needs-update.js
+
+			(function( needs_update ){
+
+				watch( needs_update, "onclick", function( prop, event, value ){
+
+					var material = getMaterialByEntityId();
+					if ( material ) material.needsUpdate = true;
+
+				});
+
+			})( TabUI.Material.tab.querySelector("div#material-needs-update") );
+
+
+		//	exit-edit-mode.js
+
+			(function(exit_button,entity_droplist,exitEditMode){
+
+				watch( exit_button, "onclick", function( prop, event, value ){
+
+					 exitEditMode( entity_droplist );
+				});
+
+			})( 
+				TabUI.Material.tab.querySelector("div#material-exit-mode"), // exit_button,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				exitEditMode // function.
+			 ); 
+
+		</script>
+
+		<script>
+
+		//	material-key-inputs.js
+
+			(function(editor,text_input,value_input,key_droplist,entity_droplist,undo_button){
+
+				watch( text_input, "onchange", function(property, event, value){
+
+					var key = key_droplist.value;
+
+					switch ( key ){
+
+						case "uuid":
+						case "type":
+						case "linecap":
+						case "linejoin":
+						case "wireframeLinecap":
+							return text_input.value = editor[key];
+						break;
+
+						case "name":
+
+							if ( !value ) return text_input.value = editor[key];
+
+						//	rename option.
+							setTimeout( function( type, name, id ){
+								var str="",dot=".",col=":";
+								var selector = "option[value='" + id + "']";
+								var option = entity_droplist.querySelector(selector); 
+							//	debugMode && console.log({params:{id:id,name:name,type:type,option:option}});
+								if ( !option ) return;
+								switch ( type ) {
+									case "MeshToonMaterial":
+									case "MeshBasicMaterial":
+									case "MeshPhongMaterial":
+									case "MeshDepthMaterial":
+									case "MeshNormalMaterial":
+									case "MeshLambertMaterial":
+									case "MeshStandardMaterial":
+									case "MeshPhysicalMaterial":
+										type = type.replace("Mesh","");
+									break;
+									case "LineBasicMaterial":
+									case "LineDashedMaterial":
+									case "RawShaderMaterial":
+										type = type.replace("Material","");
+									break;
+								}
+								option.text = str+id+dot+type+col+name; // +id;
+							}, null, editor.type, value, entity_droplist.value );
+
+						//	Update editor.
+							return editor[key] = value;
+
+						break;
+					}
+
+					value_input.value = "";
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"), // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"), // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"), // key_droplist
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button") // undo_button,
+			);
+
+		//	value input.
+
+			(function(editor,text_input,value_input,key_droplist,entity_droplist,undo_button){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				watch( value_input, "onchange", function(property, event, value){
+
+					var key = key_droplist.value;
+
+					switch ( key ){
+
+					//	typeof editor[key] === "boolean" || typeof editor[key] === "undefined"
+
+						case "fog":
+						case "lights":
+						case "flatShading":
+						case "transparent":
+						case "depthTest":
+						case "depthWrite":
+						case "clipIntersection":
+						case "clipShadows":
+						case "colorWrite":
+						case "polygonOffset":
+						case "dithering":
+						case "premultipliedAlpha":
+						case "visible":
+						case "wireframe":
+						case "skinning":
+						case "morphTargets":
+						case "morphNormals":
+							if ( value === "0" ) return editor[key] = false;                        // accept "0", string.
+							else if ( value === "1" ) return editor[key] = true;                    // accept "1", string.
+							else if ( value.toLowerCase() === "true" ) return editor[key] = true;   // accept "true" string.
+							else if ( value.toLowerCase() === "false" ) return editor[key] = false; // accept "false" string.
+							else return value_input.value = editor[key];
+						break;
+
+					//	typeof editor[key] === "number" || typeof editor[key] === "undefined"
+
+						case "displacementScale":
+						case "polygonOffsetUnits":
+						case "polygonOffsetFactor":
+							return editor[key] = THREE.Math.clamp(Number(value), -100, 100); // number.
+						break;
+						case "opacity":
+						case "overdraw":
+						case "alphaTest":
+						case "reflectivity":
+							return editor[key] = THREE.Math.clamp(Number(value), 0, 1); // number.
+						break;
+						case "refractionRatio":
+							return editor[key] = THREE.Math.clamp(Number(value), -1, 1); // number.
+						break;
+						case "bumpScale":
+						case "metalness":
+						case "roughness":
+						case "displacementBias":
+						case "aoMapIntensity":
+						case "envMapIntensity":
+						case "emissiveIntensity":
+						case "lightMapIntensity":
+						case "wireframeLinewidth":
+							return editor[key] = THREE.Math.clamp(Number(value), -10, 10); // number.
+						break;
+						case "linewidth":
+							return editor[key] = THREE.Math.clamp(Number(value), 0, 100); // number.
+						break;
+						case "size":
+						case "scale":
+						case "gapSize":
+						case "dashSize":
+						case "shininess":
+							return editor[key] = THREE.Math.clamp(Number(value), 0, 1000); // number.
+						break;
+						case "rotation":
+							return editor[key] = DEG2RAD*THREE.Math.clamp(Number(value), -180, 180); // number.
+						break;
+						case "blending":
+							if ( "0,1,2,3,4,5".split(",").includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "side":
+							if ( "0,1,2".split(",").includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "vertexColors":
+							if ( "0,1,2".split(",").includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "blendDst":
+						case "blendSrc":
+							if ( "200,201,202,203,204,205,206,207,208,209,210".split(",").includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "blendEquation":
+							if ( "100,101,102,103,104".split(",").includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "depthFunc":
+							if ( "0,1,2,3,4,5,6,7".split(",").includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "normalMapType":
+							if ( "0,1".includes(value) ) return editor[key] = Number(value); 
+						break;
+						case "combine":
+							if ( "0,1,2".includes(value) ) return editor[key] = Number(value); 
+						break;
+					}
+
+					text_input.value = "";
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-text-input"), // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"), // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"), // key_droplist
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button") // undo_button,
+			);
+
+		//	vector inputs.
+
+			(function(editor,vector_x,vector_y,vector_droplist,entity_droplist,undo_button){
+
+				watch( vector_x, "onchange", function(property, event, value){
+
+					var key = vector_droplist.value;
+
+					value = THREE.Math.clamp( Number(value), -100, 100 )
+					if ( isNaN(value) ) return vector_x.value = editor[key].x.toFixed(2);
+					editor[key].x = value; vector_x.value = value.toFixed(2);
+
+
+				});
+
+				watch( vector_y, "onchange", function(property, event, value){
+
+					var key = vector_droplist.value;
+
+					value = THREE.Math.clamp( Number(value), -100, 100 )
+					if ( isNaN(value) ) return vector_y.value = editor[key].y.toFixed(2);
+					editor[key].y = value; vector_y.value = value.toFixed(2);
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-vector-x-input"), // vector_x,
+				TabUI.Material.tab.querySelector("input#material-vector-y-input"), // vector_y,
+				TabUI.Material.tab.querySelector("select#material-vector-droplist"), // vector_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button") // undo_button,			);
+			);
+
+		//	color inputs.
+
+			(function(editor,color_r,color_g,color_b,color_droplist,entity_droplist,undo_button){
+
+				watch( color_r, "onchange", function(property, event, value){
+
+					var key = color_droplist.value;
+
+					value = THREE.Math.clamp(Number(value),0,255);
+					if ( isNaN(value) ) return color_r.value = 255*editor[key].r;
+					editor[key].r = value/255; color_r.value = value.toFixed(0);
+
+				});
+
+				watch( color_g, "onchange", function(property, event, value){
+
+					var key = color_droplist.value;
+
+					value = THREE.Math.clamp(Number(value),0,255);
+					if ( isNaN(value) ) return color_g.value = 255*editor[key].g;
+					editor[key].g = value/255; color_g.value = value.toFixed(0);
+
+				});
+
+				watch( color_b, "onchange", function(property, event, value){
+
+					var key = color_droplist.value;
+
+					value = THREE.Math.clamp(Number(value),0,255);
+					if ( isNaN(value) ) return color_b.value = 255*editor[key].b;
+					editor[key].b = value/255; color_b.value = value.toFixed(0);
+
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-color-r-input"), // color_r,
+				TabUI.Material.tab.querySelector("input#material-color-g-input"), // color_g,
+				TabUI.Material.tab.querySelector("input#material-color-b-input"), // color_b,
+				TabUI.Material.tab.querySelector("select#material-color-droplist"), // color_droplist,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button"), // undo_button,
+			);
+
+		</script>
+
+		<script>
+
+		//	material-mouse-inputs.js
+
+		//	key/value.
+
+			(function( editor,increase,decrease,text_input,value_input,key_droplist,entity_droplist,undo_button ){
+
+				var interval, key = key_droplist.value; debugMode && console.log( "key:", key );
+
+				watch( key_droplist, "onchange", function( prop, event, value ){ key = value; });
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function onMouseClickInputValue(button){ 
+
+					function updateFloatRotationValue(button, min, max, step){
+						var step = 0.1 * Math.PI/180; // 0.1 deg.
+						var min = -Math.PI, max = Math.PI;
+						var value = Number(editor[ key ]); // get value from editor, rad.
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max ); // rad.
+						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max ); // rad.
+						editor[ key ] = Number(value); // material manager updates input value, rad.
+					//	value_input.value = (RAD2DEG*editor[key]).toFixed(1); // display.
+					}
+
+					function updateFloatNumberValue(button, min, max, step){
+						var value = Number(editor[ key ]); // get value from editor.
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max );
+						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max );
+						editor[ key ] = Number(value); // material manager updates input value.
+					//	value_input.value = editor[key].toFixed(2); // display.
+					}
+
+					function updateIntegerNumberValue(button, min, max){
+						var value = parseInt(editor[ key ]); // get value from editor.
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( ++value, min, max );
+						if ( button === decrease ) value = THREE.Math.clamp( --value, min, max );
+						editor[ key ] = parseInt(value); // editor watcher updates value input.
+					}
+
+					function updateConstantStringValue( button, values ){
+						var min = 0, max = values.length;
+						var value = editor[ key ]; // string.
+						var index = values.findIndex(function( item ){ return item === value; });
+						if ( button === increase ) value = values[ ( ++index % max + max ) % max ]; // mod();
+						if ( button === decrease ) value = values[ ( --index % max + max ) % max ]; // mod();
+						editor[ key ] = String(value); // material manager updates input value.
+					}
+
+					function updateConstantNumberValue( button, values ){
+						var min = 0, max = values.length;
+						var value = Number(editor[ key ]); // get value from editor.
+						var index = values.findIndex(function( item ){ return item === value; });
+						if ( button === increase ) value = values[ ( ++index % max + max ) % max ]; // mod();
+						if ( button === decrease ) value = values[ ( --index % max + max ) % max ]; // mod();
+						editor[ key ] = Number(value); // material manager updates input value.
+					}
+
+					function update_material_value( button ){
+
+						switch( key ){
+
+						//	string types:
+
+							case "uuid": 
+								return editor[ key ] = THREE.Math.generateUUID();
+							break;
+							case "linecap":
+							case "wireframeLinecap":
+								return updateConstantStringValue(button, ["butt","round","square"]);
+							break;
+							case "linejoin":
+								return updateConstantStringValue(button, ["bevel","round","miter"]);
+							break;
+							case "precision":
+								return updateConstantStringValue(button, ["highp","mediump","lowp"]);
+							break;
+
+						//	boolean types:
+
+							case "fog":
+							case "lights":
+							case "flatShading":
+							case "transparent":
+							case "depthTest":
+							case "depthWrite":
+							case "clipIntersection":
+							case "clipShadows":
+							case "colorWrite":
+							case "polygonOffset":
+							case "dithering":
+							case "premultipliedAlpha":
+							case "visible":
+							case "wireframe":
+							case "skinning":
+							case "morphTargets":
+							case "morphNormals":
+						//	case "needsUpdate":
+							case "sizeAttenuation":
+								return editor[key] = !editor[key]; // material manager updates input value.
+							break;
+
+						//	number types:
+
+							case "blending":
+								return updateConstantNumberValue(button, [
+									THREE.NoBlending,THREE.NormalBlending,THREE.AdditiveBlending,
+									THREE.SubtractiveBlending,THREE.MultiplyBlending,THREE.CustomBlending
+								]);
+							break;
+							case "side":
+								return updateConstantNumberValue(button, [THREE.FrontSide,THREE.BackSide,THREE.DoubleSide]);
+							break;
+							case "vertexColors":
+								return updateConstantNumberValue(button, [THREE.NoColors,THREE.FaceColors,THREE.VertexColors]);
+							break;
+							case "blendDst":
+							case "blendSrc":
+								return updateConstantNumberValue(button, [
+									THREE.ZeroFactor,THREE.OneFactor,THREE.SrcColorFactor,THREE.OneMinusSrcColorFactor,
+									THREE.SrcAlphaFactor,THREE.OneMinusSrcAlphaFactor,THREE.DstAlphaFactor,THREE.OneMinusDstAlphaFactor,
+									THREE.DstColorFactor,THREE.OneMinusDstColorFactor,THREE.SrcAlphaSaturateFactor
+								]);
+							break;
+							case "blendEquation":
+								return updateConstantNumberValue(button, [
+									THREE.AddEquation,THREE.SubtractEquation,
+									THREE.ReverseSubtractEquation,THREE.MinEquation,THREE.MaxEquation
+								]);
+							break;
+							case "depthFunc":
+								return updateConstantNumberValue(button, [
+									THREE.NeverDepth,THREE.AlwaysDepth,THREE.LessDepth,THREE.LessEqualDepth,
+									THREE.GreaterEqualDepth,THREE.GreaterDepth,THREE.NotEqualDepth
+								]);
+							break;
+							case "normalMapType":
+								return updateConstantNumberValue(button, [THREE.TangentSpaceNormalMap,THREE.ObjectSpaceNormalMap]);
+							break;
+							case "combine":
+								return updateConstantNumberValue(button, [THREE.MultiplyOperation,THREE.MixOperation,THREE.AddOperation]);
+							break;
+						//
+							case "polygonOffsetUnits":
+							case "polygonOffsetFactor":
+								return updateIntegerNumberValue(button, -100, 100);
+							break;
+							case "displacementScale":
+								return updateFloatNumberValue(button, -100, 100, 1/100);
+							break;
+							case "bumpScale":
+							case "metalness":
+							case "roughness":
+							case "displacementBias":
+								return updateFloatNumberValue(button, -10, 10, 1/100);
+							break;
+							case "refractionRatio":
+								return updateFloatNumberValue(button, -1, 1, 1/100);
+							break;
+							case "opacity":
+							case "overdraw":
+							case "alphaTest":
+							case "reflectivity":
+							case "wireframeLinewidth":
+								return updateFloatNumberValue(button, 0, 1, 1/100);
+							break;
+							case "linewidth":
+							case "aoMapIntensity":
+							case "envMapIntensity":
+							case "emissiveIntensity":
+							case "lightMapIntensity":
+								return updateFloatNumberValue(button, 0, 100, 1/100);
+							break;
+							case "depthPacking": 
+								// ???
+							break;
+							case "size":
+							case "scale":
+							case "gapSize":
+							case "dashSize":
+							case "shininess":
+								return updateFloatNumberValue(button, 0, 1000, 1/100);
+							break;
+							case "rotation":
+								return updateFloatRotationValue(button);
+							break;
+
+						}
+
+					}
+
+					function update_material( button ){
+					//	debugMode && console.log({button:button,value:editor[key]});
+
+						switch ( key ){
+
+						//	enabled on mouse down.
+							case "polygonOffsetUnits":
+							case "polygonOffsetFactor":
+								interval = setTimeout( update_material, 20, button );
+								return updateIntegerNumberValue(button, -100, 100);
+							break;
+							case "displacementScale":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatNumberValue(button, -100, 100, 1/100);
+							break;
+							case "bumpScale":
+							case "metalness":
+							case "roughness":
+							case "displacementBias":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatNumberValue(button, -10, 10, 1/100);
+							break;
+							case "refractionRatio":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatNumberValue(button, -1, 1, 1/100);
+							break;
+							case "opacity":
+							case "overdraw":
+							case "alphaTest":
+							case "reflectivity":
+							case "wireframeLinewidth":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatNumberValue(button, 0, 1, 1/100);
+							break;
+							case "linewidth":
+							case "aoMapIntensity":
+							case "envMapIntensity":
+							case "emissiveIntensity":
+							case "lightMapIntensity":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatNumberValue(button, 0, 100, 1/100);
+							break;
+							case "size":
+							case "scale":
+							case "gapSize":
+							case "dashSize":
+							case "shininess":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatNumberValue(button, 0, 1000, 1/100);
+							break;
+							case "rotation":
+								interval = setTimeout( update_material, 20, button );
+								return updateFloatRotationValue(button);
+							break;
+						}
+
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout( update_material, 500, this);
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+						update_material_value( this );
+					});
+
+				}
+
+				onMouseClickInputValue(increase);
+				onMouseClickInputValue(decrease);
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("li#material-value-increase"),        // increase,
+				TabUI.Material.tab.querySelector("li#material-value-decrease"),        // decrease,
+				TabUI.Material.tab.querySelector("input#material-text-input"),         // text_input,
+				TabUI.Material.tab.querySelector("input#material-value-input"),        // value_input,
+				TabUI.Material.tab.querySelector("select#material-keys-droplist"),     // key_droplist
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button")           // undo_button,
+			);
+
+
+		//	vectors.
+
+			(function( editor,vector_x,vector_y,increase_x,increase_y,decrease_x,decrease_y,vector_droplist,entity_droplist,undo_button ){
+
+				var interval, key = vector_droplist.value; debugMode && console.log( "key:", key );
+
+				watch( vector_droplist, "onchange", function( prop, event, value ){ key = value; });
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function onMouseClickInputValue(button){ 
+
+					function updateNormalScaleValue( button, min, max, step){
+						if ( !editor[key] ) return;
+					//	var step = 1/100, min = -100, max = 100; 
+						if ( button === increase_x ) editor[key].x = round( THREE.Math.clamp( editor[key].x+step, min, max ), 2);
+						if ( button === decrease_x ) editor[key].x = round( THREE.Math.clamp( editor[key].x-step, min, max ), 2);
+						if ( button === increase_y ) editor[key].y = round( THREE.Math.clamp( editor[key].y+step, min, max ), 2);
+						if ( button === decrease_y ) editor[key].y = round( THREE.Math.clamp( editor[key].y-step, min, max ), 2);
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout( function update_material( button ){
+							interval = setTimeout( update_material, 20, button );
+							return updateNormalScaleValue(button,-100,100,1/100);
+						}, 500, this);
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+						updateNormalScaleValue(button,-100,100,1/100);
+					});
+
+				}
+
+				onMouseClickInputValue(increase_x);
+				onMouseClickInputValue(increase_y);
+				onMouseClickInputValue(decrease_x);
+				onMouseClickInputValue(decrease_y);
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-vector-x-input"),     // vector_x,
+				TabUI.Material.tab.querySelector("input#material-vector-y-input"),     // vector_y,
+				TabUI.Material.tab.querySelector("li#material-vector-x-increase"),     // increase_x,
+				TabUI.Material.tab.querySelector("li#material-vector-y-increase"),     // increase_y,
+				TabUI.Material.tab.querySelector("li#material-vector-x-decrease"),     // decrease_x,
+				TabUI.Material.tab.querySelector("li#material-vector-y-decrease"),     // decrease_y,
+				TabUI.Material.tab.querySelector("select#material-vector-droplist"),   // vector_droplist
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button")           // undo_button,
+			);
+
+
+		//	colors.
+
+			(function( editor,color_r,color_g,color_b,increase_r,increase_g,increase_b,decrease_r,decrease_g,decrease_b,color_droplist,entity_droplist,undo_button ){
+
+				var interval, key = color_droplist.value; debugMode && console.log( "key:", key );
+
+				watch( color_droplist, "onchange", function( prop, event, value ){ key = value; });
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function onMouseClickInputValue(button){ 
+
+					function updateMaterialColorValue(button){
+
+						var min=0, max=1, step=1/255; if ( !editor[key] ) return;
+
+						if ( button === increase_r ) editor[key].r = THREE.Math.clamp( editor[key].r+step, min, max );
+						if ( button === increase_g ) editor[key].g = THREE.Math.clamp( editor[key].g+step, min, max );
+						if ( button === increase_b ) editor[key].b = THREE.Math.clamp( editor[key].b+step, min, max );
+						if ( button === decrease_r ) editor[key].r = THREE.Math.clamp( editor[key].r-step, min, max );
+						if ( button === decrease_g ) editor[key].g = THREE.Math.clamp( editor[key].g-step, min, max );
+						if ( button === decrease_b ) editor[key].b = THREE.Math.clamp( editor[key].b-step, min, max );
+
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout( function update_material(button){
+							interval = setTimeout( update_material, 20, button );
+							return updateMaterialColorValue(button);
+						}, 500, this );
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+						updateMaterialColorValue(button);
+					});
+
+				}
+
+				onMouseClickInputValue(increase_r);
+				onMouseClickInputValue(increase_g);
+				onMouseClickInputValue(increase_b);
+				onMouseClickInputValue(decrease_r);
+				onMouseClickInputValue(decrease_g);
+				onMouseClickInputValue(decrease_b);
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("input#material-color-r-input"),      // color_r,
+				TabUI.Material.tab.querySelector("input#material-color-g-input"),      // color_g,
+				TabUI.Material.tab.querySelector("input#material-color-b-input"),      // color_b,
+				TabUI.Material.tab.querySelector("li#material-color-r-increase"),      // increase_r,
+				TabUI.Material.tab.querySelector("li#material-color-g-increase"),      // increase_g,
+				TabUI.Material.tab.querySelector("li#material-color-b-increase"),      // increase_b,
+				TabUI.Material.tab.querySelector("li#material-color-r-decrease"),      // decrease_r,
+				TabUI.Material.tab.querySelector("li#material-color-g-decrease"),      // decrease_g,
+				TabUI.Material.tab.querySelector("li#material-color-b-decrease"),      // decrease_b,
+				TabUI.Material.tab.querySelector("select#material-color-droplist"),    // color_droplist
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.Material.tab.querySelector("div#material-undo-button")           // undo_button,
+			);
+
+		</script>
+
+	<!-- script src="/yatch/editor/TexturesTab.js"></script -->
+
+		<script>
+
+		//	texture-key-droplist.js
+
+			(function(editor,text_input,value_input,key_droplist){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				watch( key_droplist, "onchange", function( property, event, key ){
+
+					switch ( key ) {
+					//	string types:
+						case "name":
+						case "uuid":
+							text_input.value = editor[key];
+						break;
+					//	boolean types:
+						case "flipY":
+						case "premultiplyAlpha":
+						case "matrixAutoUpdate":
+						case "generateMipmaps":
+							value_input.value = editor[key];
+						break;
+					//	number types:
+						case "type":
+						case "wrapS":
+						case "wrapT":
+						case "format":
+						case "mapping":
+						case "minFilter":
+						case "magFilter":
+							value_input.value = editor[key].toFixed(0);
+						break;
+						case "anisotropy":
+							value_input.value = editor[key].toFixed(2);
+						break;
+						case "rotation":
+							value_input.value = (RAD2DEG*editor[key]).toFixed(1);
+						break;
+					}
+
+				});
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-text-input"),    // text_input,
+				TabUI.Texture.tab.querySelector("input#texture-value-input"),   // value_input,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist")  // key_droplist.
+			);
+
+		//	texture-vector-droplist.js
+
+			(function(editor,vector_x,vector_y,vector_droplist){
+
+				watch( vector_droplist, "onchange", function( property, event, key ){
+
+					if ( key === "" )                         [vector_x.value, vector_y.value] = ["",""];
+					else if ( editor[key] === undefined )     [vector_x.value, vector_y.value] = ["",""];
+					else if ( !editor[key].isVector2 )        [vector_x.value, vector_y.value] = ["",""];
+					else [ vector_x.value, vector_y.value ] = [ editor[key].x.toFixed(2), editor[key].y.toFixed(2) ];
+
+				});
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-vector-x-input"),  // vector_x,
+				TabUI.Texture.tab.querySelector("input#texture-vector-y-input"),  // vector_y,
+				TabUI.Texture.tab.querySelector("select#texture-vector-droplist") // vector_droplist.
+			);
+
+		//	textures-entity-droplist.js
+
+			(function(editor,key_droplist,vector_droplist,entity_droplist,exitEditMode){
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+
+					editor.update( value );
+
+				//	Call droplist watchers.
+
+					callWatchers( key_droplist, "onchange", "change", key_droplist.value );
+					callWatchers( vector_droplist, "onchange", "change", vector_droplist.value );
+
+				});
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist"),       // key_droplist.
+				TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),    // vector_droplist.
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
+				exitEditMode   // function.
+			);
+
+		</script>
+
+		<script>
+
+		//	texture-manager.js
+
+		//	Vectors.
+
+			(function( editor,vector_x,vector_y,vector_droplist,entity_droplist ){
+
+				var texture;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					texture = getTextureByEntityId( value );
+				});
+
+			//	offset.
+
+				watch( editor, "offset",  function( key, action, value ){
+					var offset = editor.offset; //console.log("offset:", offset);
+					texture && texture.offset && texture.offset.copy(offset);
+					if ( vector_droplist.value === "offset" ) {
+						vector_x.value = offset.x.toFixed(3);
+						vector_y.value = offset.y.toFixed(3);
+					}
+				});
+
+			//	repeat.
+
+				watch( editor, "repeat",  function( key, action, value ){
+					var repeat = editor.repeat; //console.log("repeat:", repeat);
+					texture && texture.repeat && texture.repeat.copy(repeat);
+					if ( vector_droplist.value === "repeat" ) {
+						vector_x.value = repeat.x.toFixed(3);
+						vector_y.value = repeat.y.toFixed(3);
+					}
+				});
+
+			//	center.
+
+				watch( editor, "center",  function( key, action, value ){
+					var center = editor.center; //console.log("center:", center);
+					texture && texture.center && texture.center.copy(center);
+					if ( vector_droplist.value === "center" ) {
+						vector_x.value = center.x.toFixed(3);
+						vector_y.value = center.y.toFixed(3);
+					}
+				});
+
+			})( 
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-vector-x-input"),     // vector_x,
+				TabUI.Texture.tab.querySelector("input#texture-vector-y-input"),     // vector_y,
+				TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),   // vector_droplist,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist,
+			);
+
+
+		//	Strings.
+
+			(function( editor,text_input,value_input,key_droplist,entity_droplist ){
+
+				var texture;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					texture = getTextureByEntityId( value );
+				});
+
+				function update_texture_value( key, action, value ){
+					if ( texture ) texture[key] = String(value);
+					if ( key_droplist.value === key ) text_input.value = value;
+				}
+
+				watch( editor, "name", update_texture_value );
+				watch( editor, "uuid", update_texture_value );
+
+			})( 
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-text-input"),         // text_input,
+				TabUI.Texture.tab.querySelector("input#texture-value-input"),        // value_input,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist"),      // key_droplist,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist,
+			);
+
+
+		//	Booleans.
+
+			(function( editor,text_input,value_input,key_droplist,entity_droplist ){
+
+				var interval, texture;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					texture = getTextureByEntityId( value );
+				});
+
+				function update_texture_value( key, action, value ){
+					clearTimeout( interval );
+					if ( texture ) texture[key] = Boolean(value);
+					if ( key_droplist.value === key ) value_input.value = value; // display.
+					interval = setTimeout(function(){
+						if ( texture ) texture.needsUpdate = true; // important!
+					}, 250);
+				}
+
+				watch( editor, "flipY", update_texture_value );
+				watch( editor, "premultiplyAlpha", update_texture_value );
+				watch( editor, "matrixAutoUpdate", update_texture_value );
+				watch( editor, "generateMipmaps", update_texture_value );
+
+			})( 
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-text-input"),         // text_input,
+				TabUI.Texture.tab.querySelector("input#texture-value-input"),        // value_input,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist"),      // key_droplist,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist,
+			);
+
+
+		//	Numbers.
+
+			(function( editor,text_input,value_input,key_droplist,entity_droplist ){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+				var texture;
+
+				watch( entity_droplist, "onchange", function( property, event, value ){
+					texture = getTextureByEntityId( value );
+				});
+
+				function update_texture_value( key, action, value ){
+					if ( texture ) texture[key] = Number(value);
+					if ( key_droplist.value === key ) value_input.value = value.toFixed(2);
+				}
+
+				function update_texture_constant( key, action, value ){
+					if ( texture ) texture[key] = Number(value);
+					if ( key_droplist.value === key ) value_input.value = value.toFixed(0);
+				}
+
+			//	Rad.
+
+				watch( editor, "rotation", function( key, action, value ){
+					if ( texture ) texture[key] = Number(value);
+					if ( key_droplist.value === key ) value_input.value = (RAD2DEG*value).toFixed(1);
+				});
+
+			//	Floats.
+
+				watch( editor, "anisotropy", update_texture_value );
+
+			//	Constants.
+
+				watch( editor, "type", update_texture_constant );
+				watch( editor, "wrapS", update_texture_constant );
+				watch( editor, "wrapT", update_texture_constant );
+				watch( editor, "format", update_texture_constant );
+				watch( editor, "mapping", update_texture_constant );
+				watch( editor, "minFilter", update_texture_constant );
+				watch( editor, "magFilter", update_texture_constant );
+
+			})( 
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-text-input"),         // text_input,
+				TabUI.Texture.tab.querySelector("input#texture-value-input"),        // value_input,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist"),      // key_droplist,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist,
+			);
+
+		</script>
+
+		<script>
+
+		//	texture-needs-update.js
+
+			(function( needs_update ){
+
+				watch( needs_update, "onclick", function( prop, event, value ){
+
+					var texture = getTextureByEntityId(value);
+					if ( texture ) texture.needsUpdate = true;
+
+				});
+
+			})( TabUI.Texture.tab.querySelector("div#texture-needs-update") );
+
+
+		//	exit-edit-mode.js
+
+			(function(exit_button,entity_droplist,exitEditMode){
+
+				watch( exit_button, "onclick", function( prop, event, value ){
+
+					 exitEditMode( entity_droplist );
+				});
+
+			})( 
+				TabUI.Texture.tab.querySelector("div#texture-exit-mode"), // exit_button,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
+				exitEditMode // function.
+			 ); 
+
+		//	reset-vectors.js
+
+			(function( editor,reset_button,vector_w,vector_droplist ){
+
+				watch( reset_button, "onclick", function( property, event, key ){
+
+					switch ( key ) {
+						case "center":
+						case "offset":
+							editor[key].set(0,0);
+						break;
+						case "repeat":
+							editor[key].set(1,1);
+						break;
+					}
+
+				});
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), // reset_button,
+				TabUI.Texture.tab.querySelector("select#texture-vector-droplist") // vector_droplist.
+			);
+
+		//	replace-image.js
+
+			(function(viewer,input,button,droplist){
+
+				var interval;
+
+				input.addEventListener( "change", function(e){
+
+					if ( input.files.length === 0 ) return;
+
+					var file = input.files[0];
+
+				//	get texture.
+					var texture = getTextureByEntityId( droplist.value ); // string.
+					if ( !texture ) return; debugMode && console.log( texture );
+
+					var img = new Image();
+					img.addEventListener("load", function(){
+
+					//	make power of two.
+						var canvas = document.createElement("canvas");
+						canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+						canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+						var context = canvas.getContext( "2d" );
+						context.drawImage( img, 0, 0, canvas.width, canvas.height );
+						debugMode && console.log( canvas );
+
+					//	texture has gotten.
+						if ( !texture ) return;
+						texture.image = canvas;
+						texture.name = file.name;
+						texture.sourceFile = file.name;
+						if ( texture.image !== undefined ) texture.needsUpdate = true; // important!
+						if ( viewer && viewer.material ) viewer.material.needsUpdate = true; // important!
+					//	TODO: Update texture entity option text.
+
+					});
+
+					var reader = new FileReader();
+					reader.addEventListener("load", function() {
+						img.name = file.name;
+						img.src = reader.result;
+					});
+
+					reader.readAsDataURL(file);
+
+				});
+
+				button.addEventListener( "click", function(){ 
+					input.value = ""; input.click();
+				});
+
+			})(
+				null, // textureViewer,
+				TabUI.Texture.tab.querySelector("input#image-file-input"), // input,
+				TabUI.Texture.tab.querySelector("div#replace-image-button"), // button,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // droplist.
+			);
+
+		</script>
+
+		<script>
+
+		//	texture-key-inputs.js
+
+			(function(editor,text_input,value_input,key_droplist,entity_droplist,undo_button){
+
+				const RAD2DEG = 57.29577951308232;
+				const DEG2RAD = 0.017453292519943295;
+
+			//	text input.
+
+				watch( text_input, "onchange", function(property, event, value){
+
+					var key = key_droplist.value;
+
+					switch ( key ){
+
+						case "uuid":
+							return text_input.value = editor[key];
+						break;
+
+						case "name":
+
+							if ( !value ) return text_input.value = editor[key];
+
+						//	rename option.
+							setTimeout( function( option, name, id ){
+								if ( !option ) return;
+								var str="",dot=".",col=":";
+								option.text = str+id+dot+name;
+							}, null, 
+								entity_droplist.selectedOptions[0], value, entity_droplist.value 
+							);
+
+						//	Update editor.
+							return editor[key] = value;
+
+						break;
+
+					}
+
+					value_input.value = "";
+
+				});
+
+			//	value input.
+
+				watch( value_input, "onchange", function( prop, event, value ){
+
+					var key = key_droplist.value;
+
+					switch( key ){
+
+					//	boolean types:
+						case "flipY":
+						case "premultiplyAlpha":
+						case "matrixAutoUpdate":
+						case "generateMipmaps":
+							if ( value === "0") return editor[key] = false;
+							else if ( value === "1") return editor[key] = true;
+							else if ( value.toLowerCase() === "true") return editor[key] = true;
+							else if ( value.toLowerCase() === "false") return editor[key] = false;
+							return value_input.value = editor[key];
+						break;
+					//	number types:
+						case "type":
+						case "wrapS":
+						case "wrapT":
+						case "format":
+						case "mapping":
+						case "minFilter":
+						case "magFilter":
+							return value_input.value = editor[key].toFixed(0);
+						break;
+						case "anisotropy":
+							editor[key] = Number(value);
+							return value_input.value = editor[key].toFixed(2);
+						break;
+						case "rotation":
+							editor[key] = DEG2RAD*Number(value);
+							return value_input.value = (RAD2DEG*editor[key]).toFixed(1);
+						break;
+					}
+				});
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-text-input"),          // text_input,
+				TabUI.Texture.tab.querySelector("input#texture-value-input"),         // value_input,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist"),       // key_droplist
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
+				TabUI.Texture.tab.querySelector("div#texture-undo-button")            // undo_button,
+			);
+
+		//	vector inputs.
+
+			(function(editor,vector_x,vector_y,vector_droplist,entity_droplist,undo_button){
+
+				watch( vector_x, "onchange", function(property, event, value){
+
+					var key = vector_droplist.value;
+
+					value = THREE.Math.clamp( Number(value), -100, 100 )
+					if ( isNaN(value) ) return vector_x.value = editor[key].x.toFixed(3);
+					editor[key].x = value; vector_x.value = value.toFixed(3);
+
+
+				});
+
+				watch( vector_y, "onchange", function(property, event, value){
+
+					var key = vector_droplist.value;
+
+					value = THREE.Math.clamp( Number(value), -100, 100 )
+					if ( isNaN(value) ) return vector_y.value = editor[key].y.toFixed(3);
+					editor[key].y = value; vector_y.value = value.toFixed(3);
+
+				});
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-vector-x-input"),      // vector_x,
+				TabUI.Texture.tab.querySelector("input#texture-vector-y-input"),      // vector_y,
+				TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),    // vector_droplist,
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist,
+				TabUI.Texture.tab.querySelector("div#texture-undo-button")            // undo_button,
+			);
+
+		</script>
+
+		<script>
+
+		//	texture-mouse-inputs.js
+
+		//	key/value.
+
+			(function( editor,increase,decrease,text_input,value_input,key_droplist,entity_droplist,undo_button ){
+
+				var interval, key = key_droplist.value; debugMode && console.log( "key:", key );
+
+				watch( key_droplist, "onchange", function( prop, event, value ){ key = value; });
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function onMouseClickInputValue(button){ 
+
+					function updateFloatRotationValue(button, min, max, step){
+						var step = 0.1 * Math.PI/180; // 0.1 deg.
+						var min = -Math.PI, max = Math.PI;
+						var value = Number(editor[ key ]); // get value from editor, rad.
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max ); // rad.
+						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max ); // rad.
+						editor[ key ] = Number(value); // material manager updates input value, rad.
+					}
+
+					function updateFloatNumberValue(button, min, max, step){
+						var value = Number(editor[ key ]); // get value from editor.
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max );
+						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max );
+						editor[ key ] = Number(value); // material manager updates input value.
+					}
+
+					function updateConstantNumberValue( button, values ){
+						var min = 0, max = values.length;
+						var value = Number(editor[ key ]); // get value from editor.
+						var index = values.findIndex(function( item ){ return item === value; });
+						if ( button === increase ) value = values[ ( ++index % max + max ) % max ]; // mod();
+						if ( button === decrease ) value = values[ ( --index % max + max ) % max ]; // mod();
+						editor[ key ] = Number(value); // material manager updates input value.
+					}
+
+					function update_texture_value( button ){
+
+						switch( key ){
+
+						//	string types:
+
+							case "uuid": 
+								return editor[ key ] = THREE.Math.generateUUID();
+							break;
+
+						//	boolean types:
+
+							case "flipY":
+							case "premultiplyAlpha":
+							case "matrixAutoUpdate":
+							case "generateMipmaps":
+								return editor[key] = !editor[key]; // material manager updates input value.
+							break;
+
+						//	number types:
+
+							case "wrapS":
+							case "wrapT":
+								return updateConstantNumberValue(button, [
+									THREE.RepeatWrapping,THREE.ClampToEdgeWrapping,THREE.MirroredRepeatWrapping 
+								]);
+							break;
+
+							case "type":
+								return updateConstantNumberValue(button, []);
+							break;
+
+							case "format":
+								return updateConstantNumberValue(button, [
+									THREE.AlphaFormat,THREE.RGBFormat,THREE.RGBAFormat,
+									THREE.LuminanceFormat,THREE.LuminanceAlphaFormat
+								]);
+							break;
+
+							case "mapping":
+								return updateConstantNumberValue(button, [
+									THREE.UVMapping,THREE.CubeReflectionMapping,THREE.CubeRefractionMapping,
+									THREE.EquirectangularReflectionMapping,THREE.EquirectangularRefractionMapping,
+									THREE.SphericalReflectionMapping,THREE.CubeUVReflectionMapping,THREE.CubeUVRefractionMapping
+								]);
+							break;
+
+							case "encoding":
+								return updateConstantNumberValue(button, [
+									THREE.LinearEncoding,THREE.sRGBEncoding,THREE.GammaEncoding,THREE.RGBEEncoding,
+									THREE.LogLuvEncoding,THREE.RGBM7Encoding,THREE.RGBM16Encoding,THREE.RGBDEncoding,
+									THREE.BasicDepthPacking,THREE.RGBADepthPacking 
+								]);
+							break;
+
+							case "magFilter":
+								return updateConstantNumberValue(button, [THREE.NearestFilter,THREE.LinearFilter]);
+							break;
+
+							case "minFilter":
+								return updateConstantNumberValue(button, [
+									THREE.NearestFilter,THREE.NearestMipMapNearestFilter,
+									THREE.NearestMipMapLinearFilter,THREE.LinearFilter,
+									THREE.LinearMipMapNearestFilter,THREE.LinearMipMapLinearFilter 
+								]);
+							break;
+
+							case "anisotropy":
+								return updateFloatNumberValue(button, -1, 1, 1/100);
+							break;
+
+							case "rotation":
+								return updateFloatRotationValue(button);
+							break;
+						}
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout( function update_texture(button){
+							switch( key ){
+								case "anisotropy":
+									interval = setTimeout( update_texture, 20, button );
+									return updateFloatNumberValue( button,-1, 1, 1/100 );
+								break;
+								case "rotation":
+									interval = setTimeout( update_texture, 20, button );
+									return updateFloatRotationValue( button );
+								break;
+							}
+						}, 500, this);
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+						update_texture_value( this );
+					});
+
+				}
+
+				onMouseClickInputValue(increase);
+				onMouseClickInputValue(decrease);
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("li#texture-value-increase"),         // increase,
+				TabUI.Texture.tab.querySelector("li#texture-value-decrease"),         // decrease,
+				TabUI.Texture.tab.querySelector("input#texture-text-input"),          // text_input,
+				TabUI.Texture.tab.querySelector("input#texture-value-input"),         // value_input,
+				TabUI.Texture.tab.querySelector("select#texture-key-droplist"),       // key_droplist
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
+				TabUI.Texture.tab.querySelector("div#texture-undo-button")            // undo_button,
+			);
+
+
+		//	vectors.
+
+			(function( editor,vector_x,vector_y,increase_x,increase_y,decrease_x,decrease_y,vector_droplist,entity_droplist,undo_button ){
+
+				var interval, key = vector_droplist.value; debugMode && console.log( "key:", key );
+
+				watch( vector_droplist, "onchange", function( prop, event, value ){ key = value; });
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function onMouseClickInputValue(button){ 
+
+					function updateVectorValues( button, min,max,step ){
+						if ( !editor[key] ) return;
+						if ( button === increase_x ) editor[key].x = round( THREE.Math.clamp( editor[key].x+step, min, max ), 6);
+						if ( button === decrease_x ) editor[key].x = round( THREE.Math.clamp( editor[key].x-step, min, max ), 6);
+						if ( button === increase_y ) editor[key].y = round( THREE.Math.clamp( editor[key].y+step, min, max ), 6);
+						if ( button === decrease_y ) editor[key].y = round( THREE.Math.clamp( editor[key].y-step, min, max ), 6);
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout( function update_texture( button ){
+							switch ( key ){
+								case "center":
+									interval = setTimeout( update_texture, 20, button );
+									return updateVectorValues( button, 0, 1, 1/100 );
+								break;
+								case "offset":
+									interval = setTimeout( update_texture, 10, button );
+									return updateVectorValues( button,-100,100,1/1000 );
+								break;
+								case "repeat":
+									interval = setTimeout( update_texture, 10, button );
+									return updateVectorValues( button, -100,100,1/1000 );
+								break;
+							}
+						}, 500, this);
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+						switch ( key ){
+							case "center":
+								return updateVectorValues( button, 0, 1, 1/100 );
+							break;
+							case "offset":
+								return updateVectorValues( button, -100,100,1/1000 );
+							break;
+							case "repeat":
+								return updateVectorValues( button, -100,100,1/1000 );
+							break;
+						}
+					});
+
+				}
+
+				onMouseClickInputValue(increase_x);
+				onMouseClickInputValue(increase_y);
+				onMouseClickInputValue(decrease_x);
+				onMouseClickInputValue(decrease_y);
+
+			})(
+				textureEditor, // editor,
+				TabUI.Texture.tab.querySelector("input#texture-vector-x-input"),      // vector_x,
+				TabUI.Texture.tab.querySelector("input#texture-vector-y-input"),      // vector_y,
+				TabUI.Texture.tab.querySelector("li#texture-vector-x-increase"),      // increase_x,
+				TabUI.Texture.tab.querySelector("li#texture-vector-y-increase"),      // increase_y,
+				TabUI.Texture.tab.querySelector("li#texture-vector-x-decrease"),      // decrease_x,
+				TabUI.Texture.tab.querySelector("li#texture-vector-y-decrease"),      // decrease_y,
+				TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),    // vector_droplist
+				TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
+				TabUI.Texture.tab.querySelector("div#texture-undo-button")            // undo_button,
+			);
+
+		</script>
+
+		<script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		</script>
+
+		<script>
+
+			TabUI.Editor.role.classList.add("active");
+			TabUI.Editor.tab.classList.add("in","active");
+			groundHelper.visible = !groundHelper.visible; 
+
+			entities.add(ground);
+			entities.add(groundHelper);
+			entities.add(localPlayer.getObjectByName("playerhelper"));
+
+			cameraControls.setLatLon(5.128, 270.675);
+			localPlayer.controller.movementSpeed = 30;
+			localPlayer.controller.center.set(-85,2,-2);
+
+
+		</script>
+
+		<script>
+
+		//	Background.
+
+			(function(scene,textures_entities){
+
+				if (!scene || Number(THREE.REVISION) < 78) return;
+
+				var urls = [
+					"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
+					"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
+					"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
+					"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
+					"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
+					"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
+				];
+
+				var loader = new THREE.CubeTextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				loader.load( urls, function(texture){
+					scene.background = texture;
+					scene.background.needsUpdate = true;
+					textures_entities && textures_entities.add(texture);
+				});
+
+			})( scene, textures_entities );
+
+		</script>
+
+		<script>
+
+		//  Skydome.
+
+			const skydome = (function(scene,entities,material_entities,textures_entities){
+
+				var loader = new THREE.TextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				var geometry = new THREE.SphereGeometry( 2000, 64, 32 );
+				var texture = loader.load( "https://i.imgur.com/xQsNP0X.jpg" );
+				texture.wrapS = texture.wrapT = 1000; //texture.offset.y=-0.01;
+				var material = new THREE.MeshBasicMaterial({
+					map:texture,transparent:true,opacity:0.8,side:1,
+				});
+				var dome = new THREE.Mesh( geometry, material );
+				dome.scale.set(0.10,0.08,0.10); dome.name = "skydome";
+				scene.add(dome); entities && entities.add(dome);
+				textures_entities && textures_entities.add(texture);
+				material_entities && material_entities.add(material);
+				return dome;
+
+			})(scene, entities, material_entities, textures_entities);
+
+		//	skydome.rotation.set(0.005235,0,-0.0349);
+
+		</script>
+
+		<script>
+
+		//  Water.
+
+			const water = (function(renderer,camera,scene,light,textures_entities){
+
+				var waterNormals = loadTexture("https://i.imgur.com/gd4Gr7Q.png");
+				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
+				textures_entities && textures_entities.add(waterNormals);
+
+			//  the water effect.
+				return new THREE.Water(renderer, camera, scene, {
+					textureWidth:256,  textureHeight:256,
+					waterNormals:waterNormals, alpha:0.9,
+					sunDirection:light.position.normalize(),
+					sunColor:0xffffff,  waterColor:0x001e0f,
+					betaVersion:0, side:2,
+				});
+
+				function loadTexture( url, mapping) {
+					var loader = new THREE.TextureLoader();
+					loader.setCrossOrigin( "anonymous" );
+					var texture = loader.load( url );
+					if ( mapping ) texture.mapping = mapping;
+					return texture;
+				}
+
+			})( renderer, camera, scene, cameraLight, textures_entities );
+
+			const watermirror = (function( scene,water,material_entities,entities ){
+
+				material_entities && material_entities.add(water.material);
+				var material = water.material; // entities && entities.add(water); 
+				var geometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
+				var mirror = new THREE.Mesh( geometry, material );
+				mirror.add(water); mirror.name = "water mirror";
+				mirror.rotation.x = -Math.PI/2; 
+				mirror.position.y = -0.01;
+				scene.add(mirror);
+
+				var clock = new THREE.Clock();
+				(function render(){
+					var dt = clock.getDelta();
+					requestFrameID = requestAnimationFrame( render );
+					water.material.uniforms.time.value += Math.max(dt, 1/60);
+					water.render();
+				})();
+
+				return mirror;
+
+			})( scene, water, material_entities, entities );
+
+		</script>
+
+		<script>
+
+		//	deck 0.
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=110, h=0.5, d=60, x=-2, y=-h/2, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=100, h=0.5, d=50, x=-2, y=-0, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0_floor"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+
+		</script>
+
+		<script>
+
+		//	Water path.
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=2.5, h=0.5, d=200, x=-85, y=-h/2, z=100;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "water path"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+
+		</script>
+
+	</body>
+</html>
