@@ -36,7 +36,7 @@
 	(function( tab ){
 
 	//	Skydome viewer.
-	//	var tab = TabUI.Texture.tab;
+	//	var tab = TabUI.Skydome.tab;
 
 		var row = document.createElement("h3");
 		row.style.cssText = "height:260px;border:none;text-align:center;";
@@ -51,12 +51,12 @@
 
 	})( TabUI.Skydome.tab );
 
-//	value-input-ui.js
+//	texture-name-input-ui.js
 
 	(function( tab ){
 
-	//	Value input.
-	//	var tab = Skydome.Texture.tab;
+	//	Skydome texture name input.
+	//	var tab = TabUI.Skydome.tab;
 
 		var row = document.createElement("h3");
 		row.style.cssText = "margin:10px 15px;height:30px;";
