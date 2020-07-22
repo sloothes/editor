@@ -211,22 +211,23 @@
 
 					(function(data){
 
-						var result;
+						var result; // important!
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 								result = true;
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log("image updated!");
+									if (err) throw err; // console.log("image updated!");
 								});
 							},
 
 							function(err){ if (err) throw err; }
 
 						).then(function(){
-							console.log("result:", result);
+
+							debugMode && console.log("image result:", result);
 							if (!result) collection.insert(data, function(err){ 
-								if (err) throw err; console.log( "image inserted!" );
+								if (err) throw err; // console.log( "image inserted!" );
 							});
 
 						}).then(function(){
@@ -249,22 +250,23 @@
 
 					(function(data){
 
-						var result;
+						var result; // important!
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 								result = true;
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log("texture updated!");
+									if (err) throw err; // console.log("texture updated!");
 								});
 							},
 
 							function(err){ if (err) throw err; }
 
 						).then(function(){
-							console.log("result:", result);
+
+							debugMode && console.log("texture result:", result);
 							if (!result) collection.insert(data, function(err){ 
-								if (err) throw err; console.log( "texture inserted!" );
+								if (err) throw err; // console.log( "texture inserted!" );
 							});
 
 						}).then(function(){
@@ -280,6 +282,12 @@
 			})( Textures, meta.textures );
 
 		});
+
+	})(
+		metaDB, // database,
+		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
+	);
 
 /*
 		//	colect images.
@@ -377,10 +385,4 @@
 
 			});
 */
-
-	})(
-		metaDB, // database,
-		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
-		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
-	);
 
