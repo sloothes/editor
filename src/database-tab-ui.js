@@ -103,7 +103,7 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "margin:10px 15px;height:30px;";
+		row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
 
 		var prev = document.createElement("li");
 		prev.id = "doc-index-previous";
@@ -119,9 +119,9 @@
 
 		var input = document.createElement("input");
 		input.id = "doc-index-input";
-		input.setAttribute("placeholder", "uuid" );
+		input.setAttribute("placeholder", "index" );
 		input.classList.add("form-control","text-center");
-		input.style.cssText = "color:#000;border:none;display:inline;width:180px;"
+		input.style.cssText = "color:#000;border:none;display:inline;width:195px;"
 		+ "margin:0px 10px 0px 10px;text-align:center;font-weigth:normal;background:none;";
 
 		row.appendChild(prev);
@@ -140,11 +140,11 @@
 
 		var row = document.createElement("h3");
 		row.textContent = "key:";
-		row.style.cssText = "height:40px;"
+		row.style.cssText = "height:40px;margin:10px 0px;";
 
 		var select = document.createElement("select");
 		select.id = "doc-keys-droplist";
-		select.style.cssText = "width:170px;color:#000;float:right;"
+		select.style.cssText = "width:200px;color:#000;float:right;"
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -171,10 +171,10 @@
 
 		var row = document.createElement("h3");
 		row.textContent = "value:";
-		row.style.cssText = "margin:10px 15px;height:30px;";
+		row.style.cssText = "height:40px;margin:10px 15px 10px 0;";
 
 		var vect = document.createElement("div");
-		vect.style.cssText = "width:170px;height:40px;float:right;";
+		vect.style.cssText = "width:200px;height:40px;float:right;";
 
 		var prev = document.createElement("li");
 		prev.id = "doc-value-decrease";
@@ -192,7 +192,7 @@
 		input.id = "doc-value-input";
 		input.setAttribute("placeholder", "value" );
 		input.classList.add("form-control","text-center");
-		input.style.cssText = "color:#000;border:none;display:inline;width:80px;"
+		input.style.cssText = "color:#000;border:none;display:inline;width:110px;"
 		+ "margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 
 		vect.appendChild(prev);
