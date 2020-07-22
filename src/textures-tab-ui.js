@@ -333,6 +333,33 @@
 
 	})( TabUI.Texture.tab );
 
+//	image-replace-ui.js
+
+	(function( tab ){
+
+	//	Replace image button.
+	//	var tab = TabUI.Texture.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "replace-image-button";
+		button.textContent = "Replace Texture Image";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		var input = document.createElement("input");
+		input.type = "file";
+		input.id = "image-file-input";
+		input.style.cssText = "display:none;";
+		button.appendChild( input );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Texture.tab );
+
 //	exit-editor-ui.js
 
 	(function( tab ){
@@ -454,33 +481,6 @@
 		button.textContent = "Clone Texture Entity";
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-
-		row.appendChild( button );
-		tab.appendChild( row );
-
-	})( TabUI.Texture.tab );
-
-//	image-replace-ui.js
-
-	(function( tab ){
-
-	//	Replace image button.
-	//	var tab = TabUI.Texture.tab;
-
-		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "replace-image-button";
-		button.textContent = "Replace Texture Image";
-		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-
-		var input = document.createElement("input");
-		input.type = "file";
-		input.id = "image-file-input";
-		input.style.cssText = "display:none;";
-		button.appendChild( input );
 
 		row.appendChild( button );
 		tab.appendChild( row );

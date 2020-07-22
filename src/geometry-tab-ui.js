@@ -238,7 +238,7 @@
 
 	})( TabUI.Geometry.tab );
 
-//	create-geometry-ui.js
+//	geometry-create-ui.js
 
 	(function( tab ){
 
@@ -248,7 +248,7 @@
 	//	var tab = TabUI.Geometry.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "geometry-create-button";
@@ -261,7 +261,7 @@
 
 	})( TabUI.Geometry.tab );
 
-//	clone-geometry-ui.js
+//	geometry-clone-ui.js
 
 	(function( tab ){
 
@@ -272,7 +272,7 @@
 	//	var tab = TabUI.Geometry.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "geometry-clone-button";
@@ -285,7 +285,7 @@
 
 	})( TabUI.Geometry.tab );
 
-//	remove-geometry-ui.js
+//	geometry-remove-ui.js
 
 	(function( tab ){
 
@@ -293,11 +293,32 @@
 	//	var tab = TabUI.Geometry.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "geometry-remove-button";
 		button.textContent = "Remove Geometry Entity";
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Geometry.tab );
+
+//	geometry-save-ui.js
+
+	(function( tab ){
+
+	//	Save entity button.
+	//	var tab = TabUI.Geometry.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:40px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "geometry-save-button";
+		button.textContent = "Save Geometry Entity";
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 
@@ -314,7 +335,7 @@
 	//	var tab = TabUI.Geometry.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "octree-add-button";
@@ -333,7 +354,7 @@
 	//	var tab = TabUI.MeshWorld.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "octree-remove-button";
