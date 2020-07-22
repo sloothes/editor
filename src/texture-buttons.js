@@ -203,6 +203,85 @@
 			var texture = getTextureByEntityId(); if ( !texture ) return;
 			var json = texture.toJSON(meta); debugMode && console.log( meta );
 
+		//	images.
+
+			(function(collection,images){
+
+				for (var key in images){
+
+					(function(data){
+
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; console.log("image updated!");
+								});
+							},
+
+							function(err){
+								if (err) throw err;
+							}
+
+						).then(function(result){
+							console.log("result:", result);
+							if (!result) collection.insert(data, function(err){ 
+								if (err) throw err; console.log( "image inserted!" );
+							});
+
+						}).then(function(){
+							console.log( "image saved!" );
+						}).catch(function(err){
+							console.error(err);
+						});
+
+					})( images[key] );
+
+				}
+
+			})( Images, meta.images );
+
+		//	textures.
+
+			(function(collection,textures){
+
+				for (var key in textures){
+
+					(function(data){
+
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; console.log("texture updated!");
+								});
+							},
+
+							function(err){
+								if (err) throw err;
+							}
+
+						).then(function(result){
+							console.log("result:", result);
+							if (!result) collection.insert(data, function(err){ 
+								if (err) throw err; console.log( "texture inserted!" );
+							});
+
+						}).then(function(){
+							console.log( "texture saved!" );
+						}).catch(function(err){
+							console.error(err);
+						});
+
+					})( images[key] );
+
+				}
+
+			})( Textures, meta.textures );
+
+		});
+
+/*
 		//	colect images.
 			var images = [];
 			for ( var uuid in meta.images ){
@@ -215,14 +294,14 @@
 				textures.push( meta.textures[uuid] );
 			}
 
-			debugMode && console.log( "Images insert:", images );
-			debugMode && console.log( "Textures insert:", textures );
+		//	debugMode && console.log( "Images insert:", images );
+		//	debugMode && console.log( "Textures insert:", textures );
 
 		//	save images.
 
-			if ( images.length ) images.forEach(function(item, i){
+			if ( images.length ) images.forEach(function(data, i){
 
-				var data = images[i];
+			//	var data = images[i];
 				var collection = Images;
 				var results = collection.find({uuid:data.uuid}); // cursor.
 
@@ -240,18 +319,18 @@
 
 				//	update.
 					if ( _ids.length ) _ids.forEach(function(_id){
-						collection.update({_id:_id}, data, function(err){
-							if (err) throw err;
-							console.log("image updated!");
+						collection.update({_id:_id}, {$set:data}, function(err){
+							if (err) throw err; console.log("image updated!");
 						});
 					});
 
 				//	insert.
 					else collection.insert( data, function(err){ 
-						if (err) throw err;
-						console.log( "image inserted!" );
+						if (err) throw err; console.log( "image inserted!" );
 					});
 
+				}).then(function(){
+					console.log( "image saved!" );
 				}).catch(function(err){
 					console.error(err);
 				});
@@ -260,9 +339,9 @@
 				
 		//	save textures.
 
-			if ( textures.length ) textures.forEach(function(item, i){
+			if ( textures.length ) textures.forEach(function(data, i){
 
-				var data = textures[i];
+			//	var data = textures[i];
 				var collection = Textures;
 				var results = collection.find({uuid:data.uuid}); // cursor.
 
@@ -280,25 +359,24 @@
 
 				//	update.
 					if ( _ids.length ) _ids.forEach(function(_id){
-						collection.update({_id:_id}, data, function(err){
-							if (err) throw err;
-							console.log("texture updated!");
+						collection.update({_id:_id}, {$set:data}, function(err){
+							if (err) throw err; console.log("texture updated!");
 						});
 					});
 
 				//	insert.
 					else collection.insert( data, function(err){ 
-						if (err) throw err;
-						console.log( "texture inserted!" );
+						if (err) throw err; console.log( "texture inserted!" );
 					});
 
+				}).then(function(){
+					console.log( "texture saved!" );
 				}).catch(function(err){
 					console.error(err);
 				});
 
 			});
-
-		});
+*/
 
 	})(
 		metaDB, // database,
