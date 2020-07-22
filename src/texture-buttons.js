@@ -193,31 +193,52 @@
 
 		watch( save_button, "onclick", function( property, event, value ){
 
-		//	if ( !db ) return;
-			var texture = getTextureByEntityId(); if ( !texture ) return;
-		//	Images = db.collection("images"); if ( !Images ) return;
-		//	Textures = db.collection("textures"); if ( !Textures ) return;
+			if ( !db ) return;
+			Images = db.collection("images"); if ( !Images ) return;
+			Textures = db.collection("textures"); if ( !Textures ) return;
 
+		//	json.
 			var meta = { textures:{}, images:{} };
+			var texture = getTextureByEntityId(); if ( !texture ) return;
 			var json = texture.toJSON(meta); debugMode && console.log( meta );
 
+		//	colect images.
 			var images = [];
 			for ( var uuid in meta.images ){
 				images.push( meta.images[uuid] );
 			}
 
+		//	collect textures.
 			var textures = [];
 			for ( var uuid in meta.textures ){
 				textures.push( meta.textures[uuid] );
 			}
 
-			images.length && debugMode && console.log( "Images insert:", images );
-			textures.length && debugMode && console.log( "Textures insert:", textures );
+			debugMode && console.log( "Images insert:", images );
+			debugMode && console.log( "Textures insert:", textures );
+
+		//	insert.
+
+			if ( images.length ) {
+				Images.insert( images, function(err){ 
+					if (err) throw err;
+				}).catch(function(err){
+					console.error(err);
+				});
+			}
+
+			if ( textures.length ) {
+				Textures.insert( textures, function(err){ 
+					if (err) throw err;
+				}).catch(function(err){
+					console.error(err);
+				});
+			}
 
 		});
 
 	})(
-		null, // metaDB, // database,
+		metaDB, // database,
 		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);
