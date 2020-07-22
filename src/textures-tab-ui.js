@@ -412,7 +412,7 @@
 
 //	===================================================================================================================  //
 
-//	create-texture-ui.js
+//	texture-create-ui.js
 
 	(function( tab ){
 
@@ -439,7 +439,7 @@
 
 	})( TabUI.Texture.tab );
 
-//	clone-texture-ui.js
+//	texture-clone-ui.js
 
 	(function( tab ){
 
@@ -460,7 +460,7 @@
 
 	})( TabUI.Texture.tab );
 
-//	replace-image-ui.js
+//	image-replace-ui.js
 
 	(function( tab ){
 
@@ -487,7 +487,7 @@
 
 	})( TabUI.Texture.tab );
 
-//	remove-texture-ui.js
+//	texture-remove-ui.js
 
 	(function( tab ){
 
@@ -508,7 +508,7 @@
 
 	})( TabUI.Texture.tab );
 
-//	save-texture-ui.js
+//	texture-save-ui.js
 
 	(function( tab ){
 
