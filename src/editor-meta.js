@@ -2,12 +2,11 @@
 
 	const metaDB = new zango.Db( "meta", {
 
-		geometries: true,
-		materials:  true,
-		textures:   true,
-		images:     true,
-		shapes:     true,
-		objects:    true,
+		geometries: ["uuid"],
+		materials:  ["uuid"],
+		textures:   ["uuid"],
+		images:     ["uuid"],
+		shapes:     ["uuid"],
 
 	});
 

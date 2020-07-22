@@ -89,6 +89,13 @@
 				if ( texture.image !== undefined ) texture.needsUpdate = true;
 				if ( viewer && viewer.material ) viewer.material.needsUpdate = true;
 
+			//	add to database.
+				var meta = {geometries:{},materials:{},textures:{},images:{},shapes:{}};
+				var json = texture.toJSON(meta); debugMode && console.log( json, meta );
+
+				
+
+
 			});
 
 			var reader = new FileReader();
