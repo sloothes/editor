@@ -401,7 +401,7 @@
 
 		var button = document.createElement("div");
 		button.id = "replace-map-button";
-		button.textContent = "Replace Material Map";
+		button.textContent = "Replace Material Texture";
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 
