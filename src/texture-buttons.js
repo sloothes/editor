@@ -183,12 +183,13 @@
 
 	(function(db,save_button,entity_droplist){
 
-		var Geometries, Materials, Textures, Images, Shapes;
+		var Geometries, Materials, Textures, Images, Shapes; // collections.
 
 	//	Images = db.collection("images");
 	//	Textures = db.collection("textures");
 	//	Materials = db.collection("materials");
 	//	Geometries = db.collection("geometries");
+	//	Shapes = db.collection("shapes";)
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
 
 		watch( save_button, "onclick", function( property, event, value ){
@@ -217,23 +218,83 @@
 			debugMode && console.log( "Images insert:", images );
 			debugMode && console.log( "Textures insert:", textures );
 
-		//	insert.
+		//	save images.
 
-			if ( images.length ) {
-				Images.insert( images, function(err){ 
+			if ( images.length ) images.forEach(function(data){
+
+				var collection = Images;
+				var results = collection.find({uuid:data.uuid}); // cursor.
+
+				results.toArray(function(err,docs){
+
 					if (err) throw err;
+
+					var _ids = [];
+					for (var doc of docs){
+						_ids.push( doc._id);
+					}
+					return _ids;
+
+				}).then(function(_ids){
+
+				//	update.
+					if ( _ids.length ) _ids.forEach(function(_id){
+						collection.update({_id:_id}, data, function(err){
+							if (err) throw err;
+							console.log("image updated!");
+						});
+					});
+
+				//	insert.
+					else collection.insert( data, function(err){ 
+						if (err) throw err;
+						console.log( "image data saved!" );
+					});
+
 				}).catch(function(err){
 					console.error(err);
 				});
-			}
 
-			if ( textures.length ) {
-				Textures.insert( textures, function(err){ 
+			});
+				
+		//	save textures.
+
+			if ( textures.length ) images.forEach(function(data){
+
+				var collection = Textures;
+				var results = collection.find({uuid:data.uuid}); // cursor.
+
+				results.toArray(function(err,docs){
+
 					if (err) throw err;
+
+					var _ids = [];
+					for (var doc of docs){
+						_ids.push( doc._id);
+					}
+					return _ids;
+
+				}).then(function(_ids){
+
+				//	update.
+					if ( _ids.length ) _ids.forEach(function(_id){
+						collection.update({_id:_id}, data, function(err){
+							if (err) throw err;
+							console.log("texture updated!");
+						});
+					});
+
+				//	insert.
+					else collection.insert( data, function(err){ 
+						if (err) throw err;
+						console.log( "texture data saved!" );
+					});
+
 				}).catch(function(err){
 					console.error(err);
 				});
-			}
+
+			});
 
 		});
 
@@ -242,3 +303,32 @@
 		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);
+
+/*
+		//	update.
+			Images.find({uuid:data.uuid}).forEach(function(doc){
+				Images.update({_id:doc._id},{url:data.url},
+				function(err){ 
+					if (err) throw err;
+					console.log("image updated!")
+				});
+			}, function(err){
+				if (err) throw err;
+			}).catch(function(err){
+				console.error(err);
+			});
+		//	insert.
+			Images.insert( images, function(err){ 
+				if (err) throw err;
+				console.log( "images saved!" );
+			}).catch(function(err){
+				console.error(err);
+			})
+			Textures.insert( textures, function(err){ 
+				if (err) throw err;
+				console.log( "textures saved!" );
+			}).catch(function(err){
+				console.error(err);
+			});
+
+*/
