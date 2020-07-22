@@ -306,31 +306,3 @@
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);
 
-/*
-		//	update.
-			Images.find({uuid:data.uuid}).forEach(function(doc){
-				Images.update({_id:doc._id},{url:data.url},
-				function(err){ 
-					if (err) throw err;
-					console.log("image updated!")
-				});
-			}, function(err){
-				if (err) throw err;
-			}).catch(function(err){
-				console.error(err);
-			});
-		//	insert.
-			Images.insert( images, function(err){ 
-				if (err) throw err;
-				console.log( "images saved!" );
-			}).catch(function(err){
-				console.error(err);
-			})
-			Textures.insert( textures, function(err){ 
-				if (err) throw err;
-				console.log( "textures saved!" );
-			}).catch(function(err){
-				console.error(err);
-			});
-
-*/
