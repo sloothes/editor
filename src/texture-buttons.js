@@ -52,6 +52,67 @@
 		TabUI.Texture.tab.querySelector("select#texture-vector-droplist") // vector_droplist.
 	);
 
+//	create-texture.js
+
+	(function(viewer,input,button,droplist,textures_entities){
+
+		var interval;
+
+		input.addEventListener( "change", function(e){
+
+			if ( input.files.length === 0 ) return;
+
+			var file = input.files[0];
+
+			var img = new Image();
+			img.addEventListener("load", function(){
+
+			//	make power of two.
+				var canvas = document.createElement("canvas");
+				canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+				canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+				var context = canvas.getContext( "2d" );
+				context.drawImage( img, 0, 0, canvas.width, canvas.height );
+				debugMode && console.log( canvas );
+
+			//	create texture.
+				var texture = new THREE.Texture(canvas);
+				texture.name = file.name;
+				texture.sourceFile = file.name;
+				texture.wrapS = texture.wrapT = 1000; // THREE.RepeatWrapping.
+				debugMode && console.log( texture );
+
+			//	add texture entity.
+				textures_entities.add( texture ); // entity manager.
+
+			//	texture viewer.
+				if ( texture.image !== undefined ) texture.needsUpdate = true;
+				if ( viewer && viewer.material ) viewer.material.needsUpdate = true;
+
+			});
+
+			var reader = new FileReader();
+			reader.addEventListener("load", function() {
+				img.name = file.name;
+				img.src = reader.result;
+			});
+
+			reader.readAsDataURL(file);
+
+		});
+
+		button.addEventListener( "click", function(){ 
+			input.value = ""; input.click();
+		});
+
+	})(
+		null, // textureViewer,
+		TabUI.Texture.tab.querySelector("input#texture-file-input"), // input,
+		TabUI.Texture.tab.querySelector("div#texture-create-button"), // button,
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // droplist.
+		textures_entities // entity_manager.
+	);
+
 //	replace-image.js
 
 	(function(viewer,input,button,droplist){

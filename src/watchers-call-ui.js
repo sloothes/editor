@@ -101,7 +101,7 @@
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-exit-mode"), textures_droplist );        // texture_exit,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), textures_vector );      // vector_reset,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-needs-update"), textures_droplist );     // needs_update,
-	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#create-texture-button"), textures_droplist );    // texture_create,
+	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-create-button"), textures_droplist );    // texture_create,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#clone-texture-button"), textures_droplist );     // texture_clone,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-image-button"), textures_droplist );     // image_replace,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#remove-texture-button"), textures_droplist );    // texture_remove,
