@@ -1,33 +1,4 @@
 
-//	texture-needs-update.js
-
-	(function( needs_update ){
-
-		watch( needs_update, "onclick", function( prop, event, value ){
-
-			var texture = getTextureByEntityId(value);
-			if ( texture ) texture.needsUpdate = true;
-
-		});
-
-	})( TabUI.Texture.tab.querySelector("div#texture-needs-update") );
-
-
-//	exit-edit-mode.js
-
-	(function(exit_button,entity_droplist,exitEditMode){
-
-		watch( exit_button, "onclick", function( prop, event, value ){
-
-			 exitEditMode( entity_droplist );
-		});
-
-	})( 
-		TabUI.Texture.tab.querySelector("div#texture-exit-mode"), // exit_button,
-		TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
-		exitEditMode // function.
-	 ); 
-
 //	reset-vectors.js
 
 	(function( editor,reset_button,vector_w,vector_droplist ){
@@ -51,6 +22,94 @@
 		TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), // reset_button,
 		TabUI.Texture.tab.querySelector("select#texture-vector-droplist") // vector_droplist.
 	);
+
+//	texture-needs-update.js
+
+	(function( needs_update ){
+
+		watch( needs_update, "onclick", function( prop, event, value ){
+
+			var texture = getTextureByEntityId(value);
+			if ( texture ) texture.needsUpdate = true;
+
+		});
+
+	})( TabUI.Texture.tab.querySelector("div#texture-needs-update") );
+
+//	replace-image.js
+
+	(function(viewer,input,button,entity_droplist){
+
+		var interval;
+
+		input.addEventListener( "change", function(e){
+
+			if ( input.files.length === 0 ) return;
+
+			var file = input.files[0];
+
+		//	get texture.
+			var texture = getTextureByEntityId( entity_droplist.value );
+			if ( !texture ) return; debugMode && console.log( texture );
+
+			var img = new Image();
+			img.addEventListener("load", function(){
+
+			//	make power of two.
+				var canvas = document.createElement("canvas");
+				canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+				canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+				var context = canvas.getContext( "2d" );
+				context.drawImage( img, 0, 0, canvas.width, canvas.height );
+				debugMode && console.log( canvas );
+
+			//	texture has gotten.
+				if ( !texture ) return;
+				texture.image = canvas;
+				texture.name = file.name;
+				texture.sourceFile = file.name;
+				if ( texture.image !== undefined ) texture.needsUpdate = true; // important!
+				if ( viewer && viewer.material ) viewer.material.needsUpdate = true; // important!
+			//	TODO: Update texture entity option text.
+
+			});
+
+			var reader = new FileReader();
+			reader.addEventListener("load", function() {
+				img.name = file.name;
+				img.src = reader.result;
+			});
+
+			reader.readAsDataURL(file);
+
+		});
+
+		button.addEventListener( "click", function(){ 
+			if ( !entity_droplist.value ) return;
+			input.value = ""; input.click();
+		});
+
+	})(
+		null, // textureViewer,
+		TabUI.Texture.tab.querySelector("input#image-file-input"), // input,
+		TabUI.Texture.tab.querySelector("div#replace-image-button"), // button,
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
+	);
+
+//	exit-edit.js
+
+	(function(exit_button,entity_droplist,exitEditMode){
+
+		watch( exit_button, "onclick", function( prop, event, value ){
+
+			 exitEditMode( entity_droplist );
+		});
+
+	})( 
+		TabUI.Texture.tab.querySelector("div#texture-exit-mode"), // exit_button,
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist"), // entity_droplist.
+		exitEditMode // function.
+	 ); 
 
 //	texture-create.js
 
@@ -120,64 +179,31 @@
 		textures_entities // entity_manager.
 	);
 
-//	image-replace.js
+//	material-map-replace.js
 
-	(function(viewer,input,button,entity_droplist){
+	(function( replace_button,map_droplist,entity_droplist,exitEditMode ){
 
-		var interval;
+		watch( replace_button, "onclick", function( property, event, map ){
 
-		input.addEventListener( "change", function(e){
+			if ( !map_droplist.value ) return; if ( !map ) return;
+			var texture = getTextureByEntityId(); if ( !texture ) return;
+			var material = getMaterialByEntityId(); if ( !material ) return;
 
-			if ( input.files.length === 0 ) return;
+		//	Replace texture.
+			if ( map && material && texture ) {
+				material[ map ] = texture; 
+				material[ map ].needsUpdate = material.needsUpdate = true;
+			}
 
-			var file = input.files[0];
-
-		//	get texture.
-			var texture = getTextureByEntityId( entity_droplist.value );
-			if ( !texture ) return; debugMode && console.log( texture );
-
-			var img = new Image();
-			img.addEventListener("load", function(){
-
-			//	make power of two.
-				var canvas = document.createElement("canvas");
-				canvas.width = THREE.Math.floorPowerOfTwo( img.width );
-				canvas.height = THREE.Math.floorPowerOfTwo( img.height );
-				var context = canvas.getContext( "2d" );
-				context.drawImage( img, 0, 0, canvas.width, canvas.height );
-				debugMode && console.log( canvas );
-
-			//	texture has gotten.
-				if ( !texture ) return;
-				texture.image = canvas;
-				texture.name = file.name;
-				texture.sourceFile = file.name;
-				if ( texture.image !== undefined ) texture.needsUpdate = true; // important!
-				if ( viewer && viewer.material ) viewer.material.needsUpdate = true; // important!
-			//	TODO: Update texture entity option text.
-
-			});
-
-			var reader = new FileReader();
-			reader.addEventListener("load", function() {
-				img.name = file.name;
-				img.src = reader.result;
-			});
-
-			reader.readAsDataURL(file);
-
-		});
-
-		button.addEventListener( "click", function(){ 
-			if ( !entity_droplist.value ) return;
-			input.value = ""; input.click();
+		//	Exit material edit mode.
+			map_droplist.value = ""; exitEditMode( entity_droplist );
 		});
 
 	})(
-		null, // textureViewer,
-		TabUI.Texture.tab.querySelector("input#image-file-input"), // input,
-		TabUI.Texture.tab.querySelector("div#replace-image-button"), // button,
-		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
+		TabUI.Texture.tab.querySelector("div#replace-map-button"), // replace_button,
+		TabUI.Texture.tab.querySelector("select#textures-map-droplist"), // map_droplist,
+		TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist,
+		exitEditMode // function.
 	);
 
 //	texture-save.js
@@ -368,6 +394,8 @@
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);
 
+//	===================================================================================================================  //
+
 /*
 		//	colect images.
 			var images = [];
@@ -465,3 +493,4 @@
 			});
 */
 
+//	===================================================================================================================  //

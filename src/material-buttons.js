@@ -11,8 +11,43 @@
 
 	})( TabUI.Material.tab.querySelector("div#material-needs-update") );
 
+//	remove-texture.js
 
-//	exit-edit-mode.js
+	(function( remove_button,map_droplist ){
+
+		watch( remove_button, "onclick", function( property, event, map ){
+
+			var material = getMaterialByEntityId();
+			if ( !(map && material && material[ map ]) ) return;
+
+		//	Remove texture.
+			material[ map ] = null; material.needsUpdate = true;
+
+		//	Reset droplist.
+			map_droplist.value = "";
+		});
+
+	})(
+		TabUI.Texture.tab.querySelector("div#material-remove-map"), // remove_button,
+		TabUI.Texture.tab.querySelector("select#material-map-droplist") // map_droplist,
+	);
+
+//	replace-material.js
+
+	(function( replace_button ){
+
+		watch( replace_button, "onclick", function( prop, event, value ){
+
+			var object = getObjectByEntityId(); 
+			var material = getMaterialByEntityId();
+			if ( !(object && material && object.material) ) return;
+
+			object.material = material;
+		});
+
+	})( TabUI.Material.tab.querySelector("div#material-replace-button") ); // replace_button
+
+//	exit-edit.js
 
 	(function(exit_button,entity_droplist,exitEditMode){
 
@@ -109,21 +144,6 @@
 		TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist,
 		material_entities // entity_manager,
 	 ); 
-
-//	material-replace.js
-
-	(function( replace_button ){
-
-		watch( replace_button, "onclick", function( prop, event, value ){
-
-			var object = getObjectByEntityId(); 
-			var material = getMaterialByEntityId();
-			if ( !(object && material && object.material) ) return;
-
-			object.material = material;
-		});
-
-	})( TabUI.Material.tab.querySelector("div#material-replace-button") ); // replace_button
 	  
 //	material-remove.js
 
