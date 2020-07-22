@@ -178,3 +178,45 @@
 		TabUI.Texture.tab.querySelector("div#replace-image-button"), // button,
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // droplist.
 	);
+
+//	save-texture.js
+
+	(function(database,save_button,entity_droplist){
+
+		var Geometries, Materials, Textures, Images, Shapes;
+	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
+
+	//	Images = database.collection("images");
+	//	Textures = database.collection("textures");
+	//	Materials = database.collection("materials");
+	//	Geometries = database.collection("geometries");
+
+		watch( save_button, "onclick", function( property, event, value ){
+
+			var texture = getTextureByEntityId(); if ( !texture ) return;
+		//	Images = database.collection("images"); if ( !Images ) return;
+		//	Textures = database.collection("textures"); if ( !Textures ) return;
+
+			var meta = { textures:{}, images:{} };
+			var json = texture.toJSON(meta); debugMode && console.log( meta );
+
+			var images = [];
+			for ( var uuid in meta.images ){
+				images.push( meta.images[uuid] );
+			}
+
+			var textures = [];
+			for ( var uuid in meta.textures ){
+				textures.push( meta.textures[uuid] );
+			}
+
+			images.length && debugMode && console.log( "Images insert:", images );
+			textures.length && debugMode && console.log( "Textures insert:", textures );
+
+		});
+
+	})(
+		metaDB, // database,
+		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
+	);
