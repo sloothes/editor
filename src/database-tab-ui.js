@@ -75,7 +75,7 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "display:none;height:40px;margin-bottom:20px;"
 
 		var redo = document.createElement("div");
 		redo.id = "database-redo-button";

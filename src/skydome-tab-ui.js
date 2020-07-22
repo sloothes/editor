@@ -59,7 +59,7 @@
 	//	var tab = TabUI.Skydome.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "margin:10px 15px;height:30px;";
+		row.style.cssText = "height:30px;margin:10px 15px;";
 
 		var prev = document.createElement("li");
 		prev.id = "skydome-texture-previous";
