@@ -52,7 +52,7 @@
 		TabUI.Texture.tab.querySelector("select#texture-vector-droplist") // vector_droplist.
 	);
 
-//	create-texture.js
+//	texture-create.js
 
 	(function(viewer,input,button,entity_droplist,textures_entities){
 
@@ -120,9 +120,9 @@
 		textures_entities // entity_manager.
 	);
 
-//	replace-image.js
+//	image-replace.js
 
-	(function(viewer,input,button,droplist){
+	(function(viewer,input,button,entity_droplist){
 
 		var interval;
 
@@ -133,7 +133,7 @@
 			var file = input.files[0];
 
 		//	get texture.
-			var texture = getTextureByEntityId( droplist.value ); // string.
+			var texture = getTextureByEntityId( entity_droplist.value );
 			if ( !texture ) return; debugMode && console.log( texture );
 
 			var img = new Image();
@@ -169,6 +169,7 @@
 		});
 
 		button.addEventListener( "click", function(){ 
+			if ( !entity_droplist.value ) return;
 			input.value = ""; input.click();
 		});
 
@@ -176,25 +177,19 @@
 		null, // textureViewer,
 		TabUI.Texture.tab.querySelector("input#image-file-input"), // input,
 		TabUI.Texture.tab.querySelector("div#replace-image-button"), // button,
-		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // droplist.
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);
 
-//	save-texture.js
+//	texture-save.js
 
 	(function(db,save_button,entity_droplist){
 
 	//	var Geometries, Materials, Textures, Images, Shapes; // collections.
-
-	//	Images = db.collection("images");
-	//	Textures = db.collection("textures");
-	//	Materials = db.collection("materials");
-	//	Geometries = db.collection("geometries");
-	//	Shapes = db.collection("shapes");
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
 
 		watch( save_button, "onclick", function( property, event, value ){
 
-			if ( !db ) return;
+			if ( !db ) return; if ( !value ) return;
 
 		//	collections.
 
