@@ -299,7 +299,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "texture-vectors-reset";
@@ -320,7 +320,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "texture-needs-update";
@@ -420,7 +420,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "texture-create-button";
@@ -447,7 +447,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "texture-clone-button";
@@ -468,7 +468,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "replace-image-button";
@@ -495,7 +495,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "texture-remove-button";
@@ -516,7 +516,7 @@
 	//	var tab = TabUI.Texture.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "texture-save-button";

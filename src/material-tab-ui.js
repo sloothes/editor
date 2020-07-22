@@ -551,7 +551,7 @@
 
 		var row = document.createElement("h3");
 		row.textContent = "type:";
-		row.style.cssText = "height:40px;margin-top:40px;"
+		row.style.cssText = "height:30px;margin-top:20px;"
 
 		var select = document.createElement("select");
 		select.id = "material-type-droplist";
