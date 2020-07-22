@@ -220,8 +220,9 @@
 
 		//	save images.
 
-			if ( images.length ) images.forEach(function(data){
+			if ( images.length ) images.forEach(function(item, i){
 
+				var data = images[i];
 				var collection = Images;
 				var results = collection.find({uuid:data.uuid}); // cursor.
 
@@ -259,8 +260,9 @@
 				
 		//	save textures.
 
-			if ( textures.length ) textures.forEach(function(data){
+			if ( textures.length ) textures.forEach(function(item, i){
 
+				var data = textures[i];
 				var collection = Textures;
 				var results = collection.find({uuid:data.uuid}); // cursor.
 
