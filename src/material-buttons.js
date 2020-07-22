@@ -15,13 +15,15 @@
 
 	(function( remove_button,map_droplist ){
 
-		watch( remove_button, "onclick", function( property, event, map ){
+		watch( remove_button, "onclick", function( property, event, value ){
 
-			var material = getMaterialByEntityId();
-			if ( !(map && material && material[ map ]) ) return;
+			var map = map_droplist.value; if ( !map ) return;
+			var material = getMaterialByEntityId(); if ( !material ) return;
 
 		//	Remove texture.
-			material[ map ] = null; material.needsUpdate = true;
+			if ( material && material[ map ] !== undefined ) {
+				material[ map ] = null; material.needsUpdate = true;
+			}
 
 		//	Reset droplist.
 			map_droplist.value = "";
