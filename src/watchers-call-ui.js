@@ -42,7 +42,7 @@
 		onInputChangeWatchersCall( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") );     // entity_droplist,
 		onInputChangeWatchersCall( TabUI.Geometry.tab.querySelector("select#geometry-type-droplist") );     // type_droplist,
 		onInputChangeWatchersCall( TabUI.Geometry.tab.querySelector("select#geometry-sphere-droplist") );   // sphere_droplist,
-		onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-map-droplist") );      // map_droplist,
+		onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-map-droplist") );      // material_map_droplist,
 		onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-keys-droplist") );     // keys_droplist,
 		onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-type-droplist") );     // type_droplist,
 		onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-color-droplist") );    // color_droplist,
@@ -50,6 +50,7 @@
 		onInputChangeWatchersCall( TabUI.Material.tab.querySelector("select#material-entities-droplist") ); // entity_droplist,
 		onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#texture-key-droplist") );        // key_droplist,
 		onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#texture-vector-droplist") );     // vector_droplist,
+		onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#textures-map-droplist") );       // texture_map_droplist,
 		onInputChangeWatchersCall( TabUI.Texture.tab.querySelector("select#textures-entities-droplist") );  // entity_droplist,
 
 	})();
