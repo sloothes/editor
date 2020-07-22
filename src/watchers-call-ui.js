@@ -102,9 +102,9 @@
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), textures_vector );      // vector_reset,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-needs-update"), textures_droplist );     // needs_update,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-create-button"), textures_droplist );    // texture_create,
-		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#clone-texture-button"), textures_droplist );     // texture_clone,
+		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-clone-button"), textures_droplist );     // texture_clone,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-image-button"), textures_droplist );     // image_replace,
-		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#remove-texture-button"), textures_droplist );    // texture_remove,
+		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-remove-button"), textures_droplist );    // texture_remove,
 
 	})( 
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"),     // entity_droplist,
