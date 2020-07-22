@@ -379,7 +379,7 @@
 	//	var tab = TabUI.Editor.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "editor-vectors-reset";
@@ -400,7 +400,7 @@
 	//	var tab = TabUI.Editor.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "matrix-needs-update";
@@ -442,7 +442,7 @@
 	//	var tab = TabUI.Editor.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "rigid-add-button";
@@ -461,7 +461,7 @@
 	//	var tab = TabUI.Editor.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "rigid-remove-button";
