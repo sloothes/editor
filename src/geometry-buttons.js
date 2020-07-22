@@ -1,11 +1,17 @@
 
 //	geometry-create-button.js
 
-	(function(editor,create_button,entity_droplist,material_entities,entities,scene){
+	(function(editor,create_button,entity_droplist,material_entities,entities,local_player,scene){
 
 		watch( create_button, "onclick", function( prop, event, type ){
 
 			if ( type === "" || type === undefined ) return;
+
+		//	Copy position.
+			if ( local_player ) {
+				editor.position.x = local_player.position.x;
+				editor.position.z = local_player.position.z;
+			}
 
 		//	Create geometry.
 			var geometry = new THREE[ type ]();
@@ -51,7 +57,8 @@
 		objectEditor, // editor,
 		TabUI.Geometry.tab.querySelector("div#geometry-create-button"),    // create_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
-		material_entities, entities, scene  // material_entity_manager, entity_manager, scene.
+		material_entities, entities,               // material_entity_manager, entity_manager,
+		localPlayer, scene // local_player scene.
 	);
 
 //	geometry-clone-button.js
