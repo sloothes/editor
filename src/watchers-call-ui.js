@@ -56,7 +56,11 @@
 
 //	mouse-watchers-call.js
 
-	(function(entity_droplist,key_droplist,vector_droplist,geometry_type,material_type,material_droplist,textures_vector,textures_map,textures_droplist){
+	(function(
+		entity_droplist,key_droplist,vector_droplist,geometry_type,
+		material_map,material_type,material_droplist,
+		textures_vector,textures_map,textures_droplist
+	){
 
 		function onMouseClickWatchersCall( button, droplist ){
 
@@ -92,16 +96,17 @@
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-remove-button"), entity_droplist ); // geometry_remove,
 	//	material-tab.
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-exit-mode"), material_droplist );      // material_exit,
+		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-remove-map"), material_map );          // remove_map,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-needs-update"), material_droplist );   // needs_update,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-create-button"), material_type );      // material_create,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-clone-button"), material_droplist );   // material_clone,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-remove-button"), material_droplist );  // material_remove,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-replace-button"), material_droplist ); // material_replace,
 	//	texture-tab.
+		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-map-button"), textures_map );            // replace_map,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-exit-mode"), textures_droplist );        // texture_exit,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), textures_vector );      // vector_reset,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-needs-update"), textures_droplist );     // needs_update,
-		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-map-button"), textures_map );            // replace_map,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-create-button"), textures_droplist );    // texture_create,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-clone-button"), textures_droplist );     // texture_clone,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-image-button"), textures_droplist );     // image_replace,
@@ -113,6 +118,7 @@
 		TabUI.Editor.tab.querySelector("select#editor-key-droplist"),          // key_droplist,
 		TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),       // vector_droplist,
 		TabUI.Geometry.tab.querySelector("select#geometry-type-droplist"),     // geometry_type,
+		TabUI.Material.tab.querySelector("select#material-map-droplist"),      // material_map,
 		TabUI.Material.tab.querySelector("select#material-type-droplist"),     // material_type,
 		TabUI.Material.tab.querySelector("select#material-entities-droplist"), // material_droplist,
 		TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),     // textures_vector,
