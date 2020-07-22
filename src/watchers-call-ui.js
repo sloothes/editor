@@ -102,14 +102,13 @@
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-clone-button"), material_droplist );   // material_clone,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-remove-button"), material_droplist );  // material_remove,
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-replace-button"), material_droplist ); // material_replace,
+		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-save-button"), material_droplist );    // material_save,
 	//	texture-tab.
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-map-button"), textures_map );            // replace_map,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-exit-mode"), textures_droplist );        // texture_exit,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), textures_vector );      // vector_reset,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-needs-update"), textures_droplist );     // needs_update,
-	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-create-button"), textures_droplist );    // texture_create,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-clone-button"), textures_droplist );     // texture_clone,
-	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-image-button"), textures_droplist );     // image_replace,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-remove-button"), textures_droplist );    // texture_remove,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-save-button"), textures_droplist );      // texture_save,
 
