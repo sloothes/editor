@@ -30,8 +30,8 @@
 		});
 
 	})(
-		TabUI.Texture.tab.querySelector("div#material-remove-map"), // remove_button,
-		TabUI.Texture.tab.querySelector("select#material-map-droplist") // map_droplist,
+		TabUI.Material.tab.querySelector("div#material-remove-map"), // remove_button,
+		TabUI.Material.tab.querySelector("select#material-map-droplist") // map_droplist,
 	);
 
 //	replace-material.js
