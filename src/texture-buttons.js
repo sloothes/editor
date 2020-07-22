@@ -259,7 +259,7 @@
 				
 		//	save textures.
 
-			if ( textures.length ) images.forEach(function(data){
+			if ( textures.length ) textures.forEach(function(data){
 
 				var collection = Textures;
 				var results = collection.find({uuid:data.uuid}); // cursor.
