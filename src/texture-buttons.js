@@ -89,11 +89,9 @@
 				if ( texture.image !== undefined ) texture.needsUpdate = true;
 				if ( viewer && viewer.material ) viewer.material.needsUpdate = true;
 
-			//	add to database.
+			//	TODO: add to database.
 				var meta = {geometries:{},materials:{},textures:{},images:{},shapes:{}};
 				var json = texture.toJSON(meta); debugMode && console.log( json, meta );
-
-				
 
 			//	Enter edit mode.
 				callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = String(texture.id) );
