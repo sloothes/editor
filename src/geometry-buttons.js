@@ -19,10 +19,10 @@
 
 		//	Init params based on type.
 		//	switch (type) {
+		//		case "BoxGeometry":
 		//		case "PlaneGeometry":
 		//			geometry.translate(0, 0.5, 0);
 		//		break;
-		//		case "BoxGeometry":
 		//		case "ConeGeometry":
 		//		case "TorusGeometry":
 		//		case "SphereGeometry":
