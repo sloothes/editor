@@ -211,20 +211,19 @@
 
 					(function(data){
 
+						var result;
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
+								result = true;
 								collection.update({_id:doc._id}, {$set:data}, function(err){
 									if (err) throw err; console.log("image updated!");
 								});
-								return true;
 							},
 
-							function(err){
-								if (err) throw err;
-							}
+							function(err){ if (err) throw err; }
 
-						).then(function(result){
+						).then(function(){
 							console.log("result:", result);
 							if (!result) collection.insert(data, function(err){ 
 								if (err) throw err; console.log( "image inserted!" );
@@ -250,20 +249,19 @@
 
 					(function(data){
 
+						var result;
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
+								result = true;
 								collection.update({_id:doc._id}, {$set:data}, function(err){
 									if (err) throw err; console.log("texture updated!");
 								});
-								return true;
 							},
 
-							function(err){
-								if (err) throw err;
-							}
+							function(err){ if (err) throw err; }
 
-						).then(function(result){
+						).then(function(){
 							console.log("result:", result);
 							if (!result) collection.insert(data, function(err){ 
 								if (err) throw err; console.log( "texture inserted!" );
