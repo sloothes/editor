@@ -56,7 +56,7 @@
 
 //	mouse-watchers-call.js
 
-	(function(entity_droplist,key_droplist,vector_droplist,geometry_type,material_type,material_droplist,textures_vector,textures_map_droplist,textures_droplist){
+	(function(entity_droplist,key_droplist,vector_droplist,geometry_type,material_type,material_droplist,textures_vector,textures_map,textures_droplist){
 
 		function onMouseClickWatchersCall( button, droplist ){
 
@@ -101,7 +101,7 @@
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-exit-mode"), textures_droplist );        // texture_exit,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-vectors-reset"), textures_vector );      // vector_reset,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-needs-update"), textures_droplist );     // needs_update,
-		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-map-button"), textures_map_droplist );   // map_replace,
+		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-map-button"), textures_map );            // replace_map,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-create-button"), textures_droplist );    // texture_create,
 		onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#texture-clone-button"), textures_droplist );     // texture_clone,
 	//	onMouseClickWatchersCall( TabUI.Texture.tab.querySelector("div#replace-image-button"), textures_droplist );     // image_replace,
@@ -116,7 +116,7 @@
 		TabUI.Material.tab.querySelector("select#material-type-droplist"),     // material_type,
 		TabUI.Material.tab.querySelector("select#material-entities-droplist"), // material_droplist,
 		TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),     // textures_vector,
-		TabUI.Texture.tab.querySelector("select#textures-map-droplist"),       // textures_map_droplist,
+		TabUI.Texture.tab.querySelector("select#textures-map-droplist"),       // textures_map,
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist")   // textures_droplist,
 	);
 
