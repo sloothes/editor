@@ -180,3 +180,51 @@
 
 	})( textureViewer );
 
+
+//	texture-viewer-center.js
+
+	(function( editor,viewer,vector_x,vector_y,entity_droplist ){
+
+		var texture; 
+
+		watch( entity_droplist, "onchange", function( property, event, value ){
+
+			texture = getTextureByEntityId();
+
+			if ( !texture )  return (function(){
+
+				viewer.material.map = null;
+				viewer.material.needsUpdate = true; 
+				viewer.material.color.setHex(0x000000);
+			//	Display center position values.
+				vector_x.value = (0.5 + (viewer.center.position.x/250)).toFixed(2); // display center position (x).
+				vector_y.value = (0.5 - (viewer.center.position.z/250)).toFixed(2); // display center position (z).
+				return;
+
+			})();
+
+		//	Update viewer material.
+			viewer.material.map = texture;
+			viewer.material.needsUpdate = true;
+			viewer.material.color.setHex(0xffffff);
+
+			if ( viewer.material.map.image !== undefined ) viewer.material.map.needsUpdate = true;
+
+		//	Update viewer center helper.
+			viewer.center.position.x = -125 + (250 * editor.center.x); // update center position (x).
+			viewer.center.position.z =  125 - (250 * editor.center.y); // update center position (z).
+
+		});
+
+		watch( editor, "center",  function( key, action, value ){
+			viewer.center.position.x = -125 + (250 * editor.center.x); // update center position (x).
+			viewer.center.position.z =  125 - (250 * editor.center.y); // update center position (z).
+		});
+
+	})( 
+		textureEditor, textureViewer, // editor, viewer,
+		TabUI.Texture.tab.querySelector("input#texture-vector-x-input"),      // vector_x,
+		TabUI.Texture.tab.querySelector("input#texture-vector-y-input"),      // vector_y,
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist")  // entity_droplist.
+	);
+

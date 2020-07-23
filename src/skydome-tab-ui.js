@@ -126,7 +126,7 @@
 
 		var button = document.createElement("div");
 		button.id = "skydome-upload-button";
-		button.textContent = "Import Skydome Image";
+		button.textContent = "Upload Skydome Image";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
