@@ -86,3 +86,58 @@
 		tab.appendChild( row );
 
 	})( TabUI.Skydome.tab );
+
+//	skydome-import-ui.js
+
+	(function( tab ){
+
+	//	Import skydome image button.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "skydome-import-button";
+		button.textContent = "Import Skydome Image";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		var input = document.createElement("input");
+		input.type = "file";
+		input.id = "skydome-file-input";
+		input.style.cssText = "display:none;";
+		button.appendChild( input );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Skydome.tab );
+
+//	skydome-upload-ui.js
+
+	(function( tab ){
+
+	//	Upload skydome image button.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "skydome-upload-button";
+		button.textContent = "Import Skydome Image";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		var input = document.createElement("input");
+		input.type = "file";
+		input.id = "skydome-upload-input";
+		input.style.cssText = "display:none;";
+		button.appendChild( input );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Skydome.tab );
+
