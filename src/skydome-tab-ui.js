@@ -87,6 +87,54 @@
 
 	})( TabUI.Skydome.tab );
 
+//	skydome-toggle-ui.js
+
+	(function( tab ){
+
+	//	Skydome toggle button.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "skydome-toggle-button";
+		button.textContent = "Toggle Skydome";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Skydome.tab );
+
+//	skydome-import-ui.js
+
+	(function( tab ){
+
+	//	Import skydome image button.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "skydome-import-button";
+		button.textContent = "Import Skydome Image";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		var input = document.createElement("input");
+		input.type = "file";
+		input.id = "skydome-file-input";
+		input.style.cssText = "display:none;";
+		button.appendChild( input );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Skydome.tab );
+
 //	skydome-import-ui.js
 
 	(function( tab ){
@@ -141,3 +189,40 @@
 
 	})( TabUI.Skydome.tab );
 
+
+//	===================================================================================================================  //
+
+
+	(function( skydome, skydome_droplist  ){
+
+		function onMouseClickWatchersCall( button, droplist ){
+
+			var interval;
+
+			watch( button, "onclick", function( prop, event, value ){ 
+				debugMode && console.log({item:button,property:prop,event:event,value:value}); // debug.
+			});
+
+		//	Call watchers.
+
+			button.addEventListener( "click", function(){ 
+				clearTimeout( interval );
+				interval = setTimeout(function(button){
+					callWatchers( button, "onclick", "click", droplist.value );
+				}, 250, this); 
+			});
+		}
+
+		onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), skydome_droplist ); // toggle_button,
+
+	})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
+
+//	toggle-button.js
+
+	(function( skydome,button ){
+
+		watch( button, "onclick", function( prop, event, value ){ 
+			if ( skydome ) skydome.visible = !skydome.visible;
+		});
+
+	})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
