@@ -249,7 +249,7 @@
 
 		<script>
 
-		//	Background.
+		//	Background.js
 
 			(function(scene,textures_entities){
 
@@ -278,7 +278,7 @@
 
 		<script>
 
-		//  Skydome.
+		//  Skydome.js
 
 			const skydome = (function(scene,entities,material_entities,textures_entities){
 
@@ -298,11 +298,45 @@
 
 			})(scene, entities, material_entities, textures_entities);
 
+			(function( skydome, skydome_droplist  ){
+
+				function onMouseClickWatchersCall( button, droplist ){
+
+					var interval;
+
+					watch( button, "onclick", function( prop, event, value ){ 
+						debugMode && console.log({item:button,property:prop,event:event,value:value}); // debug.
+					});
+
+				//	Call watchers.
+
+					button.addEventListener( "click", function(){ 
+						clearTimeout( interval );
+						interval = setTimeout(function(button){
+							callWatchers( button, "onclick", "click", droplist.value );
+						}, 250, this); 
+					});
+				}
+
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), skydome_droplist ); // toggle_button,
+
+			})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
+
+		//	toggle-button.js
+
+			(function( skydome,button ){
+
+				watch( button, "onclick", function( prop, event, value ){ 
+					if ( skydome ) skydome.visible = !skydome.visible;
+				});
+
+			})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
+
 		</script>
 
 		<script>
 
-		//  Water.
+		//  Water.js
 
 			const water = (function(renderer,camera,scene,light,textures_entities){
 

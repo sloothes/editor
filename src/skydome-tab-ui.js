@@ -163,39 +163,3 @@
 	})( TabUI.Skydome.tab );
 
 
-//	===================================================================================================================  //
-
-
-	(function( skydome, skydome_droplist  ){
-
-		function onMouseClickWatchersCall( button, droplist ){
-
-			var interval;
-
-			watch( button, "onclick", function( prop, event, value ){ 
-				debugMode && console.log({item:button,property:prop,event:event,value:value}); // debug.
-			});
-
-		//	Call watchers.
-
-			button.addEventListener( "click", function(){ 
-				clearTimeout( interval );
-				interval = setTimeout(function(button){
-					callWatchers( button, "onclick", "click", droplist.value );
-				}, 250, this); 
-			});
-		}
-
-		onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), skydome_droplist ); // toggle_button,
-
-	})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
-
-//	toggle-button.js
-
-	(function( skydome,button ){
-
-		watch( button, "onclick", function( prop, event, value ){ 
-			if ( skydome ) skydome.visible = !skydome.visible;
-		});
-
-	})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
