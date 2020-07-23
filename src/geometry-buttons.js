@@ -37,7 +37,7 @@
 		//	}
 
 		//	Material.
-			var material = new THREE.MeshLambertMaterial({side:0});
+			var material = new THREE.MeshStandardMaterial({side:0});
 
 		//	Create mesh.
 			var mesh = new THREE.Mesh(geometry, material);
