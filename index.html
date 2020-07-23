@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 
-		<title>Editor (alpha 0.1.3)</title>
+		<title>Editor (alpha 0.1.4)</title>
 
 		<meta charset="utf-8">
 		<meta name="generator" content="Three.js Editor">
@@ -169,6 +169,7 @@
 		<script src="/editor/src/texture-buttons.js"></script>
 		<script src="/editor/src/texture-key-inputs.js"></script>
 		<script src="/editor/src/texture-mouse-inputs.js"></script>
+		<script src="/editor/src/texture-viewer.js"></script>
 
 		<script>
 
@@ -357,8 +358,8 @@
 
 			TabUI.Editor.role.classList.add("active");
 			TabUI.Editor.tab.classList.add("in","active");
-			watermirror.visible = !watermirror.visible; 
-		//	groundHelper.visible = !groundHelper.visible; 
+		//	watermirror.visible = !watermirror.visible; 
+			groundHelper.visible = !groundHelper.visible; 
 			ground.visible = !ground.visible; scene.add(ground);
 
 			entities.add(ground);
