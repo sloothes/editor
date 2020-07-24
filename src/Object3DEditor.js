@@ -33,7 +33,7 @@
 		var isEditing = !!object; // boolean!
 
 	//	Update editor (copy).
-		object && editor.copy( object );
+		object && editor.copy( object, false ); // (false) important!
 
 	//	uuid.
 		if ( object ) editor.uuid = object.uuid; 
