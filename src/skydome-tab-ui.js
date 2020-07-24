@@ -87,27 +87,6 @@
 
 	})( TabUI.Skydome.tab );
 
-//	skydome-toggle-ui.js
-
-	(function( tab ){
-
-	//	Skydome toggle button.
-	//	var tab = TabUI.Skydome.tab;
-
-		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "skydome-toggle-button";
-		button.textContent = "Toggle Skydome";
-		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-
-		row.appendChild( button );
-		tab.appendChild( row );
-
-	})( TabUI.Skydome.tab );
-
 //	skydome-import-ui.js
 
 	(function( tab ){
@@ -156,6 +135,48 @@
 		input.id = "skydome-upload-input";
 		input.style.cssText = "display:none;";
 		button.appendChild( input );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Skydome.tab );
+
+//	water-toggle-ui.js
+
+	(function( tab ){
+
+	//	Skydome toggle button.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "water-toggle-button";
+		button.textContent = "Toggle Water";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Skydome.tab );
+
+//	skydome-toggle-ui.js
+
+	(function( tab ){
+
+	//	Skydome toggle button.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "skydome-toggle-button";
+		button.textContent = "Toggle Skydome";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
 		row.appendChild( button );
 		tab.appendChild( row );

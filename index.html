@@ -291,20 +291,21 @@
 					});
 				}
 
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#water-toggle-button"), {value:null} ); // water_toggle_button,
 				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#ground-toggle-button"), {value:null} ); // ground_toggle_button,
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), skydome_droplist ); // skydome_toggle_button,
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), {value:null} ); // skydome_toggle_button,
 
 			})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
 
 		//	toggle-buttons.js
 
-			(function( skydome,button ){
+			(function( mirror,button ){
 
 				watch( button, "onclick", function( prop, event, value ){ 
-					if ( skydome ) skydome.visible = !skydome.visible;
+					if ( mirror ) mirror.visible = !mirror.visible;
 				});
 
-			})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
+			})( mirror, TabUI.Skydome.tab.querySelector("div#water-toggle-button") );
 
 			(function( helper,button ){
 
@@ -313,6 +314,14 @@
 				});
 
 			})( groundHelper, TabUI.Skydome.tab.querySelector("div#ground-toggle-button") );
+
+			(function( skydome,button ){
+
+				watch( button, "onclick", function( prop, event, value ){ 
+					if ( skydome ) skydome.visible = !skydome.visible;
+				});
+
+			})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
 
 		</script>
 
