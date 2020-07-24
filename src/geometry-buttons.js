@@ -147,9 +147,9 @@
 
 //	geometry-save-button.js
 
-	(function(db,save_button){
+	(function(db,save_button,entity_droplist,exitEditMode){
 
-	//	var Geometries, Materials, Textures, Objects, Images; // collections.
+	//	var Objects, Geometries, Materials, Textures, Images; // collections.
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
 
 		watch( save_button, "onclick", function( property, event, value ){
@@ -166,9 +166,16 @@
 
 		//	json.
 
-			var object = getObjectByEntityId( value ); if ( !object ) return;
-			var meta = { geometries:{}, materials:{}, textures:{}, images:{} };
-			var json = object.toJSON(meta); debugMode && console.log( meta );
+		//	var object = getObjectByEntityId( value ); if ( !object ) return;
+
+			var json, meta = { geometries:{}, materials:{}, textures:{}, images:{} };
+
+			try { json = getObjectByEntityId().toJSON( meta ); } 
+			catch(err){ return exitEditMode( entity_droplist ); }
+
+			if ( !(json && json.object) ) return exitEditMode( entity_droplist );
+
+			debugMode && console.log( json, meta );
 
 		//	images.
 
@@ -328,11 +335,13 @@
 
 		//	objects.
 
-		//	json object children.
+		//	json.object children.
 
-			(function(collection,object){
+			(function(collection,children){
 
-				object.children.forEach(function(child, i){
+				if ( !children ) return;
+
+				children.forEach(function(child, i){
 
 					var result; // important!
 
@@ -369,9 +378,9 @@
 
 				});
 
-			})( Objects, json.object );
+			})( Objects, json.object.children );
 
-		//	json object.
+		//	json.object.
 
 			(function(collection,object){
 
@@ -412,7 +421,11 @@
 
 		});
 
-	})( metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button") );
+	})( 
+		metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button"), // db,save_button,
+		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+		exitEditMode // function.
+	);
 
 
 //	octree-add-button.js
