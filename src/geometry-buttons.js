@@ -145,6 +145,279 @@
 		octreeIncludes, exitEditMode // function, function.
 	);
 
+//	geometry-save-button.js
+
+	(function(db,save_button,entity_droplist){
+
+	//	var Geometries, Materials, Textures, Objects, Images; // collections.
+	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
+
+		watch( save_button, "onclick", function( property, event, value ){
+
+			if ( !db ) return; if ( !value ) return;
+
+		//	collections.
+
+			var Images = db.collection("images"); if ( !Images ) return;
+			var Objects = db.collection("objects"); if ( !Objects ) return;
+			var Textures = db.collection("textures"); if ( !Textures ) return;
+			var Materials = db.collection("materials"); if ( !Materials ) return;
+			var Geometries = db.collection("geometries"); if ( !Geometries ) return;
+
+		//	json.
+
+			var object = getObjectByEntityId( value ); if ( !object ) return;
+			var meta = { geometries:{}, materials:{}, textures:{}, images:{} };
+			var json = object.toJSON(meta); debugMode && console.log( meta );
+
+		//	images.
+
+			(function(collection,images){
+
+				for (var key in images){
+
+					(function(data){
+
+						var result; // important!
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+								result = true;
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; // console.log("image updated!");
+								});
+							},
+
+							function(err){ if (err) throw err; }
+
+						).then(function(){
+
+							debugMode && console.log("image result:", result);
+							if (!result) collection.insert(data, function(err){ 
+								if (err) throw err; // console.log( "image inserted!" );
+							});
+
+						}).then(function(){
+							console.log( "image saved!" );
+						}).catch(function(err){
+							console.error(err);
+						});
+
+					})( images[key] );
+
+				}
+
+			})( Images, meta.images );
+
+		//	textures.
+
+			(function(collection,textures){
+
+				for (var key in textures){
+
+					(function(data){
+
+						var result; // important!
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+								result = true;
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; // console.log("texture updated!");
+								});
+							},
+
+							function(err){ if (err) throw err; }
+
+						).then(function(){
+
+							debugMode && console.log("texture result:", result);
+							if (!result) collection.insert(data, function(err){ 
+								if (err) throw err; // console.log( "texture inserted!" );
+							});
+
+						}).then(function(){
+							console.log( "texture saved!" );
+						}).catch(function(err){
+							console.error(err);
+						});
+
+					})( textures[key] );
+
+				}
+
+			})( Textures, meta.textures );
+
+		//	materials.
+
+			(function(collection,materials){
+
+				for (var key in materials){
+
+					(function(data){
+
+						var result; // important!
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+								result = true;
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; // console.log("material updated!");
+								});
+							},
+
+							function(err){ if (err) throw err; }
+
+						).then(function(){
+
+							debugMode && console.log("material result:", result);
+							if (!result) collection.insert(data, function(err){ 
+								if (err) throw err; // console.log( "material inserted!" );
+							});
+
+						}).then(function(){
+							console.log( "material saved!" );
+						}).catch(function(err){
+							console.error(err);
+						});
+
+					})( materials[key] );
+
+				}
+
+			})( Materials, meta.materials );
+
+		//	geometries.
+
+			(function(collection,geometries){
+
+				for (var key in geometries){
+
+					(function(data){
+
+						var result; // important!
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+								result = true;
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; // console.log("geometry updated!");
+								});
+							},
+
+							function(err){ if (err) throw err; }
+
+						).then(function(){
+
+							debugMode && console.log("geometry result:", result);
+							if (!result) collection.insert(data, function(err){ 
+								if (err) throw err; // console.log( "geometry inserted!" );
+							});
+
+						}).then(function(){
+							console.log( "geometry saved!" );
+						}).catch(function(err){
+							console.error(err);
+						});
+
+					})( geometries[key] );
+
+				}
+
+			})( Geometries, meta.geometries );
+
+		//	objects.
+
+		//	json children.
+
+			(function(collection,json){
+
+				json.children.forEach(function(data, i){
+
+					var result; // important!
+
+					collection.find({uuid:data.uuid}).forEach(
+
+						function(doc){
+							result = true;
+							return collection.update({_id:doc._id}, {$set:data}, function(err){
+								if (err) throw err; return doc;
+							//	console.log("child updated!");
+							});
+						},
+
+						function(err){ if (err) throw err; }
+
+					).then(function(results){
+
+						debugMode && console.log("child results:", results);
+						if (!result) return collection.insert(data, function(err){ 
+							if (err) throw err; return data;
+						//	console.log( "child inserted!" );
+						});
+
+						return results;
+
+					}).then(function(results){
+
+						debugMode && console.log( "child saved!" );
+						debugMode && console.log( "child results:", results );
+
+					}).catch(function(err){
+						console.error(err);
+					});
+
+				});
+
+			})( Objects, json );
+
+		//	json root object.
+
+			(function(collection,json){
+
+				var result; // important!
+
+				collection.find({uuid:json.uuid}).forEach(
+
+					function(doc){
+						result = true;
+						return collection.update({_id:doc._id}, {$set:json}, function(err){
+							if (err) throw err; return doc;
+						//	console.log("object updated!");
+						});
+					},
+
+					function(err){ if (err) throw err; }
+
+				).then(function(results){
+
+					debugMode && console.log("json results:", results);
+					if (!result) return collection.insert(json, function(err){ 
+						if (err) throw err; return json;
+					//	console.log( "object inserted!" );
+					});
+
+					return results;
+
+				}).then(function(results){
+
+					debugMode && console.log( "json saved!" );
+					debugMode && console.log( "json results:", results );
+
+				}).catch(function(err){
+					console.error(err);
+				});
+
+			})( Objects, json );
+
+		});
+
+	})(
+		TabUI.Geometry.tab.querySelector("div#geometry-save-button"),    // save_button,
+		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
+		entities, exitEditMode // entity_manager, function.
+	);
+
 
 //	octree-add-button.js
 

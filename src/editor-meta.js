@@ -2,11 +2,11 @@
 
 	const metaDB = new zango.Db( "meta", {
 
-		geometries: ["uuid"],
-		materials:  ["uuid"],
-		textures:   ["uuid"],
 		images:     ["uuid"],
-		shapes:     ["uuid"],
+		objects:	["uuid"],
+		textures:   ["uuid"],
+		materials:  ["uuid"],
+		geometries: ["uuid"]
 
 	});
 
@@ -23,8 +23,6 @@
 	}).catch(function(err){
 		console.error(err);
 	});
-
-	debugMode && console.log("editor DB loaded!");
 
 
 //  export database.js
