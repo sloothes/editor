@@ -97,7 +97,7 @@
 
 //	Update object editor.
 
-	(function(editor,cameraControls,rigidObjects,localPlayer,keyInputControls,key_droplist,vector_droplist,entity_droplist){
+	(function(editor,cameraLight,cameraControls,rigidObjects,localPlayer,keyInputControls,key_droplist,vector_droplist,entity_droplist){
 
 	//	Exit from edit mode.
 
@@ -111,6 +111,10 @@
 
 		function disableKeyInputControls(){
 			keyInputControls.isDisabled = true;
+		}
+
+		function takeCameraLight( object ){
+			cameraLight.target = object;
 		}
 
 		function takeCameraControls( object, offset ){
@@ -137,6 +141,7 @@
 			resetLatestEntityValue();
 			enableKeyInputControls();
 			enableCameraRigidObjects();
+			takeCameraLight( localPlayer );
 			takeCameraControls( localPlayer );
 			return;
 		}
@@ -163,7 +168,8 @@
 				disableCameraRigidObjects();
 
 			//	editor take camera controls.
-				cameraControls.trackObject = editor; // or object?
+				cameraLight.target = editor;
+				cameraControls.trackObject = editor;
 
 			//	Disable key input controls.
 				disableKeyInputControls(); // important!
@@ -183,7 +189,7 @@
 		});
 
 	})(
-		objectEditor, cameraControls, rigidObjects, localPlayer, keyInputControls, 
+		objectEditor, cameraLight, cameraControls, rigidObjects, localPlayer, keyInputControls, 
 		TabUI.Editor.tab.querySelector("select#editor-key-droplist"),     // key_droplist,
 		TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),  // vector_droplist,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
