@@ -338,7 +338,7 @@
 
 			const mirror = (function( scene,water,material_entities,entities ){
 
-				material_entities && material_entities.add(water.material);
+			//	material_entities && material_entities.add(water.material);
 				var material = water.material; // entities && entities.add(water); 
 				var geometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
 				var mirror = new THREE.Mesh( geometry, material );
@@ -366,17 +366,17 @@
 			TabUI.Editor.role.classList.add("active");
 			TabUI.Editor.tab.classList.add("in","active");
 
+		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
-			ground.visible = !ground.visible; 
+		//	ground.visible = !ground.visible; 
 			groundHelper.visible = !groundHelper.visible; 
 
-			scene.add(ground);
 
 		//	Add entities.
-			entities.add(scene);
-			entities.add(ground);
-			entities.add(mirror);
-			entities.add(localPlayer);
+		//	entities.add(scene);
+		//	entities.add(mirror);
+		//	entities.add(ground);
+		//	entities.add(localPlayer);
 			entities.add(groundHelper);
 			entities.add(localPlayer.getObjectByName("playerhelper"));
 
