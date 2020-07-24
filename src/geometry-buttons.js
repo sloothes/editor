@@ -147,7 +147,7 @@
 
 //	geometry-save-button.js
 
-	(function(db,save_button,entity_droplist,water,mirror,exitEditMode){
+	(function(db,save_button,entity_droplist,exitEditMode){
 
 	//	var Objects, Geometries, Materials, Textures, Images; // collections.
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
@@ -415,9 +415,9 @@
 		});
 
 	})( 
-		metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button"), // db,save_button,
+		metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button"), // db, save_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
-		water, mirror, exitEditMode // water, mirror, function.
+		exitEditMode // exit function.
 	);
 
 
