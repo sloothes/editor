@@ -184,40 +184,35 @@
 
 					(function(data){
 
-						var result; // important!
+						var result;
 
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 
-								result = doc.uuid; // important!
+								result = doc.uuid;
 
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("image", data.uuid, "updated!" )
-								});
+									if (err) throw err; console.log("image", doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
 							},
 
-							function(err){ if (err) throw err; }
+							function(err){
+ 
+								if (err) throw err; 
 
-						).then(function(){
+								debugMode && console.log("images result:", result);
 
-							debugMode && console.log("image result:", result);
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; return data.uuid;
-							});
+								if (!result) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log("image saved!" )
+								}).catch(function(err){ console.error(err); });
 
-							return result;
+								debugMode && console.log( "image updated!" );
 
-						}).then(function( results ){
+							}
 
-							if ( results )
-								debugMode && console.log( "image", results, "saved!" );
-							else
-								debugMode && console.log( "image", data.uuid, "didn't saved!" );
-
-						}).catch(function(err){
-							console.error(err);
-						});
+						);
 
 					})( images[key] );
 
@@ -233,40 +228,35 @@
 
 					(function(data){
 
-						var result; // important!
+						var result;
 
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 
-								result = doc.uuid; // important!
+								result = doc.uuid;
 
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("texture", data.uuid, "updated!" )
-								});
+									if (err) throw err; console.log("texture", doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
 							},
 
-							function(err){ if (err) throw err; }
+							function(err){
+ 
+								if (err) throw err; 
 
-						).then(function(){
+								debugMode && console.log("textures result:", result);
 
-							debugMode && console.log("texture result:", result);
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; return data.uuid;
-							});
+								if (!result) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log("texture saved!" )
+								}).catch(function(err){ console.error(err); });
 
-							return result;
+								debugMode && console.log( "texture updated!" );
 
-						}).then(function( results ){
+							}
 
-							if ( results )
-								debugMode && console.log( "texture", results, "saved!" );
-							else
-								debugMode && console.log( "texture", data.uuid, "didn't saved!" );
-
-						}).catch(function(err){
-							console.error(err);
-						});
+						);
 
 					})( textures[key] );
 
@@ -282,40 +272,35 @@
 
 					(function(data){
 
-						var result; // important!
+						var result;
 
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 
-								result = doc.uuid; // important!
+								result = doc.uuid;
 
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("material", data.uuid, "updated!" )
-								});
+									if (err) throw err; console.log("material", doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
 							},
 
-							function(err){ if (err) throw err; }
+							function(err){
+ 
+								if (err) throw err; 
 
-						).then(function(){
+								debugMode && console.log("materials result:", result);
 
-							debugMode && console.log("material result:", result);
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; return data.uuid;
-							});
+								if (!result) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log("material saved!" )
+								}).catch(function(err){ console.error(err); });
 
-							return result;
+								debugMode && console.log( "material updated!" );
 
-						}).then(function( results ){
+							}
 
-							if ( results )
-								debugMode && console.log( "material", results, "saved!" );
-							else
-								debugMode && console.log( "material", data.uuid, "didn't saved!" );
-
-						}).catch(function(err){
-							console.error(err);
-						});
+						);
 
 					})( materials[key] );
 
@@ -331,40 +316,35 @@
 
 					(function(data){
 
-						var result; // important!
+						var result;
 
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 
-								result = doc.uuid; // important!
+								result = doc.uuid;
 
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("geometry", data.uuid, "updated!" )
-								});
+									if (err) throw err; console.log("geometry", doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
 							},
 
-							function(err){ if (err) throw err; }
+							function(err){
+ 
+								if (err) throw err; 
 
-						).then(function(){
+								debugMode && console.log("geometries result:", result);
 
-							debugMode && console.log("geometry result:", result);
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; return data.uuid;
-							});
+								if (!result) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log("geometry saved!" )
+								}).catch(function(err){ console.error(err); });
 
-							return result;
+								debugMode && console.log( "geometry updated!" );
 
-						}).then(function( results ){
+							}
 
-							if ( results )
-								debugMode && console.log( "geometry", results, "saved!" );
-							else
-								debugMode && console.log( "geometry", data.uuid, "didn't saved!" );
-
-						}).catch(function(err){
-							console.error(err);
-						});
+						);
 
 					})( geometries[key] );
 
@@ -387,40 +367,35 @@
 
 					(function(data){
 
-						var result; // important!
+						var result;
 
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 
-								result = doc.uuid; // important!
+								result = doc.uuid;
 
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("child", data.uuid, "updated!" )
-								});
+									if (err) throw err; console.log("child", doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
 							},
 
-							function(err){ if (err) throw err; }
+							function(err){
+ 
+								if (err) throw err; 
 
-						).then(function(){
+								debugMode && console.log("children result:", result);
 
-							debugMode && console.log("child result:", result);
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; return data.uuid;
-							});
+								if (!result) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log("child saved!" )
+								}).catch(function(err){ console.error(err); });
 
-							return result;
+								debugMode && console.log( "child updated!" );
 
-						}).then(function( results ){
+							}
 
-							if ( results )
-								debugMode && console.log( "child", results, "saved!" );
-							else
-								debugMode && console.log( "child", data.uuid, "didn't saved!" );
-
-						}).catch(function(err){
-							console.error(err);
-						});
+						);
 
 					})( object.children[i] );
 
@@ -432,38 +407,35 @@
 
 			(function(collection,data){
 
-				var result; // important!
+				var result;
 
 				collection.find({uuid:data.uuid}).forEach(
 
 					function(doc){
-						result = doc.uuid; // important!
+
+						result = doc.uuid;
+
 						collection.update({_id:doc._id}, {$set:data}, function(err){
-							if (err) throw err; // console.log("object", data.uuid, "updated!" )
-						});
+							if (err) throw err; console.log("object", doc.uuid, "updated!" )
+						}).catch(function(err){ console.error(err); });
+
 					},
 
-					function(err){ if (err) throw err; }
+					function(err){
 
-				).then(function(){
+						if (err) throw err; 
 
-					debugMode && console.log("object result:", result);
-					if (!result) return collection.insert(data, function(err){ 
-						if (err) throw err; return data.uuid;
-					});
+						debugMode && console.log("objects result:", result);
 
-					return result;
+						if (!result) return collection.insert(data, function(err){ 
+							if (err) throw err; console.log("object saved!" )
+						}).catch(function(err){ console.error(err); });
 
-				}).then(function( results ){
+						debugMode && console.log( "object updated!" );
 
-					if ( results )
-						debugMode && console.log( "object", results, "saved!" );
-					else
-						debugMode && console.log( "object", data.uuid, "didn't saved!" );
+					}
 
-				}).catch(function(err){
-					console.error(err);
-				});
+				);
 
 			})( Objects, json.object );
 
