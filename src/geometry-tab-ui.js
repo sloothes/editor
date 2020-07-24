@@ -350,7 +350,7 @@
 
 	(function( tab ){
 
-	//	Save entity button.
+	//	Save geometry button.
 	//	var tab = TabUI.Geometry.tab;
 
 		var row = document.createElement("h3");
@@ -358,7 +358,7 @@
 
 		var button = document.createElement("div");
 		button.id = "geometry-save-button";
-		button.textContent = "Save Mesh Entity";
+		button.textContent = "Save Geometry Entity";
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 

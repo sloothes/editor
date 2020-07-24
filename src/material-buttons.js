@@ -226,7 +226,7 @@
 
 				for (var key in meta.geometries){
 
-					saveto(Geometries, meta.geometries[key], "geometry");
+				//	saveto(Geometries, meta.geometries[key], "geometry");
 
 				}
 

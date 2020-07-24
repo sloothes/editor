@@ -255,7 +255,7 @@
 
 				for (var key in meta.materials){
 
-					saveto(Materials, meta.materials[key], "material");
+				//	saveto(Materials, meta.materials[key], "material");
 
 				}
 
@@ -263,7 +263,7 @@
 
 				for (var key in meta.geometries){
 
-					saveto(Geometries, meta.geometries[key], "geometry");
+				//	saveto(Geometries, meta.geometries[key], "geometry");
 
 				}
 

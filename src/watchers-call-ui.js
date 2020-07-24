@@ -82,13 +82,14 @@
 		}
 
 	//	editor-tab.
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-value-increase"), key_droplist );        // increase,
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-value-decrease"), key_droplist );        // decrease,
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-add-button"), entity_droplist );         // rigid_add,
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-exit-mode"), entity_droplist );         // exit_mode,
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-vectors-reset"), vector_droplist );     // vector_reset,
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#matrix-needs-update"), entity_droplist );      // needs_update,
-		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-remove-button"), entity_droplist );      // rigid_remove,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-value-increase"), key_droplist );           // increase,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("li#editor-value-decrease"), key_droplist );           // decrease,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-add-button"), entity_droplist );            // rigid_add,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-exit-mode"), entity_droplist );            // exit_mode,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-vectors-reset"), vector_droplist );        // vector_reset,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#matrix-needs-update"), entity_droplist );         // needs_update,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-remove-button"), entity_droplist );         // rigid_remove,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-save-button"), entity_droplist );          // object_save,
 	//	geometry-tab.
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#octree-add-button"), entity_droplist );         // octree_add,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#octree-remove-button"), entity_droplist );      // octree_remove,
