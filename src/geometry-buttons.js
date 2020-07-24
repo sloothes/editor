@@ -1,17 +1,32 @@
 
+//	copy-location-button.js
+
+	(function(editor,player,copy_button,entity_droplist){
+
+		watch( copy_button, "onclick", function( prop, event, value ){
+
+		//	if ( value ) return; 
+			if ( !player ) return;
+
+		//	Copy localPlayer location.
+			editor.position.x = player.position.x;
+			editor.position.z = player.position.z;
+
+		});
+
+	})(
+		objectEditor, localPlayer, // editor, player,
+		TabUI.Geometry.tab.querySelector("div#copy-location-button"),     // copy_button,
+		TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist,
+	);
+
 //	geometry-create-button.js
 
-	(function(editor,create_button,entity_droplist,material_entities,entities,scene,local_player){
+	(function(editor,create_button,entity_droplist,material_entities,entities,scene){
 
 		watch( create_button, "onclick", function( prop, event, type ){
 
 			if ( type === "" || type === undefined ) return;
-
-		//	Copy position.
-			if ( local_player ) {
-				editor.position.x = local_player.position.x;
-				editor.position.z = local_player.position.z;
-			}
 
 		//	Create geometry.
 			var geometry = new THREE[ type ]();
@@ -57,8 +72,7 @@
 		objectEditor, // editor,
 		TabUI.Geometry.tab.querySelector("div#geometry-create-button"),    // create_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
-		material_entities, entities, scene, // material_manager, entity_manager, scene,
-		localPlayer // local_player.
+		material_entities, entities, scene // material_manager, entity_manager, scene.
 	);
 
 //	geometry-clone-button.js

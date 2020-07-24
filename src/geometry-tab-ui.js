@@ -238,6 +238,28 @@
 
 	})( TabUI.Geometry.tab );
 
+//	copy-location-ui.js
+
+	(function( tab ){
+
+	//	Copy position button.
+	//	Copies localPlayer position.
+	//	var tab = TabUI.Geometry.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:40px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "copy-location-button";
+		button.textContent = "Copy Player's Location";
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Geometry.tab );
+
 //	geometry-create-ui.js
 
 	(function( tab ){
@@ -267,7 +289,7 @@
 
 	//	Clone geometry button.
 	//	Clones selected mesh 
-	//	with the same geometry
+	//	with shared geometry
 	//	and switch to EditMode.
 	//	var tab = TabUI.Geometry.tab;
 

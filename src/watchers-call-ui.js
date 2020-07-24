@@ -96,6 +96,7 @@
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-create-button"), geometry_type );      // geometry_create,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-clone-button"), entity_droplist );     // geometry_clone,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-remove-button"), entity_droplist );    // geometry_remove,
+		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#copy-location-button"), entity_droplist );      // copy_location,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-save-button"), entity_droplist );      // geometry_save,
 	//	material-tab.
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-exit-mode"), material_droplist );      // material_exit,
