@@ -228,10 +228,17 @@
 					segments.name = "plane xz"; helper.add( segments );
 				})( 0.4 );
 
+				(function(r){
+					var cycleGeometry = new THREE.CircleGeometry(r,32).rotateY(-Math.PI/2);
+					var geometry = new THREE.EdgesGeometry( cycleGeometry );
+					var segments = new THREE.LineSegments( geometry, material );
+					segments.name = "plane yz"; helper.add( segments );
+				})( 0.4 );
+
 				scene.add( helper );
 
-				watch( editor, "position", function(key, action, value){
-					helper.position.copy( editor.position );
+				watch( editor, "position", function(prop, action, key){
+					helper.position[ key ] = editor.position[ key ];
 				});
 
 				return helper;
