@@ -166,16 +166,15 @@
 
 		//	json.
 
-		//	var object = getObjectByEntityId( value ); if ( !object ) return;
-
-			var json, meta = { geometries:{}, materials:{}, textures:{}, images:{} };
+			var json; var meta = { geometries:{}, materials:{}, textures:{}, images:{} };
 
 			try { json = getObjectByEntityId().toJSON( meta ); } 
 			catch(err){ return exitEditMode( entity_droplist ); }
 
-			if ( !(json && json.object) ) return exitEditMode( entity_droplist );
-
 			debugMode && console.log( json, meta );
+
+			if ( !json ) return exitEditMode( entity_droplist );
+			if ( !json.object ) return exitEditMode( entity_droplist );
 
 		//	images.
 
