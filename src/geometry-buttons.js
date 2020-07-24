@@ -208,8 +208,7 @@
 									if (err) throw err; console.log("image saved!" )
 								}).catch(function(err){ console.error(err); });
 
-								debugMode && console.log( "image updated!" );
-
+							//	debugMode && console.log( "image updated!" );
 							}
 
 						);
@@ -252,8 +251,7 @@
 									if (err) throw err; console.log("texture saved!" )
 								}).catch(function(err){ console.error(err); });
 
-								debugMode && console.log( "texture updated!" );
-
+							//	debugMode && console.log( "texture updated!" );
 							}
 
 						);
@@ -296,8 +294,7 @@
 									if (err) throw err; console.log("material saved!" )
 								}).catch(function(err){ console.error(err); });
 
-								debugMode && console.log( "material updated!" );
-
+							//	debugMode && console.log( "material updated!" );
 							}
 
 						);
@@ -340,8 +337,7 @@
 									if (err) throw err; console.log("geometry saved!" )
 								}).catch(function(err){ console.error(err); });
 
-								debugMode && console.log( "geometry updated!" );
-
+							//	debugMode && console.log( "geometry updated!" );
 							}
 
 						);
@@ -391,8 +387,7 @@
 									if (err) throw err; console.log("child saved!" )
 								}).catch(function(err){ console.error(err); });
 
-								debugMode && console.log( "child updated!" );
-
+							//	debugMode && console.log( "child updated!" );
 							}
 
 						);
@@ -431,8 +426,7 @@
 							if (err) throw err; console.log("object saved!" )
 						}).catch(function(err){ console.error(err); });
 
-						debugMode && console.log( "object updated!" );
-
+					//	debugMode && console.log( "object updated!" );
 					}
 
 				);
