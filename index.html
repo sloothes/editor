@@ -396,7 +396,11 @@
 			groundHelper.visible = !groundHelper.visible; 
 			ground.visible = !ground.visible; scene.add(ground);
 
+		//	Add entities.
+			entities.add(scene);
 			entities.add(ground);
+			entities.add(watermirror);
+			entities.add(localPlayer);
 			entities.add(groundHelper);
 			entities.add(localPlayer.getObjectByName("playerhelper"));
 
