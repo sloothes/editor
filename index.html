@@ -271,7 +271,7 @@
 
 			})(scene, entities, material_entities, textures_entities);
 
-			(function( skydome, skydome_droplist  ){
+			(function( skydome_droplist  ){
 
 				function onMouseClickWatchersCall( button, droplist ){
 
@@ -295,7 +295,7 @@
 				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#ground-toggle-button"), {value:""} ); // ground_toggle_button,
 				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), {value:""} ); // skydome_toggle_button,
 
-			})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
+			})( TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
 
 		//	toggle-buttons.js
 
