@@ -293,7 +293,7 @@
 	//	var tab = TabUI.Geometry.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
+		row.style.cssText = "height:40px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "geometry-remove-button";
@@ -333,7 +333,7 @@
 	//	var tab = TabUI.MeshWorld.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "octree-remove-button";
