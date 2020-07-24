@@ -291,9 +291,9 @@
 					});
 				}
 
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#water-toggle-button"), {value:null} ); // water_toggle_button,
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#ground-toggle-button"), {value:null} ); // ground_toggle_button,
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), {value:null} ); // skydome_toggle_button,
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#water-toggle-button"), {value:""} ); // water_toggle_button,
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#ground-toggle-button"), {value:""} ); // ground_toggle_button,
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), {value:""} ); // skydome_toggle_button,
 
 			})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
 
@@ -396,7 +396,7 @@
 		//	entities.add(ground);
 		//	entities.add(localPlayer);
 			entities.add(groundHelper);
-			entities.add(localPlayer.getObjectByName("playerhelper"));
+			entities.add(localPlayer.getObjectByName("local helper"));
 
 			cameraControls.setLatLon(5.128, 270.675);
 			localPlayer.controller.movementSpeed = 20;

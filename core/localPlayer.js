@@ -8,7 +8,7 @@
 		var player = (function(){
 			var player = new THREE.Object3D();
 			player.position.set( 0, 0, 0 );
-			player.name = "localPlayer";
+			player.name = "local player";
 			scene.add( player );
 			return player;
 		})();
@@ -19,7 +19,7 @@
 			var geometry = new THREE.EdgesGeometry( sphere );
 			var material = new THREE.LineBasicMaterial( { color: 0x00ff00 } );
 			var segments = new THREE.LineSegments( geometry, material );
-			segments.name = "playerhelper";
+			segments.name = "local helper";
 			return segments;
 		})( radius );
 
