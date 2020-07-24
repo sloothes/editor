@@ -189,8 +189,11 @@
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
+
+								result = doc.uuid; // important!
+
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; return result = data.uuid;
+									if (err) throw err; // console.log("image", data.uuid, "updated!" )
 								});
 							},
 
@@ -235,8 +238,11 @@
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
+
+								result = doc.uuid; // important!
+
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; return result = data.uuid;
+									if (err) throw err; // console.log("texture", data.uuid, "updated!" )
 								});
 							},
 
@@ -281,8 +287,11 @@
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
+
+								result = doc.uuid; // important!
+
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; return result = data.uuid;
+									if (err) throw err; // console.log("material", data.uuid, "updated!" )
 								});
 							},
 
@@ -327,8 +336,11 @@
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
+
+								result = doc.uuid; // important!
+
 								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; return result = data.uuid;
+									if (err) throw err; // console.log("geometry", data.uuid, "updated!" )
 								});
 							},
 
@@ -380,8 +392,11 @@
 						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
-								return collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; return result = data.uuid;
+
+								result = doc.uuid; // important!
+
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; // console.log("child", data.uuid, "updated!" )
 								});
 							},
 
@@ -407,7 +422,7 @@
 							console.error(err);
 						});
 
-					})( children[i] );
+					})( object.children[i] );
 
 				}
 
@@ -422,8 +437,9 @@
 				collection.find({uuid:data.uuid}).forEach(
 
 					function(doc){
-						return collection.update({_id:doc._id}, {$set:data}, function(err){
-							if (err) throw err; return result = data.uuid;
+						result = doc.uuid; // important!
+						collection.update({_id:doc._id}, {$set:data}, function(err){
+							if (err) throw err; // console.log("object", data.uuid, "updated!" )
 						});
 					},
 
