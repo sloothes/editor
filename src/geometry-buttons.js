@@ -147,7 +147,7 @@
 
 //	geometry-save-button.js
 
-	(function(db,save_button,entity_droplist,exitEditMode){
+	(function(db,save_button,entity_droplist,water,mirror,exitEditMode){
 
 	//	var Objects, Geometries, Materials, Textures, Images; // collections.
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
@@ -339,7 +339,12 @@
 				if ( !object.children ) return;
 				if ( !object.children.length ) return;
 
-				var length = object.children.length;
+			//	hack!
+				var children = object.children.filter(function(child){
+					return child.uuid !== water.uuid && child.uuid !== mirror.uuid;
+				}); if ( !children || !children.length ) return;
+
+				var length = children.length;
 				for (var i = 0; i < length; i++){
 
 					(function(data,keyword){
@@ -380,6 +385,9 @@
 
 				var result;
 
+				if ( data.uuid && data.uuid === water.uuid ) return; // hack!
+				if ( data.uuid && data.uuid === mirror.uuid ) return; // hack!
+
 				collection.find({uuid:data.uuid}).forEach(
 
 					function(doc){
@@ -402,14 +410,14 @@
 
 				).catch(function(err){ console.error(err); });
 
-			})( Objects, json.object,"object" );
+			})( Objects, json.object, "object" );
 
 		});
 
 	})( 
 		metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button"), // db,save_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
-		exitEditMode // function.
+		water, mirror, exitEditMode // water, mirror, function.
 	);
 
 

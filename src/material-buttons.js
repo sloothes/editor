@@ -189,170 +189,81 @@
 
 		//	json.
 
-			var material = getMaterialByEntityId(); if ( !material ) return;
 			var meta = { geometries:{}, materials:{}, textures:{}, images:{} };
-			var json = material.toJSON(meta); debugMode && console.log( meta );
+			try { getMaterialByEntityId( value ).toJSON( meta ); } catch(err){ 
+				console.error("Couldn't save", getMaterialByEntityId() ); return; 
+			}
 
-		//	images.
+			debugMode && console.log( meta );
 
-			(function(collection,images){
+			(function(meta){
 
-				for (var key in images){
+			//	images.
 
-					(function(data){
+				for (var key in meta.images){
 
-						var result; // important!
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-								result = true;
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("image updated!");
-								});
-							},
-
-							function(err){ if (err) throw err; }
-
-						).then(function(){
-
-							debugMode && console.log("image result:", result);
-							if (!result) collection.insert(data, function(err){ 
-								if (err) throw err; // console.log( "image inserted!" );
-							});
-
-						}).then(function(){
-							console.log( "image saved!" );
-						}).catch(function(err){
-							console.error(err);
-						});
-
-					})( images[key] );
+					saveto(Images, meta.images[key], "image");
 
 				}
 
-			})( Images, meta.images );
+			//	textures.
 
-		//	textures.
+				for (var key in meta.textures){
 
-			(function(collection,textures){
-
-				for (var key in textures){
-
-					(function(data){
-
-						var result; // important!
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-								result = true;
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("texture updated!");
-								});
-							},
-
-							function(err){ if (err) throw err; }
-
-						).then(function(){
-
-							debugMode && console.log("texture result:", result);
-							if (!result) collection.insert(data, function(err){ 
-								if (err) throw err; // console.log( "texture inserted!" );
-							});
-
-						}).then(function(){
-							console.log( "texture saved!" );
-						}).catch(function(err){
-							console.error(err);
-						});
-
-					})( textures[key] );
+					saveto(Textures, meta.textures[key], "texture");
 
 				}
 
-			})( Textures, meta.textures );
+			//	materials.
 
-		//	materials.
+				for (var key in meta.materials){
 
-			(function(collection,materials){
-
-				for (var key in materials){
-
-					(function(data){
-
-						var result; // important!
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-								result = true;
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("material updated!");
-								});
-							},
-
-							function(err){ if (err) throw err; }
-
-						).then(function(){
-
-							debugMode && console.log("material result:", result);
-							if (!result) collection.insert(data, function(err){ 
-								if (err) throw err; // console.log( "material inserted!" );
-							});
-
-						}).then(function(){
-							console.log( "material saved!" );
-						}).catch(function(err){
-							console.error(err);
-						});
-
-					})( materials[key] );
+					saveto(Materials, meta.materials[key], "material");
 
 				}
 
-			})( Materials, meta.materials );
+			//	geometries.
 
-		//	geometries.
+				for (var key in meta.geometries){
 
-			(function(collection,geometries){
-
-				for (var key in geometries){
-
-					(function(data){
-
-						var result; // important!
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-								result = true;
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; // console.log("geometry updated!");
-								});
-							},
-
-							function(err){ if (err) throw err; }
-
-						).then(function(){
-
-							debugMode && console.log("geometry result:", result);
-							if (!result) collection.insert(data, function(err){ 
-								if (err) throw err; // console.log( "geometry inserted!" );
-							});
-
-						}).then(function(){
-							console.log( "geometry saved!" );
-						}).catch(function(err){
-							console.error(err);
-						});
-
-					})( geometries[key] );
+					saveto(Geometries, meta.geometries[key], "geometry");
 
 				}
 
-			})( Geometries, meta.geometries );
+				function saveto(collection,data,keyword){
+
+					var result;
+
+					collection.find({uuid:data.uuid}).forEach(
+
+						function(doc){
+
+							result = doc.uuid;
+
+							collection.update({_id:doc._id}, {$set:data}, function(err){
+								if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
+							}).catch(function(err){ console.error(err); });
+
+						},
+
+						function(err){
+
+							if (err) throw err;  
+
+							if (!result) return collection.insert(data, function(err){ 
+								if (err) throw err; console.log(keyword, data.uuid, "saved!" )
+							}).catch(function(err){ console.error(err); });
+						}
+
+					).catch(function(err){ console.error(err); });
+
+				}
+
+			})( meta );
 
 		});
 
 	})(
-		metaDB, // database,
-		TabUI.Material.tab.querySelector("div#material-save-button"), // save_button,
+		metaDB, TabUI.Material.tab.querySelector("div#material-save-button"), // save_button,
 		TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist.
 	);
