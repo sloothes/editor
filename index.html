@@ -175,18 +175,18 @@
 
 		//	geometry-center-helper.js
 
-			const centerHelper = (function(){
+			(function(editor){
 
-				var helper = new THREE.Object3D(); // helper.
+			//	var helper = new THREE.Object3D(); // helper.
 				var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
 
 			//	cycle.
 
 				(function(){
-					var cycleGeometry = new THREE.CircleGeometry(5,32).rotateX(-Math.PI/2);
+					var cycleGeometry = new THREE.CircleGeometry(0.4,32).rotateX(-Math.PI/2);
 					var geometry = new THREE.EdgesGeometry( cycleGeometry );
 					var segments = new THREE.LineSegments( geometry, material );
-					helper.add( segments );
+					editor.add( segments );
 				})();
 
 			//	haircross.
@@ -194,27 +194,34 @@
 				(function(){
 					var geometry = new THREE.Geometry();
 					geometry.vertices.push(
-						new THREE.Vector3( -10, 0, 0 ),
-						new THREE.Vector3(  10, 0, 0 )
+						new THREE.Vector3( -1, 0, 0 ),
+						new THREE.Vector3(  1, 0, 0 )
 					);
 					var segments = new THREE.LineSegments( geometry, material );
-					helper.add( segments );
+					segments.name = "axis x"; editor.add( segments );
 				})();
 
 				(function(){
 					var geometry = new THREE.Geometry();
 					geometry.vertices.push(
-						new THREE.Vector3( 0, 0, -10 ),
-						new THREE.Vector3( 0, 0,  10 )
+						new THREE.Vector3( 0.-1, 0 ),
+						new THREE.Vector3( 0, 1, 0 )
 					);
 					var segments = new THREE.LineSegments( geometry, material );
-					helper.add( segments );
+					segments.name = "axis y"; editor.add( segments );
 				})();
 
-				return helper;
-			})();
+				(function(){
+					var geometry = new THREE.Geometry();
+					geometry.vertices.push(
+						new THREE.Vector3( 0, 0, -1 ),
+						new THREE.Vector3( 0, 0,  1 )
+					);
+					var segments = new THREE.LineSegments( geometry, material );
+					segments.name = "axis z"; editor.add( segments );
+				})();
 
-			scene.add(centerHelper);
+			})(objectEditor);
 
 		</script>
 
