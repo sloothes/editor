@@ -199,7 +199,7 @@
 						).then(function(){
 
 							debugMode && console.log("image result:", result);
-							if (!result) collection.insert(data, function(err){ 
+							if (!result) return collection.insert(data, function(err){ 
 								if (err) throw err; return data.uuid;
 							});
 
@@ -245,7 +245,7 @@
 						).then(function(){
 
 							debugMode && console.log("texture result:", result);
-							if (!result) collection.insert(data, function(err){ 
+							if (!result) return collection.insert(data, function(err){ 
 								if (err) throw err; return data.uuid;
 							});
 
@@ -291,7 +291,7 @@
 						).then(function(){
 
 							debugMode && console.log("material result:", result);
-							if (!result) collection.insert(data, function(err){ 
+							if (!result) return collection.insert(data, function(err){ 
 								if (err) throw err; return data.uuid;
 							});
 
@@ -337,7 +337,7 @@
 						).then(function(){
 
 							debugMode && console.log("geometry result:", result);
-							if (!result) collection.insert(data, function(err){ 
+							if (!result) return collection.insert(data, function(err){ 
 								if (err) throw err; return data.uuid;
 							});
 
