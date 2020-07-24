@@ -173,220 +173,48 @@
 
 			debugMode && console.log( json, meta );
 
-			if ( !json ) return exitEditMode( entity_droplist );
-			if ( !json.object ) return exitEditMode( entity_droplist );
+			if ( !json ) return exitEditMode(entity_droplist);
+			if ( !json.object ) return exitEditMode(entity_droplist);
 
-		//	images.
+			(function(meta){
 
-			(function(collection,images){
+			//	images.
 
-				for (var key in images){
+				for (var key in meta.images){
 
-					(function(data,keyword){
-
-						var result;
-
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-
-								result = doc.uuid;
-
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-								}).catch(function(err){ console.error(err); });
-
-							},
-
-							function(err){
- 
-								if (err) throw err;  
-
-								if (!result) return collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-								}).catch(function(err){ console.error(err); });
-							}
-
-						).catch(function(err){ console.error(err); });
-
-					})( images[key],"image" );
+					saveto(Images, meta.images[key], "image");
 
 				}
 
-			})( Images, meta.images );
+			//	textures.
 
-		//	textures.
+				for (var key in meta.textures){
 
-			(function(collection,textures){
-
-				for (var key in textures){
-
-					(function(data,keyword){
-
-						var result;
-
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-
-								result = doc.uuid;
-
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-								}).catch(function(err){ console.error(err); });
-							},
-
-							function(err){
- 
-								if (err) throw err; 
-
-								if (!result) collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-								}).catch(function(err){ console.error(err); });
-							}
-
-						).catch(function(err){ console.error(err); });
-
-					})( textures[key],"texture" );
+					saveto(Textures, meta.textures[key], "texture");
 
 				}
 
-			})( Textures, meta.textures );
+			//	materials.
 
-		//	materials.
+				for (var key in meta.materials){
 
-			(function(collection,materials){
-
-				for (var key in materials){
-
-					(function(data,keyword){
-
-						var result;
-
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-
-								result = doc.uuid;
-
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-								}).catch(function(err){ console.error(err); });
-							},
-
-							function(err){
- 
-								if (err) throw err; 
-
-								if (!result) collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-								}).catch(function(err){ console.error(err); });
-							}
-
-						).catch(function(err){ console.error(err); });
-
-					})( materials[key],"material" );
+					saveto(Materials, meta.materials[key], "material");
 
 				}
 
-			})( Materials, meta.materials );
+			//	geometries.
 
-		//	geometries.
+				for (var key in meta.geometries){
 
-			(function(collection,geometries){
-
-				for (var key in geometries){
-
-					(function(data,keyword){
-
-						var result;
-
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-
-								result = doc.uuid;
-
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-								}).catch(function(err){ console.error(err); });
-							},
-
-							function(err){
- 
-								if (err) throw err; 
-
-								if (!result) collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-								}).catch(function(err){ console.error(err); });
-							}
-
-						).catch(function(err){ console.error(err); });
-
-					})( geometries[key],"geometry" );
+					saveto(Geometries, meta.geometries[key], "geometry");
 
 				}
 
-			})( Geometries, meta.geometries );
+			})( meta );
 
-		//	objects.
-
-			(function(collection,object){
-
-			//	json.object.children.
-
-				if ( !object ) return;
-				if ( !object.children ) return;
-				if ( !object.children.length ) return;
-
-			//	hack!
-				var children = object.children.filter(function(child){
-					return child.uuid !== water.uuid && child.uuid !== mirror.uuid;
-				}); if ( !children || !children.length ) return;
-
-				var length = children.length;
-				for (var i = 0; i < length; i++){
-
-					(function(data,keyword){
-
-						var result;
-
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-
-								result = doc.uuid;
-
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-								}).catch(function(err){ console.error(err); });
-							},
-
-							function(err){
- 
-								if (err) throw err; 
-
-								if (!result) collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-								}).catch(function(err){ console.error(err); });
-							}
-
-						).catch(function(err){ console.error(err); });
-
-					})( object.children[i],"child" );
-
-				}
-
-			})( Objects, json.object );
-
-		//	json.object.
-
-			(function(collection,data,keyword){
+			function saveto( collection, data, keyword ){
 
 				var result;
-
-				if ( data.uuid && data.uuid === water.uuid ) return; // hack!
-				if ( data.uuid && data.uuid === mirror.uuid ) return; // hack!
 
 				collection.find({uuid:data.uuid}).forEach(
 
@@ -397,20 +225,55 @@
 						collection.update({_id:doc._id}, {$set:data}, function(err){
 							if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
 						}).catch(function(err){ console.error(err); });
+
 					},
 
 					function(err){
 
-						if (err) throw err; 
+						if (err) throw err;  
 
-						if (!result) collection.insert(data, function(err){ 
+						if (!result) return collection.insert(data, function(err){ 
 							if (err) throw err; console.log(keyword, data.uuid, "saved!" )
 						}).catch(function(err){ console.error(err); });
 					}
 
 				).catch(function(err){ console.error(err); });
 
-			})( Objects, json.object, "object" );
+			}
+
+		//	object.
+
+			(function(object){
+
+				if ( !object ) return;
+				if ( !object.children ) return;
+				if ( !object.children.length ) return;
+
+			//	children.
+				var children = object.children.filter(function(child){
+					return child.uuid !== water.uuid && child.uuid !== mirror.uuid;
+				}); if ( !children || !children.length ) return;
+
+				var length = children.length;
+				for (var i = 0; i < length; i++){
+
+					saveto(Objects, children[i], "child");
+
+				}
+
+			})( json.object );
+
+		//	object.
+
+			(function(object){
+
+				if ( !object ) return;
+				if ( object.uuid === water.uuid ) return exitEditMode(entity_droplist); // hack!
+				if ( object.uuid === mirror.uuid ) return exitEditMode(entity_droplist); // hack!
+
+				saveto(Objects, json.object, "object");
+
+			})( json.object );
 
 		});
 
