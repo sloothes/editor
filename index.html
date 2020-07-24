@@ -291,11 +291,12 @@
 					});
 				}
 
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), skydome_droplist ); // toggle_button,
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#ground-toggle-button"), {value:null} ); // ground_toggle_button,
+				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), skydome_droplist ); // skydome_toggle_button,
 
 			})(skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
 
-		//	toggle-button.js
+		//	toggle-buttons.js
 
 			(function( skydome,button ){
 
@@ -304,6 +305,14 @@
 				});
 
 			})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
+
+			(function( helper,button ){
+
+				watch( button, "onclick", function( prop, event, value ){ 
+					if ( helper ) helper.visible = !helper.visible;
+				});
+
+			})( groundHelper, TabUI.Skydome.tab.querySelector("div#ground-toggle-button") );
 
 		</script>
 
