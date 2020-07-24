@@ -147,7 +147,7 @@
 
 //	geometry-save-button.js
 
-	(function(db,save_button,entity_droplist){
+	(function(db,save_button){
 
 	//	var Geometries, Materials, Textures, Objects, Images; // collections.
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
@@ -412,11 +412,7 @@
 
 		});
 
-	})(
-		TabUI.Geometry.tab.querySelector("div#geometry-save-button"),    // save_button,
-		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
-		entities, exitEditMode // entity_manager, function.
-	);
+	})( metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button") );
 
 
 //	octree-add-button.js
