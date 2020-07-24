@@ -1,24 +1,18 @@
 
-//	copy-location-button.js
+//	copy-position-button.js
 
-	(function(editor,player,copy_button,entity_droplist){
+	(function(editor,copy_button){
 
-		watch( copy_button, "onclick", function( prop, event, value ){
-
-		//	if ( value ) return; 
-			if ( !player ) return;
+		watch( copy_button, "onclick", function( prop, event, position ){
 
 		//	Copy localPlayer location.
-			editor.position.x = player.position.x;
-			editor.position.z = player.position.z;
+			editor.position.x = position.x;
+		//	editor.position.y = position.y;
+			editor.position.z = position.z;
 
 		});
 
-	})(
-		objectEditor, localPlayer, // editor, player,
-		TabUI.Geometry.tab.querySelector("div#copy-location-button"),     // copy_button,
-		TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist,
-	);
+	})( objectEditor, TabUI.Geometry.tab.querySelector("div#copy-position-button") );
 
 //	geometry-create-button.js
 
