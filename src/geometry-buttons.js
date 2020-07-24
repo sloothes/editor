@@ -203,7 +203,7 @@
 								if (err) throw err;  
 
 								if (!result) return collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, doc.uuid, "saved!" )
+									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
 								}).catch(function(err){ console.error(err); });
 							}
 
