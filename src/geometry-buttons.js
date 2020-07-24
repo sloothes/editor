@@ -1,18 +1,27 @@
 
 //	copy-position-button.js
 
-	(function(editor,copy_button){
+	(function(editor,localPlayer,button){
 
-		watch( copy_button, "onclick", function( prop, event, position ){
+		var interval;
+
+		watch( button, "onclick", function( prop, event ){
 
 		//	Copy localPlayer location.
-			editor.position.x = position.x;
-		//	editor.position.y = position.y;
-			editor.position.z = position.z;
+			editor.position.x = localPlayer.position.x;
+		//	editor.position.y = localPlayer.position.y;
+			editor.position.z = localPlayer.position.z;
 
 		});
 
-	})( objectEditor, TabUI.Geometry.tab.querySelector("div#copy-position-button") );
+		button.addEventListener( "click", function(){ 
+			clearTimeout( interval );
+			interval = setTimeout(function(button){
+				callWatchers( button, "onclick", "click" );
+			}, 250, this); 
+		});
+
+	})( objectEditor, localPlayer, TabUI.Geometry.tab.querySelector("div#copy-position-button") );
 
 //	geometry-create-button.js
 

@@ -60,7 +60,7 @@
 	(function(
 		entity_droplist,key_droplist,vector_droplist,geometry_type,
 		material_map,material_type,material_droplist,
-		textures_vector,textures_map,textures_droplist,localPlayer
+		textures_vector,textures_map,textures_droplist
 	){
 
 		function onMouseClickWatchersCall( button, droplist ){
@@ -96,7 +96,6 @@
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-create-button"), geometry_type );      // geometry_create,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-clone-button"), entity_droplist );     // geometry_clone,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-remove-button"), entity_droplist );    // geometry_remove,
-		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#copy-position-button"), localPlayer.position ); // copy_position,
 		onMouseClickWatchersCall( TabUI.Geometry.tab.querySelector("div#geometry-save-button"), entity_droplist );      // geometry_save,
 	//	material-tab.
 		onMouseClickWatchersCall( TabUI.Material.tab.querySelector("div#material-exit-mode"), material_droplist );      // material_exit,
@@ -126,8 +125,7 @@
 		TabUI.Material.tab.querySelector("select#material-entities-droplist"), // material_droplist,
 		TabUI.Texture.tab.querySelector("select#texture-vector-droplist"),     // textures_vector,
 		TabUI.Texture.tab.querySelector("select#textures-map-droplist"),       // textures_map,
-		TabUI.Texture.tab.querySelector("select#textures-entities-droplist"),   // textures_droplist,
-		localPlayer
+		TabUI.Texture.tab.querySelector("select#textures-entities-droplist")   // textures_droplist,
 	);
 
 /*
