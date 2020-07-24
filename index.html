@@ -237,8 +237,8 @@
 
 				scene.add( helper );
 
-				watch( editor, "position", function(prop, action, key){
-					helper.position[ key ] = editor.position[ key ];
+				watch( editor.position, ["x","y","z"], function( key, action, value ){
+					helper.position[key] = editor.position[key];
 				});
 
 				return helper;
