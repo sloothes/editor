@@ -363,13 +363,13 @@
 
 			})( renderer, camera, scene, cameraLight, textures_entities );
 
-			const watermirror = (function( scene,water,material_entities,entities ){
+			const mirror = (function( scene,water,material_entities,entities ){
 
 				material_entities && material_entities.add(water.material);
 				var material = water.material; // entities && entities.add(water); 
 				var geometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
 				var mirror = new THREE.Mesh( geometry, material );
-				mirror.add(water); mirror.name = "water mirror";
+				mirror.add(water); mirror.name = "mirror";
 				mirror.rotation.x = -Math.PI/2; 
 				mirror.position.y = -0.01;
 				scene.add(mirror);
