@@ -173,13 +173,11 @@
 
 		<script>
 
-		/*
+		//	geometry-center-helper.js
 
-		//	Geometry bounding sphere center helper.
+			const centerHelper = (function(){
 
-			const centerhelper = (function(){
-
-				var object = new THREE.Object3D(); // helper.
+				var helper = new THREE.Object3D(); // helper.
 				var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
 
 			//	cycle.
@@ -188,7 +186,7 @@
 					var cycleGeometry = new THREE.CircleGeometry(5,32).rotateX(-Math.PI/2);
 					var geometry = new THREE.EdgesGeometry( cycleGeometry );
 					var segments = new THREE.LineSegments( geometry, material );
-					object.add( segments );
+					helper.add( segments );
 				})();
 
 			//	haircross.
@@ -200,7 +198,7 @@
 						new THREE.Vector3(  10, 0, 0 )
 					);
 					var segments = new THREE.LineSegments( geometry, material );
-					object.add( segments );
+					helper.add( segments );
 				})();
 
 				(function(){
@@ -210,13 +208,13 @@
 						new THREE.Vector3( 0, 0,  10 )
 					);
 					var segments = new THREE.LineSegments( geometry, material );
-					object.add( segments );
+					helper.add( segments );
 				})();
 
-				return object;
+				return helper;
 			})();
 
-		*/
+			scene.add(centerHelper);
 
 		</script>
 
