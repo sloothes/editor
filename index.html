@@ -392,14 +392,17 @@
 
 			TabUI.Editor.role.classList.add("active");
 			TabUI.Editor.tab.classList.add("in","active");
-		//	watermirror.visible = !watermirror.visible; 
+
+		//	mirror.visible = !mirror.visible; 
+			ground.visible = !ground.visible; 
 			groundHelper.visible = !groundHelper.visible; 
-			ground.visible = !ground.visible; scene.add(ground);
+
+			scene.add(ground);
 
 		//	Add entities.
 			entities.add(scene);
 			entities.add(ground);
-			entities.add(watermirror);
+			entities.add(mirror);
 			entities.add(localPlayer);
 			entities.add(groundHelper);
 			entities.add(localPlayer.getObjectByName("playerhelper"));
