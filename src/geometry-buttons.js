@@ -328,19 +328,19 @@
 
 		//	objects.
 
-		//	json children.
+		//	json object children.
 
-			(function(collection,json){
+			(function(collection,object){
 
-				json.children.forEach(function(data, i){
+				object.children.forEach(function(child, i){
 
 					var result; // important!
 
-					collection.find({uuid:data.uuid}).forEach(
+					collection.find({uuid:child.uuid}).forEach(
 
 						function(doc){
 							result = true;
-							return collection.update({_id:doc._id}, {$set:data}, function(err){
+							return collection.update({_id:doc._id}, {$set:child}, function(err){
 								if (err) throw err; return doc;
 							//	console.log("child updated!");
 							});
@@ -351,8 +351,8 @@
 					).then(function(results){
 
 						debugMode && console.log("child results:", results);
-						if (!result) return collection.insert(data, function(err){ 
-							if (err) throw err; return data;
+						if (!result) return collection.insert(child, function(err){ 
+							if (err) throw err; return child;
 						//	console.log( "child inserted!" );
 						});
 
@@ -369,19 +369,19 @@
 
 				});
 
-			})( Objects, json );
+			})( Objects, json.object );
 
-		//	json root object.
+		//	json object.
 
-			(function(collection,json){
+			(function(collection,object){
 
 				var result; // important!
 
-				collection.find({uuid:json.uuid}).forEach(
+				collection.find({uuid:object.uuid}).forEach(
 
 					function(doc){
 						result = true;
-						return collection.update({_id:doc._id}, {$set:json}, function(err){
+						return collection.update({_id:doc._id}, {$set:object}, function(err){
 							if (err) throw err; return doc;
 						//	console.log("object updated!");
 						});
@@ -391,9 +391,9 @@
 
 				).then(function(results){
 
-					debugMode && console.log("json results:", results);
-					if (!result) return collection.insert(json, function(err){ 
-						if (err) throw err; return json;
+					debugMode && console.log("object results:", results);
+					if (!result) return collection.insert(object, function(err){ 
+						if (err) throw err; return object;
 					//	console.log( "object inserted!" );
 					});
 
@@ -401,14 +401,14 @@
 
 				}).then(function(results){
 
-					debugMode && console.log( "json saved!" );
-					debugMode && console.log( "json results:", results );
+					debugMode && console.log( "object saved!" );
+					debugMode && console.log( "object results:", results );
 
 				}).catch(function(err){
 					console.error(err);
 				});
 
-			})( Objects, json );
+			})( Objects, json.object );
 
 		});
 
