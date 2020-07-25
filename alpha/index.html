@@ -255,7 +255,7 @@
 
 			const water = (function(renderer,camera,scene,light,textures_entities){
 
-				var waterNormals = loadTexture("https://i.imgur.com/xQsNP0X.png");
+				var waterNormals = loadTexture("https://i.imgur.com/gd4Gr7Q.png");
 				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
 				textures_entities && textures_entities.add(waterNormals);
 
@@ -312,7 +312,7 @@
 				var loader = new THREE.TextureLoader();
 				loader.setCrossOrigin( "anonymous" );
 				var geometry = new THREE.SphereGeometry( 2000, 64, 32 );
-				var texture = loader.load( "https://i.imgur.com/IMVEV3T.jpg" );
+				var texture = loader.load( "https://i.imgur.com/xQsNP0X.png" );
 				texture.wrapS = texture.wrapT = 1000; texture.name="skydome";
 				var material = new THREE.MeshBasicMaterial({
 					map:texture,transparent:false,opacity:1,side:1,
