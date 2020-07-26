@@ -181,27 +181,36 @@
 
 		//	database-droplists.js
 
-			(function(database_droplist,collection_droplist){
+			(function(key_droplist,database_droplist,collection_droplist){
 
-				watch( database_droplist, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:database_droplist,event:event,value:value}); // debug.
-				});
-
-				database_droplist.addEventListener( "change", function(){
-					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				watch( key_droplist, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:key_droplist,event:event,value:value}); // debug.
 				});
 
 				watch( collection_droplist, "onchange", function( prop, event, value ){ 
 					debugMode && console.log({item:collection_droplist,event:event,value:value}); // debug.
 				});
 
+				watch( database_droplist, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:database_droplist,event:event,value:value}); // debug.
+				});
+
+				key_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
 				collection_droplist.addEventListener( "change", function(){
 					this.blur(); callWatchers( this, "onchange", "change", this.value );
 				});
 
+				database_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
 			})( 
-				TabUI.Database.tab.querySelector("select#database-droplist"),   // database_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist")  // collection_droplist,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
+				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 
 			(function(index_input,key_droplist,database_droplist,collection_droplist){
