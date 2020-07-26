@@ -204,7 +204,7 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist")  // collection_droplist,
 			);
 
-			(function(database_droplist,collection_droplist,dockeys_droplist){
+			(function(index_input,key_droplist,database_droplist,collection_droplist){
 
 				var db = metadB; 
 				var collection = db.collection(collection_droplist.value);
@@ -219,7 +219,7 @@
 						debugMode && console.log( "collection:", collection );
 
 					} catch(err){
-						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name); return false;
+						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
 					}
 
 				});
@@ -229,12 +229,25 @@
 					if ( !db ) return; if ( !collection ) return;
 
 					collection.findOne({},{},function(err, doc){
-						if (err) throw err;
-						debugMode && console.log( "result:", doc );
+						if (err) throw err; // console.log( "doc:", doc );
+						if ( !doc ) throw "None doc found in collection!";
 					}).then(function(doc){
+
+					//	remove old key options.
+						while (key_droplist.options.length) {
+							key_droplist.options.remove(0);
+						} return doc;
+
+					}).then(function(doc){
+
+					//	create new key options.
 						debugMode && console.log( doc );
-
-
+					//	var keys = Object.keys(doc).join();
+						Object.keys(doc).forEach(function( key ){
+							var option = document.createElement("option");
+							option.text = option.value = key;
+							key_droplist.appendChild( option );
+						});
 
 
 
@@ -259,9 +272,10 @@
 
 
 			})( 
-				TabUI.Database.tab.querySelector("select#database-droplist"),   // database_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist"), // collection_droplist,
-				TabUI.Database.tab.querySelector("select#doc-keys-droplist")    // dockeys_droplist,
+				TabUI.Database.tab.querySelector("input#doc-index-input"),     // index_input,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
+				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 
 
