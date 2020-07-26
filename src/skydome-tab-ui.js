@@ -3,18 +3,18 @@
 	TabUI.add( "Skydome", "skydome-tab" );
 	TabUI.append( "Skydome" );
 
-	const background_droplist = (function( tab ){
+	const skydome_droplist = (function( tab ){
 
-	//	Background droplist.
+	//	Skydome droplist.
 	//	var tab = TabUI.Skydome.tab;
 
 		var row = document.createElement("h3");
-		row.textContent = "background:";
+		row.textContent = "Skydome:";
 		row.style.cssText = "height:30px;"
 
 		var select = document.createElement("select");
-		select.id = "background-texture-droplist";
-		select.style.cssText = "width:150px;color:#000;float:right;"
+		select.id = "skydome-texture-droplist";
+		select.style.cssText = "width:170px;color:#000;float:right;"
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -31,18 +31,18 @@
 
 	})( TabUI.Skydome.tab );
 
-	const skydome_droplist = (function( tab ){
+	const background_droplist = (function( tab ){
 
-	//	Skydome droplist.
+	//	Background droplist.
 	//	var tab = TabUI.Skydome.tab;
 
 		var row = document.createElement("h3");
-		row.textContent = "Skydome:";
+		row.textContent = "background:";
 		row.style.cssText = "height:30px;"
 
 		var select = document.createElement("select");
-		select.id = "skydome-texture-droplist";
-		select.style.cssText = "width:170px;color:#000;float:right;"
+		select.id = "background-texture-droplist";
+		select.style.cssText = "width:150px;color:#000;float:right;"
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
