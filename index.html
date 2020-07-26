@@ -317,7 +317,7 @@
 
 			})( TabUI.Skydome.tab.querySelector("select#background-texture-droplist") );
 
-			(function(scene,background_droplist,textures_entities){
+			(function( scene,background_droplist) {
 
 				watch( background_droplist, "onchange", function( prop, event, value ){
 
@@ -340,10 +340,10 @@
 
 				});
 
-				background_droplist.callWatchers( background_droplist, "onchange", "change", 
-				background_droplist.value = "v6bjQLb,lwrlr6P,kKUKBJg,N0oZlJR,x9q8z0K,HYcK7Ii" );
+				background_droplist.value = "v6bjQLb,lwrlr6P,kKUKBJg,N0oZlJR,x9q8z0K,HYcK7Ii";
+				callWatchers( background_droplist, "onchange", "change", background_droplist.value );
 
-			})( scene, TabUI.Skydome.tab.querySelector("select#background-texture-droplist"), textures_entities );
+			})( scene, TabUI.Skydome.tab.querySelector("select#background-texture-droplist") );
 
 		</script>
 
