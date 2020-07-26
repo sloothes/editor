@@ -204,7 +204,7 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist")  // collection_droplist,
 			);
 
-			(function(database_droplist,collection_droplist){
+			(function(database_droplist,collection_droplist,dockeys_droplist){
 
 				var db = metadB; 
 				var collection = db.collection(collection_droplist.value);
@@ -215,11 +215,27 @@
 
 					try { 
 
-						collection = db.collection(value); debugMode && console.log( "collection:", collection );
+						collection = db.collection(value); 
+						debugMode && console.log( "collection:", collection );
 
 					} catch(err){
-						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
+						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name); 
+						return false;
 					}
+
+				});
+
+				watch( collection_droplist, "onchange", function( prop, event, value ){ 
+
+					if ( !db ) return; if ( !collection ) return;
+
+					collection.findOne( {}, {}, 
+						function(err){if (err) throw err
+					}).then(function(doc){
+						debugMode && console.log( doc );
+					}).catch(function(err){
+						console.error(err);
+					});
 
 				});
 
@@ -242,15 +258,10 @@
 
 
 
-
-
-
-
-
-
 			})( 
 				TabUI.Database.tab.querySelector("select#database-droplist"),   // database_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist")  // collection_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist"), // collection_droplist,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist")    // dockeys_droplist,
 			);
 
 
@@ -258,8 +269,8 @@
 
 		<script>
 
-			TabUI.Editor.role.classList.add("active");
-			TabUI.Editor.tab.classList.add("in","active");
+			TabUI.Database.role.classList.add("active");
+			TabUI.Database.tab.classList.add("in","active");
 
 		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
