@@ -215,14 +215,13 @@
 
 					try { 
 
-						collection = db.collection(value); 
+						collection = db.collection(value); debugMode && console.log( "collection:", collection );
 
 					} catch(err){
 						console.error(err); // collection = undefined;
-						callWatchers(collection_droplist, "onchange", "change", collection.name)
+						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
 					}
 
-					debugMode && console.log( "collection:", collection );
 				});
 
 
