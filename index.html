@@ -236,7 +236,9 @@
 					//	remove old key options.
 						while (key_droplist.options.length) {
 							key_droplist.options.remove(0);
-						} return doc;
+							console.log(key_droplist.options.length); // debug!
+							if (!key_droplist.options.length) return doc;
+						} // return doc;
 
 					}).then(function(doc){
 
