@@ -231,19 +231,17 @@
 						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
 					}
 
-			//	});
-
-			//	watch( collection_droplist, "onchange", function( prop, event, value ){ 
-
-			//		if ( !db ) return; if ( !collection ) return;
-
 					collection.findOne({},{},function(err, doc){
+
 						if (err) throw err; // console.log( "doc:", doc );
 					//	if ( !doc ) throw "None doc found in collection!";
+
 					}).then(function(doc){
 
+					//	remove old key options.
+
 						if ( !doc ) {
-						//	remove old key options.
+
 							while (key_droplist.options.length) {
 								key_droplist.options.remove(0);
 								if (!key_droplist.options.length)
@@ -252,11 +250,10 @@
 
 						} else {
 
-						//	remove old key options.
 							while (key_droplist.options.length) {
 								key_droplist.options.remove(0);
 								if (!key_droplist.options.length)
-									return doc;
+									return doc; // important!
 							}
 
 						}
@@ -273,8 +270,14 @@
 							key_droplist.appendChild( option );
 						});
 
+						return doc;
+
+					}).then(function(doc){
+
+						index_input.value = doc._id; // important!
+
 					}).catch(function(err){
-						console.error(err);
+						index_input.value = ""; debugMode && console.error(err);
 					});
 
 				});
