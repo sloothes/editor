@@ -280,8 +280,6 @@
 
 				});
 
-				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
-
 			})( 
 				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
 				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
@@ -383,6 +381,8 @@
 					skip_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip );
 				});
+
+				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
 
 			})( 
 				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
