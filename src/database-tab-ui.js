@@ -103,6 +103,7 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
+		row.textContent = "index:";
 		row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
 
 		var prev = document.createElement("li");
@@ -121,8 +122,8 @@
 		input.id = "doc-index-input";
 		input.setAttribute("placeholder", "index" );
 		input.classList.add("form-control","text-center");
-		input.style.cssText = "color:#000;border:none;display:inline;width:195px;"
-		+ "margin:0px 10px 0px 10px;text-align:center;font-weigth:normal;background:none;";
+		input.style.cssText = "color:#000;border:none;display:inline;width:110px;"
+		+ "margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 
 		row.appendChild(prev);
 		row.appendChild(input);
