@@ -298,10 +298,11 @@
 
 			//	Create options.
 				var str =  "", dot = ".", col = ":";
-				for (var i=1; i < skyboxes.length+1; i++ ) {
+				for (var i=0; i < skyboxes.length; i++ ) {
 					var option = document.createElement("option");
+					var index = String( i+1 );
 					var name = skyboxes[i].key;
-					option.text = str+i+dot+name; 
+					option.text = str+index+dot+name; 
 					option.value = skyboxes[i].value;
 					background_droplist.appendChild( option );
 				}
