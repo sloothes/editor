@@ -276,7 +276,7 @@
 
 					}).then(function(doc){
 
-						index_input.value = doc._id; // important!
+						index_input.value = 0; // important!
 
 					}).catch(function(err){
 						index_input.value = ""; debugMode && console.error(err);
@@ -321,21 +321,27 @@
 					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
 						if (err) throw err; if ( !docs.length ) throw "None doc found!";
 					}).then(function(results){
+
 					//	remove old key options.
 						if (!results.length) throw "results not found!";
 						while (key_droplist.options.length) {
 							key_droplist.options.remove(0);
 							if (!key_droplist.options.length)
 								return results[0]; // important!
-						} // return results[0];
+						}
+
 					}).then(function(doc){
-					//	create new key options.
+
 						if ( !doc ) throw "doc did not found!";
+						debugMode && console.log( doc );
+
+					//	create new key options.
 						Object.keys(doc).forEach(function( key ){
 							var option = document.createElement("option");
 							option.text = option.value = key;
 							key_droplist.appendChild( option );
 						}); return doc;
+
 					}).then(function(doc){
 
 						callWatchers(key_droplist, "onchange", "change", key_droplist.value);
