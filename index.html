@@ -251,6 +251,31 @@
 
 		//	Background.js
 
+			(function(){
+
+				if (!scene || Number(THREE.REVISION) < 78) return;
+
+			//	                 posx,   negx,   posy,   negy,   posz,   negz
+				const sky02  = "AiYr5Bj,BawPVy4,OnEYrxP,t5eKqEL,L7SNCXP,7dcYXKc";
+				const sky03  = "fbLkP5b,2ezGkl6,IyXzc4L,ja5htHQ,QZDxVvI,BZ68JvT";
+				const space4 = "v6bjQLb,lwrlr6P,kKUKBJg,N0oZlJR,x9q8z0K,HYcK7Ii";
+				const space5 = "QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm";
+
+				var urls = space4.split(",").map(function(item){
+					return "https://i.imgur.com/"+item+".jpg";
+				});
+
+				var loader = new THREE.CubeTextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				loader.load( urls, function(texture){
+					scene.background = texture;
+					scene.background.needsUpdate = true;
+					textures_entities && textures_entities.add(texture);
+				});
+
+			})();
+
+/*
 			(function(scene,textures_entities){
 
 				if (!scene || Number(THREE.REVISION) < 78) return;
@@ -273,6 +298,7 @@
 				});
 
 			})( scene, textures_entities );
+*/
 
 		</script>
 
