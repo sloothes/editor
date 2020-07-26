@@ -355,7 +355,7 @@
 					clearTimeout( interval ); // important!
 				//	THREE.Math.clamp( ++skip.value, 0, max - 1 );
 					interval = setTimeout(function increase(){
-						THREE.Math.clamp( ++skip.value, 0, max - 1 );
+						skip.value = THREE.Math.clamp( ++skip.value, 0, max - 1 );
 						if ( !skip.value || skip.value == max - 1 ) return;
 						interval = setTimeout(increase,50);
 					}, 500);
@@ -365,7 +365,7 @@
 					clearTimeout( interval ); // important!
 				//	THREE.Math.clamp( --skip.value, 0, max - 1 );
 					interval = setTimeout(function decrease(){
-						THREE.Math.clamp( --skip.value, 0, max - 1 );
+						skip.value = THREE.Math.clamp( --skip.value, 0, max - 1 );
 						if ( !skip.value || skip.value == max - 1 ) return;
 						interval = setTimeout(decrease,50);
 					}, 500);
@@ -375,13 +375,13 @@
 
 				next_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					THREE.Math.clamp( ++skip.value, 0, max - 1 );
+					skip.value = THREE.Math.clamp( ++skip.value, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip.value );
 				});
 
 				prev_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					THREE.Math.clamp( --skip.value, 0, max - 1 );
+					skip.value = THREE.Math.clamp( --skip.value, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip.value );
 				});
 
