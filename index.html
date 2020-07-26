@@ -382,7 +382,7 @@
 					interval = setTimeout( get_doc, 250, skip );
 				});
 
-				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
+				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value ); // important!
 
 			})( 
 				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
