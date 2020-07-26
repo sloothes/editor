@@ -18,7 +18,7 @@
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys = ",meta";
+		var keys = "meta";
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
@@ -51,7 +51,7 @@
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys = ",geometries,materials,textures,images,shapes";
+		var keys = "objects,geometries,materials,textures,images,shapes";
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
