@@ -312,6 +312,7 @@
 				watch( skip, "value", function(prop, action, value, oldValue){
 					debugMode && console.log({object:skip,value:value,last_value:oldValue}); // debug!
 
+
 					skip_input.value = value;
 				});
 
@@ -391,8 +392,11 @@
 
 					max = 0; skip.value = 0; // reset.
 					collection = db.collection(value);
-					count(collection).then(function(k){ max = k; });
-					get_doc( skip.value );
+					count(collection).then(function(k){ 
+						max = k; return skip.value;
+					}).then(function(value){
+						get_doc( skip.value );
+					});
 
 				});
 
