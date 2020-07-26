@@ -218,7 +218,7 @@
 						collection = db.collection(value); debugMode && console.log( "collection:", collection );
 
 					} catch(err){
-						console.error(err); // collection = undefined;
+					//	console.error(err); // collection = undefined;
 						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
 					}
 
