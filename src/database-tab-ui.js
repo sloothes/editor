@@ -106,6 +106,9 @@
 		row.textContent = "index:";
 		row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
 
+		var vect = document.createElement("div");
+		vect.style.cssText = "width:200px;height:40px;float:right;";
+
 		var prev = document.createElement("li");
 		prev.id = "doc-index-previous";
 		prev.innerHTML = "&#9668;";
@@ -125,9 +128,10 @@
 		input.style.cssText = "color:#000;border:none;display:inline;width:110px;"
 		+ "margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 
-		row.appendChild(prev);
-		row.appendChild(input);
-		row.appendChild(next);
+		vect.appendChild(prev);
+		vect.appendChild(input);
+		vect.appendChild(next);
+		row.appendChild(vect);
 		tab.appendChild( row );
 
 	})( TabUI.Database.tab );
