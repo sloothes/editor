@@ -301,7 +301,7 @@
 		});
 
 	})(
-		metaDB, // database,
+		metadB, // database,
 		TabUI.Texture.tab.querySelector("div#texture-save-button"), // save_button,
 		TabUI.Texture.tab.querySelector("select#textures-entities-droplist") // entity_droplist.
 	);

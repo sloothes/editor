@@ -189,7 +189,7 @@
 		});
 
 	})( 
-		metaDB, TabUI.Editor.tab.querySelector("div#editor-save-button"), // db, save_button,
+		metadB, TabUI.Editor.tab.querySelector("div#editor-save-button"), // db, save_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
 		exitEditMode // exit function.
 	);

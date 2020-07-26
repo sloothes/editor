@@ -258,7 +258,7 @@
 		});
 
 	})( 
-		metaDB, TabUI.Geometry.tab.querySelector("div#geometry-save-button"), // db, save_button,
+		metadB, TabUI.Geometry.tab.querySelector("div#geometry-save-button"), // db, save_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
 		exitEditMode // exit function.
 	);

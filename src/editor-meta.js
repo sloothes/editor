@@ -1,6 +1,6 @@
 //	editor-meta.js
 
-	const metaDB = new zango.Db( "meta", {
+	const metadB = new zango.Db( "meta", {
 
 		images:     ["uuid"],
 		objects:	["uuid"],
@@ -10,13 +10,13 @@
 
 	});
 
-	metaDB.open(function(err, database){
+	metadB.open(function(err, database){
 		if (err) console.error(err);
 	}).then( function(){
 
 		debugMode && console.log( 
-			"Database " + metaDB.name 
-			+ " (v" + metaDB.version 
+			"Database " + metadB.name 
+			+ " (v" + metadB.version 
 			+ ") ready for use."
 		);
 
@@ -30,11 +30,11 @@
 	const exportMetaCollection = function ( name ){
 
 	//  throws error if collection not exist!
-		if ( !metaDB.collection( name ) ) {
+		if ( !metadB.collection( name ) ) {
 			throw "Collection " + name + " does not exist."; // important!
 		}
 
-		metaDB.collection(name).find()
+		metadB.collection(name).find()
 		.toArray(function(err, docs){
 			if (err) throw err;
 			if ( !docs.length )  
@@ -48,7 +48,7 @@
 			var a = document.createElement("a");
 			var file = new Blob([data], {type: "text/json"});
 			a.href = URL.createObjectURL(file);
-			a.download = name + "-" + metaDB.name + "v" + metaDB.version + ".json";
+			a.download = name + "-" + metadB.name + "v" + metadB.version + ".json";
 			a.click();
 
 			return a.href; // OK.

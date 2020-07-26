@@ -264,6 +264,6 @@
 		});
 
 	})(
-		metaDB, TabUI.Material.tab.querySelector("div#material-save-button"), // save_button,
+		metadB, TabUI.Material.tab.querySelector("div#material-save-button"), // save_button,
 		TabUI.Material.tab.querySelector("select#material-entities-droplist") // entity_droplist.
 	);
