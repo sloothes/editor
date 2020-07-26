@@ -272,11 +272,7 @@
 							key_droplist.appendChild( option );
 						});
 
-						return doc;
-
-					}).then(function(doc){
-
-						index_input.value = 0; // important!
+					//	return doc;
 
 					}).catch(function(err){
 						index_input.value = ""; debugMode && console.error(err);
@@ -314,6 +310,7 @@
 					max = 0; skip = 0; // reset.
 					collection = db.collection(value);
 					count(collection).then(function(k){ max = k; });
+					index_input.value = skip;
 
 				});
 
@@ -323,7 +320,7 @@
 					}).then(function(results){
 
 					//	remove old key options.
-						if (!results.length) throw "results not found!";
+						if (!results.length) throw "None results found!";
 						while (key_droplist.options.length) {
 							key_droplist.options.remove(0);
 							if (!key_droplist.options.length)
@@ -332,7 +329,7 @@
 
 					}).then(function(doc){
 
-						if ( !doc ) throw "doc did not found!";
+						if ( !doc ) throw "None doc found!";
 						debugMode && console.log( doc );
 
 					//	create new key options.
