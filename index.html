@@ -219,8 +219,7 @@
 						debugMode && console.log( "collection:", collection );
 
 					} catch(err){
-						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name); 
-						return false;
+						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name); return false;
 					}
 
 				});
@@ -229,33 +228,34 @@
 
 					if ( !db ) return; if ( !collection ) return;
 
-					collection.findOne( {}, {}, 
-						function(err){if (err) throw err
+					collection.findOne({},{},function(err, doc){
+						if (err) throw err;
+						debugMode && console.log( "result:", doc );
 					}).then(function(doc){
 						debugMode && console.log( doc );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 					}).catch(function(err){
 						console.error(err);
 					});
 
 				});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 			})( 
