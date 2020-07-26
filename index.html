@@ -215,18 +215,17 @@
 
 					try { 
 
-						collection = db.collection(value); 
-						debugMode && console.log( "collection:", collection );
+						collection = db.collection(value); debugMode && console.log( "collection:", collection );
 
 					} catch(err){
-						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
+						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
 					}
 
-				});
+			//	});
 
-				watch( collection_droplist, "onchange", function( prop, event, value ){ 
+			//	watch( collection_droplist, "onchange", function( prop, event, value ){ 
 
-					if ( !db ) return; if ( !collection ) return;
+			//		if ( !db ) return; if ( !collection ) return;
 
 					collection.findOne({},{},function(err, doc){
 						if (err) throw err; // console.log( "doc:", doc );
@@ -263,21 +262,6 @@
 							option.text = option.value = key;
 							key_droplist.appendChild( option );
 						});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 					}).catch(function(err){
 						console.error(err);
