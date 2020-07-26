@@ -179,9 +179,82 @@
 
 		<script>
 
+		//	database-droplists.js
+
+			(function(database_droplist,collection_droplist){
+
+				watch( database_droplist, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:database_droplist,event:event,value:value}); // debug.
+				});
+
+				database_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+				watch( collection_droplist, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:collection_droplist,event:event,value:value}); // debug.
+				});
+
+				collection_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+			})( 
+				TabUI.Database.tab.querySelector("select#database-droplist"),   // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist")  // collection_droplist,
+			);
+
+			(function(database_droplist,collection_droplist){
+
+				var collection;
+				var db = metadB; 
+
+				watch( collection_droplist, "onchange", function( prop, event, value ){ 
+
+					if ( !db ) return; if ( !value ) return;
+
+					try { 
+
+						collection = db.collection(value); 
+
+					} catch(err){
+					//	collection = undefined;
+
+						console.error(err);
+					}
+
+					debugMode && console.log( "collection:", collection );
+				});
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			})( 
+				TabUI.Database.tab.querySelector("select#database-droplist"),   // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist")  // collection_droplist,
+			);
 
 
 		</script>
