@@ -95,35 +95,35 @@
 
 	})( TabUI.Database.tab );
 
-//	index-input-ui.js
+//	skip-input-ui.js
 
 	(function( tab ){
 
-	//	Document index input.
+	//	Document skip input.
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.textContent = "index:";
+		row.textContent = "skip:";
 		row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
 
 		var vect = document.createElement("div");
 		vect.style.cssText = "width:200px;height:40px;float:right;";
 
 		var prev = document.createElement("li");
-		prev.id = "doc-index-decrease";
+		prev.id = "doc-skip-decrease";
 		prev.innerHTML = "&#9668;";
 		prev.style.display = "inline";
 		prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
 		var next = document.createElement("li");
-		next.id = "doc-index-increase";
+		next.id = "doc-skip-increase";
 		next.innerHTML = "&#9658;";
 		next.style.display = "inline";
 		next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
 		var input = document.createElement("input");
-		input.id = "doc-index-input";
-		input.setAttribute("placeholder", "index" );
+		input.id = "doc-skip-input";
+		input.setAttribute("placeholder", "number" );
 		input.classList.add("form-control","text-center");
 		input.style.cssText = "color:#000;border:none;display:inline;width:110px;"
 		+ "margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
