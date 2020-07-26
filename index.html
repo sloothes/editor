@@ -230,17 +230,30 @@
 
 					collection.findOne({},{},function(err, doc){
 						if (err) throw err; // console.log( "doc:", doc );
+					//	if ( !doc ) throw "None doc found in collection!";
+					}).then(function(doc){
+
+						if ( !doc ) {
+						//	remove old key options.
+							while (key_droplist.options.length) {
+								key_droplist.options.remove(0);
+								if (!key_droplist.options.length)
+									throw "None doc found in collection!";
+							}
+
+						} else {
+
+						//	remove old key options.
+							while (key_droplist.options.length) {
+								key_droplist.options.remove(0);
+								if (!key_droplist.options.length)
+									return doc;
+							}
+
+						}
+
+					}).then(function(doc){
 						if ( !doc ) throw "None doc found in collection!";
-					}).then(function(doc){
-
-					//	remove old key options.
-						while (key_droplist.options.length) {
-							key_droplist.options.remove(0);
-							console.log(key_droplist.options.length); // debug!
-							if (!key_droplist.options.length) return doc;
-						} // return doc;
-
-					}).then(function(doc){
 
 					//	create new key options.
 						debugMode && console.log( doc );
@@ -272,6 +285,7 @@
 
 				});
 
+				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
 
 			})( 
 				TabUI.Database.tab.querySelector("input#doc-index-input"),     // index_input,
