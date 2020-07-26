@@ -215,7 +215,7 @@
 
 		//	collection-droplist.js
 
-			(function(index_input,key_droplist,database_droplist,collection_droplist){
+			(function(skip_input,key_droplist,database_droplist,collection_droplist){
 
 				var db = metadB; 
 				var collection = db.collection(collection_droplist.value);
@@ -275,7 +275,7 @@
 					//	return doc;
 
 					}).catch(function(err){
-						index_input.value = ""; debugMode && console.error(err);
+						skip_input.value = ""; debugMode && console.error(err);
 					});
 
 				});
@@ -283,7 +283,7 @@
 				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
 
 			})( 
-				TabUI.Database.tab.querySelector("input#doc-index-input"),     // index_input,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
 				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
 				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
@@ -291,7 +291,7 @@
 
 		//	database-mouse-inputs.js
 
-			(function(next_doc,prev_doc,index_input,key_droplist,database_droplist,collection_droplist){
+			(function(next_doc,prev_doc,skip_input,key_droplist,database_droplist,collection_droplist){
 
 				var interval; var max = 0; var skip = 0; var db = metadB;
 				var collection = db.collection(collection_droplist.value);
@@ -310,7 +310,7 @@
 					max = 0; skip = 0; // reset.
 					collection = db.collection(value);
 					count(collection).then(function(k){ max = k; });
-					index_input.value = skip;
+					skip_input.value = skip;
 
 				});
 
@@ -353,7 +353,7 @@
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function increase(){
-						++skip; index_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
+						++skip; skip_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
 						if ( !skip || skip == max - 1 ) return;
 						interval = setTimeout(increase,50);
 					}, 500);
@@ -362,7 +362,7 @@
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function decrease(){
-						--skip; index_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
+						--skip; skip_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
 						if ( !skip || skip == max - 1 ) return;
 						interval = setTimeout(decrease,50);
 					}, 500);
@@ -372,20 +372,20 @@
 
 				next_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					++skip; index_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
+					++skip; skip_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip );
 				});
 
 				prev_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					--skip; index_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
+					--skip; skip_input.value = skip = THREE.Math.clamp( skip, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip );
 				});
 
 			})( 
-				TabUI.Database.tab.querySelector("li#doc-index-increase"),     // next_doc,
-				TabUI.Database.tab.querySelector("li#doc-index-decrease"),     // prev_doc,
-				TabUI.Database.tab.querySelector("input#doc-index-input"),     // index_input,
+				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
+				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
 				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
 				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
