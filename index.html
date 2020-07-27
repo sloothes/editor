@@ -475,32 +475,52 @@
 
 						if ( collection.name === "images" && key === "url" ) {
 
-							if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+							if ( Array.isArray(_doc[key]) && _doc[key].length ) 
 
-								var index = parseInt(value_input.value); if ( isNaN(index) ) return;
+								return (function(){
 
-								if ( !_doc[key] || !_doc[key][index] ) return;
+									var index = parseInt(value_input.value); if ( isNaN(index) ) return;
 
-								var data = _doc[key][index].split(","); 
-								var type = data.shift().replace("data:","").replace(";base64","");
-								var name = "IMG-" + _doc.uuid + " (" + (index+1) + " of " + (_doc[key].length) + ")";
-								data = data.shift(); // important! or data = data.pop(); or data = data.join();
-								return debugMode && console.log("uploadDataURL():", {data:data, type:type, name:name}); // breakpoint!
+									if ( !_doc[key] || !_doc[key][index] ) return;
 
-
-								return;
-							}
-
-							if ( !_doc[key] ) return;
-							var data = _doc[key].split(","); 
-							var type = data.shift().replace("data:","").replace(";base64","");
-							var name = "IMG-" + _doc.uuid; 
-							data = data.shift(); // important! or data = data.pop(); or data = data.join();
-							return debugMode && console.log("uploadDataURL():", {data:data, type:type, name:name}); // breakpoint!
+									var data = _doc[key][index].split(","); 
+									var type = data.shift().replace("data:","").replace(";base64","");
+									var name = "IMG-" + _doc.uuid + " (" + (index+1) + " of " + (_doc[key].length) + ")";
+									data = data.shift(); // important! or data = data.pop(); or data = data.join();
+									debugMode && console.log({data:data, type:type, name:name}); // debug!
 
 
+									return;
+								})(); 
 
-							return;
+							else
+
+								return (function(){
+
+									if ( !_doc[key] ) return;
+									var data = _doc[key].split(","); 
+									var type = data.shift().replace("data:","").replace(";base64","");
+									var name = "IMG-" + _doc.uuid; 
+									data = data.shift(); // important! or data = data.pop(); or data = data.join();
+									debugMode && console.log({data:data, type:type, name:name}); // debug!
+
+									uploadDataURL(data, type, name).then(function(data){
+										debugMode && console.log( data );
+										return data.link; // breakpoint!
+
+										return collection.update(
+											{_id:_doc._id}, 
+											{ $set:{ url:data.link } }, 
+											function(err){ if (err) throw err; }
+										);
+
+									}).then(function(results){
+										debugMode && console.log( results );
+									}).catch(function(err){
+										console.error(err);
+									})
+
+								})(); 
 						}
 
 					});
