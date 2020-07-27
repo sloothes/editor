@@ -179,7 +179,7 @@
 
 		<script>
 
-		//	database-droplists.js
+		//	database-inputs.js
 
 			(function(key_droplist,database_droplist,collection_droplist){
 
@@ -213,6 +213,28 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 
+			(function(skip_input,value_input){
+
+				watch( skip_input, "onchange", function( prop, event, value ){ 
+				//	debugMode && console.log({item:skip_input,event:event,value:value});
+				});
+
+				watch( value_input, "onchange", function( prop, event, value ){ 
+				//	debugMode && console.log({item:value_input,event:event,value:value});
+				});
+
+				skip_input.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+				value_input.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+			})( 
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
+				TabUI.Database.tab.querySelector("input#doc-value-input")     // value_input,
+			);
 
 		//	database-inputs.js
 
@@ -343,7 +365,7 @@
 					interval = setTimeout( get_doc, 250, skip );
 				});
 
-			//	Key inputs.
+			//	Value inputs.
 
 				(function(){
 
@@ -368,8 +390,8 @@
 					next_key.addEventListener( "click", function(){
 						clearTimeout( interval ); // important!
 
-						var default_src = "https://i.imgur.com/rnZZU0i.png";
 						var key = key_droplist.value; if ( !key ) return; 
+						var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 					//	images collection.
 						if ( collection.name === "images" && key === "url"
@@ -389,8 +411,8 @@
 					prev_key.addEventListener( "click", function(){
 						clearTimeout( interval ); // important!
 
-						var default_src = "https://i.imgur.com/rnZZU0i.png";
 						var key = key_droplist.value; if ( !key ) return; 
+						var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 					//	images collection.
 						if ( collection.name === "images" && key === "url"
@@ -408,6 +430,25 @@
 					});
 
 				})();
+
+
+				watch( value_input, "onchange", function( prop, event, value ){ 
+
+					var key = key_droplist.value; if ( !key ) return; 
+					var default_src = "https://i.imgur.com/rnZZU0i.png";
+
+				//	images collection.
+					if ( collection.name === "images" && key === "url"
+					&& Array.isArray(_doc[key]) && _doc[key].length ) {
+						return (function(value){
+							var max = _doc[key].length - 1;
+							var index = THREE.Math.clamp( value, 0, max );
+							if ( isNaN(index) ) value_input.value = index = 0;
+							image.src = _doc.url[index];
+						})(value);
+					}
+
+				});
 
 
 			//	Key droplist.
