@@ -309,8 +309,17 @@
 				watch( key_droplist, "onchange", function( prop, event, key ){ 
 
 					if ( !key ) return; debugMode && console.log({ [key]: _doc[key] });
-					value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
 
+					if ( collection === db.collection("image") && key === "url" ) {}
+						return (function(image){
+							debugMode && console.log( image );
+
+							image.src = _doc.url; value_input.value = ""; return;
+
+						})( TabUI.Database.tab.querySelector("img#database-image-viewer") );
+					}
+
+					value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
 				});
 
 				/*
