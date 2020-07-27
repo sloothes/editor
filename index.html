@@ -184,15 +184,15 @@
 			(function(key_droplist,database_droplist,collection_droplist){
 
 				watch( key_droplist, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:key_droplist,event:event,key:value});
+				//	debugMode && console.log({item:key_droplist,event:event,key:value});
 				});
 
 				watch( collection_droplist, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:collection_droplist,event:event,value:value});
+				//	debugMode && console.log({item:collection_droplist,event:event,value:value});
 				});
 
 				watch( database_droplist, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:database_droplist,event:event,value:value});
+				//	debugMode && console.log({item:database_droplist,event:event,value:value});
 				});
 
 				key_droplist.addEventListener( "change", function(){
@@ -308,7 +308,7 @@
 
 				watch( key_droplist, "onchange", function( prop, event, key ){ 
 
-					if ( !key ) return; debugMode && console.log(_doc[ key ]);
+					if ( !key ) return; debugMode && console.log({ [key]: _doc[key] });
 					value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
 
 				});
