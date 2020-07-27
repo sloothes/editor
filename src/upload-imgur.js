@@ -1,7 +1,7 @@
     function uploadDataURL(data, type, name){
 
     //  Returns a resolved promise with record data from imgur.com.
-        debugMode && console.log("uploading:", file.name);
+    //  debugMode && console.log("uploading:", file.name);
         return new Promise(function( resolve, reject ){
 
             var formdata = new FormData();
@@ -9,8 +9,8 @@
             formdata.append("type",  type);
             formdata.append("name",  name);
 
-        //	var endpoint = "https://api.imgur.com/3/image";
-        //	var clientID = "06217f601180652";  // sloothes app Client-ID.
+        	var endpoint = "https://api.imgur.com/3/image";
+        	var clientID = "06217f601180652";  // sloothes app Client-ID.
 
             var xhttp = new XMLHttpRequest();
             xhttp.open("POST", endpoint, true);
@@ -47,8 +47,8 @@
             formdata.append("type",  file.type);
             formdata.append("name",  file.name);
 
-        //	var endpoint = "https://api.imgur.com/3/image";
-        //	var clientID = "06217f601180652";  // sloothes app Client-ID.
+        	var endpoint = "https://api.imgur.com/3/image";
+        	var clientID = "06217f601180652";  // sloothes app Client-ID.
 
             var xhttp = new XMLHttpRequest();
             xhttp.open("POST", endpoint, true);
@@ -80,8 +80,8 @@
         debugMode && console.log("DELETE https://api.imgur.com/3/image/" + deletehash);
         return new Promise(function( resolve, reject ){
 
-        //	var endpoint = "https://api.imgur.com/3/image/" + deletehash;
-        //	var clientID = "06217f601180652";  // sloothes app Client-ID.
+        	var endpoint = "https://api.imgur.com/3/image/" + deletehash;
+        	var clientID = "06217f601180652";  // sloothes app Client-ID.
 
             var xhttp = new XMLHttpRequest();
             var endpoint = endpoint + "/" + deletehash;
