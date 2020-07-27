@@ -483,7 +483,7 @@
 
 								var data = _doc[key][index].split(","); 
 							//	if ( data.length !== 2 ) return debugMode && console.log( data );
-								var type = data.shift().replace("data:","").replace("base64");
+								var type = data.shift().replace("data:","").replace("base64","");
 							//	if ( !type ) return debugMode && console.log( type );
 								var name = "image "+String(index+1)+" of "+String(_doc[key].length);
 								return debugMode && console.log("uploadDataURL():", {data:data, type:type, name:name}); // breakpoint!
