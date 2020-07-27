@@ -259,7 +259,7 @@
 
 					}).then(function(doc){
 
-						callWatchers(key_droplist, "onchange", "change", doc); // key_droplist.value
+						callWatchers(key_droplist, "onchange", "change", key_droplist.value); 
 
 					}).catch(function(err){
 						debugMode && console.error(err);
@@ -320,8 +320,9 @@
 							return doc[ key ];
 
 					}).then(function(value){
+						debugMode && console.log(value);
 
-						value_input.value = value;
+						value_input.value = JSON.stringify(value);
 
 					}).catch(function(err){
 						debugMode && console.error(err);
