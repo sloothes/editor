@@ -42,7 +42,7 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.textContent = "collection:";
+		row.textContent = "Collection:";
 		row.style.cssText = "height:30px;"
 
 		var select = document.createElement("select");
