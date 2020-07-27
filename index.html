@@ -377,8 +377,8 @@
 						//	if ( value_input.value === "" ) return;
 							if ( isNaN(value_input.value) ) return;
 							var index = Number( value_input.value );
-							index = THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
-							value_input.value = index; value_input.value = "";
+							value_input.value = index = 
+							THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
 							interval = setTimeout( function(index){
 								image.src = _doc.url[index]; 
 							}, 250, index ); return;
@@ -398,8 +398,8 @@
 						//	if ( value_input.value === "" ) return;
 							if ( isNaN(value_input.value) ) return;
 							var index = Number( value_input.value );
-							index = THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
-							value_input.value = index; value_input.value = "";
+							value_input.value = index = 
+							THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
 							interval = setTimeout( function(index){
 								image.src = _doc.url[index]; 
 							}, 250, index ); return;
