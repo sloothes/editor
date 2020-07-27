@@ -223,7 +223,7 @@
 
 	(function(vector_droplist){
 
-		callWatchers( vector_droplist, "onchange", "change", vector_droplist.value = "position"); // important!
+		callWatchers( vector_droplist, "onchange", "change", "position"); // important!
 
 	})( TabUI.Editor.tab.querySelector("select#editor-vector-droplist") );  // vector_droplist,
 
