@@ -323,29 +323,6 @@
 					if ( image.src !== default_src ) image.src = default_src;
 				});
 
-				/*
-					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
-						if (err) throw err; if ( !docs.length ) throw "None doc found!";
-					}).then(function(result){ 
-						if ( result.length ) return result[0]; else throw "No results!";
-					}).then(function(doc){
-					
-					//	var index = 0;
-					//	if ( typeof doc[key] === "object" )
-					//		return Object.values(doc[key])[index];
-
-						return doc[ key ];
-
-					}).then(function(value){
-						debugMode && console.log(value);
-
-						value_input.value = value; // JSON.stringify(value);
-
-					}).catch(function(err){
-						debugMode && console.error(err);
-					});
-				*/
-
 			//	Collection droplist.
 
 				watch( collection_droplist, "onchange", function( prop, event, value ){
@@ -579,6 +556,30 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 */
+
+/*
+			collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
+				if (err) throw err; if ( !docs.length ) throw "None doc found!";
+			}).then(function(result){ 
+				if ( result.length ) return result[0]; else throw "No results!";
+			}).then(function(doc){
+
+			//	var index = 0;
+			//	if ( typeof doc[key] === "object" )
+			//		return Object.values(doc[key])[index];
+
+				return doc[ key ];
+
+			}).then(function(value){
+				debugMode && console.log(value);
+
+				value_input.value = value; // JSON.stringify(value);
+
+			}).catch(function(err){
+				debugMode && console.error(err);
+			});
+*/
+
 		</script>
 
 
