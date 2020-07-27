@@ -232,15 +232,18 @@
 				});
 
 			})( 
-				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),     // skip_input,
 				TabUI.Database.tab.querySelector("input#doc-value-input")     // value_input,
 			);
 
 		//	database-inputs.js
 
-			(function(image,next_doc,prev_doc,next_key,prev_key,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
+			(function(
+				image,next_doc,prev_doc,next_key,prev_key,skip_input,value_input,
+				key_droplist,database_droplist,collection_droplist,upload_data
+			){
 
-				var interval, _id, _uuid, _doc;
+				var _id, _uuid, _doc;
 				var max = 0, skip = 0, db = metadB;
 				var collection = db.collection(collection_droplist.value);
 
@@ -292,78 +295,47 @@
 					});
 				}
 
-				function uploadDataURL(data, type, name){
+			//	Skip inputs.
 
-				//  Returns a resolved promise with record data from imgur.com.
-					debugMode && console.log("uploading:", file.name);
-					return new Promise(function( resolve, reject ){
+				(function(){
 
-						var formdata = new FormData();
-						formdata.append("image", data);
-						formdata.append("type",  type);
-						formdata.append("name",  name);
+					var interval;
 
-					//	var endpoint = "https://api.imgur.com/3/image";
-					//	var clientID = "06217f601180652";  // sloothes app Client-ID.
+				//	on mouse down.
 
-						var xhttp = new XMLHttpRequest();
-						xhttp.open("POST", endpoint, true);
-						xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
-						xhttp.onreadystatechange = function () {
-							if (this.readyState === 4) {
-								var response = "";
-								if (this.status >= 200 && this.status < 300) {
-									response = JSON.parse(this.responseText);
-									debugMode && console.log(response);
-									resolve(response.data); // resolve promise.
-								} else {
-									var err = JSON.parse(this.responseText).data.error;
-									console.error( err.type, err );
-									reject( err );
-								}
-							}
-						};
-
-						xhttp.send(formdata);
-						xhttp = null;
+					next_doc.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout(function increase(){
+							skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+							if ( !skip || skip == max - 1 ) return;
+							interval = setTimeout(increase, 50);
+						}, 500);
 					});
-				};
 
-			//	Doc inputs.
+					prev_doc.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout(function decrease(){
+							skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
+							if ( !skip || skip == max - 1 ) return;
+							interval = setTimeout(decrease, 50);
+						}, 500);
+					});
 
-			//	on mouse down.
+				//	on mouse click.
 
-				next_doc.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					interval = setTimeout(function increase(){
+					next_doc.addEventListener( "click", function(){
+						clearTimeout( interval ); // important!
 						skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
-						if ( !skip || skip == max - 1 ) return;
-						interval = setTimeout(increase, 50);
-					}, 500);
-				});
+						interval = setTimeout( get_doc, 250, skip );
+					});
 
-				prev_doc.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					interval = setTimeout(function decrease(){
+					prev_doc.addEventListener( "click", function(){
+						clearTimeout( interval ); // important!
 						skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
-						if ( !skip || skip == max - 1 ) return;
-						interval = setTimeout(decrease, 50);
-					}, 500);
-				});
+						interval = setTimeout( get_doc, 250, skip );
+					});
 
-			//	on click.
-
-				next_doc.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
-					skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
-					interval = setTimeout( get_doc, 250, skip );
-				});
-
-				prev_doc.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
-					skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
-					interval = setTimeout( get_doc, 250, skip );
-				});
+				})();
 
 			//	Value inputs.
 
@@ -386,6 +358,8 @@
 				(function(){
 
 					var interval;
+
+				//	on mouse click.
 
 					next_key.addEventListener( "click", function(){
 						clearTimeout( interval ); // important!
@@ -431,7 +405,6 @@
 
 				})();
 
-
 				watch( value_input, "onchange", function( prop, event, value ){ 
 
 					var key = key_droplist.value; if ( !key ) return; 
@@ -450,6 +423,98 @@
 					}
 
 				});
+
+			//	Upload image data.
+
+				(function(){
+
+					var interval;
+
+					function uploadDataURL(data, type, name){
+
+					//  Returns a resolved promise with record data from imgur.com.
+						debugMode && console.log("uploading:", file.name);
+						return new Promise(function( resolve, reject ){
+
+							var formdata = new FormData();
+							formdata.append("image", data);
+							formdata.append("type",  type);
+							formdata.append("name",  name);
+
+						//	var endpoint = "https://api.imgur.com/3/image";
+						//	var clientID = "06217f601180652";  // sloothes app Client-ID.
+
+							var xhttp = new XMLHttpRequest();
+							xhttp.open("POST", endpoint, true);
+							xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
+							xhttp.onreadystatechange = function () {
+								if (this.readyState === 4) {
+									var response = "";
+									if (this.status >= 200 && this.status < 300) {
+										response = JSON.parse(this.responseText);
+										debugMode && console.log(response);
+										resolve(response.data); // resolve promise.
+									} else {
+										var err = JSON.parse(this.responseText).data.error;
+										console.error( err.type, err );
+										reject( err );
+									}
+								}
+							};
+
+							xhttp.send(formdata);
+							xhttp = null;
+						});
+					}
+
+					watch( upload_data, "onclick", function( prop, event, value ){ 
+						debugMode && console.log({item:upload_data,property:prop,event:event,value:value});
+
+						var key = key_droplist.value; if ( !key ) return; 
+						var default_src = "https://i.imgur.com/rnZZU0i.png";
+
+						if ( collection.name === "images" && key === "url" ) {
+
+							if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+
+								var index = parseInt(value_input.value); if ( isNaN(index) ) return;
+
+								if ( !_doc[key] || !_doc[key][index] ) return;
+
+								var data = _doc[key][index].split(","); 
+							//	if ( data.length !== 2 ) return debugMode && console.log( data );
+								var type = data.shift().replace("data:","").replace("base64");
+							//	if ( !type ) return debugMode && console.log( type );
+								var name = "image "+String(index+1)+" of "+String(_doc[key].length);
+								return debugMode && console.log("uploadDataURL():", {data:data, type:type, name:name}); // breakpoint!
+
+
+								return;
+							}
+
+							if ( !_doc[key] ) return;
+							var data = _doc[key][index].split(","); 
+							var type = data.shift().replace("data:","").replace("base64");
+							var name = "image "+_doc.uuid;
+							return debugMode && console.log("uploadDataURL():", {data:data, type:type, name:name}); // breakpoint!
+
+
+
+							return;
+						}
+
+					});
+
+				//	Call watchers.
+
+					upload_data.addEventListener( "click", function(){ 
+						clearTimeout( interval );
+						interval = setTimeout(function(button){
+							callWatchers( button, "onclick", "click", value_input.value );
+						}, 250, this); 
+					});
+
+				})();
 
 
 			//	Key droplist.
@@ -506,16 +571,17 @@
 				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value ); // important!
 
 			})( 
-				TabUI.Database.tab.querySelector("img#image-url-viewer"),      // image,
-				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
-				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
-				TabUI.Database.tab.querySelector("li#doc-key-increase"),       // next_key,
-				TabUI.Database.tab.querySelector("li#doc-key-decrease"),       // prev_key,
-				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
-				TabUI.Database.tab.querySelector("input#doc-value-input"),     // value_input,
-				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
-				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
+				TabUI.Database.tab.querySelector("img#image-url-viewer"),       // image,
+				TabUI.Database.tab.querySelector("li#doc-skip-increase"),       // next_doc,
+				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),       // prev_doc,
+				TabUI.Database.tab.querySelector("li#doc-key-increase"),        // next_key,
+				TabUI.Database.tab.querySelector("li#doc-key-decrease"),        // prev_key,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),       // skip_input,
+				TabUI.Database.tab.querySelector("input#doc-value-input"),      // value_input,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),   // key_droplist,
+				TabUI.Database.tab.querySelector("select#database-droplist"),   // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist"), // collection_droplist,
+				TabUI.Database.tab.querySelector("div#upload-image-data")       // upload_data,
 			);
 
 		</script>

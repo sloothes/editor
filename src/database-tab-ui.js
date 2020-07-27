@@ -98,7 +98,7 @@
 		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
-		button.id = "upload-image-data-button";
+		button.id = "upload-image-data";
 		button.textContent = "Upload Image Data";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
