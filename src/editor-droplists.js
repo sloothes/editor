@@ -219,15 +219,6 @@
 	})( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") ); // entity_droplist.
 
 
-//	Call vector droplist watchers.
-
-	(function(entity_droplist){
-
-		callWatchers( entity_droplist, "onchange", "change", ""); // important!
-
-	})( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") ); // entity_droplist.
-
-
 //	editors-helper.
 
 	const exitEditMode = function( entity_droplist ){
