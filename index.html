@@ -218,8 +218,8 @@
 
 			(function(next_doc,prev_doc,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
 
-				var interval; 
-				var max = 0; var db = metadB; var skip = 0;
+				var interval, _id, _uuid, _doc;
+				var max = 0, skip = 0, db = metadB;
 				var collection = db.collection(collection_droplist.value);
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
@@ -233,6 +233,7 @@
 				}
 
 				function get_doc(value){
+
 					collection.find().skip(value).limit(1).toArray( function(err,docs){ 
 						if (err) throw err; if ( !docs.length ) throw "None doc found!";
 					}).then(function(result){
@@ -248,7 +249,6 @@
 					}).then(function(doc){
 
 						if ( !doc ) throw "None doc found!";
-						debugMode && console.log( doc );
 
 					//	create new key options.
 						Object.keys(doc).forEach(function( key ){
@@ -258,6 +258,10 @@
 						}); return doc;
 
 					}).then(function(doc){
+
+						debugMode && console.log( doc );
+
+						[ _doc, _id, _uuid ] = [ doc, doc._id, doc.uuid ];
 
 						callWatchers(key_droplist, "onchange", "change", key_droplist.value); 
 
@@ -304,8 +308,12 @@
 
 				watch( key_droplist, "onchange", function( prop, event, key ){ 
 
-					if ( !key ) return;
+					if ( !key ) return; debugMode && console.log(_doc[ key ]);
+					value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
 
+				});
+
+				/*
 					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
 						if (err) throw err; if ( !docs.length ) throw "None doc found!";
 					}).then(function(result){ 
@@ -321,13 +329,12 @@
 					}).then(function(value){
 						debugMode && console.log(value);
 
-						value_input.value = JSON.stringify(value);
+						value_input.value = value; // JSON.stringify(value);
 
 					}).catch(function(err){
 						debugMode && console.error(err);
 					});
-
-				});
+				*/
 
 			//	Collection droplist.
 
