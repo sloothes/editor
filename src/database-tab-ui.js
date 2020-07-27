@@ -14,7 +14,7 @@
 
 		var select = document.createElement("select");
 		select.id = "database-droplist";
-		select.style.cssText = "width:170px;color:#000;float:right;"
+		select.style.cssText = "width:150px;color:#000;float:right;"
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -47,7 +47,7 @@
 
 		var select = document.createElement("select");
 		select.id = "collection-droplist";
-		select.style.cssText = "width:170px;color:#000;float:right;"
+		select.style.cssText = "width:160px;color:#000;float:right;"
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
