@@ -310,7 +310,7 @@
 
 					if ( !key ) return; debugMode && console.log({ [key]: _doc[key] });
 
-					if ( collection === db.collection("image") && key === "url" ) {}
+					if ( collection === db.collection("image") && key === "url" ) {
 						return (function(image){
 							debugMode && console.log( image );
 
