@@ -213,6 +213,273 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 
+
+		//	database-mouse-inputs.js
+
+			(function(next_doc,prev_doc,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
+
+				var interval; 
+				var max = 0; var db = metadB; var skip = 0;
+				var collection = db.collection(collection_droplist.value);
+
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function count(collection){
+				//	returns promise: count(col).then(function(result){...})
+					var k = 0; return collection.find()
+						.forEach( function(doc){ ++k; })
+						.catch(function(err){console.error(err);})
+						.then(function(){ return k; });
+				}
+
+				function get_doc(value){
+					collection.find().skip(value).limit(1).toArray( function(err,docs){ 
+						if (err) throw err; if ( !docs.length ) throw "None doc found!";
+					}).then(function(result){
+
+					//	remove old key options.
+						if (!result.length) throw "None result found!";
+						while (key_droplist.options.length) {
+							key_droplist.options.remove(0);
+							if (!key_droplist.options.length)
+								return result[0]; // important!
+						}
+
+					}).then(function(doc){
+
+						if ( !doc ) throw "None doc found!";
+						debugMode && console.log( doc );
+
+					//	create new key options.
+						Object.keys(doc).forEach(function( key ){
+							var option = document.createElement("option");
+							option.text = option.value = key;
+							key_droplist.appendChild( option );
+						}); return doc;
+
+					}).then(function(doc){
+
+						callWatchers(key_droplist, "onchange", "change", doc); // key_droplist.value
+
+					}).catch(function(err){
+						debugMode && console.error(err);
+					});
+				}
+
+			//	on mouse down.
+
+				next_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function increase(){
+						skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+						if ( !skip || skip == max - 1 ) return;
+						interval = setTimeout(increase, 50);
+					}, 500);
+				});
+
+				prev_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function decrease(){
+						skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
+						if ( !skip || skip == max - 1 ) return;
+						interval = setTimeout(decrease, 50);
+					}, 500);
+				});
+
+			//	on click.
+
+				next_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+					interval = setTimeout( get_doc, 250, skip );
+				});
+
+				prev_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
+					interval = setTimeout( get_doc, 250, skip );
+				});
+
+			//	Key droplist.
+
+				watch( key_droplist, "onchange", function( prop, event, doc ){ 
+
+					if ( !doc ) return;
+					
+					var key = key_droplist.value; var index = 0; 
+
+					switch ( typeof doc[key] ) {
+						case "function":
+							return;
+						break;
+						case "object":
+						//	value_input.value = Object.keys(doc[key])[index]; return;
+							value_input.value = Object.values(doc[key])[index]; return;
+						break;
+						default:
+							value_input.value = doc[ key ]; return;
+						break;
+					}
+
+				});
+
+			//	Collection droplist.
+
+				watch( collection_droplist, "onchange", function( prop, event, value ){
+
+					max = 0; skip = 0; // reset.
+
+					try { 
+
+						collection = db.collection(value); // debugMode && console.log( "collection:", collection ); 
+
+					} catch(err){
+
+						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
+					}
+
+					count(collection)
+						.then(function(k){ max = k; })
+						.then(function(){ get_doc( skip ); })
+						.then(function(){ skip_input.value = skip; });
+
+				});
+
+			//	Call collection droplist watchers.
+				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value ); // important!
+
+			})( 
+				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
+				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
+				TabUI.Database.tab.querySelector("input#doc-value-input"),     // value_input,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
+				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
+			);
+
+		</script>
+
+		<script>
+
+			TabUI.Database.role.classList.add("active");
+			TabUI.Database.tab.classList.add("in","active");
+
+		//	scene.add(ground);
+		//	mirror.visible = !mirror.visible; 
+		//	ground.visible = !ground.visible; 
+			groundHelper.visible = !groundHelper.visible; 
+
+
+		//	Add entities.
+		//	entities.add(scene);
+		//	entities.add(mirror);
+		//	entities.add(ground);
+		//	entities.add(localPlayer);
+			entities.add(groundHelper);
+			entities.add(localPlayer.getObjectByName("local helper"));
+
+			cameraControls.setLatLon(5.128, 270.675);
+			localPlayer.controller.movementSpeed = 20;
+			localPlayer.controller.center.set(-85,2,-2);
+
+		</script>
+
+		<script>
+
+		//	deck 0.
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=110, h=0.5, d=60, x=-2, y=-h/2, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=100, h=0.5, d=50, x=-2, y=-0, z=2.6;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "deck0_floor"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+
+		</script>
+
+		<!-- script src="/editor/src/ViewportTab.js"></script -->
+
+		<script>
+/*
+		//	Water path.
+
+			(function(scene,octree,cameraControls,material_entities,entities){
+				var w=2.5, h=0.5, d=200, x=-85, y=-h/2, z=100;
+				var geometry = new THREE.BoxGeometry(w,h,d);
+				geometry.translate(0, h/2, 0);
+				var material = new THREE.MeshLambertMaterial();
+				var mesh = new THREE.Mesh(geometry, material);
+				mesh.name = "water path"; mesh.visible = false;
+				mesh.position.set(x,y,z); scene.add( mesh );
+			//	var geometry = new THREE.EdgesGeometry( geometry );
+			//	var segments = new THREE.LineSegments( geometry, material );
+			//	segments.name = "water path edges";
+			//	segments.position.copy( mesh.position );
+			//	octree.importThreeMesh( mesh );
+				entities && entities.add( mesh );
+				material_entities && material_entities.add(material);
+			//	cameraControls.rigidObjects.push( mesh );
+			//	return mesh;
+			})( scene, octree, cameraControls, material_entities, entities );
+*/
+
+/*
+			(function(scene,textures_entities){
+
+				if (!scene || Number(THREE.REVISION) < 78) return;
+
+				var urls = [
+					"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
+					"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
+					"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
+					"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
+					"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
+					"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
+				];
+
+				var loader = new THREE.CubeTextureLoader();
+				loader.setCrossOrigin( "anonymous" );
+				loader.load( urls, function(texture){
+					scene.background = texture;
+					scene.background.needsUpdate = true;
+					textures_entities && textures_entities.add(texture);
+				});
+
+			})( scene, textures_entities );
+*/
+
 /*
 		//	collection-droplist.js
 
@@ -288,249 +555,8 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 */
-
-		//	database-mouse-inputs.js
-
-			(function(next_doc,prev_doc,skip_input,key_droplist,database_droplist,collection_droplist){
-
-				var interval; 
-				var max = 0; var db = metadB; var skip = 0;
-				var collection = db.collection(collection_droplist.value);
-
-				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
-
-				function count(collection){
-				//	returns promise: count(col).then(function(result){...})
-					var k = 0; return collection.find()
-						.forEach( function(doc){ ++k; })
-						.catch(function(err){console.error(err);})
-						.then(function(){ return k; });
-				}
-
-
-				function get_doc(value){
-					collection.find().skip(value).limit(1).toArray( function(err,docs){ 
-						if (err) throw err; if ( !docs.length ) throw "None doc found!";
-					}).then(function(result){
-
-					//	remove old key options.
-						if (!result.length) throw "None result found!";
-						while (key_droplist.options.length) {
-							key_droplist.options.remove(0);
-							if (!key_droplist.options.length)
-								return result[0]; // important!
-						}
-
-					}).then(function(doc){
-
-						if ( !doc ) throw "None doc found!";
-						debugMode && console.log( doc );
-
-					//	create new key options.
-						Object.keys(doc).forEach(function( key ){
-							var option = document.createElement("option");
-							option.text = option.value = key;
-							key_droplist.appendChild( option );
-						}); return doc;
-
-					}).then(function(doc){
-
-						callWatchers(key_droplist, "onchange", "change", key_droplist.value);
-
-					}).catch(function(err){
-						debugMode && console.error(err);
-					});
-				}
-
-			//	on mouse down.
-
-				next_doc.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					interval = setTimeout(function increase(){
-						skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
-						if ( !skip || skip == max - 1 ) return;
-						interval = setTimeout(increase, 50);
-					}, 500);
-				});
-
-				prev_doc.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					interval = setTimeout(function decrease(){
-						skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
-						if ( !skip || skip == max - 1 ) return;
-						interval = setTimeout(decrease, 50);
-					}, 500);
-				});
-
-			//	on click.
-
-				next_doc.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
-					skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
-					interval = setTimeout( get_doc, 250, skip );
-				});
-
-				prev_doc.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
-					skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
-					interval = setTimeout( get_doc, 250, skip );
-				});
-
-			//	Collection droplist.
-
-				watch( collection_droplist, "onchange", function( prop, event, value ){
-
-					max = 0; skip = 0; // reset.
-
-					try { 
-
-						collection = db.collection(value); // debugMode && console.log( "collection:", collection ); 
-
-					} catch(err){
-
-						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
-					}
-
-					  
-					count(collection)
-						.then(function(k){ max = k; })
-						.then(function(){ get_doc( skip ); })
-						.then(function(){ skip_input.value = skip; });
-
-				});
-
-			//	Call collection droplist watchers.
-				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value ); // important!
-
-			})( 
-				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
-				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
-				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
-				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
-				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
-			);
-
 		</script>
 
-		<script>
-
-			TabUI.Database.role.classList.add("active");
-			TabUI.Database.tab.classList.add("in","active");
-
-		//	scene.add(ground);
-		//	mirror.visible = !mirror.visible; 
-		//	ground.visible = !ground.visible; 
-			groundHelper.visible = !groundHelper.visible; 
-
-
-		//	Add entities.
-		//	entities.add(scene);
-		//	entities.add(mirror);
-		//	entities.add(ground);
-		//	entities.add(localPlayer);
-			entities.add(groundHelper);
-			entities.add(localPlayer.getObjectByName("local helper"));
-
-			cameraControls.setLatLon(5.128, 270.675);
-			localPlayer.controller.movementSpeed = 20;
-			localPlayer.controller.center.set(-85,2,-2);
-
-		</script>
-
-		<script>
-
-		//	deck 0.
-
-			(function(scene,octree,cameraControls,material_entities,entities){
-				var w=110, h=0.5, d=60, x=-2, y=-h/2, z=2.6;
-				var geometry = new THREE.BoxGeometry(w,h,d);
-				geometry.translate(0, h/2, 0);
-				var material = new THREE.MeshLambertMaterial();
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.name = "deck0"; mesh.visible = false;
-				mesh.position.set(x,y,z); scene.add( mesh );
-			//	var geometry = new THREE.EdgesGeometry( geometry );
-			//	var segments = new THREE.LineSegments( geometry, material );
-			//	segments.name = "water path edges";
-			//	segments.position.copy( mesh.position );
-			//	octree.importThreeMesh( mesh );
-				entities && entities.add( mesh );
-				material_entities && material_entities.add(material);
-			//	cameraControls.rigidObjects.push( mesh );
-			//	return mesh;
-			})( scene, octree, cameraControls, material_entities, entities );
-
-			(function(scene,octree,cameraControls,material_entities,entities){
-				var w=100, h=0.5, d=50, x=-2, y=-0, z=2.6;
-				var geometry = new THREE.BoxGeometry(w,h,d);
-				geometry.translate(0, h/2, 0);
-				var material = new THREE.MeshLambertMaterial();
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.name = "deck0_floor"; mesh.visible = false;
-				mesh.position.set(x,y,z); scene.add( mesh );
-			//	var geometry = new THREE.EdgesGeometry( geometry );
-			//	var segments = new THREE.LineSegments( geometry, material );
-			//	segments.name = "water path edges";
-			//	segments.position.copy( mesh.position );
-			//	octree.importThreeMesh( mesh );
-				entities && entities.add( mesh );
-				material_entities && material_entities.add(material);
-			//	cameraControls.rigidObjects.push( mesh );
-			//	return mesh;
-			})( scene, octree, cameraControls, material_entities, entities );
-/*
-		//	Water path.
-
-			(function(scene,octree,cameraControls,material_entities,entities){
-				var w=2.5, h=0.5, d=200, x=-85, y=-h/2, z=100;
-				var geometry = new THREE.BoxGeometry(w,h,d);
-				geometry.translate(0, h/2, 0);
-				var material = new THREE.MeshLambertMaterial();
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.name = "water path"; mesh.visible = false;
-				mesh.position.set(x,y,z); scene.add( mesh );
-			//	var geometry = new THREE.EdgesGeometry( geometry );
-			//	var segments = new THREE.LineSegments( geometry, material );
-			//	segments.name = "water path edges";
-			//	segments.position.copy( mesh.position );
-			//	octree.importThreeMesh( mesh );
-				entities && entities.add( mesh );
-				material_entities && material_entities.add(material);
-			//	cameraControls.rigidObjects.push( mesh );
-			//	return mesh;
-			})( scene, octree, cameraControls, material_entities, entities );
-*/
-		</script>
-
-		<script>
-		/*
-			(function(scene,textures_entities){
-
-				if (!scene || Number(THREE.REVISION) < 78) return;
-
-				var urls = [
-					"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
-					"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
-					"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
-					"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
-					"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
-					"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
-				];
-
-				var loader = new THREE.CubeTextureLoader();
-				loader.setCrossOrigin( "anonymous" );
-				loader.load( urls, function(texture){
-					scene.background = texture;
-					scene.background.needsUpdate = true;
-					textures_entities && textures_entities.add(texture);
-				});
-
-			})( scene, textures_entities );
-		*/
-		</script>
-
-		<!-- script src="/editor/src/ViewportTab.js"></script -->
 
 	</body>
 </html>
