@@ -221,11 +221,11 @@
 
 //	Call vector droplist watchers.
 
-	(function(vector_droplist){
+	(function(entity_droplist){
 
-		callWatchers( vector_droplist, "onchange", "change", "position"); // important!
+		callWatchers( entity_droplist, "onchange", "change", ""); // important!
 
-	})( TabUI.Editor.tab.querySelector("select#editor-vector-droplist") );  // vector_droplist,
+	})( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") ); // entity_droplist.
 
 
 //	editors-helper.
