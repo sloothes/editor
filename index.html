@@ -370,8 +370,9 @@
 				//	images collection.
 					if ( collection.name === "images" && key === "url" ) {
 						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
-							var index = Number(value_input.value);
-							if ( !index || isNaN(index) ) return;
+						//	if ( value_input.value === "" ) return;
+							if ( isNaN(value_input.value) ) return;
+							var index = Number( value_input.value );
 							index = THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
 						}
 					}
@@ -397,8 +398,9 @@
 				//	images collection.
 					if ( collection.name === "images" && key === "url" ) {
 						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
-							var index = Number(value_input.value);
-							if ( !index || isNaN(index) ) return;
+						//	if ( value_input.value === "" ) return;
+							if ( isNaN(value_input.value) ) return;
+							var index = Number( value_input.value );
 							index = THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
 						}
 					}
