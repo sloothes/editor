@@ -67,6 +67,47 @@
 
 	})( TabUI.Database.tab );
 
+//	database-image-viewer-ui.js
+
+	(function( tab ){
+
+	//	Database image viewer.
+	//	var tab = TabUI.Skydome.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:260px;border:none;text-align:center;";
+
+		var canvas = document.createElement("canvas");
+		canvas.width = 256; canvas.height = 256;
+		canvas.id = "database-image-viewer";
+		canvas.style.cssText = "width:256px;height:256px;margin:auto;";
+
+		row.appendChild( canvas );
+		tab.appendChild( row );
+
+	})( TabUI.Database.tab );
+
+//	upload-image-data-ui.js
+
+	(function( tab ){
+
+	//	Image upload button.
+	//	var tab = TabUI.Database.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "upload-image-data-button";
+		button.textContent = "Upload Image Data";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Database.tab );
+
 //	undo-redo-ui.js
 
 	(function( tab ){
