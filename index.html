@@ -363,15 +363,55 @@
 
 				next_key.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					interval = setTimeout( function(){
 
-					}, 250 );
+					var default_src = "https://i.imgur.com/rnZZU0i.png";
+					var key = key_droplist.value; if ( !key ) return; 
+
+				//	images collection.
+					if ( collection.name === "images" && key === "url" ) {
+						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+							var index = Number(value_input.value);
+							if ( !index || isNaN(index) ) return;
+							index = THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
+						}
+					}
+
+					interval = setTimeout( function(index){
+
+					//	images collection.
+						if ( collection.name === "images" && key === "url" ) {
+							if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+								image.src = _doc.url[index]; value_input.value = index; return;
+							}
+						}
+
+					}, 250, index );
 				});
 
 				prev_key.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
+
+					var default_src = "https://i.imgur.com/rnZZU0i.png";
+					var key = key_droplist.value; if ( !key ) return; 
+
+				//	images collection.
+					if ( collection.name === "images" && key === "url" ) {
+						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+							var index = Number(value_input.value);
+							if ( !index || isNaN(index) ) return;
+							index = THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
+						}
+					}
+
 					interval = setTimeout( function(){
-						
+
+					//	images collection.
+						if ( collection.name === "images" && key === "url" ) {
+							if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+								image.src = _doc.url[index]; value_input.value = index; return;
+							}
+						}
+
 					}, 250 );
 				});
 
@@ -391,7 +431,9 @@
 
 						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
 
-							image.src = _doc.url[0]; value_input.value = ""; return;
+							var index = 0;
+							image.src = _doc.url[index]; 
+							value_input.value = index; return;
 						}
 
 						image.src = _doc.url; value_input.value = ""; return;
