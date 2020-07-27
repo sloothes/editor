@@ -302,24 +302,30 @@
 
 			//	Key droplist.
 
-				watch( key_droplist, "onchange", function( prop, event, doc ){ 
+				watch( key_droplist, "onchange", function( prop, event, key ){ 
 
-					if ( !doc ) return;
+					if ( !key ) return;
+
+					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
+						if (err) throw err; if ( !docs.length ) throw "None doc found!";
+					}).then(function(result){ 
+						if ( result.length ) return result[0]; else throw "No results!";
+					}).then(function(doc){
 					
-					var key = key_droplist.value; var index = 0; 
+						var index = 0;
 
-					switch ( typeof doc[key] ) {
-						case "function":
-							return;
-						break;
-						case "object":
-						//	value_input.value = Object.keys(doc[key])[index]; return;
-							value_input.value = Object.values(doc[key])[index]; return;
-						break;
-						default:
-							value_input.value = doc[ key ]; return;
-						break;
-					}
+						if ( typeof doc[key] === "object" )
+							return Object.values(doc[key])[index];
+						else 
+							return doc[ key ];
+
+					}).then(function(value){
+
+						value_input.value = value;
+
+					}).catch(function(err){
+						debugMode && console.error(err);
+					});
 
 				});
 
