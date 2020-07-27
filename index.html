@@ -444,8 +444,8 @@
 							var max = _doc[key].length - 1;
 							var index = THREE.Math.clamp( value, 0, max );
 							if ( isNaN(index) ) index = 0;
-							value_input.value = index;
-							image.src = _doc.url[index];
+							value_input.value = index = parseInt(index);
+							image.src = _doc.url[ index ];
 						})(value);
 					}
 
