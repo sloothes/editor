@@ -194,7 +194,7 @@
 		TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),  // vector_droplist,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
 	);
-
+	
 
 //	Call material entity droplist.
 
@@ -217,6 +217,15 @@
 		});
 
 	})( TabUI.Editor.tab.querySelector("select#editor-entities-droplist") ); // entity_droplist.
+
+
+//	Call vector droplist watchers.
+
+	(function(vector_droplist){
+
+		callWatchers( vector_droplist, "onchange", "change", vector_droplist.value = "position"); // important!
+
+	})( TabUI.Editor.tab.querySelector("select#editor-vector-droplist") );  // vector_droplist,
 
 
 //	editors-helper.
