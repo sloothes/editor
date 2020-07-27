@@ -214,9 +214,9 @@
 			);
 
 
-		//	database-mouse-inputs.js
+		//	database-inputs.js
 
-			(function(image,next_doc,prev_doc,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
+			(function(image,next_doc,prev_doc,next_key,prev_key,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
 
 				var interval, _id, _uuid, _doc;
 				var max = 0, skip = 0, db = metadB;
@@ -307,6 +307,7 @@
 					});
 				};
 
+			//	Doc inputs.
 
 			//	on mouse down.
 
@@ -341,6 +342,39 @@
 					skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip );
 				});
+
+			//	Key inputs.
+
+				next_key.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function increase(){
+
+						interval = setTimeout(increase, 50);
+					}, 500);
+				});
+
+				prev_key.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function decrease(){
+
+						interval = setTimeout(decrease, 50);
+					}, 500);
+				});
+
+				next_key.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout( function(){
+
+					}, 250 );
+				});
+
+				prev_key.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout( function(){
+						
+					}, 250 );
+				});
+
 
 
 			//	Key droplist.
@@ -398,6 +432,8 @@
 				TabUI.Database.tab.querySelector("img#image-url-viewer"),      // image,
 				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
 				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
+				TabUI.Database.tab.querySelector("li#doc-key-increase"),       // next_key,
+				TabUI.Database.tab.querySelector("li#doc-key-decrease"),       // prev_key,
 				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
 				TabUI.Database.tab.querySelector("input#doc-value-input"),     // value_input,
 				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,

@@ -223,13 +223,13 @@
 		vect.style.cssText = "width:200px;height:40px;float:right;";
 
 		var prev = document.createElement("li");
-		prev.id = "doc-value-decrease";
+		prev.id = "doc-key-decrease";
 		prev.innerHTML = "&#9668;";
 		prev.style.display = "inline";
 		prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
 		var next = document.createElement("li");
-		next.id = "doc-value-increase";
+		next.id = "doc-key-increase";
 		next.innerHTML = "&#9658;";
 		next.style.display = "inline";
 		next.classList.add("btn","btn-primary","get-next-btn","pull-right");
