@@ -270,6 +270,44 @@
 					});
 				}
 
+				function uploadDataURL(data, type, name){
+
+				//  Returns a resolved promise with record data from imgur.com.
+					debugMode && console.log("uploading:", file.name);
+					return new Promise(function( resolve, reject ){
+
+						var formdata = new FormData();
+						formdata.append("image", data);
+						formdata.append("type",  type);
+						formdata.append("name",  name);
+
+					//	var endpoint = "https://api.imgur.com/3/image";
+					//	var clientID = "06217f601180652";  // sloothes app Client-ID.
+
+						var xhttp = new XMLHttpRequest();
+						xhttp.open("POST", endpoint, true);
+						xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
+						xhttp.onreadystatechange = function () {
+							if (this.readyState === 4) {
+								var response = "";
+								if (this.status >= 200 && this.status < 300) {
+									response = JSON.parse(this.responseText);
+									debugMode && console.log(response);
+									resolve(response.data); // resolve promise.
+								} else {
+									var err = JSON.parse(this.responseText).data.error;
+									console.error( err.type, err );
+									reject( err );
+								}
+							}
+						};
+
+						xhttp.send(formdata);
+						xhttp = null;
+					});
+				};
+
+
 			//	on mouse down.
 
 				next_doc.addEventListener( "mousedown", function(){
@@ -304,6 +342,7 @@
 					interval = setTimeout( get_doc, 250, skip );
 				});
 
+
 			//	Key droplist.
 
 				watch( key_droplist, "onchange", function( prop, event, key ){ 
@@ -312,7 +351,14 @@
 
 					if ( !key ) return; debugMode && console.log({ [key]: _doc[key] });
 
+				//	images collection.
+
 					if ( collection.name === "images" && key === "url" ) {
+
+						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+
+							image.src = _doc.url[0]; value_input.value = ""; return;
+						}
 
 						image.src = _doc.url; value_input.value = ""; return;
 
