@@ -493,7 +493,7 @@
 							}
 
 							if ( !_doc[key] ) return;
-							var data = _doc[key][index].split(","); 
+							var data = _doc[key].split(","); 
 							var type = data.shift().replace("data:","").replace("base64");
 							var name = "image "+_doc.uuid;
 							return debugMode && console.log("uploadDataURL():", {data:data, type:type, name:name}); // breakpoint!
