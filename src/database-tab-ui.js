@@ -72,17 +72,16 @@
 	(function( tab ){
 
 	//	Database image viewer.
-	//	var tab = TabUI.Skydome.tab;
+	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
 		row.style.cssText = "height:260px;border:none;text-align:center;";
 
-		var canvas = document.createElement("canvas");
-		canvas.width = 256; canvas.height = 256;
-		canvas.id = "database-image-viewer";
-		canvas.style.cssText = "width:256px;height:256px;margin:auto;";
+		var img = new Image(256,256)
+		img.id = "database-image-viewer";
+		img.style.cssText = "width:256px;height:256px;margin:auto;";
 
-		row.appendChild( canvas );
+		row.appendChild( img );
 		tab.appendChild( row );
 
 	})( TabUI.Database.tab );
