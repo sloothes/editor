@@ -78,7 +78,8 @@
 		row.style.cssText = "height:260px;border:none;text-align:center;";
 
 		var img = new Image(256,256)
-		img.id = "database-image-viewer";
+		img.id = "image-url-viewer";
+		img.src = img.src = "https://i.imgur.com/rnZZU0i.png";
 		img.style.cssText = "width:256px;height:256px;margin:auto;";
 
 		row.appendChild( img );

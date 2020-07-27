@@ -216,7 +216,7 @@
 
 		//	database-mouse-inputs.js
 
-			(function(next_doc,prev_doc,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
+			(function(image,next_doc,prev_doc,skip_input,value_input,key_droplist,database_droplist,collection_droplist){
 
 				var interval, _id, _uuid, _doc;
 				var max = 0, skip = 0, db = metadB;
@@ -308,18 +308,19 @@
 
 				watch( key_droplist, "onchange", function( prop, event, key ){ 
 
+					var default_src = "https://i.imgur.com/rnZZU0i.png";
+
 					if ( !key ) return; debugMode && console.log({ [key]: _doc[key] });
 
-					if ( collection === db.collection("images") && key === "url" ) {
-						return (function(image){
-							debugMode && console.log( image );
+					if ( collection.name === "images" && key === "url" ) {
 
-							image.src = _doc.url; value_input.value = ""; return;
+						image.src = _doc.url; value_input.value = ""; return;
 
-						})( TabUI.Database.tab.querySelector("img#database-image-viewer") );
 					}
 
 					value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
+
+					if ( image.src !== default_src ) image.src = default_src;
 				});
 
 				/*
@@ -371,6 +372,7 @@
 				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value ); // important!
 
 			})( 
+				TabUI.Database.tab.querySelector("img#image-url-viewer"),      // image,
 				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
 				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
 				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
