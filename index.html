@@ -345,78 +345,83 @@
 
 			//	Key inputs.
 
-				next_key.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					interval = setTimeout(function increase(){
+				(function(){
 
-						interval = setTimeout(increase, 50);
-					}, 500);
-				});
+					var interval;
 
-				prev_key.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					interval = setTimeout(function decrease(){
+				//	next_key.addEventListener( "mousedown", function(){
+				//		clearTimeout( interval ); // important!
+				//		interval = setTimeout(function increase(){
+				//
+				//			interval = setTimeout(increase, 50);
+				//		}, 500);
+				//	});
 
-						interval = setTimeout(decrease, 50);
-					}, 500);
-				});
+				//	prev_key.addEventListener( "mousedown", function(){
+				//		clearTimeout( interval ); // important!
+				//		interval = setTimeout(function decrease(){
+				//
+				//			interval = setTimeout(decrease, 50);
+				//		}, 500);
+				//	});
 
-				next_key.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
+					next_key.addEventListener( "click", function(){
+						clearTimeout( interval ); // important!
 
-					var default_src = "https://i.imgur.com/rnZZU0i.png";
-					var key = key_droplist.value; if ( !key ) return; 
-
-				//	images collection.
-					if ( collection.name === "images" && key === "url" ) {
-						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
-						//	if ( value_input.value === "" ) return;
-							if ( isNaN(value_input.value) ) return;
-							var index = Number( value_input.value );
-							index = THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
-						}
-					}
-
-					interval = setTimeout( function(index){
+						var default_src = "https://i.imgur.com/rnZZU0i.png";
+						var key = key_droplist.value; if ( !key ) return; 
 
 					//	images collection.
 						if ( collection.name === "images" && key === "url" ) {
 							if ( Array.isArray(_doc[key]) && _doc[key].length ) {
-								image.src = _doc.url[index]; value_input.value = index; return;
+							//	if ( value_input.value === "" ) return;
+								if ( isNaN(value_input.value) ) return;
+								var index = Number( value_input.value );
+								index = THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
 							}
 						}
 
-					}, 250, index );
-				});
+						interval = setTimeout( function(index){
 
-				prev_key.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
+						//	images collection.
+							if ( collection.name === "images" && key === "url" ) {
+								if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+									image.src = _doc.url[index]; value_input.value = index; return;
+								}
+							}
 
-					var default_src = "https://i.imgur.com/rnZZU0i.png";
-					var key = key_droplist.value; if ( !key ) return; 
+						}, 250, index );
+					});
 
-				//	images collection.
-					if ( collection.name === "images" && key === "url" ) {
-						if ( Array.isArray(_doc[key]) && _doc[key].length ) {
-						//	if ( value_input.value === "" ) return;
-							if ( isNaN(value_input.value) ) return;
-							var index = Number( value_input.value );
-							index = THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
-						}
-					}
+					prev_key.addEventListener( "click", function(){
+						clearTimeout( interval ); // important!
 
-					interval = setTimeout( function(){
+						var default_src = "https://i.imgur.com/rnZZU0i.png";
+						var key = key_droplist.value; if ( !key ) return; 
 
 					//	images collection.
 						if ( collection.name === "images" && key === "url" ) {
 							if ( Array.isArray(_doc[key]) && _doc[key].length ) {
-								image.src = _doc.url[index]; value_input.value = index; return;
+							//	if ( value_input.value === "" ) return;
+								if ( isNaN(value_input.value) ) return;
+								var index = Number( value_input.value );
+								index = THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
 							}
 						}
 
-					}, 250 );
-				});
+						interval = setTimeout( function(){
 
+						//	images collection.
+							if ( collection.name === "images" && key === "url" ) {
+								if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+									image.src = _doc.url[index]; value_input.value = index; return;
+								}
+							}
+
+						}, 250 );
+					});
+
+				})();
 
 
 			//	Key droplist.
