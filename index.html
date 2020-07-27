@@ -213,9 +213,10 @@
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
 
+/*
 		//	collection-droplist.js
 
-			(function(database_droplist,collection_droplist){
+			(function(skip_input,key_droplist,database_droplist,collection_droplist){
 
 				var db = metadB; 
 				var collection = db.collection(collection_droplist.value);
@@ -233,16 +234,6 @@
 						callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
 					}
 
-				});
-
-			})( 
-			//	TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
-			//	TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
-				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
-			);
-
-			/*
 					collection.findOne({},{},function(err, doc){
 
 						if (err) throw err; // console.log( "doc:", doc );
@@ -287,17 +278,24 @@
 					}).catch(function(err){
 						skip_input.value = ""; debugMode && console.error(err);
 					});
-			*/
+
+				});
+
+			})( 
+			//	TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
+			//	TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
+				TabUI.Database.tab.querySelector("select#database-droplist"),  // database_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
+			);
+*/
 
 		//	database-mouse-inputs.js
 
 			(function(next_doc,prev_doc,skip_input,key_droplist,database_droplist,collection_droplist){
 
 				var interval; 
-				var max = 0; 
-				var db = metadB;
-				var skip = {value:0};
-				var collection; // = db.collection(collection_droplist.value);
+				var max = 0; var db = metadB; var skip = 0;
+				var collection = db.collection(collection_droplist.value);
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
@@ -309,12 +307,6 @@
 						.then(function(){ return k; });
 				}
 
-				watch( skip, "value", function(prop, action, value, oldValue){
-					debugMode && console.log({object:skip,value:value,last_value:oldValue}); // debug!
-
-
-					skip_input.value = value;
-				});
 
 				function get_doc(value){
 					collection.find().skip(value).limit(1).toArray( function(err,docs){ 
@@ -354,20 +346,20 @@
 
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
-				//	THREE.Math.clamp( ++skip.value, 0, max - 1 );
+				//	THREE.Math.clamp( ++skip, 0, max - 1 );
 					interval = setTimeout(function increase(){
-						skip.value = THREE.Math.clamp( ++skip.value, 0, max - 1 );
-						if ( !skip.value || skip.value == max - 1 ) return;
+						skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+						if ( !skip || skip == max - 1 ) return;
 						interval = setTimeout(increase,50);
 					}, 500);
 				});
 
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
-				//	THREE.Math.clamp( --skip.value, 0, max - 1 );
+				//	THREE.Math.clamp( --skip, 0, max - 1 );
 					interval = setTimeout(function decrease(){
-						skip.value = THREE.Math.clamp( --skip.value, 0, max - 1 );
-						if ( !skip.value || skip.value == max - 1 ) return;
+						skip = THREE.Math.clamp( --skip, 0, max - 1 );
+						if ( !skip || skip == max - 1 ) return;
 						interval = setTimeout(decrease,50);
 					}, 500);
 				});
@@ -376,27 +368,32 @@
 
 				next_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					skip.value = THREE.Math.clamp( ++skip.value, 0, max - 1 );
-					interval = setTimeout( get_doc, 250, skip.value );
+					skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+					interval = setTimeout( get_doc, 250, skip );
 				});
 
 				prev_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
-					skip.value = THREE.Math.clamp( --skip.value, 0, max - 1 );
-					interval = setTimeout( get_doc, 250, skip.value );
+					skip = THREE.Math.clamp( --skip, 0, max - 1 );
+					interval = setTimeout( get_doc, 250, skip );
 				});
 
 			//	Collection droplist.
 
 				watch( collection_droplist, "onchange", function( prop, event, value ){
 
-					max = 0; skip.value = 0; // reset.
-					collection = db.collection(value);
-					count(collection).then(function(k){ 
-						max = k; return skip.value;
-					}).then(function(value){
-						get_doc( skip.value );
-					});
+					max = 0; skip = 0; // reset.
+
+					try { 
+
+						collection = db.collection(value); // debugMode && console.log( "collection:", collection ); 
+
+					} catch(err){
+
+						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = collection.name);
+					}
+
+					count(collection).then(function(k){ max = k; }).then(function(value){ get_doc( skip ); });
 
 				});
 
