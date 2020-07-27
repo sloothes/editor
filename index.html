@@ -312,12 +312,11 @@
 						if ( result.length ) return result[0]; else throw "No results!";
 					}).then(function(doc){
 					
-						var index = 0;
+					//	var index = 0;
+					//	if ( typeof doc[key] === "object" )
+					//		return Object.values(doc[key])[index];
 
-						if ( typeof doc[key] === "object" )
-							return Object.values(doc[key])[index];
-						else 
-							return doc[ key ];
+						return doc[ key ];
 
 					}).then(function(value){
 						debugMode && console.log(value);
