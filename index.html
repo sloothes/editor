@@ -223,9 +223,8 @@
 
 					if ( skip !== undefined && collection.name === "objects" ) {
 
-						return collection.find().skip(skip).limit(1)
-						.then(function(docs){ return docs[0]; })
-						.then(function(doc){
+						return collection.find().skip(skip).limit(1).toArray()
+						.then(function(docs){ return docs[0]; }).then(function(doc){
 
 							var json = {};
 							json.images = [];
