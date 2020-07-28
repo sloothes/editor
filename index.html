@@ -184,7 +184,7 @@
 
 			(function( db,skip_input,key_droplist,collection_droplist ){
 
-				var max = 0, skip = 0, doc;
+				var max = 0, skip = 0;
 				var collection = db.collection(collection_droplist.value);
 
 				function count(collection){
@@ -199,18 +199,13 @@
 
 					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
 						if (err) throw err; if ( !docs.length ) throw "None doc found!";
-					}).then(function(results){ return results[0]; }).then(function(result){
+					}).then(function(results){ return results[0]; }).then(function(doc){
 
-						doc = result; // important!
 						debugMode && console.log(doc);
+						return doc; // important!
 
 					}).catch(function(err){
-
-						doc = undefined; // important!
 						debugMode && console.error(err);
-
-					}).then(function(){
-						return doc; // always return doc.
 					});
 				}
 
@@ -235,11 +230,18 @@
 
 						skip_input.value = skip = value; 
 
-						return get_doc(skip); // get doc.
+					//	get doc.
+						return collection.find().skip(skip)
+						.limit(1).toArray( function(err,docs){ 
+							if (err) throw err;
+						}).then(function(docs){ 
+							return docs[0]; 
+						});
 
 					}).then(function(doc){
+						debugMode && console.log(doc);
 
-						if ( !doc ) throw "document not found!"
+						if ( !doc ) throw "none document found!"
 
 					//	remove old key options.
 						while (key_droplist.options.length) {
