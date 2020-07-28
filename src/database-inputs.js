@@ -128,6 +128,17 @@
 				debugMode && console.log({item:prev_doc,event:event,skip:value});
 			});
 
+			watch( skip_input, "onchange", function( prop, event, value ){ 
+				debugMode && console.log({item:skip_input,event:event,skip:value});
+			});
+
+		//	on key change.
+
+			skip_input.addEventListener( "change", function(){
+				skip_input.value = skip = THREE.Math.clamp( this.value, 0, max - 1 );
+				this.blur(); callWatchers( this, "onchange", "change", skip );
+			});
+
 		//	on mouse down.
 
 			next_doc.addEventListener( "mousedown", function(){
