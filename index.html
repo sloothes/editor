@@ -477,7 +477,7 @@
 
 							if ( Array.isArray(_doc[key]) && _doc[key].length ) 
 
-								return (function(){
+								return (function(key){
 
 									var index = parseInt(value_input.value); if ( isNaN(index) ) return;
 
@@ -489,13 +489,32 @@
 									data = data.shift(); // important! or data = data.pop(); or data = data.join();
 									debugMode && console.log({data:data, type:type, name:name}); // debug!
 
+									var dotkey = key+"."+index;
+									uploadDataURL(data, type, name).then(function(data){
+										debugMode && console.log( data );
 
-									return;
-								})(); 
+										return collection.update(
+											{_id:_doc._id}, 
+											{ $set:{ [dotkey]:data.link } }, 
+											function(err){ if (err) throw err; }
+										).then(function(){
+											return collection.findOne({_id:_doc._id})
+											.then(function(doc){ return doc; })
+										}).catch(function(err){
+											console.error(err);
+										});
+
+									}).then(function(results){
+										debugMode && console.log( results );
+									}).catch(function(err){
+										console.error(err);
+									})
+
+								})(key); 
 
 							else
 
-								return (function(){
+								return (function(key){
 
 									if ( !_doc[key] ) return;
 									var data = _doc[key].split(","); 
@@ -506,13 +525,17 @@
 
 									uploadDataURL(data, type, name).then(function(data){
 										debugMode && console.log( data );
-										return data.link; // breakpoint!
 
 										return collection.update(
 											{_id:_doc._id}, 
-											{ $set:{ url:data.link } }, 
+											{ $set:{ [key]:data.link } }, 
 											function(err){ if (err) throw err; }
-										);
+										).then(function(){
+											return collection.findOne({_id:_doc._id})
+											.then(function(doc){ return doc; })
+										}).catch(function(err){
+											console.error(err);
+										});
 
 									}).then(function(results){
 										debugMode && console.log( results );
@@ -520,7 +543,7 @@
 										console.error(err);
 									})
 
-								})(); 
+								})(key); 
 						}
 
 					});
