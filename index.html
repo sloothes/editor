@@ -265,33 +265,35 @@
 
 								var promises = [];
 
-								texture_uuids.forEach(function(uuid){
-									promises.push(function(){
+								texture_uuids.forEach(function(uuid){ 
+									promises.push(
+										(function(){
 
-										return db.collection("textures")
-										.findOne({uuid:uuid})
-										.then(function(doc){
-
-											if (!doc) return;
-											doc && json.textures.push(doc); 
-											return doc; 
-
-										}).then(function(doc){
-											if (!doc) return;
-
-											return db.collection("images")
-											.findOne({uuid:doc.image})
+											return db.collection("textures")
+											.findOne({uuid:uuid})
 											.then(function(doc){
-												doc && json.images.push(doc); 
+
+												if (!doc) return;
+												doc && json.textures.push(doc); 
+												return doc; 
+
+											}).then(function(doc){
+												if (!doc) return;
+
+												return db.collection("images")
+												.findOne({uuid:doc.image})
+												.then(function(doc){
+													doc && json.images.push(doc); 
+												}).catch(function(err){
+													console.error(err);
+												});
+
 											}).catch(function(err){
 												console.error(err);
 											});
 
-										}).catch(function(err){
-											console.error(err);
-										});
-
-									})
+										})()
+									);
 								});
 
 								debugMode && console.log("promises:", promises);
