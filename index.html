@@ -201,20 +201,27 @@
 
 			})( TabUI.Database.tab );
 
+		//	database-buttons.js
+
+			(function( db,button ){
+
+				var interval;
+
+				watch( button, "onclick", function( prop, event, value ){ 
+					debugMode && console.log({item:button,property:prop,event:event,value:value});
+				});
+
+			//	Call watchers.
+
+				button.addEventListener( "click", function(){ 
+					clearTimeout( interval );
+					interval = setTimeout(function(button){
+						callWatchers( button, "onclick", "click" );
+					}, 250, this); 
+				});
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+			})( metadB, TabUI.Database.tab.querySelector("div#doc-load-button") ); // load_button,
 
 		</script>
 
