@@ -260,7 +260,7 @@
 		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
-		button.id = "value-update-button";
+		button.id = "update-value-button";
 		button.textContent = "Update Value";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
@@ -281,7 +281,7 @@
 		row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
-		button.id = "doc-update-button";
+		button.id = "update-doc-button";
 		button.textContent = "Update document";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";

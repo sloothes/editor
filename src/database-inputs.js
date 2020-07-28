@@ -74,9 +74,9 @@
 				.then(function(){ return k; });
 		}
 
-		function get_doc(value){
+		function get_doc(skip){
 
-			collection.find().skip(value).limit(1).toArray( function(err,docs){ 
+			collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
 				if (err) throw err; if ( !docs.length ) throw "None doc found!";
 			}).then(function(result){
 
@@ -112,7 +112,7 @@
 			});
 		}
 
-	//	Skip inputs.
+	//	Skip mouse inputs.
 
 		(function(){
 
@@ -156,8 +156,6 @@
 
 		})();
 
-	//	Value inputs.
-
 		//	next_key.addEventListener( "mousedown", function(){
 		//		clearTimeout( interval ); // important!
 		//		interval = setTimeout(function increase(){
@@ -173,6 +171,8 @@
 		//			interval = setTimeout(decrease, 50);
 		//		}, 500);
 		//	});
+
+	//	Value mouse inputs.
 
 		(function(){
 

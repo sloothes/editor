@@ -180,7 +180,269 @@
 
 		<script>
 
+		//	database-skip-input.js
+
+			(function( db,skip_input,key_droplist,collection_droplist ){
+
+				var max = 0, skip = 0, doc;
+				var collection = db.collection(collection_droplist.value);
+
+				function count(collection){
+				//	returns promise: count(col).then(function(result){...})
+					var k = 0; return collection.find()
+						.forEach( function(doc){ ++k; })
+						.catch(function(err){console.error(err);})
+						.then(function(){ return k; });
+				}
+
+				function get_doc(skip){
+
+					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
+						if (err) throw err; if ( !docs.length ) throw "None doc found!";
+					}).then(function(results){ return results[0]; }).then(function(result){
+
+						doc = result; // important!
+						debugMode && console.log(doc);
+
+					}).catch(function(err){
+
+						doc = undefined; // important!
+						debugMode && console.error(err);
+
+					}).then(function(){
+						return doc; // always return doc.
+					});
+				}
+
+				watch( skip_input, "onchange", function(prop, event, value){
+
+					get_doc(value).then(function(doc){
+						if ( !doc ) throw "document not found!"
+
+					//	remove old key options.
+						while (key_droplist.options.length) {
+							key_droplist.options.remove(0);
+							if (!key_droplist.options.length) return doc;
+						}
+
+					}).then(function(doc){
+
+					//	create new key options.
+						Object.keys(doc).forEach(function( key ){
+							var option = document.createElement("option");
+							option.text = option.value = key;
+							key_droplist.appendChild( option );
+						});
+
+						callWatchers(key_droplist, "onchange", "change", key_droplist.value); 
+
+					}).catch(function(err){
+						console.error(err);
+					});
+
+				});
+
+			})( 
+				metadB, // db,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
+			);
+
+		</script>
+
+		<script>
+
 		//	database-buttons.js
+
+		//	todo: update-meta-doc-button.js
+
+		//	update-meta-value-button.js
+
+			(function( 
+				db,skip_input,value_input,update_value,
+				key_droplist,collection_droplist,
+				textures_entities,material_entities,entities 
+			){
+
+				var interval, doc;
+				var key = key_droplist.value;
+				var skip = parseInt(skip_input.value); 
+				if ( isNaN(skip) ) skip_input.value = skip = 0;
+				var collection = db.collection(collection_droplist.value);
+
+				function get_doc(skip){
+
+					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
+						if (err) throw err; if ( !docs.length ) throw "None doc found!";
+					}).then(function(results){ return results[0]; }).then(function(result){
+
+						if ( !result ) 
+							throw "None doc found!";
+						else
+							doc = result; // important!
+
+						debugMode && console.log(doc);
+
+					}).catch(function(err){
+
+						doc = undefined; // important!
+						debugMode && console.error(err);
+
+					}.then(function(){
+						return doc; // always return doc.
+					});
+				}
+
+				watch( collection_droplist, "onchange", function( prop, event, value ){ 
+					collection = db.collection( value ); 
+				});
+
+				watch( key_droplist, "onchange", function( prop, event, value ){ key = value; });
+
+				watch( skip_input, "onchange", function( prop, event, value ){ 
+					skip = parseInt(value); if ( isNaN(skip) ) skip_input.value = skip = 0;
+				});
+
+				watch( value_input, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:value_input,property:prop,event:event,value:value});
+				});
+
+			//	database-update-value-button.js
+
+				watch( update_value, "onclick", function( prop, event, doc ){ 
+					debugMode && console.log({item:update_value,property:prop,event:event,doc:doc});
+
+					function updateValue( id, key, value ){
+
+						var selector = {_id:id};
+						var modifier = {$set: { [key]:value } };
+
+						collection.update( selector, modifier, function(err){ 
+
+							if (err) throw err; 
+
+							collection.findOne(selector).then(function(result){ 
+
+							//	Fatal Error.
+								if ( !result ) 
+									throw "FatalError: document did not found!";
+
+							//	update doc.
+								doc = result;
+
+							//	return value.
+								return result[key]; 
+
+							}).then(function(value){
+
+							//	Success.
+								value_input.value = value; // update input.
+								console.log( "Success:", key, "value updated:", value );
+
+							}).catch(function(err){
+								console.error(err);
+								value_input.value = doc[ key ];
+							});
+							
+						}).catch(function(err){
+							console.error(err);
+							value_input.value = doc[ key ];
+							console.log("Failed:", key, "value did not updated!")
+						});
+					}
+
+					if ( collection.name === "object" ) return (function(){
+
+						switch ( key ){
+						//	string.
+							case "name":
+								(function( value ){
+									if ( !value ) return value_input.value = doc[key];
+									return updateValue( doc._id, key, value_input.value );
+								})( value_input.value );
+							break;
+						//	number.
+							case "layer":
+								(function( value ){
+									if ( isNaN(value) ) {
+										return value_input.value = doc[key];
+									}
+									value = THREE.Math.clamp( value, 0, 31);
+									return updateValue( doc._id, key, value );
+								})( parseInt(value_input.value) );
+							break;
+						//	boolean.
+							case "visible":
+								(function( value ){
+									if ( value === 0 ) value = false;
+									else if ( value === 1 ) value = true;
+									else if ( value.toLowerCase() === "true" ) value = true;
+									else if ( value.toLowerCase() === "false" ) value = false;
+									else return value_input.value = doc[key];
+									return updateValue( doc._id, key, value );
+								})( value_input.value );
+							break;
+							default:
+								value_input.value = doc[key];
+							break;
+						}
+
+					})();
+
+					if ( collection.name === "geometries" ) return (function(){
+
+
+					})();
+
+					if ( collection.name === "materials" ) return (function(){
+
+
+
+					})();
+
+					if ( collection.name === "textures" ) return (function(){
+
+
+
+					})();
+
+					if ( collection.name === "images" ) return (function(){
+
+
+
+					})();
+
+				});
+
+			//	Call watchers.
+
+				value_input.addEventListener( "change", function(){
+					callWatchers( this, "onchange", "change", this.value );
+				})
+
+				update_value.addEventListener( "click", function(){ 
+					clearTimeout( interval );
+					interval = setTimeout(function(button){
+						callWatchers( button, "onclick", "click", get_doc(skip) );
+					}, 250, this); 
+				});
+
+			})( 
+				metadB, // db, 
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),        // skip_input,
+				TabUI.Database.tab.querySelector("input#doc-value-input"),       // value_input,
+				TabUI.Database.tab.querySelector("div#update-value-button"),     // update_value,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),    // key_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist"),  // collection_droplist,
+				textures_entities, material_entities, entities
+			);
+
+		</script>
+
+		<script>
+
+		//	load-meta-doc-button.js
 
 			(function( db,load_button,skip_input,collection_droplist,textures_entities,material_entities,entities ){
 
@@ -188,11 +450,11 @@
 				var skip = skip_input.value;
 				var collection = db.collection(collection_droplist.value);
 
-				watch( collection_droplist, "onchange", function(prop, event, value){
-					collection = db.collection(collection_droplist.value);
+				watch( collection_droplist, "onchange", function(prop, event, value){ 
+					collection = db.collection(value); 
 				});
 
-				watch( skip_input, "onchange", function( prop, event, value ){ skip = Number(value); });
+				watch( skip_input, "onchange", function( prop, event, value ){ skip = parseInt(value); });
 
 			//	load from database.
 
