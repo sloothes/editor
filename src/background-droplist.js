@@ -92,3 +92,29 @@
 //	const sky03  = "fbLkP5b,2ezGkl6,IyXzc4L,ja5htHQ,QZDxVvI,BZ68JvT";
 //	const space4 = "v6bjQLb,lwrlr6P,kKUKBJg,N0oZlJR,x9q8z0K,HYcK7Ii";
 //	const space5 = "QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm";
+
+
+/*
+	(function(scene,textures_entities){
+
+		if (!scene || Number(THREE.REVISION) < 78) return;
+
+		var urls = [
+			"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
+			"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
+			"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
+			"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
+			"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
+			"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
+		];
+
+		var loader = new THREE.CubeTextureLoader();
+		loader.setCrossOrigin( "anonymous" );
+		loader.load( urls, function(texture){
+			scene.background = texture;
+			scene.background.needsUpdate = true;
+			textures_entities && textures_entities.add(texture);
+		});
+
+	})( scene, textures_entities );
+*/
