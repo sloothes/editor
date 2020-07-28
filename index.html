@@ -668,10 +668,6 @@
 
 			//	Call watchers.
 
-				skip_input.addEventListener( "change", function(){
-					callWatchers( this, "onchange", "change", this.value );
-				})
-
 				load_button.addEventListener( "click", function(){ 
 					clearTimeout( interval );
 					interval = setTimeout(function(button){
