@@ -35,7 +35,7 @@
 	(function(skip_input,value_input){
 
 		watch( skip_input, "onchange", function( prop, event, value ){ 
-		//	debugMode && console.log({item:skip_input,event:event,value:value});
+			debugMode && console.log({item:skip_input,event:event,value:value});
 		});
 
 		watch( value_input, "onchange", function( prop, event, value ){ 
