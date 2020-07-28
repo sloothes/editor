@@ -75,12 +75,13 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:260px;border:none;text-align:center;";
+		row.style.cssText = "height:260px;border:none;text-align:center;margin-right:15px;";
 
 		var img = new Image(256,256)
 		img.id = "image-url-viewer";
-		img.src = img.src = "https://i.imgur.com/rnZZU0i.png";
-		img.style.cssText = "width:256px;height:256px;margin:auto;";
+	//	img.src = img.src = "https://i.imgur.com/rnZZU0i.png";
+		img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
+		img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		row.appendChild( img );
 		tab.appendChild( row );
