@@ -373,7 +373,7 @@
 					get_doc(skip).then(function(doc){
 						debugMode && console.log(doc);
 
-						if ( collection.name === "object" ) return (function(){
+						if ( collection.name === "objects" ) return (function(){
 
 							switch ( key ){
 							//	string.
@@ -381,7 +381,7 @@
 									(function( value ){
 										if ( !value ) 
 											return value_input.value = doc[key];
-										return updateValue( doc._id, key, value );
+										updateValue( doc._id, key, value );
 									})( value_input.value );
 								break;
 							//	number.
@@ -390,7 +390,7 @@
 										if ( isNaN(value) ) 
 											return value_input.value = doc[key];
 										value = THREE.Math.clamp( value, 0, 31);
-										return updateValue( doc._id, key, value );
+										updateValue( doc._id, key, value );
 									})( parseInt(value_input.value) );
 								break;
 							//	boolean.
@@ -401,7 +401,7 @@
 										else if ( value.toLowerCase() === "true" ) value = true;
 										else if ( value.toLowerCase() === "false" ) value = false;
 										else return value_input.value = doc[key];
-										return updateValue( doc._id, key, value );
+										updateValue( doc._id, key, value );
 									})( value_input.value );
 								break;
 								default:
