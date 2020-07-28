@@ -239,7 +239,6 @@
 						});
 
 					}).then(function(doc){
-						debugMode && console.log(doc);
 
 						if ( !doc ) throw "none document found!"
 
@@ -250,6 +249,8 @@
 						}
 
 					}).then(function(doc){
+
+						debugMode && console.log(doc);
 
 					//	create new key options.
 						Object.keys(doc).forEach(function( key ){
