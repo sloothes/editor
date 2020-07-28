@@ -332,25 +332,11 @@
 				textures_entities,material_entities,entities 
 			){
 
-				var interval, doc;
+				var interval;
 				var key = key_droplist.value;
 				var skip = parseInt(skip_input.value); 
 				if ( isNaN(skip) ) skip_input.value = skip = 0;
 				var collection = db.collection(collection_droplist.value);
-
-				function get_doc(skip){
-
-					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
-						if (err) throw err; if ( !docs.length ) throw "None doc found!";
-					}).then(function(results){ return results[0]; }).then(function(result){
-
-						debugMode && console.log(result);
-						return doc = result; // important!
-
-					}).catch(function(err){
-						debugMode && console.error(err);
-					});
-				}
 
 				watch( collection_droplist, "onchange", function( prop, event, value ){ 
 					collection = db.collection( value ); 
@@ -369,107 +355,122 @@
 			//	database-update-value-button.js
 
 				watch( update_value, "onclick", function( prop, event ){ 
-					debugMode && console.log({item:update_value,property:prop,event:event, doc:doc});
+				//	debugMode && console.log({item:update_value,property:prop,event:event});
 
-					function updateValue( id, key, value ){
+					function get_doc(skip){
 
-						var selector = {_id:id};
-						var modifier = {$set: { [key]:value } };
+						collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
+							if (err) throw err; if ( !docs.length ) throw "None doc found!";
+						}).then(function(results){ return results[0]; }).then(function(doc){
 
-						collection.update( selector, modifier, function(err){ 
+							return doc; // important!
 
-							if (err) throw err; 
+						}).catch(function(err){
+							debugMode && console.error(err);
+						});
+					}
 
-							collection.findOne(selector).then(function(result){ 
+					get_doc(skip).then(function(doc){
+						debugMode && console.log(doc);
 
-							//	Fatal Error.
-								if ( !result ) 
-									throw "FatalError: document did not found!";
+						if ( collection.name === "object" ) return (function(){
 
-							//	update doc.
-								doc = result;
+							switch ( key ){
+							//	string.
+								case "name":
+									(function( value ){
+										if ( !value ) 
+											return value_input.value = doc[key];
+										return updateValue( doc._id, key, value );
+									})( value_input.value );
+								break;
+							//	number.
+								case "layer":
+									(function( value ){
+										if ( isNaN(value) ) 
+											return value_input.value = doc[key];
+										value = THREE.Math.clamp( value, 0, 31);
+										return updateValue( doc._id, key, value );
+									})( parseInt(value_input.value) );
+								break;
+							//	boolean.
+								case "visible":
+									(function( value ){
+										if ( value === 0 ) value = false;
+										else if ( value === 1 ) value = true;
+										else if ( value.toLowerCase() === "true" ) value = true;
+										else if ( value.toLowerCase() === "false" ) value = false;
+										else return value_input.value = doc[key];
+										return updateValue( doc._id, key, value );
+									})( value_input.value );
+								break;
+								default:
+									value_input.value = doc[key];
+								break;
+							}
 
-							//	return value.
-								return result[key]; 
+						})();
 
-							}).then(function(value){
+						if ( collection.name === "geometries" ) return (function(){
 
-							//	Success.
-								value_input.value = value; // update input.
-								console.log( "Success:", key, "value updated:", value );
+
+						})();
+
+						if ( collection.name === "materials" ) return (function(){
+
+
+
+						})();
+
+						if ( collection.name === "textures" ) return (function(){
+
+
+
+						})();
+
+						if ( collection.name === "images" ) return (function(){
+
+
+
+						})();
+
+						function updateValue( id, key, value ){
+
+							var selector = {_id:id};
+							var modifier = {$set: { [key]:value } };
+
+							collection.update( selector, modifier, function(err){ 
+
+								if (err) throw err; 
+
+								collection.findOne(selector).then(function(doc){ 
+
+								//	Fatal Error.
+									if ( !doc ) 
+										throw "FatalError: document did not found!";
+
+								//	return value.
+									return doc[key]; 
+
+								}).then(function(value){
+
+								//	Success.
+									value_input.value = value; // update input.
+									console.log( "Success:", key, "value updated:", value );
+
+								}).catch(function(err){
+									console.error(err);
+									value_input.value = doc[ key ];
+								});
 
 							}).catch(function(err){
 								console.error(err);
 								value_input.value = doc[ key ];
+								console.log("Failed:", key, "value did not updated!")
 							});
-							
-						}).catch(function(err){
-							console.error(err);
-							value_input.value = doc[ key ];
-							console.log("Failed:", key, "value did not updated!")
-						});
-					}
-
-					if ( collection.name === "object" ) return (function(){
-
-						switch ( key ){
-						//	string.
-							case "name":
-								(function( value ){
-									if ( !value ) 
-										return value_input.value = doc[key];
-									return updateValue( doc._id, key, value );
-								})( value_input.value );
-							break;
-						//	number.
-							case "layer":
-								(function( value ){
-									if ( isNaN(value) ) 
-										return value_input.value = doc[key];
-									value = THREE.Math.clamp( value, 0, 31);
-									return updateValue( doc._id, key, value );
-								})( parseInt(value_input.value) );
-							break;
-						//	boolean.
-							case "visible":
-								(function( value ){
-									if ( value === 0 ) value = false;
-									else if ( value === 1 ) value = true;
-									else if ( value.toLowerCase() === "true" ) value = true;
-									else if ( value.toLowerCase() === "false" ) value = false;
-									else return value_input.value = doc[key];
-									return updateValue( doc._id, key, value );
-								})( value_input.value );
-							break;
-							default:
-								value_input.value = doc[key];
-							break;
 						}
-
-					})();
-
-					if ( collection.name === "geometries" ) return (function(){
-
-
-					})();
-
-					if ( collection.name === "materials" ) return (function(){
-
-
-
-					})();
-
-					if ( collection.name === "textures" ) return (function(){
-
-
-
-					})();
-
-					if ( collection.name === "images" ) return (function(){
-
-
-
-					})();
+						
+					});
 
 				});
 
