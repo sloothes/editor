@@ -88,7 +88,7 @@
 		<script src="/editor/js/TabUI.js"></script>
 
 		<script>
-			const debugMode = true;
+			const debugMode = false;
 			const Signal = signals.Signal;
 			const RAD2DEG = 57.29577951308232;
 			const DEG2RAD = 0.017453292519943295;
@@ -170,401 +170,18 @@
 		<script src="/editor/src/texture-key-inputs.js"></script>
 		<script src="/editor/src/texture-mouse-inputs.js"></script>
 		<script src="/editor/src/texture-viewer.js"></script>
+		<script src="/editor/src/editor-center-helper.js"></script>
+		<script src="/editor/src/Water.js"></script>
+		<script src="/editor/src/Skydome.js"></script>
+		<script src="/editor/src/skydome-droplist.js"></script>
+		<script src="/editor/src/background-droplist.js"></script>
+		<script src="/editor/src/skydome-buttons.js"></script>
+		<script src="/editor/src/database-inputs.js"></script>
 
 		<script>
 
-		//	editor-center-helper.js
-
-			const editorCenter = (function(editor){
-
-				var helper = new THREE.Object3D(); // helper.
-				var material = new THREE.LineBasicMaterial( { color: 0xffffff } );
-
-			//	haircross.
-
-				(function(x){
-					var geometry = new THREE.Geometry();
-					geometry.vertices.push(
-						new THREE.Vector3( -x, 0, 0 ),
-						new THREE.Vector3(  x, 0, 0 )
-					);
-					var segments = new THREE.LineSegments( geometry, material );
-					segments.name = "axis x"; helper.add( segments );
-				})( 1 );
-
-				(function(y){
-					var geometry = new THREE.Geometry();
-					geometry.vertices.push(
-						new THREE.Vector3( 0,-y, 0 ),
-						new THREE.Vector3( 0, y, 0 )
-					);
-					var segments = new THREE.LineSegments( geometry, material );
-					segments.name = "axis y"; helper.add( segments );
-				})( 1 );
-
-				(function(z){
-					var geometry = new THREE.Geometry();
-					geometry.vertices.push(
-						new THREE.Vector3( 0, 0,-z ),
-						new THREE.Vector3( 0, 0, z )
-					);
-					var segments = new THREE.LineSegments( geometry, material );
-					segments.name = "axis z"; helper.add( segments );
-				})( 1 );
-
-			//	cycles.
-
-				(function(r){
-					var cycleGeometry = new THREE.CircleGeometry(r,32);
-					var geometry = new THREE.EdgesGeometry( cycleGeometry );
-					var segments = new THREE.LineSegments( geometry, material );
-					segments.name = "plane xy"; helper.add( segments );
-				})( 0.4 );
-
-				(function(r){
-					var cycleGeometry = new THREE.CircleGeometry(r,32).rotateX(-Math.PI/2);
-					var geometry = new THREE.EdgesGeometry( cycleGeometry );
-					var segments = new THREE.LineSegments( geometry, material );
-					segments.name = "plane xz"; helper.add( segments );
-				})( 0.4 );
-
-				(function(r){
-					var cycleGeometry = new THREE.CircleGeometry(r,32).rotateY(-Math.PI/2);
-					var geometry = new THREE.EdgesGeometry( cycleGeometry );
-					var segments = new THREE.LineSegments( geometry, material );
-					segments.name = "plane yz"; helper.add( segments );
-				})( 0.4 );
-
-				scene.add( helper );
-
-				watch( editor.position, ["x","y","z"], function( key, action, value ){
-					helper.position[key] = editor.position[key];
-				});
-
-				return helper;
-
-			})( objectEditor );
-
-		</script>
-
-		<script>
-
-		//	Background.js
-
-		//	                 posx,   negx,   posy,   negy,   posz,   negz
-		//	const sky02  = "AiYr5Bj,BawPVy4,OnEYrxP,t5eKqEL,L7SNCXP,7dcYXKc";
-		//	const sky03  = "fbLkP5b,2ezGkl6,IyXzc4L,ja5htHQ,QZDxVvI,BZ68JvT";
-		//	const space4 = "v6bjQLb,lwrlr6P,kKUKBJg,N0oZlJR,x9q8z0K,HYcK7Ii";
-		//	const space5 = "QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm";
-
-		//	background-droplist.js
-
-			(function(background_droplist){
-
-				const skyboxes = [
-				//	{"key":"Sky 02","value":"AiYr5Bj,BawPVy4,OnEYrxP,t5eKqEL,L7SNCXP,7dcYXKc"},
-				//	{"key":"Sky 03","value":"fbLkP5b,2ezGkl6,IyXzc4L,ja5htHQ,QZDxVvI,BZ68JvT"},
-				//	{"key":"Space 4","value":"v6bjQLb,lwrlr6P,kKUKBJg,N0oZlJR,x9q8z0K,HYcK7Ii"},
-				//	{"key":"Space 5","value":"QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm"},
-					{"key":"space","value":"XtPBLgT,32NO3Lc,1SMHHAp,gbEbMNT,lvgr5hN,F3rDcga"},
-					{"key":"space 2","value":"Xc66lOU,AVEUFWj,8wnSjQE,pQ7v0wX,iLDmlLu,wuaAI4Y"},
-					{"key":"space 3","value":"1ngOaxz,HTXmngS,U8clyMh,NUzQ5yn,KJ7c2ee,Z7hIEdv"},
-					{"key":"space 4","value":"3E05J80,4r01E6C,2bON7hI,5f4R105,hfmahM3,py4wSN9"},
-					{"key":"space 5","value":"QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm"},
-					{"key":"mebula","value":"OWp9t1x,cvxZwad,WbWfGjU,H83gehZ,pk3zUkz,SimZzUK"},
-					{"key":"autumn","value":"MpytPQn,bDeAi8p,5tK8afR,TWF1Jnv,sWpEZpx,AIbLzhH"},
-					{"key":"Dark Sunset","value":"ty5neut,b8zTECB,Px8IhnE,9gashbV,lNErUmY,Gwaif8K"},
-					{"key":"forest","value":"wVNQ3UP,CpnLWRG,zpQtUgE,moU3V1A,gxRSIIK,6hPT2T6"},
-					{"key":"island","value":"dC6LmWy,EUQHho3,3Y3NELo,6tB1mFC,RG9xkGf,0DWY6ln"},
-					{"key":"pines-road","value":"J5JO8vF,HBFA8gP,dwvuy0g,XOpnnOv,r6DTvai,GIfSE6a"},
-					{"key":"sky01","value":"GKYsaK6,3IrwfbY,Eh5Cx5x,ZbWUJHX,Q2zhZUa,enQgsUD"},
-					{"key":"sky02","value":"AiYr5Bj,BawPVy4,OnEYrxP,t5eKqEL,L7SNCXP,7dcYXKc"},
-					{"key":"sky03","value":"fbLkP5b,2ezGkl6,IyXzc4L,ja5htHQ,QZDxVvI,BZ68JvT"},
-					{"key":"sky14","value":"oIeGekr,4p17vuI,1ADPm2x,9hsvroD,aYKe72m,8FUzbvo"},
-					{"key":"sky26","value":"FMADmcP,21Ia1L4,a9I6dw9,d8zXEEb,0W2gkSn,QGPHjW3"},
-					{"key":"sky30","value":"S1ck5UU,sB7fR7D,OAp7iJW,d9YgYy4,bjh7cgC,ImftiPX"},
-					{"key":"sky31","value":"bZbi4vd,QkB0mC9,cDsY3n2,mxfpk2g,PKFhbNQ,1cIamo4"},
-					{"key":"sky32","value":"cD2fVJ3,z6znJF8,KsTVPR6,LbITtbU,FnIWnix,qA8Yn6M"},
-					{"key":"sky33","value":"m9oqzUL,vGZk6PQ,hobXq8I,dwvkY61,D73klTH,zyT64gv"},
-					{"key":"sky88","value":"E1xjrkm,b48TEwK,IuWHRau,a0TqSus,N5rXVkP,wRHUyzS"},
-					{"key":"sky89","value":"zKf8l2y,Q2Txc9V,edxYeCT,Wce0wqT,fhcix7U,PjJBFNc"},
-					{"key":"sky90","value":"8VrI7tY,tuLEzTu,fELVfRS,NQPAVgB,7pcNO10,Hxo0Zxo"},
-					{"key":"skybox","value":"Ih8hz3h,lOlAHhx,lwiUbBi,Mmp7eqN,ws3Y2Qo,lm2XlSi"},
-					{"key":"starry","value":"InYFZCq,PiN1Z9Y,IlbcPnw,wai32zC,vrzgU5k,FwrPE1I"},
-					{"key":"sunset","value":"V8zIj55,3Df4xsN,FGEnBpd,RNtY1y2,WRgHw0T,wE49kB2"},
-					{"key":"moon","value":"zJB8OPe,pP9eDVf,Y8Krh0j,sfiEXOs,SaeOiKt,YzF35vW"},
-					{"key":"sunny","value":"f3PhGwV,dtnVw3b,SWFFe2x,0L72gkl,ZChWgVX,1GG72rw"}
-				];
-
-			//	Create options.
-				var str =  "", dot = ".", col = ":";
-				for (var i=0; i < skyboxes.length; i++ ) {
-					var option = document.createElement("option");
-					var index = String( i+1 );
-					var name = skyboxes[i].key;
-					option.text = str+index+dot+name; 
-					option.value = skyboxes[i].value;
-					background_droplist.appendChild( option );
-				}
-
-				watch( background_droplist, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:background_droplist,event:event,value:value}); // debug.
-				});
-
-				background_droplist.addEventListener( "change", function(){
-					this.blur(); callWatchers( this, "onchange", "change", this.value );
-				});
-
-			})( TabUI.Skydome.tab.querySelector("select#background-texture-droplist") );
-
-			(function( scene,background_droplist) {
-
-				watch( background_droplist, "onchange", function( prop, event, value ){
-
-					if (!scene || Number(THREE.REVISION) < 78) return;
-
-					value = value.split(",");
-					if ( !value ) return; if ( value.length != 6 ) return;
-
-					var urls = value.map(function(item){ 
-						return "https://i.imgur.com/"+item+".jpg"; 
-					});
-
-					var loader = new THREE.CubeTextureLoader();
-					loader.setCrossOrigin( "anonymous" );
-					loader.load( urls, function(texture){
-						scene.background = texture;
-						scene.background.needsUpdate = true;
-					//	textures_entities && textures_entities.add(texture);
-					});
-
-				});
-
-				background_droplist.value = "OWp9t1x,cvxZwad,WbWfGjU,H83gehZ,pk3zUkz,SimZzUK"; // "mebula".
-				callWatchers( background_droplist, "onchange", "change", background_droplist.value );
-
-			})( scene, TabUI.Skydome.tab.querySelector("select#background-texture-droplist") );
-
-		</script>
-
-		<script>
-
-/*
-			(function(scene,textures_entities){
-
-				if (!scene || Number(THREE.REVISION) < 78) return;
-
-				var urls = [
-					"https://i.imgur.com/v6bjQLb.jpg", // "posx.jpg",
-					"https://i.imgur.com/lwrlr6P.jpg", // "negx.jpg", 
-					"https://i.imgur.com/kKUKBJg.jpg", // "posy.jpg", 
-					"https://i.imgur.com/N0oZlJR.jpg", // "negy.jpg", 
-					"https://i.imgur.com/x9q8z0K.jpg", // "posz.jpg", 
-					"https://i.imgur.com/HYcK7Ii.jpg", // "negz.jpg"
-				];
-
-				var loader = new THREE.CubeTextureLoader();
-				loader.setCrossOrigin( "anonymous" );
-				loader.load( urls, function(texture){
-					scene.background = texture;
-					scene.background.needsUpdate = true;
-					textures_entities && textures_entities.add(texture);
-				});
-
-			})( scene, textures_entities );
-*/
-
-		</script>
-
-		<script>
-
-		//  Water.js
-
-			const water = (function(renderer,camera,scene,light,textures_entities){
-
-				var waterNormals = loadTexture("https://i.imgur.com/gd4Gr7Q.png");
-				waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping;
-				textures_entities && textures_entities.add(waterNormals);
-
-			//  the water effect.
-				return new THREE.Water(renderer, camera, scene, {
-					textureWidth:256,  textureHeight:256,
-					waterNormals:waterNormals, alpha:0.9,
-					sunDirection:light.position.normalize(),
-					sunColor:0xffffff,  waterColor:0x001e0f,
-					betaVersion:0, side:2,
-				});
-
-				function loadTexture( url, mapping) {
-					var loader = new THREE.TextureLoader();
-					loader.setCrossOrigin( "anonymous" );
-					var texture = loader.load( url );
-					if ( mapping ) texture.mapping = mapping;
-					return texture;
-				}
-
-			})( renderer, camera, scene, cameraLight, textures_entities );
-
-			const mirror = (function( scene,water,material_entities,entities ){
-
-			//	material_entities && material_entities.add(water.material);
-				var material = water.material; // entities && entities.add(water); 
-				var geometry = new THREE.PlaneBufferGeometry(10000, 10000, 100, 100);
-				var mirror = new THREE.Mesh( geometry, material );
-				mirror.add(water); mirror.name = "mirror";
-				mirror.rotation.x = -Math.PI/2; 
-				mirror.position.y = -0.01;
-				scene.add(mirror);
-
-				var clock = new THREE.Clock();
-				(function render(){
-					var dt = clock.getDelta();
-					requestFrameID = requestAnimationFrame( render );
-					water.material.uniforms.time.value += Math.max(dt, 1/60);
-					water.render();
-				})();
-
-				return mirror;
-
-			})( scene, water, material_entities, entities );
-
-		</script>
-
-		<script>
-
-		//  Skydome.js
-
-			const skydome = (function(scene,entities,material_entities,textures_entities){
-
-				var loader = new THREE.TextureLoader();
-				loader.setCrossOrigin( "anonymous" );
-				var geometry = new THREE.SphereGeometry( 2000, 64, 32 );
-				var texture = loader.load( "https://i.imgur.com/IMVEV3T.jpg" ); // xQsNP0X.png
-				texture.wrapS = texture.wrapT = 1000; texture.name="skydome";
-				var material = new THREE.MeshBasicMaterial({
-					map:texture,transparent:false,opacity:1,side:1,
-				}); var dome = new THREE.Mesh( geometry, material );
-				dome.scale.set(0.10,0.08,0.10); dome.name = "skydome";
-				scene.add(dome); entities && entities.add(dome);
-				textures_entities && textures_entities.add(texture);
-				material_entities && material_entities.add(material);
-				return dome;
-
-			})(scene, entities, material_entities, textures_entities);
-
-		//  skydome-droplist.js
-
-			(function( skydome_droplist ){
-
-				const skydomes = [
-					{name:"editor", value:"IMVEV3T"},
-					{name:"tropical island", value:"xQsNP0X"},
-				];
-
-			//	Create options.
-				var str =  "", dot = ".", col = ":";
-				for (var i=0; i < skydomes.length; i++ ) {
-					var option = document.createElement("option");
-					var index = String( i+1 );
-					var name = skydomes[i].name;
-					option.text = str+index+dot+name; 
-					option.value = skydomes[i].value;
-					skydome_droplist.appendChild( option );
-				}
-
-				watch( skydome_droplist, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:skydome_droplist,event:event,value:value}); // debug.
-				});
-
-				skydome_droplist.addEventListener( "change", function(){
-					this.blur(); callWatchers( this, "onchange", "change", this.value );
-				});
-
-			})( TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
-
-			(function( skydome,skydome_droplist,textures_entities) {
-
-				watch( skydome_droplist, "onchange", function( prop, event, value ){
-
-					if ( !value ) return;
-					var url = "https://i.imgur.com/"+value+".jpg" // xQsNP0X.png
-
-					var loader = new THREE.TextureLoader();
-					loader.setCrossOrigin( "anonymous" );
-					loader.load( url, function(texture){
-						texture.wrapS = texture.wrapT = 1000; 
-					//	texture.name="skydome";
-						texture.sourceFile = url;
-						skydome.material.map = texture;
-						skydome.material.needsUpdate = true;
-						skydome.material.map.needsUpdate = true;
-						textures_entities && textures_entities.add(texture);
-					});
-
-				});
-
-				callWatchers( skydome_droplist, "onchange", "change", skydome_droplist.value = "xQsNP0X" ); // "IMVEV3T"
-
-			})( skydome, TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist"), textures_entities );
-
-		//	toggle-buttons.js
-
-			(function( skydome_droplist  ){
-
-				function onMouseClickWatchersCall( button, droplist ){
-
-					var interval;
-
-					watch( button, "onclick", function( prop, event, value ){ 
-						debugMode && console.log({item:button,property:prop,event:event,value:value}); // debug.
-					});
-
-				//	Call watchers.
-
-					button.addEventListener( "click", function(){ 
-						clearTimeout( interval );
-						interval = setTimeout(function(button){
-							callWatchers( button, "onclick", "click", droplist.value );
-						}, 250, this); 
-					});
-				}
-
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#water-toggle-button"), {value:""} ); // water_toggle_button,
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#ground-toggle-button"), {value:""} ); // ground_toggle_button,
-				onMouseClickWatchersCall( TabUI.Skydome.tab.querySelector("div#skydome-toggle-button"), {value:""} ); // skydome_toggle_button,
-
-			})( TabUI.Skydome.tab.querySelector("select#skydome-texture-droplist") );
-
-			(function( mirror,button ){
-
-				watch( button, "onclick", function( prop, event, value ){ 
-					if ( mirror ) mirror.visible = !mirror.visible;
-				});
-
-			})( mirror, TabUI.Skydome.tab.querySelector("div#water-toggle-button") );
-
-			(function( helper,button ){
-
-				watch( button, "onclick", function( prop, event, value ){ 
-					if ( helper ) helper.visible = !helper.visible;
-				});
-
-			})( groundHelper, TabUI.Skydome.tab.querySelector("div#ground-toggle-button") );
-
-			(function( skydome,button ){
-
-				watch( button, "onclick", function( prop, event, value ){ 
-					if ( skydome ) skydome.visible = !skydome.visible;
-				});
-
-			})( skydome, TabUI.Skydome.tab.querySelector("div#skydome-toggle-button") );
-
-		</script>
-
-		<script>
-
-			TabUI.Editor.role.classList.add("active");
-			TabUI.Editor.tab.classList.add("in","active");
+			TabUI.Database.role.classList.add("active");
+			TabUI.Database.tab.classList.add("in","active");
 
 		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
@@ -627,6 +244,12 @@
 			//	cameraControls.rigidObjects.push( mesh );
 			//	return mesh;
 			})( scene, octree, cameraControls, material_entities, entities );
+
+		</script>
+
+		<!-- script src="/editor/src/ViewportTab.js"></script -->
+
+		<script>
 /*
 		//	Water path.
 
@@ -649,9 +272,9 @@
 			//	return mesh;
 			})( scene, octree, cameraControls, material_entities, entities );
 */
+
 		</script>
 
-		<!-- script src="/editor/src/ViewportTab.js"></script -->
 
 	</body>
 </html>
