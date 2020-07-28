@@ -182,7 +182,7 @@
 
 		//	database-buttons.js
 
-			(function( db,load_button,skip_input,collection_droplist ){
+			(function( db,load_button,skip_input,collection_droplist,textures_entities,material_entities,entities ){
 
 				var interval;
 				var skip = skip_input.value;
@@ -194,6 +194,8 @@
 
 				watch( skip_input, "onchange", function( prop, event, value ){ skip = Number(value); });
 
+			//	load from database.
+
 				watch( load_button, "onclick", function( prop, event, value ){ 
 					debugMode && console.log({item:load_button,property:prop,event:event,value:value});
 
@@ -202,10 +204,10 @@
 
 					if ( skip !== undefined && collection.name === "objects" ) {
 
-					//	Create json.
-
 						return collection.find().skip(skip).limit(1).toArray()
 						.then(function(docs){ return docs[0]; }).then(function(doc){
+
+						//	Create json.
 
 							var json = {};
 						//	json.shapes = [];
@@ -219,6 +221,8 @@
 							}
 
 							json.object = doc; // important!
+
+						//	Collect geometry, material.
 
 							return Promise.all([
 
@@ -243,7 +247,8 @@
 							]).then(function([geometries, materials]){
 								debugMode && console.log(geometries, materials);
 
-							//	todo: json.textures, json.images!
+							//	Collect textures, images.
+
 								var texture_uuids = [];
 								materials.forEach(function(material){
 									if (material.map) texture_uuids.push(material.map);
@@ -308,6 +313,8 @@
 							}).then(function(json){
 								debugMode && console.log("json:", json);
 
+							//	Parse json.
+
 								var loader = new THREE.ObjectLoader();
 								return loader.parse( json );
 
@@ -338,10 +345,28 @@
 							}).then(function(mesh){
 								debugMode && console.log("mesh:", mesh);
 
+							//	Add to scene.
 								scene.add(mesh);
+
+							//	Add to entities managers.
 								entities.add(mesh);
 								material_entities.add(mesh.material);
-							//	todo: textures_entities.add( material textures );
+
+								var material = mesh.material;
+								if (material.map) textures_entities.add( mesh.material.map );
+								if (material.aoMap) textures_entities.add( mesh.material.aoMap );
+								if (material.envMap) textures_entities.add( mesh.material.envMap );
+								if (material.lightMap) textures_entities.add( mesh.material.lightMap );
+								if (material.bumpMap) textures_entities.add( mesh.material.bumpMap );
+								if (material.alphaMap) textures_entities.add( mesh.material.alphaMap );
+								if (material.normalMap) textures_entities.add( mesh.material.normalMap );
+								if (material.specularMap) textures_entities.add( mesh.material.specularMap );
+								if (material.gradiendMap) textures_entities.add( mesh.material.gradiendMap );
+								if (material.emissiveMap) textures_entities.add( mesh.material.emissiveMap );
+								if (material.metalnessMap) textures_entities.add( mesh.material.metalnessMap );
+								if (material.roughnessMap) textures_entities.add( mesh.material.roughnessMap );
+								if (material.displacementMap) textures_entities.add( mesh.material.displacementMap );
+
 
 							}).catch(function(err){
 								console.error(err);
@@ -371,7 +396,8 @@
 				metadB, // db, 
 				TabUI.Database.tab.querySelector("div#doc-load-button"),         // load_button,
 				TabUI.Database.tab.querySelector("input#doc-skip-input"),        // skip_input,
-				TabUI.Database.tab.querySelector("select#collection-droplist")   // collection_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist"),  // collection_droplist,
+				textures_entities, material_entities, entities
 			);
 
 		</script>
