@@ -180,7 +180,7 @@
 		<script src="/editor/src/database-inputs.js"></script>
 
 		<script>
-
+/*
 		//	database-skip-inputs.js
 
 			(function( db,next_doc,prev_doc,skip_input,key_droplist,collection_droplist ){
@@ -193,7 +193,8 @@
 
 				function count(collection){
 				//	returns promise: count(col).then(function(result){...})
-					var k = 0; return collection.find()
+					var k = 0; 
+					return collection.find()
 						.forEach( function(doc){ ++k; })
 						.catch(function(err){console.error(err);})
 						.then(function(){ return k; });
@@ -223,7 +224,7 @@
 
 					max = 0; skip = 0; // reset.
 
-				//	skip = parseInt(value); if ( isNaN(skip) ) skip_input = skip = 0;
+				//	skip = parseInt(value); if ( isNaN(skip) ) skip_input.value = skip = 0;
 
 					count(collection).then(function(k){ max = k; }).then(function(){ 
 
@@ -271,7 +272,6 @@
 
 				});
 
-/*
 			//	on mouse down.
 
 				next_doc.addEventListener( "mousedown", function(){
@@ -305,7 +305,6 @@
 					skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
 					interval = setTimeout( get_doc, 250, skip );
 				});
-*/
 
 			})( 
 				metadB, // db,
@@ -315,6 +314,7 @@
 				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
 			);
+*/
 
 		</script>
 
@@ -327,16 +327,25 @@
 		//	update-meta-value-button.js
 
 			(function( 
-				db,skip_input,value_input,update_value,
-				key_droplist,collection_droplist,
+				db,next_doc,prev_doc,skip_input,value_input,
+				update_value,key_droplist,collection_droplist,
 				textures_entities,material_entities,entities 
 			){
 
-				var interval;
+				var interval, max;
 				var key = key_droplist.value;
 				var skip = parseInt(skip_input.value); 
 				if ( isNaN(skip) ) skip_input.value = skip = 0;
 				var collection = db.collection(collection_droplist.value);
+
+				function count(collection){
+				//	returns promise: count(col).then(function(result){...})
+					var k = 0; 
+					return collection.find()
+						.forEach( function(doc){ ++k; })
+						.catch(function(err){console.error(err);})
+						.then(function(){ return k; });
+				}
 
 				watch( collection_droplist, "onchange", function( prop, event, value ){ 
 					collection = db.collection( value ); 
@@ -344,12 +353,68 @@
 
 				watch( key_droplist, "onchange", function( prop, event, value ){ key = value; });
 
-				watch( skip_input, "onchange", function( prop, event, value ){ 
-					skip = parseInt(value); if ( isNaN(skip) ) skip_input.value = skip = 0;
-				});
-
 				watch( value_input, "onchange", function( prop, event, value ){ 
 					debugMode && console.log({item:value_input,property:prop,event:event,value:value});
+				});
+
+			//	database-skip-inputs.js
+
+				watch(next_doc, "onclick", function(prop, event, value){ skip = value; });
+				watch(prev_doc, "onclick", function(prop, event, value){ skip = value; });
+
+				watch( skip_input, "onchange", function( prop, event, value ){ 
+				//	skip = parseInt(value); if ( isNaN(skip) ) skip_input.value = skip = 0;
+
+					max = 0; skip = 0; // reset.
+
+					count(collection).then(function(k){ max = k; }).then(function(){ 
+
+						value = THREE.Math.clamp(value, 0, max - 1);
+						if ( isNaN(value) ) value = 0; return( value );
+
+					}).then(function(value){ 
+
+						skip_input.value = skip = value; 
+
+					//	get doc.
+						return collection.find().skip(skip)
+						.limit(1).toArray( function(err,docs){ 
+							if (err) throw err;
+						}).then(function(docs){ 
+							return docs[0]; 
+						});
+
+					}).then(function(doc){
+
+						if ( !doc ) throw "none document found!"
+
+					//	remove old key options.
+						while (key_droplist.options.length) {
+							key_droplist.options.remove(0);
+							if (!key_droplist.options.length) return doc;
+						}
+
+					}).then(function(doc){
+
+						debugMode && console.log(doc);
+
+					//	create new key options.
+						Object.keys(doc).forEach(function( key ){
+							var option = document.createElement("option");
+							option.text = option.value = key;
+							key_droplist.appendChild( option );
+						});
+
+						callWatchers(key_droplist, "onchange", "change", key_droplist.value); 
+
+					}).catch(function(err){
+						console.error(err);
+					});
+
+				});
+
+				skip_input.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", skip );
 				});
 
 			//	database-update-value-button.js
@@ -485,11 +550,13 @@
 
 			})( 
 				metadB, // db, 
-				TabUI.Database.tab.querySelector("input#doc-skip-input"),        // skip_input,
-				TabUI.Database.tab.querySelector("input#doc-value-input"),       // value_input,
-				TabUI.Database.tab.querySelector("div#update-value-button"),     // update_value,
-				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),    // key_droplist,
-				TabUI.Database.tab.querySelector("select#collection-droplist"),  // collection_droplist,
+				TabUI.Database.tab.querySelector("li#doc-skip-increase"),       // next_doc,
+				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),       // prev_doc,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),       // skip_input,
+				TabUI.Database.tab.querySelector("input#doc-value-input"),      // value_input,
+				TabUI.Database.tab.querySelector("div#update-value-button"),    // update_value,
+				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),   // key_droplist,
+				TabUI.Database.tab.querySelector("select#collection-droplist"), // collection_droplist,
 				textures_entities, material_entities, entities
 			);
 

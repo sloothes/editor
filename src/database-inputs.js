@@ -34,21 +34,21 @@
 
 	(function(skip_input,value_input){
 
-		watch( skip_input, "onchange", function( prop, event, value ){ 
-			debugMode && console.log({item:skip_input,event:event,value:value});
-		});
-
 		watch( value_input, "onchange", function( prop, event, value ){ 
 		//	debugMode && console.log({item:value_input,event:event,value:value});
-		});
-
-		skip_input.addEventListener( "change", function(){
-			this.blur(); callWatchers( this, "onchange", "change", this.value );
 		});
 
 		value_input.addEventListener( "change", function(){
 			this.blur(); callWatchers( this, "onchange", "change", this.value );
 		});
+
+	//	watch( skip_input, "onchange", function( prop, event, value ){ 
+	//		debugMode && console.log({item:skip_input,event:event,skip:value});
+	//	});
+
+	//	skip_input.addEventListener( "change", function(){
+	//		this.blur(); callWatchers( this, "onchange", "change", this.value );
+	//	});
 
 	})( 
 		TabUI.Database.tab.querySelector("input#doc-skip-input"),     // skip_input,
@@ -120,6 +120,14 @@
 
 			window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
+			watch( next_doc, "onclick", function( prop, event, value ){
+				debugMode && console.log({item:next_doc,event:event,skip:value});
+			});
+
+			watch( prev_doc, "onclick", function( prop, event, value ){
+				debugMode && console.log({item:prev_doc,event:event,skip:value});
+			});
+
 		//	on mouse down.
 
 			next_doc.addEventListener( "mousedown", function(){
@@ -146,12 +154,14 @@
 				clearTimeout( interval ); // important!
 				skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
 				interval = setTimeout( get_doc, 250, skip );
+				callWatchers( this, "onclick", "click", skip ); // important!
 			});
 
 			prev_doc.addEventListener( "click", function(){
 				clearTimeout( interval ); // important!
 				skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
 				interval = setTimeout( get_doc, 250, skip );
+				callWatchers( this, "onclick", "click", skip ); // important!
 			});
 
 		})();
