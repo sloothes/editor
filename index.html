@@ -192,7 +192,7 @@
 
 				var button = document.createElement("div");
 				button.id = "doc-load-button";
-				button.textContent = "Load Object";
+				button.textContent = "Load document";
 				button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 				button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
@@ -203,25 +203,107 @@
 
 		//	database-buttons.js
 
-			(function( db,button ){
+			(function( db,load_button,skip_input,collection_droplist ){
 
 				var interval;
+				var skip = skip_input.value;
+				var collection = db.collection(collection_droplist.value);
 
-				watch( button, "onclick", function( prop, event, value ){ 
-					debugMode && console.log({item:button,property:prop,event:event,value:value});
+				watch( collection_droplist, "onchange", function(prop, event, value){
+					collection = db.collection(collection_droplist.value);
+				});
+
+				watch( skip_input, "onchange", function( prop, event, value ){ skip = Number(value); });
+
+				watch( load_button, "onclick", function( prop, event, value ){ 
+					debugMode && console.log({item:load_button,property:prop,event:event,value:value});
+
+					var skip = parseInt(skip_input.value); if ( isNaN(skip) ) return;
+					var collection = db.collection(collection_droplist.value); if ( !collection ) return; 
+
+					if ( skip !== undefined && collection.name === "objects" ) {
+
+						return collection.find().skip(skip).limit(1)
+						.then(function(docs){ return docs[0]; })
+						.then(function(doc){
+
+							var json = {};
+							json.images = [];
+							json.textures = [];
+							json.materials = [];
+							json.geometries = [];
+							json.metadata = {
+								version: 4.5, type: "Object",
+								generator: "Object3D.toJSON"
+							}
+
+							json.object = doc; // important!
+
+							return promise.all([
+
+								db.collection("geometries")
+								.findOne({uuid:doc.geometry})
+								.then(function(doc){
+									json.geometries.push(doc); 
+									return json.geometries; 
+								}),
+
+								db.collection("materials")
+								.findOne({uuid:doc.material})
+								.then(function(doc){
+									json.materials.push(doc); 
+									return json.materials; 
+								}),
+
+							]}.then(function([geometries, materials]){
+								debugMode && console.log(geometries, materials);
+
+							//	todo: json.textures, json.images!
+
+								return json;
+
+							}).then(function(json){
+
+								var loader = new THREE.ObjectLoader();
+								return loader.parse( json );
+
+							}).then(function(mesh){
+
+								scene.add(mesh);
+								entities.add(mesh);
+								material_entities.add(mesh.material);
+							//	todo: textures_entities.add( material textures );
+
+							}).catch(function(err){
+								console.error(err);
+							});
+
+						}).catch(function(err){
+							console.error(err);
+						});
+					}
+
 				});
 
 			//	Call watchers.
 
-				button.addEventListener( "click", function(){ 
+				skip_input.addEventListener( "change", function(){
+					callWatchers( this, "onchange", "change", this.value );
+				})
+
+				load_button.addEventListener( "click", function(){ 
 					clearTimeout( interval );
 					interval = setTimeout(function(button){
 						callWatchers( button, "onclick", "click" );
 					}, 250, this); 
 				});
 
-
-			})( metadB, TabUI.Database.tab.querySelector("div#doc-load-button") ); // load_button,
+			})( 
+				metadB, // db, 
+				TabUI.Database.tab.querySelector("div#doc-load-button"),         // load_button,
+				TabUI.Database.tab.querySelector("input#doc-skip-input"),        // skip_input,
+				TabUI.Database.tab.querySelector("select#collection-droplist")   // collection_droplist,
+			);
 
 		</script>
 
