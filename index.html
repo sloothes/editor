@@ -342,10 +342,10 @@
 
 					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
 						if (err) throw err; if ( !docs.length ) throw "None doc found!";
-					}).then(function(results){ return results[0]; }).then(function(doc){
+					}).then(function(results){ return results[0]; }).then(function(result){
 
-						debugMode && console.log(doc);
-						return doc; // important!
+						debugMode && console.log(result);
+						return doc = result; // important!
 
 					}).catch(function(err){
 						debugMode && console.error(err);
