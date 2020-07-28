@@ -206,6 +206,7 @@
 						.then(function(docs){ return docs[0]; }).then(function(doc){
 
 							var json = {};
+						//	json.shapes = [];
 							json.images = [];
 							json.textures = [];
 							json.materials = [];
@@ -293,16 +294,16 @@
 
 								debugMode && console.log("promises:", promises);
 
-								if (!promises.length ) return json;
+								if (!promises.length ) return;
 
 								Promise.all(promises)
 								.then(function(){
-									return json;
+									return;
 								}).catch(function(err){
 									console.error(err);
 								});
 
-							}).then(function(json){
+							}).then(function(){
 								debugMode && console.log("json:", json);
 
 								var loader = new THREE.ObjectLoader();
