@@ -484,10 +484,6 @@
 
 			//	Call watchers.
 
-				value_input.addEventListener( "change", function(){
-					callWatchers( this, "onchange", "change", this.value );
-				})
-
 				update_value.addEventListener( "click", function(){ 
 					clearTimeout( interval );
 					interval = setTimeout(function(button){
