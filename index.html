@@ -247,6 +247,30 @@
 
 							}).then(function(mesh){
 
+							//	Replace uuids.
+
+								mesh.geometry.uuid = THREE.Math.generateUUID();
+								mesh.material.uuid = THREE.Math.generateUUID();
+
+							//	todo: var material = mesh.material;
+							//	if (material.map) mesh.material.map.uuid = THREE.Math.generateUUID();
+							//	if (material.aoMap) mesh.material.aoMap.uuid = THREE.Math.generateUUID();
+							//	if (material.envMap) mesh.material.envMap.uuid = THREE.Math.generateUUID();
+							//	if (material.lightMap) mesh.material.lightMap.uuid = THREE.Math.generateUUID();
+							//	if (material.bumpMap) mesh.material.bumpMap.uuid = THREE.Math.generateUUID();
+							//	if (material.alphaMap) mesh.material.alphaMap.uuid = THREE.Math.generateUUID();
+							//	if (material.normalMap) mesh.material.normalMap.uuid = THREE.Math.generateUUID();
+							//	if (material.specularMap) mesh.material.specularMap.uuid = THREE.Math.generateUUID();
+							//	if (material.gradiendMap) mesh.material.gradiendMap.uuid = THREE.Math.generateUUID();
+							//	if (material.emissiveMap) mesh.material.emissiveMap.uuid = THREE.Math.generateUUID();
+							//	if (material.metalnessMap) mesh.material.metalnessMap.uuid = THREE.Math.generateUUID();
+							//	if (material.roughnessMap) mesh.material.roughnessMap.uuid = THREE.Math.generateUUID();
+							//	if (material.displacementMap) mesh.material.displacementMap.uuid = THREE.Math.generateUUID();
+
+								return mesh;
+
+							}).then(function(mesh){
+
 								scene.add(mesh);
 								entities.add(mesh);
 								material_entities.add(mesh.material);
