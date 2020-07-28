@@ -238,7 +238,7 @@
 
 							json.object = doc; // important!
 
-							return promise.all([
+							return Promise.all([
 
 								db.collection("geometries")
 								.findOne({uuid:doc.geometry})
