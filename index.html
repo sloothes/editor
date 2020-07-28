@@ -342,22 +342,13 @@
 
 					collection.find().skip(skip).limit(1).toArray( function(err,docs){ 
 						if (err) throw err; if ( !docs.length ) throw "None doc found!";
-					}).then(function(results){ return results[0]; }).then(function(result){
-
-						if ( !result ) 
-							throw "None doc found!";
-						else
-							doc = result; // important!
+					}).then(function(results){ return results[0]; }).then(function(doc){
 
 						debugMode && console.log(doc);
+						return doc; // important!
 
 					}).catch(function(err){
-
-						doc = undefined; // important!
 						debugMode && console.error(err);
-
-					}).then(function(){
-						return doc; // always return doc.
 					});
 				}
 
