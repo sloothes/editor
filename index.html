@@ -416,16 +416,16 @@
 						//	string.
 							case "name":
 								(function( value ){
-									if ( !value ) return value_input.value = doc[key];
-									return updateValue( doc._id, key, value_input.value );
+									if ( !value ) 
+										return value_input.value = doc[key];
+									return updateValue( doc._id, key, value );
 								})( value_input.value );
 							break;
 						//	number.
 							case "layer":
 								(function( value ){
-									if ( isNaN(value) ) {
+									if ( isNaN(value) ) 
 										return value_input.value = doc[key];
-									}
 									value = THREE.Math.clamp( value, 0, 31);
 									return updateValue( doc._id, key, value );
 								})( parseInt(value_input.value) );
