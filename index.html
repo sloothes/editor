@@ -414,7 +414,7 @@
 				});
 
 				skip_input.addEventListener( "change", function(){
-					this.blur(); callWatchers( this, "onchange", "change", skip );
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
 				});
 
 			//	database-update-value-button.js
