@@ -214,9 +214,29 @@
 					});
 				}
 
+			//	Update collection.
+				watch( collection_droplist, "onchange", function( prop, event, value ){
+					collection = db.collection(value); // debugMode && console.log( "collection:", collection ); 
+				});
+
+			//	Get skip.
 				watch( skip_input, "onchange", function(prop, event, value){
 
-					get_doc(value).then(function(doc){
+					max = 0; skip = 0; // reset.
+
+				//	skip = parseInt(value); if ( isNaN(skip) ) skip_input = skip = 0;
+
+					count(collection).then(function(k){ max = k; }).then(function(){ 
+
+						skip = THREE.Math.clamp(value, 0, max - 1);
+						if ( isNaN(skip) ) skip = 0; skip_input.value = skip;
+
+					}).then(function(){ 
+
+						return get_doc(skip); 
+
+					}).then(function(doc){
+
 						if ( !doc ) throw "document not found!"
 
 					//	remove old key options.
