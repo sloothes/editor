@@ -21,6 +21,7 @@
 		<script src="/js/inflate.min.js"></script>
 		<script src="/js/zangodb.min.js"></script>
 		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/validator.min.js"></script>
 		<script src="/js/hold-event.min.js"></script>
 		<script src="/js/jcrop.js"></script>
 
@@ -180,12 +181,15 @@
 
 		<script>
 
-		//	database-skip-input.js
+		//	database-skip-inputs.js
 
-			(function( db,skip_input,key_droplist,collection_droplist ){
+			(function( db,next_doc,prev_doc,skip_input,key_droplist,collection_droplist ){
 
+				var interval;
 				var max = 0, skip = 0;
 				var collection = db.collection(collection_droplist.value);
+
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
 				function count(collection){
 				//	returns promise: count(col).then(function(result){...})
@@ -267,8 +271,46 @@
 
 				});
 
+/*
+			//	on mouse down.
+
+				next_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function increase(){
+						skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+						if ( !skip || skip == max - 1 ) return;
+						interval = setTimeout(increase, 50);
+					}, 500);
+				});
+
+				prev_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function decrease(){
+						skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
+						if ( !skip || skip == max - 1 ) return;
+						interval = setTimeout(decrease, 50);
+					}, 500);
+				});
+
+			//	on mouse click.
+
+				next_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					skip_input.value = skip = THREE.Math.clamp( ++skip, 0, max - 1 );
+					interval = setTimeout( get_doc, 250, skip );
+				});
+
+				prev_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					skip_input.value = skip = THREE.Math.clamp( --skip, 0, max - 1 );
+					interval = setTimeout( get_doc, 250, skip );
+				});
+*/
+
 			})( 
 				metadB, // db,
+				TabUI.Database.tab.querySelector("li#doc-skip-increase"),      // next_doc,
+				TabUI.Database.tab.querySelector("li#doc-skip-decrease"),      // prev_doc,
 				TabUI.Database.tab.querySelector("input#doc-skip-input"),      // skip_input,
 				TabUI.Database.tab.querySelector("select#doc-keys-droplist"),  // key_droplist,
 				TabUI.Database.tab.querySelector("select#collection-droplist") // collection_droplist,
