@@ -202,6 +202,8 @@
 
 					if ( skip !== undefined && collection.name === "objects" ) {
 
+					//	Create json.
+
 						return collection.find().skip(skip).limit(1).toArray()
 						.then(function(docs){ return docs[0]; }).then(function(doc){
 
@@ -294,16 +296,14 @@
 
 								debugMode && console.log("promises:", promises);
 
-								if (!promises.length ) return;
+								if (!promises.length ) return json;
 
-								Promise.all(promises)
-								.then(function(){
-									return;
-								}).catch(function(err){
+								return Promise.all(promises)
+								.catch(function(err){
 									console.error(err);
-								});
+								}).then(function(){ return json; });
 
-							}).then(function(){
+							}).then(function(json){
 								debugMode && console.log("json:", json);
 
 								var loader = new THREE.ObjectLoader();
