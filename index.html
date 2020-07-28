@@ -228,12 +228,14 @@
 
 					count(collection).then(function(k){ max = k; }).then(function(){ 
 
-						skip = THREE.Math.clamp(value, 0, max - 1);
-						if ( isNaN(skip) ) skip = 0; skip_input.value = skip;
+						value = THREE.Math.clamp(value, 0, max - 1);
+						if ( isNaN(value) ) value = 0; return( value );
 
-					}).then(function(){ 
+					}).then(function(value){ 
 
-						return get_doc(skip); 
+						skip_input.value = skip = value; 
+
+						return get_doc(skip); // get doc.
 
 					}).then(function(doc){
 
