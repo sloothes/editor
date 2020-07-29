@@ -333,6 +333,7 @@
 				var input = document.createElement("input");
 				input.type = "file";
 				input.id = "imgur-file-input";
+				input.setAttribute( "multiple", "" ); // true.
 				input.style.cssText = "display:none;";
 				button.appendChild( input );
 
