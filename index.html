@@ -180,6 +180,45 @@
 
 		<script>
 
+		//	imgurdB.js
+
+			const imgurdB = new zango.Db( "imgur", {
+
+				wood:      ["id"],
+				rock:      ["id"],
+				floor:     ["id"],
+				glass:     ["id"],
+				metal:     ["id"],
+				plant:     ["id"],
+				paster:    ["id"],
+				matcap:    ["id"],
+				bricks:    ["id"],
+				fabric:    ["id"],
+				roofing:   ["id"],
+				terrain:   ["id"],
+				concrete:  ["id"],
+				sandstone: ["id"],
+
+			});
+
+			imgurdB.open(function(err, database){
+				if (err) console.error(err);
+			}).then( function(){
+
+				debugMode && console.log( 
+					"Database " + imgurdB.name 
+					+ " (v" + imgurdB.version 
+					+ ") ready for use."
+				);
+
+			}).catch(function(err){
+				console.error(err);
+			});
+
+		</script>
+
+		<script>
+
 		//	Texture Images Tab.
 
 			TabUI.add( "Images", "images-tab" );
@@ -197,10 +236,10 @@
 				var select = document.createElement("select");
 				select.id = "imgur-collection-droplist";
 				select.style.cssText = "width:150px;color:#000;float:right;";
-				select.style.cssText =+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;";
-				select.style.cssText =+ "font-size:20px;margin-left:10px;margin-right:15px;";
+				select.style.cssText += "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;";
+				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;";
 
-				var keys = "matcap,wood";
+				var keys = "wood,rock,floor,glass,metal,plant,paster,matcap,bricks,fabric,roofing,terrain,concrete,sandstone";
 
 				keys.split(",").forEach(function( name ){
 					var option = document.createElement("option");
@@ -306,26 +345,28 @@
 
 		<script>
 
+			(function(){
+
+			//	var matcaps  = "bixnsMm,MS1GDja,pUytALG,4KwC8wH,Wiqsp9s,gXRFY3U,2tkhy7C,D64zaTR,Id8k2u4,Fx9154f,dqKYFPo,l0Lf1LN,";
+			//		matcaps += "7bH7Ajw,IeAwKEi,VysdwUU,dWAhf12,9ufYr2S,iAWd8i1,mkGDAn5,gf3PsvD,BeHwxKA,GYBQ8Xr,9gxylAS,0p2RT39,";
+			//		matcaps += "aHeUCko,epbmrGs,NKMFDGB,pvXMCj9,QbZ8H2v,aCAVXQb,qU0AEUM,yvwt1wj,D5UeFcC,6GZMeko,rSlm3oM,Xqg7n0A,";
+			//		matcaps += "PzHZLHy,MEzwCJq,wgf7Vl0,GcLQiey,3xH34nj,vhdhgMe,jRTIv3l,xELCxlQ,wtJaViy,Qb0qKtc,7kq8wQ3,F6kcile,";
+			//		matcaps += "0LRxFql,rxUXS8C,qXg0NKn,LSB7hqR,EolEkFt,gOtyiMy,YTE0R32,thsIYPF,ee6stBn,gyYhQao,QOEE3jO,0V4rQPV,";
+			//		matcaps += "l9Tugo0,R86xHzg,IDlk0H9,tUparH7,GISkhjO,JQzRceW,WxVSuFW,4tyRlwP,aFIJ3Iu,BCqRnS4,1OcGlAa,PqIxyYE,";
+			//		matcaps += "S7J95Cf,QPUvzXD,Stdy1eT,k0nOt5N,rWuDYYe,SGRUmyD,1Ia4Qbk,FFYLtQa,szmc38X,NJSPJlS,8HsVNJA,n3wbE5E,";
+			//		matcaps += "88autaS,7jwTUiI,H1F3Yrv,kgV7aSY,PDFIrWw,Uun8Lpr,Oz16d2L,02gRNwL,bV94g46,eUEtBHC,e1N7JYN,bWpofvm,";
+			//		matcaps += "uzlo3mR,YaXveL2,mw2f1lF,HkWGQb1,N9xoehs,53rWmmo,sBPySdS,1YZKblR,ywKHb7r,3UcbBN7,pWPtSJS,n1a2nB8,";
+			//		matcaps += "lecZa2Q,e3bxY9I,Jl6XqD0";
+
+
+
+
+
+
+
+			})();
+
 		//	imgur-upload-button.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		</script>
 
