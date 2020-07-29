@@ -388,8 +388,10 @@
 							uploads.push( function(){
 								return uploadTexture( file )
 								.then(function( data ){
-									results.push( data );
-									collection.insert(data);
+									if ( !data.error ) {
+										results.push( data );
+										collection.insert(data);
+									}
 								}).catch(function(err){
 									console.error(err);
 								});
