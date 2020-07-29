@@ -98,7 +98,7 @@
 		})
 
 		img.addEventListener("error",function(err){
-			callWatchers( this, "onerror", "error", this.src );
+			callWatchers( this, "onerror", "error", err );
 		})
 
 		row.appendChild( img );
