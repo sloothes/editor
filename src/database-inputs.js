@@ -325,6 +325,8 @@
 
 							if ( !_doc[key] || !_doc[key][index] ) return;
 
+						//	if ( validator && !validator.isDataURI( _doc[key][index] )) return;
+
 							var data = _doc[key][index].split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
 							var name = "IMG-" + _doc.uuid + " (" + (index+1) + " of " + (_doc[key].length) + ")";
@@ -359,6 +361,9 @@
 						return (function(key){
 
 							if ( !_doc[key] ) return;
+
+						//	if ( validator && !validator.isDataURI( _doc[key] )) return;
+
 							var data = _doc[key].split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
 							var name = "IMG-" + _doc.uuid; 
