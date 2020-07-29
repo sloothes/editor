@@ -219,7 +219,7 @@
 
 		<script>
 
-		//	Texture Images Tab.
+		//	Imgur Images Tab.
 
 			TabUI.add( "Images", "images-tab" );
 			TabUI.append( "Images" );
@@ -256,7 +256,7 @@
 			})( TabUI.Images.tab );
 
 
-		//	images-viewer-ui.js
+		//	imgur-viewer-ui.js
 
 			(function( tab ){
 
@@ -277,7 +277,7 @@
 
 			})( TabUI.Images.tab );
 
-		//	images-name-input-ui.js
+		//	imgur-name-input-ui.js
 
 			(function( tab ){
 
@@ -288,19 +288,19 @@
 				row.style.cssText = "height:30px;margin:10px 15px;";
 
 				var prev = document.createElement("li");
-				prev.id = "imgur-texture-previous";
+				prev.id = "imgur-doc-previous";
 				prev.innerHTML = "&#9668;";
 				prev.style.display = "inline";
 				prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
 				var next = document.createElement("li");
-				next.id = "imgur-texture-next";
+				next.id = "imgur-doc-next";
 				next.innerHTML = "&#9658;";
 				next.style.display = "inline";
 				next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
 				var input = document.createElement("input");
-				input.id = "imgur-texture-name";
+				input.id = "imgur-name-input";
 				input.setAttribute("placeholder", "name" );
 				input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
@@ -363,6 +363,100 @@
 				tab.appendChild( row );
 
 			})( TabUI.Images.tab );
+
+		</script>
+
+		<script>
+
+		//	imgur-
+
+			(function(db,next_doc,prev_doc,name_input,collection_droplist){
+
+				var interval, skip = 0, limit = 50, names = [];
+
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				watch(collection_droplist, "onchange",function(prop, event, value){ 
+
+				//	Reset.
+					skip = 0; names = [];
+
+				//	Get names.
+					db.collection( value ).find().skip(skip)
+					.limit(999).toArray().then(function(docs){
+						 names = docs.map(function(doc){ return doc.name; });
+					}).catch(function(err){ 
+						console.error(err); 
+					});
+
+				});
+
+				watch( next_doc, "onclick", function( prop, event, value ){
+					debugMode && console.log({item:next_doc,event:event});
+				});
+
+				watch( prev_doc, "onclick", function( prop, event, value ){
+					debugMode && console.log({item:prev_doc,event:event});
+				});
+
+				watch( name_input, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:name_input,event:event});
+				});
+
+			//	on key change.
+
+				name_input.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", skip );
+				});
+
+			//	on mouse down.
+
+				next_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function increase(){
+						var max = names.length - 1;
+						skip = THREE.Math.clamp(++skip, 0, max);
+						name_input.value = names[skip];
+						interval = setTimeout(increase, 50);
+					}, 500);
+				});
+
+				prev_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function decrease(){
+						var max = names.length - 1;
+						skip = THREE.Math.clamp(--skip, 0, max);
+						name_input.value = names[skip];
+						interval = setTimeout(decrease, 50);
+					}, 500);
+				});
+
+			//	on mouse click.
+
+				next_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					var max = names.length - 1;
+					skip = THREE.Math.clamp(++skip, 0, max);
+					name_input.value = names[skip];
+					callWatchers( this, "onclick", "click", skip ); // important!
+				});
+
+				prev_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+					var max = names.length - 1;
+					skip = THREE.Math.clamp(--skip, 0, max);
+					name_input.value = names[skip];
+					callWatchers( this, "onclick", "click", skip ); // important!
+				});
+
+			})(
+				imgurdB, // db,
+				TabUI.Images.tab.querySelector("li#imgur-doc-next"), // next_doc,
+				TabUI.Images.tab.querySelector("li#imgur-doc-previous"), // prev_doc,
+				TabUI.Images.tab.querySelector("input#imgur-name-input"), // name_input,
+				TabUI.Images.tab.querySelector("select#imgur-collection-droplist") // collection_droplist,
+			);
+
 
 		</script>
 
