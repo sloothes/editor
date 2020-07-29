@@ -396,8 +396,11 @@
 
 					db.collection( value ).find().skip(index).limit(limit).toArray().then(function(docs){ 
 
-						items = docs.map(function(doc){ return doc.name || doc._id; }); 
-						name_input.value = items[index]; debugMode && console.log( items );
+						items = docs.map(function(doc){
+							return { name:doc.name, link:doc.link, id:doc.id, _id:doc._id } 
+						}); name_input.value = items[index].name || items[index]._id; 
+
+						debugMode && console.log( items );
 
 					}).catch(function(err){ console.error(err); });
 
