@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 
-		<title>matcap upload</title>
+		<title>imgur upload</title>
 
 		<meta charset="utf-8">
 		<meta name="generator" content="Three.js Editor">
@@ -66,7 +66,7 @@
 		//	const clientID = "06217f601180652";
 		//	const endpoint = "https://api.imgur.com/3/image/"
 
-			var matcaps;
+			var images;
 			var input, button;
 			var uploads, results;
 			var debugMode = true;
@@ -121,12 +121,12 @@
 
 				//	debugMode && console.log( "results:", results );
 
-					matcaps = results.map( function( item ){ 
+					images = results.map( function( item ){ 
 						return item.id; 
 					}).filter(Boolean);
 
-					debugMode && console.log( matcaps );
-					console.log( "success:",  matcaps.join(",") );
+					debugMode && console.log( images );
+					console.log( "success:",  images.join(",") );
 
 				}).catch(function(err){
 					console.error(err);
@@ -137,7 +137,7 @@
 			});
 
 			button = document.createElement("a");
-			button.text = "Choose matcaps";
+			button.text = "Choose images";
 			button.classList.add("btn", "btn-primary");
 			button.addEventListener("click", function(){
 				input.value = "";
