@@ -466,18 +466,23 @@
 					db.collection( value ).find().skip(index)
 					.limit(limit).on("data", function(data){
 
-						if ( !data ) return;
+						if ( data === undefined ) return;
+
 						var item = { _id: data._id };
 						if ( data.id   !== undefined ) item.id   = data.id;
 						if ( data.link !== undefined ) item.link = data.link;
 						if ( data.name !== undefined ) item.name = data.name;
+
 						items.push( item ); debugMode && console.log( item );
+
+					}).on("end", function(){
+
+						debugMode && console.log( items );
 
 					}).toArray().then(function(docs){ 
 
 						name_input.value = items[index].name || items[index]._id; 
 						img_viewer.src = "https://i.imgur.com/"+items[index].id+"t.jpg";
-						debugMode && console.log( items );
 
 					}).catch(function(err){ console.error(err); });
 
