@@ -259,6 +259,41 @@
 
 			})( TabUI.Images.tab );
 
+		//	images-name-input-ui.js
+
+			(function( tab ){
+
+			//	Images texture name input.
+			//	var tab = TabUI.Images.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin:10px 15px;";
+
+				var prev = document.createElement("li");
+				prev.id = "images-texture-previous";
+				prev.innerHTML = "&#9668;";
+				prev.style.display = "inline";
+				prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+
+				var next = document.createElement("li");
+				next.id = "images-texture-next";
+				next.innerHTML = "&#9658;";
+				next.style.display = "inline";
+				next.classList.add("btn","btn-primary","get-next-btn","pull-right");
+
+				var input = document.createElement("input");
+				input.id = "images-texture-name";
+				input.setAttribute("placeholder", "name" );
+				input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:180px;"
+				+ "margin:0px 10px 0px 10px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+
+				row.appendChild(prev);
+				row.appendChild(input);
+				row.appendChild(next);
+				tab.appendChild( row );
+
+			})( TabUI.Images.tab );
 
 
 
