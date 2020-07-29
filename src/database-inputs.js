@@ -74,7 +74,7 @@
 					debugMode && console.log("end event!");  // debug!
 				}).on("data", function(data){ 
 					debugMode && console.log("data event:", ++k);  // debug!
-				})
+				}).toArray() // testing
 			//	.forEach( function(doc){ ++k; })
 				.catch(function(err){console.error(err);})
 				.then(function(){ return k; });
