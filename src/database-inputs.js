@@ -529,7 +529,7 @@
 					switch ( key ){
 					//	string.
 						case "name":
-							(function( value ){
+							return (function( value ){
 								if ( !value ) 
 									return value_input.value = doc[key];
 								updateValue( doc._id, key, value );
@@ -537,7 +537,7 @@
 						break;
 					//	number.
 						case "layer":
-							(function( value ){
+							return (function( value ){
 								if ( isNaN(value) ) 
 									return value_input.value = doc[key];
 								value = THREE.Math.clamp( value, 0, 31);
@@ -546,12 +546,13 @@
 						break;
 					//	boolean.
 						case "visible":
-							(function( value ){
-								if ( value === 0 ) value = false;
-								else if ( value === 1 ) value = true;
-								else if ( value.toLowerCase() === "true" ) value = true;
-								else if ( value.toLowerCase() === "false" ) value = false;
-								else return value_input.value = doc[key];
+							return (function( value ){
+								if ( value === "1" ) value = true;
+								if ( value === "0" ) value = false;
+								if ( value.toLowerCase() === "true" ) value = true;
+								if ( value.toLowerCase() === "false" ) value = false;
+								if ( typeof value !== "boolean" ) 
+									return value_input.value = doc[key];
 								updateValue( doc._id, key, value );
 							})( value_input.value );
 						break;
