@@ -482,10 +482,19 @@
 					}).toArray().then(function(docs){ 
 
 						if ( items.length > index ) {
-							name_input.value = items[index].name.replace(".jpg","")
-							.replace(".png","").replace(".jpeg","") || items[index]._id; 
+
+							if ( items[index].name !== undefined )
+
+								name_input.value = items[index].name
+								.replace(".jpg","").replace(".png","").replace(".jpeg","");
+
+							else 
+								name_input.value = items[index]._id; 
+
 							img_viewer.src = "https://i.imgur.com/"+items[index].id+"t.jpg";
+
 						} else {
+
 							name_input.value = ""; img_viewer.src = ":0";
 						}
 
@@ -524,8 +533,14 @@
 
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(++index, 0, max);
-						name_input.value = items[i].name.replace(".jpg","")
-						.replace(".png","").replace(".jpeg","") || items[i]._id; 
+
+						if ( items[i].name !== undefined )
+							name_input.value = items[i].name
+							.replace(".jpg","").replace(".png","")
+							.replace(".jpeg","");
+						else 
+							name_input.value = items[i]._id; 
+
 						interval = setTimeout(increase, 100);
 					}, 500);
 				});
@@ -541,8 +556,14 @@
 
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(--index, 0, max);
-						name_input.value = items[i].name.replace(".jpg","")
-						.replace(".png","").replace(".jpeg","") || items[i]._id; 
+
+						if ( items[i].name !== undefined )
+							name_input.value = items[i].name
+							.replace(".jpg","").replace(".png","")
+							.replace(".jpeg","");
+						else 
+							name_input.value = items[i]._id; 
+
 						interval = setTimeout(decrease, 100);
 					}, 500);
 				});
@@ -559,11 +580,19 @@
 
 					var max = items.length - 1;
 					var i = THREE.Math.clamp(++index, 0, max);
-					name_input.value = items[i].name.replace(".jpg","")
-					.replace(".png","").replace(".jpeg","") || items[i]._id; 
+
+
+					if ( items[i].name !== undefined )
+						name_input.value = items[i].name
+						.replace(".jpg","").replace(".png","")
+						.replace(".jpeg","");
+					else 
+						name_input.value = items[i]._id; 
+
 					interval = setTimeout(function(){
 						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
 					},250);
+
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
 
@@ -577,11 +606,18 @@
 
 					var max = items.length - 1;
 					var i = THREE.Math.clamp(--index, 0, max);
-					name_input.value = items[i].name.replace(".jpg","")
-					.replace(".png","").replace(".jpeg","") || items[i]._id; 
+
+					if ( items[i].name !== undefined )
+						name_input.value = items[i].name
+						.replace(".jpg","").replace(".png","")
+						.replace(".jpeg","");
+					else 
+						name_input.value = items[i]._id; 
+
 					interval = setTimeout(function(){
 						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
 					},250);
+
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
 
