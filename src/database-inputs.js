@@ -68,15 +68,12 @@
 		const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 		function count(collection){
-		//	returns promise: count(col).then(function(result){...})
+		//	returns promise: count(col).then(function(k){...});
 			var k = 0; return collection.find()
-				.on("end", function(){ 
-					debugMode && console.log("end event!");  // debug!
-				}).on("data", function(data){ 
-					debugMode && console.log("data event:", ++k);  // debug!
-				}).toArray() // .forEach( function(doc){ ++k; })
-				.catch(function(err){console.error(err);})
-				.then(function(){ return k; });
+			.on("data", function(data){ ++k; })
+			.on("end", function(){;}).toArray()
+			.catch(function(err){ console.error(err); })
+			.then(function(){ return k; });
 		}
 
 		function get_doc(skip){
@@ -181,23 +178,6 @@
 			});
 
 		})();
-
-		//	next_key.addEventListener( "mousedown", function(){
-		//		clearTimeout( interval ); // important!
-		//		interval = setTimeout(function increase(){
-		//
-		//			interval = setTimeout(increase, 50);
-		//		}, 500);
-		//	});
-
-		//	prev_key.addEventListener( "mousedown", function(){
-		//		clearTimeout( interval ); // important!
-		//		interval = setTimeout(function decrease(){
-		//
-		//			interval = setTimeout(decrease, 50);
-		//		}, 500);
-		//	});
-
 
 	//	Value mouse inputs.
 
