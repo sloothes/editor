@@ -150,7 +150,7 @@
 
 			function uploadTexture(file){
 			//  Returns a resolved promise with record data from imgur.com.
-				debugMode && console.log(`uploading ${file.name}...`);
+				debugMode && console.log("uploading", file.name, "...");
 				return new Promise(function( resolve, reject ){
 
 					var formdata = new FormData();

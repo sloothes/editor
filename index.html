@@ -332,7 +332,7 @@
 
 				var input = document.createElement("input");
 				input.type = "file";
-				input.id = "imgur-upload-input";
+				input.id = "imgur-file-input";
 				input.style.cssText = "display:none;";
 				button.appendChild( input );
 
@@ -340,6 +340,144 @@
 				tab.appendChild( row );
 
 			})( TabUI.Images.tab );
+
+		</script>
+
+		<script>
+
+		//	imgur-upload-button.js
+
+			(function(db,input,button,collection_droplist){
+
+				input.addEventListener( "change", function onChange(){
+
+					var collection = db.collection(collection_droplist.value);
+
+					if ( !input.files.length ) return;
+					debugMode && console.log( input.files );
+
+					input.removeEventListener( "change", onChange );
+
+					var uploads = [], promises = [], results = [];
+
+					for (var i = 0; i < input.files.length; i++ ){
+						(function(file){
+							uploads.push( function(){
+								return uploadTexture( file )
+								.then(function( data ){
+									results.push( data );
+									collection.insert(data);
+								}).catch(function(err){
+									console.error(err);
+								});
+							});
+						})( input.files[i] );
+					}
+
+					debugMode && console.log( "uploads:", uploads );
+
+					while ( uploads.length ){
+						promises.push( uploads.shift().call() );
+					}
+
+					Promise.all(promises).then(function(){
+
+						var failed = results.filter(function(item){ 
+							return item.error && item.file;
+						}).map(function(item){
+							return item.file;
+						}).filter(Boolean).sort();
+
+						if ( failed.length )
+							console.log( {failed:failed.length, files:failed.join(",")} );
+						else
+							console.log("All files uploaded successfully.");
+
+						debugMode && console.log( "results:", results );
+
+						var success = results.map( function( data ){ 
+							return {name:data.title, id:data.id}; 
+						}).filter(Boolean);
+
+						debugMode && console.log( success );
+						console.log( "success:", JSON.stringify(success) );
+
+					}).catch(function(err){
+						console.error(err);
+					}).then( function(){
+						input.addEventListener( "change", onChange );
+					});
+
+					function uploadTexture(file){
+					//  Returns a resolved promise with record data from imgur.com.
+						debugMode && console.log("uploading", file.name, "...");
+						return new Promise(function( resolve, reject ){
+
+							var formdata = new FormData();
+							formdata.append("image", file);
+							formdata.append("type",  file.type);
+							formdata.append("name",  file.name);
+
+							var xhttp = new XMLHttpRequest();
+							var clientid = "06217f601180652";  // slothes app.
+							var endpoint = "https://api.imgur.com/3/image";
+							xhttp.open("POST", endpoint, true);
+							xhttp.setRequestHeader("Authorization", "Client-ID " + clientid);
+							xhttp.onreadystatechange = function () {
+								if (this.readyState === 4) {
+									var response = "";
+									if (this.status >= 200 && this.status < 300) {
+										response = JSON.parse(this.responseText);
+										debugMode && console.log(response.data);
+										resolve(response.data); // resolve promise.
+									} else {
+										var err = JSON.parse(this.responseText).data.error;
+										console.error( err.type, err );
+										resolve( {file:file.name, error:err.type, message:err} ); // throw err;
+									}
+								}
+							};
+
+							xhttp.send(formdata);
+							xhttp = null;
+						});
+					}
+
+				});
+
+			//	Call watchers.
+
+				button.addEventListener( "click", function(){ 
+					input.value = "";
+					input.click();
+					return false;
+				});
+
+			//	Collection droplist.
+
+				watch(collection_droplist, "onchange",function(prop, event, value){
+
+					try { 
+
+						collection = db.collection(value); // debugMode && console.log( "collection:", collection ); 
+
+					} catch(err){
+
+						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = "matcap");
+					}
+				})
+
+				collection_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+			}){
+				imgurdB, // db,
+				TabUI.Images.tab.querySelector("input#imgur-file-input"), // input,
+				TabUI.Images.tab.querySelector("div#imgur-upload-button"), // button,
+				TabUI.Images.tab.querySelector("select#imgur-collection-droplist") // collection_droplist,
+			};
+
 
 		</script>
 
@@ -391,8 +529,6 @@
 
 			})();
 */
-		//	imgur-upload-button.js
-
 		</script>
 
 		<script>
