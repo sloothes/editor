@@ -72,7 +72,8 @@
 		var canvas = document.createElement("canvas");
 		canvas.width = 256; canvas.height = 256;
 		canvas.id = "skydome-viewer";
-		canvas.style.cssText = "width:256px;height:256px;margin:auto;";
+		canvas.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
+		canvas.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		row.appendChild( canvas );
 		tab.appendChild( row );
