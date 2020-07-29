@@ -177,9 +177,82 @@
 		<script src="/editor/src/skydome-droplist.js"></script>
 		<script src="/editor/src/background-droplist.js"></script>
 		<script src="/editor/src/skydome-buttons.js"></script>
-		<script src="/editor/src/database-inputs.js"></script>
 
 		<script>
+
+		//	Texture Images Tab.
+
+			TabUI.add( "Images", "images-tab" );
+			TabUI.append( "Images" );
+
+			(function( tab ){
+
+			//	Images Collection droplist.
+			//	var tab = TabUI.Images.tab;
+
+				var row = document.createElement("h3");
+				row.textContent = "Collection:";
+				row.style.cssText = "height:30px;"
+
+				var select = document.createElement("select");
+				select.id = "images-collection-droplist";
+				select.style.cssText = "width:150px;color:#000;float:right;"
+				+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
+				+ "font-size:20px;margin-left:10px;margin-right:15px;";
+
+				var keys = "wood";
+
+				keys.split(",").forEach(function( name ){
+					var option = document.createElement("option");
+					option.text = name;
+					option.value = name;
+					select.appendChild( option );
+				});
+
+				row.appendChild( select );
+				tab.appendChild( row );
+
+				return select;
+
+			})( TabUI.Images.tab );
+
+
+		//	images-viewer-ui.js
+
+			(function( tab ){
+
+			//	Image viewer.
+			//	var tab = TabUI.Images.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:260px;border:none;text-align:center;margin-right:15px;";
+
+				var img = new Image(256,256)
+				img.id = "image-url-viewer";
+				img.src = img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+				img.style.cssText = "width:256px;height:256px;margin:auto;";
+
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Images.tab );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -213,77 +286,9 @@
 
 		</script>
 
-		<script>
-
-		//	deck 0.
-
-			(function(scene,octree,cameraControls,material_entities,entities){
-				var w=110, h=0.5, d=60, x=-2, y=-h/2, z=2.6;
-				var geometry = new THREE.BoxGeometry(w,h,d);
-				geometry.translate(0, h/2, 0);
-				var material = new THREE.MeshLambertMaterial();
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.name = "deck0"; mesh.visible = false;
-				mesh.position.set(x,y,z); scene.add( mesh );
-			//	var geometry = new THREE.EdgesGeometry( geometry );
-			//	var segments = new THREE.LineSegments( geometry, material );
-			//	segments.name = "water path edges";
-			//	segments.position.copy( mesh.position );
-			//	octree.importThreeMesh( mesh );
-				entities && entities.add( mesh );
-				material_entities && material_entities.add(material);
-			//	cameraControls.rigidObjects.push( mesh );
-			//	return mesh;
-			})( scene, octree, cameraControls, material_entities, entities );
-
-			(function(scene,octree,cameraControls,material_entities,entities){
-				var w=100, h=0.5, d=50, x=-2, y=-0, z=2.6;
-				var geometry = new THREE.BoxGeometry(w,h,d);
-				geometry.translate(0, h/2, 0);
-				var material = new THREE.MeshLambertMaterial();
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.name = "deck0_floor"; mesh.visible = false;
-				mesh.position.set(x,y,z); scene.add( mesh );
-			//	var geometry = new THREE.EdgesGeometry( geometry );
-			//	var segments = new THREE.LineSegments( geometry, material );
-			//	segments.name = "water path edges";
-			//	segments.position.copy( mesh.position );
-			//	octree.importThreeMesh( mesh );
-				entities && entities.add( mesh );
-				material_entities && material_entities.add(material);
-			//	cameraControls.rigidObjects.push( mesh );
-			//	return mesh;
-			})( scene, octree, cameraControls, material_entities, entities );
-
-		</script>
-
-		<!-- script src="/editor/src/ViewportTab.js"></script -->
-
-		<script>
-/*
-		//	Water path.
-
-			(function(scene,octree,cameraControls,material_entities,entities){
-				var w=2.5, h=0.5, d=200, x=-85, y=-h/2, z=100;
-				var geometry = new THREE.BoxGeometry(w,h,d);
-				geometry.translate(0, h/2, 0);
-				var material = new THREE.MeshLambertMaterial();
-				var mesh = new THREE.Mesh(geometry, material);
-				mesh.name = "water path"; mesh.visible = false;
-				mesh.position.set(x,y,z); scene.add( mesh );
-			//	var geometry = new THREE.EdgesGeometry( geometry );
-			//	var segments = new THREE.LineSegments( geometry, material );
-			//	segments.name = "water path edges";
-			//	segments.position.copy( mesh.position );
-			//	octree.importThreeMesh( mesh );
-				entities && entities.add( mesh );
-				material_entities && material_entities.add(material);
-			//	cameraControls.rigidObjects.push( mesh );
-			//	return mesh;
-			})( scene, octree, cameraControls, material_entities, entities );
-*/
-		</script>
-
+		<script src="/editor/src/database-inputs.js"></script>
+	<!-- script src="/editor/src/ViewportTab.js"></script -->
+		<script src="/editor/src/playground.js"></script>
 
 	</body>
 </html>
