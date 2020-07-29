@@ -74,14 +74,32 @@
 	//	Database image viewer.
 	//	var tab = TabUI.Database.tab;
 
+		const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+
 		var row = document.createElement("h3");
 		row.style.cssText = "height:260px;border:none;text-align:center;margin-right:15px;";
 
 		var img = new Image(256,256)
+		img.src = dummy_src;
 		img.id = "image-url-viewer";
-		img.src = img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 		img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 		img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
+
+		watch( img, "onload", function(prop, event, value){
+			debugMode && console.log({item:img,event:event,src:value});
+		});
+
+		watch( img, "onerror", function(prop, event, value){
+			debugMode && console.log({item:img,event:event,src:value}); img.src = dummy_src; 
+		});
+
+		img.addEventListener("load",function(event){
+			callWatchers( this, "onload", "load", this.src );
+		})
+
+		img.addEventListener("error",function(err){
+			callWatchers( this, "onerror", "error", this.src );
+		})
 
 		row.appendChild( img );
 		tab.appendChild( row );
