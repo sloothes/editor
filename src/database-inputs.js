@@ -65,7 +65,7 @@
 		var _id, _uuid, _doc;
 		var max = 0, skip = 0, db = metadB;
 		var collection = db.collection(collection_droplist.value);
-		var default_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+		const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 		function count(collection){
 		//	returns promise: count(col).then(function(result){...})
@@ -314,7 +314,6 @@
 				debugMode && console.log({item:upload_data,property:prop,event:event,value:value});
 
 				var key = key_droplist.value; if ( !key ) return; 
-				var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 				if ( collection.name === "images" && key === "url" ) {
 
@@ -426,7 +425,7 @@
 
 			value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
 
-			if ( image.src !== default_src ) image.src = default_src;
+			if ( image.src !== dummy_src ) image.src = dummy_src;
 		});
 
 	//	Collection droplist.
