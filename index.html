@@ -493,12 +493,12 @@
 					this.blur(); callWatchers( this, "onchange", "change", this.value );
 				});
 
-			}){
+			})(
 				imgurdB, // db,
 				TabUI.Images.tab.querySelector("input#imgur-file-input"), // input,
 				TabUI.Images.tab.querySelector("div#imgur-upload-button"), // button,
 				TabUI.Images.tab.querySelector("select#imgur-collection-droplist") // collection_droplist,
-			};
+			);
 
 		</script>
 
