@@ -427,8 +427,8 @@
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function increase(){
 						var max = names.length - 1;
-						skip = THREE.Math.clamp(++skip, 0, max);
-						name_input.value = names[skip];
+						var index = THREE.Math.clamp(++skip, 0, max);
+						name_input.value = names[index];
 						interval = setTimeout(increase, 50);
 					}, 500);
 				});
@@ -437,8 +437,8 @@
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function decrease(){
 						var max = names.length - 1;
-						skip = THREE.Math.clamp(--skip, 0, max);
-						name_input.value = names[skip];
+						var index = THREE.Math.clamp(--skip, 0, max);
+						name_input.value = names[index];
 						interval = setTimeout(decrease, 50);
 					}, 500);
 				});
@@ -448,16 +448,16 @@
 				next_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
 					var max = names.length - 1;
-					skip = THREE.Math.clamp(++skip, 0, max);
-					name_input.value = names[skip];
+					var index = THREE.Math.clamp(++skip, 0, max);
+					name_input.value = names[index];
 					callWatchers( this, "onclick", "click", skip ); // important!
 				});
 
 				prev_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
 					var max = names.length - 1;
-					skip = THREE.Math.clamp(--skip, 0, max);
-					name_input.value = names[skip];
+					var index = THREE.Math.clamp(--skip, 0, max);
+					name_input.value = names[index];
 					callWatchers( this, "onclick", "click", skip ); // important!
 				});
 
