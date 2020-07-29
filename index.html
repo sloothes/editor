@@ -195,10 +195,10 @@
 				row.style.cssText = "height:30px;"
 
 				var select = document.createElement("select");
-				select.id = "images-collection-droplist";
-				select.style.cssText = "width:150px;color:#000;float:right;"
-				+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
-				+ "font-size:20px;margin-left:10px;margin-right:15px;";
+				select.id = "imgur-collection-droplist";
+				select.style.cssText = "width:150px;color:#000;float:right;";
+				select.style.cssText =+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;";
+				select.style.cssText =+ "font-size:20px;margin-left:10px;margin-right:15px;";
 
 				var keys = "matcap,wood";
 
@@ -228,7 +228,7 @@
 				row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
 
 				var img = new Image(256,256)
-				img.id = "image-url-viewer";
+				img.id = "imgur-image-viewer";
 				img.src = img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 				img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 				img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
@@ -249,23 +249,23 @@
 				row.style.cssText = "height:30px;margin:10px 15px;";
 
 				var prev = document.createElement("li");
-				prev.id = "images-texture-previous";
+				prev.id = "imgur-texture-previous";
 				prev.innerHTML = "&#9668;";
 				prev.style.display = "inline";
 				prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
 				var next = document.createElement("li");
-				next.id = "images-texture-next";
+				next.id = "imgur-texture-next";
 				next.innerHTML = "&#9658;";
 				next.style.display = "inline";
 				next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
 				var input = document.createElement("input");
-				input.id = "images-texture-name";
+				input.id = "imgur-texture-name";
 				input.setAttribute("placeholder", "name" );
 				input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:180px;"
-				+ "margin:0px 10px 0px 10px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
+				input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 
 				row.appendChild(prev);
 				row.appendChild(input);
@@ -278,25 +278,35 @@
 
 			(function( tab ){
 
-			//	Image upload button.
+			//	Images upload button.
 			//	var tab = TabUI.Images.tab;
 
 				var row = document.createElement("h3");
-				row.style.cssText = "height:30px;margin-bottom:20px;"
+				row.style.cssText = "height:40px;margin-bottom:20px;"
 
 				var button = document.createElement("div");
-				button.id = "upload-image-files";
-				button.textContent = "Upload Image Files";
-				button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-				button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;";
-				button.style.cssText += "margin-left:15px;margin-right:15px;";
+				button.id = "imgur-upload-button";
+				button.textContent = "Upload Skydome Image";
+				button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
+				button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+
+				var input = document.createElement("input");
+				input.type = "file";
+				input.id = "imgur-upload-input";
+				input.style.cssText = "display:none;";
+				button.appendChild( input );
 
 				row.appendChild( button );
 				tab.appendChild( row );
 
 			})( TabUI.Images.tab );
 
+		</script>
 
+		<script>
+
+		//	imgur-upload-button.js
 
 
 
