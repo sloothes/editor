@@ -516,6 +516,12 @@
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function increase(){
+
+						if ( !items.length ) { 
+							name_input.value = ""; 
+							img_viewer.src = ":0"; return;
+						}
+
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(++index, 0, max);
 						name_input.value = items[i].name.replace(".jpg","")
@@ -527,6 +533,12 @@
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function decrease(){
+
+						if ( !items.length ) { 
+							name_input.value = ""; 
+							img_viewer.src = ":0"; return;
+						}
+
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(--index, 0, max);
 						name_input.value = items[i].name.replace(".jpg","")
@@ -539,6 +551,12 @@
 
 				next_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
+
+					if ( !items.length ) { 
+						name_input.value = ""; 
+						img_viewer.src = ":0"; return;
+					}
+
 					var max = items.length - 1;
 					var i = THREE.Math.clamp(++index, 0, max);
 					name_input.value = items[i].name.replace(".jpg","")
@@ -551,6 +569,12 @@
 
 				prev_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
+
+					if ( !items.length ) { 
+						name_input.value = ""; 
+						img_viewer.src = ":0"; return; 
+					}
+
 					var max = items.length - 1;
 					var i = THREE.Math.clamp(--index, 0, max);
 					name_input.value = items[i].name.replace(".jpg","")
