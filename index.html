@@ -368,23 +368,35 @@
 
 		<script>
 
-		//	imgur-
+		//	imgur-skip-inputs.js
 
 			(function(db,next_doc,prev_doc,name_input,collection_droplist){
 
-				var interval, skip = 0, limit = 50, names = [];
+				var interval, skip = 0, limit = 100, names = [];
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
-				watch(collection_droplist, "onchange",function(prop, event, value){ 
+			//	Collection droplist.
+
+				watch(collection_droplist, "onchange",function(prop, event, value){
+
+					try { 
+
+						collection = db.collection( value ); // debugMode && console.log( "collection:", collection ); 
+
+					} catch(err){
+
+						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = "matcap");
+					}
 
 				//	Reset.
 					skip = 0; names = [];
 
 				//	Get names.
 					db.collection( value ).find().skip(skip)
-					.limit(999).toArray().then(function(docs){
+					.limit(limit).toArray().then(function(docs){
 						 names = docs.map(function(doc){ return doc.name; });
+						 debugMode && console.log( names );
 					}).catch(function(err){ 
 						console.error(err); 
 					});
@@ -448,6 +460,12 @@
 					name_input.value = names[skip];
 					callWatchers( this, "onclick", "click", skip ); // important!
 				});
+
+				collection_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
 
 			})(
 				imgurdB, // db,
@@ -565,24 +583,6 @@
 					input.value = "";
 					input.click();
 					return false;
-				});
-
-			//	Collection droplist.
-
-				watch(collection_droplist, "onchange",function(prop, event, value){
-
-					try { 
-
-						collection = db.collection(value); // debugMode && console.log( "collection:", collection ); 
-
-					} catch(err){
-
-						return callWatchers(collection_droplist, "onchange", "change", collection_droplist.value = "matcap");
-					}
-				})
-
-				collection_droplist.addEventListener( "change", function(){
-					this.blur(); callWatchers( this, "onchange", "change", this.value );
 				});
 
 			})(
