@@ -217,12 +217,13 @@
 				&& Array.isArray(_doc[key]) && _doc[key].length ) {
 				//	if ( value_input.value === "" ) return;
 					if ( isNaN(value_input.value) ) return;
-					var index = Number( value_input.value );
-					value_input.value = index = 
-					THREE.Math.clamp( ++index, 0, _doc[key].length - 1 );
-					interval = setTimeout( function(index){
-						image.src = _doc.url[index]; 
-					}, 250, index ); return;
+					var max = _doc[key].length - 1;
+					var i = Number( value_input.value );
+					value_input.value = 
+					i = THREE.Math.clamp( ++i, 0, max );
+					interval = setTimeout( function(i){
+						image.src = _doc.url[i]; 
+					}, 250, i ); return;
 				}
 
 			});
@@ -237,17 +238,20 @@
 				&& Array.isArray(_doc[key]) && _doc[key].length ) {
 				//	if ( value_input.value === "" ) return;
 					if ( isNaN(value_input.value) ) return;
-					var index = Number( value_input.value );
-					value_input.value = index = 
-					THREE.Math.clamp( --index, 0, _doc[key].length - 1 );
-					interval = setTimeout( function(index){
-						image.src = _doc.url[index]; 
-					}, 250, index ); return;
+					var max = _doc[key].length - 1;
+					var i = Number( value_input.value );
+					value_input.value = 
+					i = THREE.Math.clamp( --i, 0, max );
+					interval = setTimeout( function(i){
+						image.src = _doc.url[i]; 
+					}, 250, i ); return;
 				}
 
 			});
 
 		})();
+
+	//	on key change.
 
 		watch( value_input, "onchange", function( prop, event, value ){ 
 
@@ -258,10 +262,10 @@
 			&& Array.isArray(_doc[key]) && _doc[key].length ) {
 				return (function(value){
 					var max = _doc[key].length - 1;
-					var index = THREE.Math.clamp( value, 0, max );
-					if ( isNaN(index) ) index = 0;
-					value_input.value = index = parseInt(index);
-					image.src = _doc.url[ index ];
+					var i = THREE.Math.clamp( value, 0, max );
+					if ( isNaN(i) ) i = 0;
+					value_input.value = i = parseInt(i);
+					image.src = _doc.url[i];
 				})(value);
 			}
 
@@ -323,9 +327,8 @@
 
 							var index = parseInt(value_input.value); if ( isNaN(index) ) return;
 
-							if ( !_doc[key] || !_doc[key][index] ) return;
-
-						//	if ( validator && !validator.isDataURI( _doc[key][index] )) return;
+							if ( !_doc[key] === undefined || !_doc[key][index] ) return;
+							if ( validator && !validator.isDataURI( _doc[key][index] )) return;
 
 							var data = _doc[key][index].split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
@@ -360,9 +363,8 @@
 
 						return (function(key){
 
-							if ( !_doc[key] ) return;
-
-						//	if ( validator && !validator.isDataURI( _doc[key] )) return;
+							if ( !_doc[key] === undefined ) return;
+							if ( validator && !validator.isDataURI( _doc[key] )) return;
 
 							var data = _doc[key].split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
@@ -419,13 +421,15 @@
 
 				if ( Array.isArray(_doc[key]) && _doc[key].length ) {
 
-					var index = 0;
-					image.src = _doc.url[index]; 
-					value_input.value = index; return;
+					var i = 0; image.src = _doc[key][i]; 
+					value_input.value = i; return;
 				}
 
-				image.src = _doc.url; value_input.value = ""; return;
+				image.src = _doc[key]; 
 
+				if ( validator && validator.isURL(_doc[key]) )
+					value_input.value = _doc[key];
+				else value_input.value = ""; return;
 			}
 
 			value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);

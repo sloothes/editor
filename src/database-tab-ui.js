@@ -117,7 +117,7 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
+		row.style.cssText = "height:40px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "cache-textures-button";
@@ -342,7 +342,7 @@
 	//	var tab = TabUI.Database.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
+		row.style.cssText = "height:40px;margin-bottom:20px;"
 
 		var button = document.createElement("div");
 		button.id = "doc-load-button";
