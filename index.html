@@ -482,7 +482,8 @@
 					}).toArray().then(function(docs){ 
 
 						if ( items.length > index ) {
-							name_input.value = items[index].name || items[index]._id; 
+							name_input.value = items[index].name.replace(".jpg","")
+							.replace(".png","").replace(".jpeg","") || items[index]._id; 
 							img_viewer.src = "https://i.imgur.com/"+items[index].id+"t.jpg";
 						} else {
 							name_input.value = ""; img_viewer.src = ":0";
@@ -517,7 +518,8 @@
 					interval = setTimeout(function increase(){
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(++index, 0, max);
-						name_input.value = items[i].name || items[i]._id;
+						name_input.value = items[i].name.replace(".jpg","")
+						.replace(".png","").replace(".jpeg","") || items[i]._id; 
 						interval = setTimeout(increase, 100);
 					}, 500);
 				});
@@ -527,7 +529,8 @@
 					interval = setTimeout(function decrease(){
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(--index, 0, max);
-						name_input.value = items[i].name || items[i]._id;
+						name_input.value = items[i].name.replace(".jpg","")
+						.replace(".png","").replace(".jpeg","") || items[i]._id; 
 						interval = setTimeout(decrease, 100);
 					}, 500);
 				});
@@ -538,7 +541,8 @@
 					clearTimeout( interval ); // important!
 					var max = items.length - 1;
 					var i = THREE.Math.clamp(++index, 0, max);
-					name_input.value = items[i].name || items[i]._id;
+					name_input.value = items[i].name.replace(".jpg","")
+					.replace(".png","").replace(".jpeg","") || items[i]._id; 
 					interval = setTimeout(function(){
 						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
 					},250);
@@ -549,7 +553,8 @@
 					clearTimeout( interval ); // important!
 					var max = items.length - 1;
 					var i = THREE.Math.clamp(--index, 0, max);
-					name_input.value = items[i].name || items[i]._id;
+					name_input.value = items[i].name.replace(".jpg","")
+					.replace(".png","").replace(".jpeg","") || items[i]._id; 
 					interval = setTimeout(function(){
 						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
 					},250);
