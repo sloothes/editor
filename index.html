@@ -494,15 +494,15 @@
 				});
 
 				watch( next_doc, "onclick", function( prop, event, value ){
-					debugMode && console.log({item:next_doc,event:event});
+				//	debugMode && console.log({item:next_doc,event:event,index:value});
 				});
 
 				watch( prev_doc, "onclick", function( prop, event, value ){
-					debugMode && console.log({item:prev_doc,event:event});
+				//	debugMode && console.log({item:prev_doc,event:event,index:value});
 				});
 
 				watch( name_input, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:name_input,event:event});
+					debugMode && console.log({item:name_input,event:event,index:value});
 				});
 
 			//	on key change.
