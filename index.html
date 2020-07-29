@@ -432,7 +432,7 @@
 					interval = setTimeout(function increase(){
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(++index, 0, max);
-						name_input.value = items[i];
+						name_input.value = items[i].name || items[i]._id;
 						interval = setTimeout(increase, 100);
 					}, 500);
 				});
@@ -442,7 +442,7 @@
 					interval = setTimeout(function decrease(){
 						var max = items.length - 1;
 						var i = THREE.Math.clamp(--index, 0, max);
-						name_input.value = items[i];
+						name_input.value = items[i].name || items[i]._id;
 						interval = setTimeout(decrease, 100);
 					}, 500);
 				});
