@@ -65,6 +65,7 @@
 		var _id, _uuid, _doc;
 		var max = 0, skip = 0, db = metadB;
 		var collection = db.collection(collection_droplist.value);
+		var default_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 		function count(collection){
 		//	returns promise: count(col).then(function(result){...})
@@ -198,7 +199,7 @@
 
 		(function(){
 
-			var interval, default_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+			var interval;
 
 		//	on mouse click.
 
@@ -266,7 +267,7 @@
 
 		(function(){
 
-			var interval, default_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+			var interval;
 
 			function uploadDataURL(data, type, name){
 
