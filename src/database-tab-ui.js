@@ -109,6 +109,28 @@
 
 	})( TabUI.Database.tab );
 
+//	cache-texture-button.js
+
+	(function( tab ){
+
+	//	Textures cache button.
+	//	var tab = TabUI.Database.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "cache-textures-button";
+		button.textContent = "Cache Texture Images";
+		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
+		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Database.tab );
+
 //	undo-redo-ui.js
 
 	(function( tab ){
