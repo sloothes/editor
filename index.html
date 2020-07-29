@@ -393,13 +393,12 @@
 					skip = 0; names = [];
 
 				//	Get names.
-					db.collection( value ).find().skip(skip).limit(limit).toArray()
-					.then(function(docs){
-						 names = docs.map(function(doc){ return doc.name || doc.id; });
-						 debugMode && console.log( names );
-					}).catch(function(err){ 
-						console.error(err); 
-					});
+
+					db.collection( value ).find().skip(skip).limit(limit).toArray().then(function(docs){ 
+
+						names = docs.map(function(doc){ return doc.name || doc.id; }); debugMode && console.log( names );
+
+					}).catch(function(err){ console.error(err); });
 
 				});
 
