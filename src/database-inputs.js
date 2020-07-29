@@ -70,9 +70,12 @@
 		function count(collection){
 		//	returns promise: count(col).then(function(result){...})
 			var k = 0; return collection.find()
-				.on("end", function(e,data){console.log("cursor end event:",e,data);}) // testing!
-				.on("data", function(e,data){console.log("cursor data event:",e,data);}) // testing!
-				.forEach( function(doc){ ++k; })
+				.on("end", function(){ 
+					debugMode && console.log("end event!");  // debug!
+				}).on("data", function(data){ 
+					debugMode && console.log("data event:", ++k);  // debug!
+				})
+			//	.forEach( function(doc){ ++k; })
 				.catch(function(err){console.error(err);})
 				.then(function(){ return k; });
 		}
