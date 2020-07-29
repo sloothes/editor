@@ -473,11 +473,11 @@
 						if ( data.link !== undefined ) item.link = data.link;
 						if ( data.name !== undefined ) item.name = data.name;
 
-						items.push( item ); debugMode && console.log( item );
+						items.push( item ); // debugMode && console.log( item );
 
-					}).on("end", function(){
+				//	}).on("end", function(){
 
-						debugMode && console.log( items );
+				//		debugMode && console.log( items );
 
 					}).toArray().then(function(docs){ 
 
