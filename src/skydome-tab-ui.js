@@ -67,7 +67,7 @@
 	//	var tab = TabUI.Skydome.tab;
 
 		var row = document.createElement("h3");
-		row.style.cssText = "height:260px;border:none;text-align:center;margin-right:15px;";
+		row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
 
 		var canvas = document.createElement("canvas");
 		canvas.width = 256; canvas.height = 256;
