@@ -408,8 +408,10 @@
 				image.src = _doc[key]; 
 
 				if ( validator && validator.isURL(_doc[key]) )
-					value_input.value = _doc[key];
-				else value_input.value = ""; return;
+					value_input.value = _doc[key]
+					.replace("https://i.imgur.com/","");
+				else 
+					value_input.value = ""; return;
 			}
 
 			value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
