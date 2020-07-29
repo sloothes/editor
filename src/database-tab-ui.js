@@ -79,7 +79,7 @@
 
 		var img = new Image(256,256)
 		img.id = "image-url-viewer";
-	//	img.src = img.src = "https://i.imgur.com/rnZZU0i.png";
+		img.src = img.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 		img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 		img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 

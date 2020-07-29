@@ -198,7 +198,7 @@
 
 		(function(){
 
-			var interval;
+			var interval, default_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 		//	on mouse click.
 
@@ -206,7 +206,6 @@
 				clearTimeout( interval ); // important!
 
 				var key = key_droplist.value; if ( !key ) return; 
-				var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 			//	images collection.
 				if ( collection.name === "images" && key === "url"
@@ -227,7 +226,6 @@
 				clearTimeout( interval ); // important!
 
 				var key = key_droplist.value; if ( !key ) return; 
-				var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 			//	images collection.
 				if ( collection.name === "images" && key === "url"
@@ -249,7 +247,6 @@
 		watch( value_input, "onchange", function( prop, event, value ){ 
 
 			var key = key_droplist.value; if ( !key ) return; 
-			var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 		//	images collection.
 			if ( collection.name === "images" && key === "url"
@@ -269,7 +266,7 @@
 
 		(function(){
 
-			var interval;
+			var interval, default_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 
 			function uploadDataURL(data, type, name){
 
@@ -404,8 +401,6 @@
 	//	Key droplist.
 
 		watch( key_droplist, "onchange", function( prop, event, key ){ 
-
-			var default_src = "https://i.imgur.com/rnZZU0i.png";
 
 			if ( !key ) return; debugMode && console.log({ [key]: _doc[key] });
 
