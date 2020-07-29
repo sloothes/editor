@@ -123,8 +123,7 @@
 		button.id = "cache-textures-button";
 		button.textContent = "Cache Texture Images";
 		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
-		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
 		row.appendChild( button );
 		tab.appendChild( row );
