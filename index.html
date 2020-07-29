@@ -407,25 +407,20 @@
 
 					Promise.all(promises).then(function(){
 
-						var failed = results.filter(function(item){ 
-							return item.error && item.file;
-						}).map(function(item){
-							return item.file;
-						}).filter(Boolean).sort();
-
-						if ( failed.length )
-							console.log( {failed:failed.length, files:failed.join(",")} );
-						else
-							console.log("All files uploaded successfully.");
-
 						debugMode && console.log( "results:", results );
 
-						var success = results.map( function( data ){ 
-							return {name:data.name, id:data.id}; 
-						}).filter(Boolean);
+						if ( results.length ) {
 
-						debugMode && console.log( success );
-						console.log( JSON.stringify(success) );
+							var success = results.map( function( data ){ 
+								return {name:data.name, id:data.id}; 
+							}).filter(Boolean);
+
+							debugMode && console.log( success );
+							debugMode && console.log( JSON.stringify(success) );
+							console.log( "Success:", results.length, "of", 
+							input.files.length, "files uploaded successfully.");
+
+						}
 
 					}).catch(function(err){
 						console.error(err);
