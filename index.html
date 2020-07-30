@@ -254,7 +254,7 @@
 			//	var tab = TabUI.Materials.tab;
 
 				var row = document.createElement("h3"); 
-				row.textContent = "type:"; row.style.cssText = "height:30px;margin-top:20px;"
+				row.textContent = "type:"; row.style.cssText = "height:30px;margin-top:20px;display:none;"
 
 				var select = document.createElement("select"); select.id = "material-type-droplist";
 				select.style.cssText  = "width:210px;color:#000;float:right;";
@@ -536,6 +536,9 @@
 				tab.appendChild( row );
 
 			})( TabUI.Materials.tab );
+
+
+
 
 
 
