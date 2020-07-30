@@ -501,7 +501,7 @@
 				materialViewer.material = (function(){
 					var mesh = new THREE.Mesh(
 						new THREE.SphereGeometry(),
-						new THREE.MeshStandardMaterial();
+						new THREE.MeshStandardMaterial()
 					);  
 					mesh.name = "new material viewer";
 					mesh.material.name = "New Material";
@@ -554,6 +554,8 @@
 					materialViewer.dispose();
 					materialViewer.material.color.setHex(0xffffff);
 				}
+
+				materialViewer.render(); // important!
 
 			})( materialViewer );
 
