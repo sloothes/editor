@@ -459,18 +459,18 @@
 
 				materialViewer.camera = (function( d ){
 				//	var aspect = canvas.clientWidth / canvas.clientWidth;
-					var camera = new THREE.OrthographicCamera( -d, +d, +d, -d, 1, 1000 );
-					camera.name = "new material camera"; camera.position.z = 50; 
+					var camera = new THREE.OrthographicCamera( -d, +d, +d, -d, 1, 100 );
+					camera.name = "new material camera"; camera.position.z = 10; 
 					camera.lookAt( 0,0,0 ); materialViewer.scene.add( camera ); 
 					return camera;
-				})( 1.5 );
+				})( 1.2 );
 
 			//	Viewer light.
 
 				materialViewer.light = (function(){
-					var light = new THREE.DirectionalLight( 0xffffff, 0.75 );
+					var light = new THREE.DirectionalLight( 0xffffff, 0.5 );
 					light.name = "new material light";
-					camera.position.set( 0,50,50 );
+					light.position.set( 0,30,50 );
 					materialViewer.scene.add( light );
 					return light;
 				})();
