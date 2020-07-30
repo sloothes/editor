@@ -296,41 +296,6 @@
 
 			})( TabUI.NewMaterial.tab );
 
-		//	create-new-material-map-droplist-ui.js
-
-			(function( tab ){
-
-			//	Create New Material Texture droplist. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.textContent = "texture:"; row.style.cssText = "height:30px;";
-				var select = document.createElement("select"); select.id = "create-material-map-droplist";
-				select.style.cssText  = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
-				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
-
-				var keys =  [
-					{name:"Diffuse",value:"map"},
-					{name:"Bump",value:"bumpMap"},
-					{name:"Alpha",value:"alphaMap"},
-					{name:"Light",value:"lightMap"},
-					{name:"Normal",value:"normalMap"},
-					{name:"Specular",value:"specularMap"},
-					{name:"Emissive",value:"emissiveMap"},
-					{name:"Metalness",value:"metalnessMap"},
-					{name:"Roughness",value:"roughnessMap"},
-					{name:"Environment",value:"envMap"},
-					{name:"Displacement",value:"displacementMap"},
-					{name:"Ambient/Occlusion",value:"aoMap"}
-				];
-
-				keys.forEach(function( key ){
-					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
-				}); select.value = "map";
-				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
-				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
-
-				row.appendChild( select ); tab.appendChild( row );
-
-			})( TabUI.NewMaterial.tab );
-
 
 		//	create-new-material-bump-scale-ui.js
 
@@ -367,6 +332,41 @@
 				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMaterial.tab );
+
+		//	create-new-material-map-droplist-ui.js
+
+			(function( tab ){
+
+			//	Create New Material Texture droplist. // var tab = TabUI.NewMaterial.tab;
+				var row = document.createElement("h3"); row.textContent = "select:"; row.style.cssText = "height:30px;";
+				var select = document.createElement("select"); select.id = "create-material-map-droplist";
+				select.style.cssText  = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
+				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
+
+				var keys =  [
+					{name:"Diffuse",value:"map"},
+					{name:"Bump",value:"bumpMap"},
+					{name:"Alpha",value:"alphaMap"},
+					{name:"Light",value:"lightMap"},
+					{name:"Normal",value:"normalMap"},
+					{name:"Specular",value:"specularMap"},
+					{name:"Emissive",value:"emissiveMap"},
+					{name:"Metalness",value:"metalnessMap"},
+					{name:"Roughness",value:"roughnessMap"},
+					{name:"Environment",value:"envMap"},
+					{name:"Displacement",value:"displacementMap"},
+					{name:"Ambient/Occlusion",value:"aoMap"}
+				];
+
+				keys.forEach(function( key ){
+					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
+				}); select.value = "map";
+				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
+				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
+
+				row.appendChild( select ); tab.appendChild( row );
 
 			})( TabUI.NewMaterial.tab );
 
@@ -563,7 +563,12 @@
 
 		<script>
 
+			(function(db,viewer,button){
 
+
+			})(
+				materialdB, materialViewer, TabUI.NewMaterial.tab.querySelector("div#create-new-material-button")
+			)
 
 
 
