@@ -330,8 +330,7 @@
 				btn.id = "create-material-map-button";
 				btn.textContent = "Diffuse Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText  = "width:230px;float:left;height:40px;";
-				btn.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;text-align:left;";
+				btn.style.cssText  = "width:230px;float:left;height:40px;font-size:large;margin-left:15px;;";
 
 				var img = new Image(40,40);
 				img.style.cssText = "border:1px solid;border-radius:4px;float:right;margin-right:15px;";
@@ -353,6 +352,165 @@
 
 		//	create-material-emissive-button-ui.js
 
+			(function( tab ){
+
+			//	Create Material Diffuse button.
+			//	var tab = TabUI.Materials.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin-bottom:20px;"
+
+				var btn = document.createElement("div");
+				btn.id = "create-material-map-button";
+				btn.textContent = "Diffuse Image";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText  = "width:230px;float:left;height:40px;font-size:large;margin-left:15px;;";
+
+				var img = new Image(40,40);
+				img.style.cssText = "border:1px solid;border-radius:4px;float:right;margin-right:15px;";
+				watch( img, "onload", function(prop, event, value){ debugMode && console.log({item:img,event:event,src:value}); });
+				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+
+				var input = document.createElement("input");
+				input.type = "file";
+				input.id = "create-material-map-file-input";
+				input.style.cssText = "display:none;";
+				btn.appendChild( input );
+
+				row.appendChild( btn );
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
+
+			(function( tab ){
+
+			//	Create Material Diffuse button.
+			//	var tab = TabUI.Materials.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin-bottom:20px;"
+
+				var btn = document.createElement("div");
+				btn.id = "create-material-map-button";
+				btn.textContent = "Diffuse Image";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText  = "width:230px;float:left;height:40px;font-size:large;margin-left:15px;;";
+
+				var img = new Image(40,40);
+				img.style.cssText = "border:1px solid;border-radius:4px;float:right;margin-right:15px;";
+				watch( img, "onload", function(prop, event, value){ debugMode && console.log({item:img,event:event,src:value}); });
+				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+
+				var input = document.createElement("input");
+				input.type = "file";
+				input.id = "create-material-map-file-input";
+				input.style.cssText = "display:none;";
+				btn.appendChild( input );
+
+				row.appendChild( btn );
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
+
+			(function( tab ){
+
+			//	Create Material Diffuse button.
+			//	var tab = TabUI.Materials.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin-bottom:20px;"
+
+				var btn = document.createElement("div");
+				btn.id = "create-material-map-button";
+				btn.textContent = "Diffuse Image";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText  = "width:230px;float:left;height:40px;font-size:large;margin-left:15px;;";
+
+				var img = new Image(40,40);
+				img.style.cssText = "border:1px solid;border-radius:4px;float:right;margin-right:15px;";
+				watch( img, "onload", function(prop, event, value){ debugMode && console.log({item:img,event:event,src:value}); });
+				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+
+				var input = document.createElement("input");
+				input.type = "file";
+				input.id = "create-material-map-file-input";
+				input.style.cssText = "display:none;";
+				btn.appendChild( input );
+
+				row.appendChild( btn );
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
+
+			(function( tab ){
+
+			//	Create Material Diffuse button.
+			//	var tab = TabUI.Materials.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin-bottom:20px;"
+
+				var btn = document.createElement("div");
+				btn.id = "create-material-map-button";
+				btn.textContent = "Diffuse Image";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText  = "width:230px;float:left;height:40px;font-size:large;margin-left:15px;;";
+
+				var img = new Image(40,40);
+				img.style.cssText = "border:1px solid;border-radius:4px;float:right;margin-right:15px;";
+				watch( img, "onload", function(prop, event, value){ debugMode && console.log({item:img,event:event,src:value}); });
+				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+
+				var input = document.createElement("input");
+				input.type = "file";
+				input.id = "create-material-map-file-input";
+				input.style.cssText = "display:none;";
+				btn.appendChild( input );
+
+				row.appendChild( btn );
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
+
+			(function( tab ){
+
+			//	Create Material Diffuse button.
+			//	var tab = TabUI.Materials.tab;
+
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin-bottom:20px;"
+
+				var btn = document.createElement("div");
+				btn.id = "create-material-map-button";
+				btn.textContent = "Diffuse Image";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText  = "width:230px;float:left;height:40px;font-size:large;margin-left:15px;;";
+
+				var img = new Image(40,40);
+				img.style.cssText = "border:1px solid;border-radius:4px;float:right;margin-right:15px;";
+				watch( img, "onload", function(prop, event, value){ debugMode && console.log({item:img,event:event,src:value}); });
+				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+
+				var input = document.createElement("input");
+				input.type = "file";
+				input.id = "create-material-map-file-input";
+				input.style.cssText = "display:none;";
+				btn.appendChild( input );
+
+				row.appendChild( btn );
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
 
 
 
@@ -361,22 +519,20 @@
 			(function( tab ){
 
 			//	Create New Material button.
-			//	var tab = TabUI.Images.tab;
-
+			//	var tab = TabUI.Materials.tab;
 				var row = document.createElement("h3");
 				row.style.cssText = "height:30px;margin-bottom:20px;"
-
 				var btn = document.createElement("div");
 				btn.id = "create-new-material-button";
 				btn.textContent = "Create New Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
-				btn.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+				btn.style.cssText = "width:-webkit-fill-available;height:40px;";
+				btn.style.cssText += "font-size:large;margin-right:15px;float:right;";
 
 				row.appendChild( btn );
 				tab.appendChild( row );
 
-			})( TabUI.Images.tab );
+			})( TabUI.Materials.tab );
 
 
 		</script>
