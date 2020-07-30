@@ -375,14 +375,13 @@
 			(function( tab ){
 
 			//	Create New Material Image button. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;";
+				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;margin-right:15px;";
 
-				var btn = document.createElement("div"); 
-				btn.id = "create-new-material-img-button"; btn.textContent = "Import Image";
+				var btn = document.createElement("div"); btn.id = "create-new-material-img-button"; btn.textContent = "Import Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText  = "width:220px;float:right;height:40px;font-size:large;"; //margin-right:15px;
+				btn.style.cssText  = "width:220px;float:right;height:40px;font-size:large;";
 
-				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;"; // margin-right:15px;
+				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;";
 				watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
 				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
 				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
