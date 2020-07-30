@@ -18,7 +18,8 @@
 		select.style.cssText += "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;";
 		select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys = "wood,rock,glass,metal,floor,plant,trees,paster,matcap,bricks,fabric,roofing,terrain,concrete,sandstone";
+		var keys  = "wood,rock,glass,metal,floor,plant,trees,paster,";
+			keys += "matcap,bricks,fabric,roofing,terrain,concrete,sandstone";
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
@@ -49,7 +50,8 @@
 		select.style.cssText += "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;";
 		select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys = "urban,night,cloudy,midday,skybox,indoor,nature,studio,sunset,outdoor,skydome,sunrise,overcast";
+		var keys  = "urban,night,cloudy,midday,skybox,indoor,nature,";
+			keys += "studio,sunset,outdoor,skydome,sunrise,overcast";
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
