@@ -334,17 +334,46 @@
 
 			})( TabUI.Materials.tab );
 
-		//	create-material-emissive-button-ui.js
+		//	create-material-bump-button-ui.js
 
 			(function( tab ){
 
-			//	Create Material Diffuse button.
+			//	Create Material Bump button.
 			//	var tab = TabUI.Materials.tab;
 
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
+				btn.id = "create-material-bump-button"; btn.textContent = "Bump Image";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
+
+				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:right;margin-right:15px;";
+				watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
+				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+
+				var input = document.createElement("input");
+				input.type = "file"; input.id = "create-material-map-file-input";
+				input.style.cssText = "display:none;"; btn.appendChild( input );
+
+				row.appendChild( btn );
+				row.appendChild( img );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
+
+		//	create-material-displacement-button-ui.js
+
+			(function( tab ){
+
+			//	Create Material Displacement button.
+			//	var tab = TabUI.Materials.tab;
+
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+
+				var btn = document.createElement("div");
+				btn.id = "create-material-displacement-button"; btn.textContent = "Displacement Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
 
@@ -363,15 +392,18 @@
 				tab.appendChild( row );
 
 			})( TabUI.Materials.tab );
+
+		//	create-material-normal-button-ui.js
+
 			(function( tab ){
 
-			//	Create Material Diffuse button.
+			//	Create Material Normal button.
 			//	var tab = TabUI.Materials.tab;
 
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
+				btn.id = "create-material-normal-button"; btn.textContent = "Normal Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
 
@@ -390,15 +422,17 @@
 				tab.appendChild( row );
 
 			})( TabUI.Materials.tab );
+
+
 			(function( tab ){
 
-			//	Create Material Diffuse button.
+			//	Create Material Roughness button.
 			//	var tab = TabUI.Materials.tab;
 
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
+				btn.id = "create-material-roughness-button"; btn.textContent = "Roughness Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
 
@@ -417,15 +451,17 @@
 				tab.appendChild( row );
 
 			})( TabUI.Materials.tab );
+
+
 			(function( tab ){
 
-			//	Create Material Diffuse button.
+			//	Create Material Metalness button.
 			//	var tab = TabUI.Materials.tab;
 
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
+				btn.id = "create-material-metalness-button"; btn.textContent = "Metalness Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
 
@@ -444,15 +480,16 @@
 				tab.appendChild( row );
 
 			})( TabUI.Materials.tab );
+
 			(function( tab ){
 
-			//	Create Material Diffuse button.
+			//	Create Material Specular button.
 			//	var tab = TabUI.Materials.tab;
 
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;display:none;"
 
 				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
+				btn.id = "create-material-specular-button"; btn.textContent = "Specular Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
 
@@ -471,42 +508,16 @@
 				tab.appendChild( row );
 
 			})( TabUI.Materials.tab );
+
 			(function( tab ){
 
-			//	Create Material Diffuse button.
+			//	Create Material AO button.
 			//	var tab = TabUI.Materials.tab;
 
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
-				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
-
-				var img = new Image(40,40); 
-				img.style.cssText = "border-radius:4px;float:right;margin-right:15px;";
-				watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
-				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
-				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
-
-				var input = document.createElement("input");
-				input.type = "file"; input.id = "create-material-map-file-input";
-				input.style.cssText = "display:none;"; btn.appendChild( input );
-
-				row.appendChild( btn );
-				row.appendChild( img );
-				tab.appendChild( row );
-
-			})( TabUI.Materials.tab );
-			(function( tab ){
-
-			//	Create Material Diffuse button.
-			//	var tab = TabUI.Materials.tab;
-
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
-
-				var btn = document.createElement("div");
-				btn.id = "create-material-map-button"; btn.textContent = "Diffuse Image";
+				btn.id = "create-material-ao-button"; btn.textContent = "Ambient/Occlusion";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
 
