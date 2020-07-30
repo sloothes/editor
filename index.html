@@ -218,7 +218,7 @@
 			(function( tab ){
 
 			//	Materlals Collection droplist. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.textContent = "Collection:"; row.style.cssText = "height:30px;"
+				var row = document.createElement("h3"); row.textContent = "Collection:"; row.style.cssText = "height:30px;";
 				var select = document.createElement("select"); select.id = "create-material-collection-droplist";
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
@@ -238,7 +238,7 @@
 			(function( tab ){
 
 			//	Create Material Type droplist. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.textContent = "type:"; row.style.cssText = "height:30px;margin-top:20px;display:none;"
+				var row = document.createElement("h3"); row.textContent = "type:"; row.style.cssText = "height:30px;margin-top:20px;display:none;";
 
 				var select = document.createElement("select"); select.id = "material-type-droplist";
 				select.style.cssText  = "width:210px;color:#000;float:right;border:1px solid;border-radius:4px;";
@@ -287,7 +287,7 @@
 			(function( tab ){
 
 			//	Create New Material Name input. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.style.cssText = "margin-right:20px;height:40px;";
+				var row = document.createElement("h3"); row.style.cssText = "margin-right:15px;height:40px;";
 				var input = document.createElement("input"); input.id = "create-new-material-name-input";
 				input.setAttribute("placeholder", "name" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "width:-webkit-fill-available;color:#000;display:inline;margin:0px 5px;";
@@ -301,10 +301,10 @@
 			(function( tab ){
 
 			//	Create New Material Texture droplist. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.textContent = "texture:"; row.style.cssText = "height:40px;"
+				var row = document.createElement("h3"); row.textContent = "texture:"; row.style.cssText = "height:30px;";
 				var select = document.createElement("select"); select.id = "create-material-map-droplist";
-				select.style.cssText  = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
-				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
+				select.style.cssText  = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
+				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
 
 				var keys =  [
 					{name:"Diffuse",value:"map"},
@@ -337,7 +337,7 @@
 			(function( tab ){
 
 			//	Create New Material Bump Scale input. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
+				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
 				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
@@ -351,13 +351,12 @@
 
 			})( TabUI.NewMaterial.tab );
 
-
 		//	create-new-material-normal-scale-ui.js
 
 			(function( tab ){
 
 			//	Create New Material Normal Scale input. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
+				var row = document.createElement("h3");row.textContent = "normal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
 				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
@@ -371,17 +370,17 @@
 
 			})( TabUI.NewMaterial.tab );
 
-		//	create-new-material-import-image-ui.js
+		//	create-new-material-image-button-ui.js
 
 			(function( tab ){
 
 			//	Create New Material Image button. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;";
 
 				var btn = document.createElement("div"); 
 				btn.id = "create-new-material-img-button"; btn.textContent = "Import Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText  = "width:220px;float:right;height:40px;font-size:large;"; // margin-left:15px;
+				btn.style.cssText  = "width:220px;float:right;height:40px;font-size:large;"; //margin-right:15px;
 
 				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;"; // margin-right:15px;
 				watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
@@ -399,7 +398,7 @@
 			(function( tab ){
 
 			//	Create New Material Remove button. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
 				var btn = document.createElement("div"); btn.id = "create-new-material-remove-button"; btn.textContent = "Remove Texture";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
@@ -412,7 +411,7 @@
 			(function( tab ){
 
 			//	Create New Material Save button. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
 				var btn = document.createElement("div"); btn.id = "create-new-material-save-button"; btn.textContent = "Save Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
@@ -425,7 +424,7 @@
 			(function( tab ){
 
 			//	Create New Material Apply button. // var tab = TabUI.NewMaterial.tab;
-				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
+				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;";
 				var btn = document.createElement("div"); btn.id = "create-new-material-apply-button"; btn.textContent = "Apply Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
