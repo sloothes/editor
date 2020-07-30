@@ -213,6 +213,7 @@
 		//	create-new-material-tab-ui.js
 
 			TabUI.add( "NewMaterial", "create-new-material-tab" ); TabUI.append( "NewMaterial" );
+			TabUI.NewMaterial.pill.innerHTML = "New&nbsp;Material";
 
 			(function( tab ){
 
@@ -221,11 +222,12 @@
 				var select = document.createElement("select"); select.id = "create-material-collection-droplist";
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
-				var keys =  "rock,wood,floor,metal,bricks,fabric,matcap,plaster,roofing,terrain,concrete,sandstone,environment,others";
 
+				var keys =  "rock,wood,floor,metal,bricks,fabric,matcap,plaster,roofing,terrain,concrete,sandstone,environment,others";
 				keys.split(",").forEach(function( name ){
 					var option = document.createElement("option"); option.text = name; option.value = name; select.appendChild( option );
-				});
+				}); watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
+				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
 				row.appendChild( select ); tab.appendChild( row );
 
@@ -242,16 +244,14 @@
 				select.style.cssText  = "width:210px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
 
-				var types  = "MeshBasicMaterial,MeshStandardMaterial,MeshLambertMaterial,MeshPhongMaterial,";
-					types += "MeshDepthMaterial,MeshNormalMaterial,MeshToonMaterial,MeshPhysicalMaterial,PointsMaterial,";
-					types += "LineBasicMaterial,LineDashedMaterial,RawShaderMaterial,ShaderMaterial,ShadowMaterial,SpriteMaterial";
-
+				var types = "MeshBasicMaterial,MeshStandardMaterial,MeshLambertMaterial,MeshPhongMaterial,";
+				types += "MeshDepthMaterial,MeshNormalMaterial,MeshToonMaterial,MeshPhysicalMaterial,PointsMaterial,";
+				types += "LineBasicMaterial,LineDashedMaterial,RawShaderMaterial,ShaderMaterial,ShadowMaterial,SpriteMaterial";
 				types.split(",").forEach(function( name ){
 					var option = document.createElement("option"); option.text = name; option.value = name; select.appendChild( option );
-				}); select.value = "MeshStandardMaterial";
-
+				}); select.value = "MeshStandardMaterial"; 
 				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
-				select.addEventListener( "change", function(){ callWatchers( this, "onchange", "change", this.value ); });
+				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
 				row.appendChild( select ); tab.appendChild( row );
 
@@ -261,19 +261,11 @@
 
 			(function( tab ){
 
-			//	Create Material Tab viewer. // var tab = TabUI.NewMaterial.tab;
-			//	const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
-
+			//	Create New Material viewer. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
-
-				var img = new Image(256,256); img.id = "create-material-viewer"; // img.src = dummy_src;
-				img.style.cssText  = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
-				img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
-
-				watch( img, "onload", function(prop, event, value){ debugMode && console.log({item:img,event:event,src:value}); });
-				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
-				img.addEventListener("error",function(err){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
-				row.appendChild( img ); tab.appendChild( row );
+				var canvas = document.createElement("canvas"); canvas.width = 256; canvas.height = 256; canvas.id = "texture-viewer"; 
+				canvas.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
+				row.appendChild( canvas ); tab.appendChild( row );
 
 			})( TabUI.NewMaterial.tab );
 
@@ -309,7 +301,6 @@
 			(function( tab ){
 
 			//	Create New Material Texture droplist. // var tab = TabUI.NewMaterial.tab;
-
 				var row = document.createElement("h3"); row.textContent = "texture:"; row.style.cssText = "height:40px;"
 				var select = document.createElement("select"); select.id = "create-material-map-droplist";
 				select.style.cssText  = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
@@ -333,99 +324,122 @@
 				keys.forEach(function( key ){
 					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
 				}); select.value = "map";
+				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
+				select.addEventListener( "change", function(){ this.blur; callWatchers( this, "onchange", "change", this.value ); });
 
 				row.appendChild( select ); tab.appendChild( row );
 
 			})( TabUI.NewMaterial.tab );
 
 
+		//	create-new-material-bump-scale-ui.js
+
+			(function( tab ){
+
+			//	Create New Material Bump Scale input. // var tab = TabUI.NewMaterial.tab;
+				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-new-material-bump-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-new-material-bump-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-new-material-bump-input";
+				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMaterial.tab );
 
 
+		//	create-new-material-normal-scale-ui.js
 
+			(function( tab ){
 
+			//	Create New Material Normal Scale input. // var tab = TabUI.NewMaterial.tab;
+				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-new-material-normal-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-new-material-normal-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
 
+				var input = document.createElement("input"); input.id = "create-new-material-normal-input";
+				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
-
-
-
+			})( TabUI.NewMaterial.tab );
 
 		//	create-new-material-import-image-ui.js
 
 			(function( tab ){
 
-			//	Create Material Image button.
-			//	var tab = TabUI.Materials.tab;
-
+			//	Create New Material Image button. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
-				var btn = document.createElement("div");
-				btn.id = "create-material-img-button"; btn.textContent = "Import Texture";
+				var btn = document.createElement("div"); 
+				btn.id = "create-new-material-img-button"; btn.textContent = "Import Image";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText  = "width:220px;float:left;height:40px;font-size:large;margin-left:15px;";
+				btn.style.cssText  = "width:220px;float:right;height:40px;font-size:large;"; // margin-left:15px;
 
-				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:right;margin-right:15px;";
+				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;"; // margin-right:15px;
 				watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
 				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
 				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
 
 				var input = document.createElement("input"); input.type = "file"; 
-				input.id = "create-material-img-file-input"; input.style.cssText = "display:none;"; 
+				input.id = "create-new-material-img-file-input"; input.style.cssText = "display:none;"; 
+				btn.appendChild( input ); row.appendChild( img ); row.appendChild( btn ); tab.appendChild( row );
 
-				btn.appendChild( input ); row.appendChild( btn ); row.appendChild( img ); tab.appendChild( row );
-
-			})( TabUI.Materials.tab );
+			})( TabUI.NewMaterial.tab );
 
 		//	create-new-material-remove-button-ui.js
 
 			(function( tab ){
 
-			//	Create Material Remove button.
-				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
+			//	Create New Material Remove button. // var tab = TabUI.NewMaterial.tab;
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 				var btn = document.createElement("div"); btn.id = "create-new-material-remove-button"; btn.textContent = "Remove Texture";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 				row.appendChild( btn ); tab.appendChild( row );
 
-			})( TabUI.Materials.tab );
-
-
-
-
-
+			})( TabUI.NewMaterial.tab );
 
 		//	create-new-material-save-button-ui.js
 
 			(function( tab ){
 
-			//	Create Material Save button. // var tab = TabUI.Materials.tab;
+			//	Create New Material Save button. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 				var btn = document.createElement("div"); btn.id = "create-new-material-save-button"; btn.textContent = "Save Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 				row.appendChild( btn ); tab.appendChild( row );
 
-			})( TabUI.Materials.tab );
+			})( TabUI.NewMaterial.tab );
 
 		//	create-new-material-apply-button-ui.js
 
 			(function( tab ){
 
-			//	Create Material Apply button. // var tab = TabUI.Materials.tab;
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+			//	Create New Material Apply button. // var tab = TabUI.NewMaterial.tab;
+				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
 				var btn = document.createElement("div"); btn.id = "create-new-material-apply-button"; btn.textContent = "Apply Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 				row.appendChild( btn ); tab.appendChild( row );
 
-			})( TabUI.Materials.tab );
+			})( TabUI.NewMaterial.tab );
 
 
 		</script>
 
 		<script>
 
-			TabUI.Materials.role.classList.add("active");
-			TabUI.Materials.tab.classList.add("in","active");
+			TabUI.NewMaterial.role.classList.add("active");
+			TabUI.NewMaterial.tab.classList.add("in","active");
 
 		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
