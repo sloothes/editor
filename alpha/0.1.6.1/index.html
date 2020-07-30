@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+
+		<title>Editor (alpha 0.1.6.1)</title>
+
+		<meta charset="utf-8">
+		<meta name="generator" content="Three.js Editor">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
+		<link rel="stylesheet" href="/css/joystick.css">
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/bootbox-dialoges.css">
+		<link rel="stylesheet" href="/css/jcrop.css">
+
+		<script src="/js/watch.js"></script>
+		<script src="/js/Objectid.js"></script>
+		<script src="/js/jquery.min.js"></script> 
+		<script src="/js/system.min.js"></script>
+		<script src="/js/signals.min.js"></script>
+		<script src="/js/inflate.min.js"></script>
+		<script src="/js/zangodb.min.js"></script>
+		<script src="/js/bootstrap.min.js"></script>
+		<script src="/js/validator.min.js"></script>
+		<script src="/js/hold-event.min.js"></script>
+		<script src="/js/jcrop.js"></script>
+
+		<style>
+
+			body {
+				margin: 0px;
+				font-size: 13px;
+				font-family: sans-serif;
+				background-repeat: repeat;
+				background-image: url("https://i.imgur.com/rnZZU0i.png") !important;
+				overflow: hidden;
+			}
+
+			#loading-bar {
+				width:100%;
+				height:100%;
+				top:0; left:0;
+				position:fixed;
+				display:flex;
+				align-items:center;
+				justify-content:center;
+			}
+
+			.middle > * {
+				top:0; 
+				left:0;
+				right:0;
+				bottom:0;
+				margin:auto;
+				position:absolute;
+			}
+
+			#joystick1 {
+				right: calc(40px + 370px);
+			}
+			
+			#jumpButton {
+				right: calc(105px + 370px);
+			}
+
+			.btn-matcap,
+			.btn-terrain {
+				padding:0;
+				float:left;
+				width:55px;
+				height:55px;
+				border:1px solid;
+				border-radius:4px;
+				margin-right:4px;
+				margin-bottom:4px;
+				display:inline-block;
+			}
+
+			.btn-matcap + .btn-matcap,
+			.btn-terrain + .btn-terrain {
+				margin-right:4px;
+			}
+
+		</style>
+	</head>
+
+	<body ontouchstart="">
+
+		<script src="/editor/js/TabUI.js"></script>
+
+		<script>
+			const debugMode = true;
+			const Signal = signals.Signal;
+			const RAD2DEG = 57.29577951308232;
+			const DEG2RAD = 0.017453292519943295;
+			document.body.appendChild( createSidePanel() );
+		</script>
+
+		<script src="/editor/js/three.js"></script>
+		<script src="/editor/js/MeshWalk.js"></script>
+		<script src="/editor/js/UVsDebug.js"></script>
+		<script src="/editor/js/FBXLoader.js"></script>
+		<script src="/editor/js/VirtualInput.js"></script>
+		<script src="/editor/js/KeyboardState.js"></script>
+		<script src="/editor/js/EditorControls.js"></script>
+		<script src="/editor/js/camera-controls.js"></script>
+		<script src="/editor/js/SubdivisionModifier.js"></script>
+		<script src="/editor/js/three-pathfinding.umd.js"></script>
+
+		<script src="/threejs/r96/examples/js/loaders/GLTFLoader.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/GLTFExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/STLExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/OBJExporter.js"></script>
+		<script src="/threejs/r96/examples/js/exporters/ColladaExporter.js"></script>
+
+	<!-- Water.js -->
+
+		<script src="/editor/js/Ocean_fft.js"></script>
+		<script src="/editor/js/MirrorRenderer.js"></script>
+		<script src="/editor/js/WaterMaterial.js"></script>
+
+	<!-- Engine.js -->
+
+		<script src="/editor/core/helpers.js"></script>
+		<script src="/editor/core/keyboard.js"></script>
+		<script src="/editor/core/enviroment.js"></script>
+		<script src="/editor/core/localPlayer.js"></script>
+		<script src="/editor/core/cameraControls.js"></script>
+		<script src="/editor/core/keyboardState.js"></script>
+		<script src="/editor/core/keyInputControls.js"></script>
+		<script src="/editor/core/joystickControls.js"></script>
+
+	<!-- Editor.js -->
+
+		<script src="/editor/src/EntityManager.js"></script>
+		<script src="/editor/src/MaterialManager.js"></script>
+		<script src="/editor/src/TexturesManager.js"></script>
+		<script src="/editor/src/UndoArray.js"></script>
+		<script src="/editor/src/imgru-db.js"></script>
+		<script src="/editor/src/editor-meta.js"></script>
+
+		<script src="/editor/src/editor-tab-ui.js"></script>
+		<script src="/editor/src/geometry-tab-ui.js"></script>
+		<script src="/editor/src/material-tab-ui.js"></script>
+		<script src="/editor/src/textures-tab-ui.js"></script>
+		<script src="/editor/src/skydome-tab-ui.js"></script>
+		<script src="/editor/src/images-tab-ui.js"></script>
+
+		<script src="/editor/src/watchers-call-ui.js"></script>
+		<script src="/editor/src/entities-helpers.js"></script>
+		<script src="/editor/src/TextureEditor.js"></script>
+		<script src="/editor/src/MaterialEditor.js"></script>
+		<script src="/editor/src/Object3DEditor.js"></script>
+		<script src="/editor/src/RigidObjects.js"></script>
+		<script src="/editor/src/editor-droplists.js"></script>
+		<script src="/editor/src/edges-helper.js"></script>
+		<script src="/editor/src/octree-helpers.js"></script>
+		<script src="/editor/src/geometry-buttons.js"></script>
+		<script src="/editor/src/geometry-inputs.js"></script>
+		<script src="/editor/src/editor-buttons.js"></script>
+		<script src="/editor/src/rigid-objects-buttons.js"></script>
+		<script src="/editor/src/editor-key-inputs.js"></script>
+		<script src="/editor/src/editor-mouse-inputs.js"></script>
+		<script src="/editor/src/editor-manager.js"></script>
+		<script src="/editor/src/editor-systems.js"></script>
+		<script src="/editor/src/material-droplists.js"></script>
+		<script src="/editor/src/material-manager.js"></script>
+		<script src="/editor/src/material-buttons.js"></script>
+		<script src="/editor/src/material-key-inputs.js"></script>
+		<script src="/editor/src/material-mouse-inputs.js"></script>
+		<script src="/editor/src/texture-droplists.js"></script>
+		<script src="/editor/src/texture-manager.js"></script>
+		<script src="/editor/src/texture-buttons.js"></script>
+		<script src="/editor/src/texture-key-inputs.js"></script>
+		<script src="/editor/src/texture-mouse-inputs.js"></script>
+		<script src="/editor/src/texture-viewer.js"></script>
+		<script src="/editor/src/editor-center-helper.js"></script>
+		<script src="/editor/src/Water.js"></script>
+		<script src="/editor/src/Skydome.js"></script>
+		<script src="/editor/src/skydome-droplist.js"></script>
+		<script src="/editor/src/background-droplist.js"></script>
+		<script src="/editor/src/skydome-buttons.js"></script>
+		<script src="/editor/src/images-inputs.js"></script>
+		<script src="/editor/src/images-uploads.js"></script>
+
+		<script>
+
+		</script>
+
+		<script>
+
+			TabUI.Images.role.classList.add("active");
+			TabUI.Images.tab.classList.add("in","active");
+
+		//	scene.add(ground);
+		//	mirror.visible = !mirror.visible; 
+		//	ground.visible = !ground.visible; 
+			groundHelper.visible = !groundHelper.visible; 
+
+
+		//	Add entities.
+		//	entities.add(scene);
+		//	entities.add(mirror);
+		//	entities.add(ground);
+		//	entities.add(localPlayer);
+			entities.add(groundHelper);
+			entities.add(localPlayer.getObjectByName("local helper"));
+
+			cameraControls.setLatLon(5.128, 270.675);
+			localPlayer.controller.movementSpeed = 20;
+			localPlayer.controller.center.set(-85,2,-2);
+			localPlayer.visible = !localPlayer.visible; 
+
+		</script>
+
+		<script src="/editor/src/database-tab-ui.js"></script>
+		<script src="/editor/src/database-inputs.js"></script>
+	<!-- script src="/editor/src/ViewportTab.js"></script -->
+		<script src="/editor/src/playground.js"></script>
+
+	</body>
+</html>
