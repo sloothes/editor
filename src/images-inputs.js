@@ -94,7 +94,7 @@
 				}
 
 				var max = items.length - 1;
-				var i = THREE.Math.clamp(++index, 0, max);
+				var i = index = THREE.Math.clamp(++index, 0, max);
 
 				if ( items[i].name !== undefined )
 					name_input.value = items[i].name
@@ -117,7 +117,7 @@
 				}
 
 				var max = items.length - 1;
-				var i = THREE.Math.clamp(--index, 0, max);
+				var i = index = THREE.Math.clamp(--index, 0, max);
 
 				if ( items[i].name !== undefined )
 					name_input.value = items[i].name
@@ -141,7 +141,7 @@
 			}
 
 			var max = items.length - 1;
-			var i = THREE.Math.clamp(++index, 0, max);
+			var i = index = THREE.Math.clamp(++index, 0, max);
 
 
 			if ( items[i].name !== undefined )
@@ -167,7 +167,7 @@
 			}
 
 			var max = items.length - 1;
-			var i = THREE.Math.clamp(--index, 0, max);
+			var i = index = THREE.Math.clamp(--index, 0, max);
 
 			if ( items[i].name !== undefined )
 				name_input.value = items[i].name
