@@ -263,7 +263,7 @@
 
 			//	Create New Material viewer. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;margin-right:15px;";
-				var canvas = document.createElement("canvas"); canvas.width = 256; canvas.height = 256; canvas.id = "texture-viewer"; 
+				var canvas = document.createElement("canvas"); canvas.width = 256; canvas.height = 256; canvas.id = "create-new-material-viewer"; 
 				canvas.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 				row.appendChild( canvas ); tab.appendChild( row );
 
@@ -431,6 +431,131 @@
 
 			})( TabUI.NewMaterial.tab );
 
+		</script>
+
+		<script>
+
+		//	create-new-material-viewer.js
+
+			const materialViewer = {
+
+				canvas: TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-viewer"),
+
+			};
+
+		//	New Material Viewer scene.
+
+			(function( materialViewer ){
+
+			//	Viewer scene.
+
+				materialViewer.scene = (function(){
+					var scene = new THREE.Scene();
+					scene.name = "new material scene";
+					return scene;
+				})();
+
+			//	Viewer camera.
+
+				materialViewer.camera = (function( d ){
+				//	var aspect = canvas.clientWidth / canvas.clientWidth;
+					var camera = new THREE.OrthographicCamera( -d, +d, +d, -d, 1, 1000 );
+					camera.name = "new material camera";
+					camera.position.z = 50;
+					camera.lookAt( 0,0,0 );
+					materialViewer.scene.add( camera );
+					return camera;
+				})( 1.5 );
+
+			//	Viewer light.
+
+				materialViewer.light = (function(){
+					var light = new THREE.DirectionalLight( 0xffffff, 0.75 );
+					light.name = "new material light";
+					camera.position.set( 0,10,0 );
+					materialViewer.scene.add( light );
+					return light;
+				})();
+
+			//  Viewr Renderer.
+
+				materialViewer.renderer = new THREE.WebGLRenderer({
+					alpha: true,  // for transparent rendering set alpha:true, important!
+					canvas: materialViewer.canvas,
+					antialias: true,
+					preserveDrawingBuffer: true,
+				});
+
+				materialViewer.renderer.gammaInput = true;
+				materialViewer.renderer.gammaOutput = true;
+				materialViewer.renderer.shadowMap.enabled = true;
+				materialViewer.renderer.setClearAlpha( 0 ); // for transparent rendering set clear alpha: 0.
+				materialViewer.renderer.setClearColor( 0x000000, 0 ); // for transparent rendering set clear alpha: 0.
+				materialViewer.renderer.setPixelRatio( window.devicePixelRatio );
+				materialViewer.renderer.setSize( materialViewer.canvas.width, materialViewer.canvas.height );
+				materialViewer.renderer.domElement.style.background = "none";  // transparent rendering. important!
+				materialViewer.render = function(){ this.renderer.render( this.scene, this.camera ); };
+
+			//	Viewer material.
+
+				materialViewer.material = (function(){
+					var mesh = new THREE.Mesh(
+						new THREE.SphereGeometry(),
+						new THREE.MeshStandardMaterial();
+					);  
+					mesh.name = "new material viewer";
+					mesh.material.name = "New Material";
+					materialViewer.scene.add( mesh );
+					return mesh.material;
+				//	material_entities.add( mesh.material );
+				})();
+
+			//	dispose.
+
+				materialViewer.dispose = function(){
+
+					(function( material ){
+					//	dispose textures.
+						material && material.map && material.map.dispose && material.map.dispose();
+						material && material.bumpMap && material.bumpMap.dispose && material.bumpMap.dispose();
+						material && material.alphaMap && material.alphaMap.dispose && material.alphaMap.dispose();
+						material && material.normalMap && material.normalMap.dispose && material.normalMap.dispose();
+						material && material.emissiveMap && material.emissiveMap.dispose && material.emissiveMap.dispose();
+						material && material.roughnessMap && material.roughnessMap.dispose && material.roughnessMap.dispose();
+						material && material.metalnessMap && material.metalnessMap.dispose && material.metalnessMap.dispose();
+						material && material.displacementMap && material.displacementMap.dispose && material.displacementMap.dispose();
+						material && material.lightMap && material.lightMap.dispose && material.lightMap.dispose();
+						material && material.envMap && material.envMap.dispose && material.envMap.dispose();
+						material && material.aoMap && material.aoMap.dispose && material.aoMap.dispose();
+					})( textureViewer.material );
+
+					(function(){
+					//	remove textures.
+						materialViewer.material.map = null;
+						materialViewer.material.bumpMap = null;
+						materialViewer.material.alphaMap = null;
+						materialViewer.material.normalMap = null;
+						materialViewer.material.emissiveMap = null;
+						materialViewer.material.roughnessMap = null;
+						materialViewer.material.metalnessMap = null;
+						materialViewer.material.displacementMap = null;
+						materialViewer.material.lightMap = null;
+						materialViewer.material.envMap = null;
+						materialViewer.material.aoMap = null;
+					})();
+
+				//	update material.
+					materialViewer.material.needsUpdate = true; // important!
+				}
+
+			//	reset.
+
+				materialViewer.reset = function(){
+					materialViewer.dispose();
+					materialViewer.material.color.setHex(0xffffff);
+				}
+
+			})( materialViewer );
 
 		</script>
 

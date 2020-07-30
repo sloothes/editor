@@ -2,7 +2,7 @@
 
 	const textureViewer = {
 
-		canvas: document.querySelector("canvas#texture-viewer"),
+		canvas: TabUI.Texture.tab.querySelector("canvas#texture-viewer"),
 
 	};
 
