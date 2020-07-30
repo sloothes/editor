@@ -472,7 +472,7 @@
 				materialViewer.light = (function(){
 					var light = new THREE.DirectionalLight( 0xffffff, 0.75 );
 					light.name = "new material light";
-					camera.position.set( 0,10,0 );
+					camera.position.set( 0,50,50 );
 					materialViewer.scene.add( light );
 					return light;
 				})();
@@ -500,8 +500,8 @@
 
 				materialViewer.material = (function(){
 					var mesh = new THREE.Mesh(
-						new THREE.SphereGeometry(),
-						new THREE.MeshStandardMaterial()
+						new THREE.SphereGeometry(64,32,1),
+						new THREE.MeshStandardMaterial( )
 					);  
 					mesh.name = "new material viewer";
 					mesh.material.name = "New Material";
@@ -514,8 +514,9 @@
 
 				materialViewer.dispose = function(){
 
+				//	dispose textures.
+
 					(function( material ){
-					//	dispose textures.
 						material && material.map && material.map.dispose && material.map.dispose();
 						material && material.bumpMap && material.bumpMap.dispose && material.bumpMap.dispose();
 						material && material.alphaMap && material.alphaMap.dispose && material.alphaMap.dispose();
@@ -529,8 +530,9 @@
 						material && material.aoMap && material.aoMap.dispose && material.aoMap.dispose();
 					})( textureViewer.material );
 
+				//	remove textures.
+
 					(function(){
-					//	remove textures.
 						materialViewer.material.map = null;
 						materialViewer.material.bumpMap = null;
 						materialViewer.material.alphaMap = null;
