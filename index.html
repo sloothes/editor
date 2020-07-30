@@ -304,6 +304,26 @@
 
 			})( TabUI.Materials.tab );
 
+		//	create-new-material-button-ui.js
+
+			(function( tab ){
+
+			//	Create New Material button.
+			//	var tab = TabUI.Materials.tab;
+				var row = document.createElement("h3");
+				row.style.cssText = "height:30px;margin-bottom:20px;"
+				var btn = document.createElement("div");
+				btn.id = "create-new-material-button";
+				btn.textContent = "Create New Material";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText = "width:-webkit-fill-available;height:40px;";
+				btn.style.cssText += "font-size:large;margin-right:15px;float:right;";
+
+				row.appendChild( btn );
+				tab.appendChild( row );
+
+			})( TabUI.Materials.tab );
+
 		//	create-material-diffuse-button-ui.js
 
 			(function( tab ){
@@ -546,13 +566,13 @@
 
 			(function( tab ){
 
-			//	Create New Material button.
+			//	Create Material Save button.
 			//	var tab = TabUI.Materials.tab;
 				var row = document.createElement("h3");
 				row.style.cssText = "height:30px;margin-bottom:20px;"
 				var btn = document.createElement("div");
-				btn.id = "create-new-material-button";
-				btn.textContent = "Create New Material";
+				btn.id = "create-material-save-button";
+				btn.textContent = "Save Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;";
 				btn.style.cssText += "font-size:large;margin-right:15px;float:right;";
