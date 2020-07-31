@@ -581,8 +581,8 @@
 				button.addEventListener( "click", function(){
 					clearTimeout(interval); interval = setTimeout(function(button){
 						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({ 
-							name:"untitled material " + (++k),
-							bumpScale:0.01,normalScale:1,displacementBias:0,displacementScale:0}) 
+							name:"untitled material " + (++k), normalScale:new THREE.Vector2(1,1),
+							bumpScale:0.01, displacementBias:0, displacementScale:0 })
 						);
 					}, 250, this);
 				})
