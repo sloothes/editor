@@ -470,7 +470,7 @@
 					var camera = new THREE.OrthographicCamera( -d, +d, +d, -d, 1, 100 );
 					camera.name = "camera"; camera.position.z = 10; camera.lookAt( 0,0,0 ); 
 					materialViewer.scene.add( camera ); return camera;
-				})( 1.2 );
+				})( 1 );
 
 			//	Viewer light.
 
@@ -659,7 +659,7 @@
 
 		//	create-new-material-save-button.js
 
-			(function(viewer,save_button,name_input,map_droplist,metadB,imgurdB,materialdB){
+			(function(viewer,save_button,name_input,map_droplist,col_droplist,metadB,imgurdB,materialdB){
 
 				var interval;
 
@@ -670,7 +670,7 @@
 					}, 250);
 				}
 
-			//	Parse viewer mesh json meta data to watcher.
+			//	Parses material viewer mesh material to watcher.
 				save_button.addEventListener( "click", onSaveButtonClick );
 
 				watch(save_button, "onclick", function(prop, event, material){
@@ -680,7 +680,7 @@
 					var meta = {geometries:{},materials:{},textures:{},images:{}};
 					var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
 
-				//	make power of two and convert image/png; 
+				//	makes power of two and convert image/png; 
 				//	dataURL to data:image/jpeg;base64 dataURL.
 
 					var promises = [];
@@ -704,15 +704,15 @@
 						);
 					} 
 
-					var entry = {};
-					entry.name = name_input.value;
-					entry.collection = map_droplist.value;
-					entry.preview = viewer.canvas.toDataURL(); // image/png.
-					entry.images = Object.keys(meta.images);
-					entry.textures = Object.keys(meta.textures);
+					var entry = {}; 
+					entry.name = name_input.value;               // string.
+					entry.collection = col_droplist.value;       // string.
+					entry.images = Object.keys(meta.images);     // uuid array.
+					entry.textures = Object.keys(meta.textures); // uuid array.
+					entry.preview = viewer.canvas.toDataURL();   // dataURL.
 
-					debugMode && console.log("meta:", meta);  // debug!
-					debugMode && console.log("entry:", entry); // debug!
+					debugMode && console.log("meta:", meta);     // debug!
+					debugMode && console.log("entry:", entry);   // debug!
 
 					Promise.all(promises).then(function(results){
 						debugMode && console.log("results:", results); // debug!
@@ -723,9 +723,10 @@
 
 
 					}).catch(function(err){
-						console.error(err);
+						console.error(err); console.log("material", entry.name, "save failed!");
 					}).then(function(){
 						save_button.addEventListener( "click", onSaveButtonClick ); // important!
+						console.log("material", entry.name, "saved successfully!");
 					})
 
 				});
@@ -760,11 +761,12 @@
 
 				}
 
-			})( materialViewer, 
-				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"), // save_button,
-				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"), // name_input,
+			})( materialViewer, // viewer,
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),     // save_button,
+				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),    // name_input,
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"), // map_droplist,
-				metadB,imgurdB,materialdB
+				TabUI.NewMaterial.tab.querySelector("create-material-collection-droplist"),     // col_droplist,
+				metadB,imgurdB,materialdB // dBs.
 			);
 
 		</script>
