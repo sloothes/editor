@@ -593,12 +593,12 @@
 				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") // input,
 			);
 
-			(function(viewer,icon,button,input,map_droplist){
+			(function(viewer,icon,image_button,image_input,map_droplist){
 
-				button.addEventListener( "change", function(){
+				image_input.addEventListener( "change", function(){
 
-					if ( !input.files.length ) return;
 					if ( !map_droplist.value ) return;
+					if ( !image_input.files.length ) return;
 
 					var file = input.files[0];
 
@@ -636,14 +636,14 @@
 					reader.readAsDataURL(file);
 				});
 
-				button.addEventListener( "click", function(){
-					input.value = ""; input.click();
-				});
+			//	button.addEventListener( "click", function(){ input.value = ""; input.click(); });
+				watch( image_button, "onclick", function(prop, event, value){ input.value = ""; input.click(); });
+				watch( map_droplist, "onchange", function(prop, event, value){ input.value = ""; input.click(); });
 
 			})( materialViewer, 
 				TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-icon"), // icon,
-				TabUI.NewMaterial.tab.querySelector("div#create-new-material-img-button"), // button,
-				TabUI.NewMaterial.tab.querySelector("input#create-new-material-file-input"), // input,
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-img-button"), // image_button,
+				TabUI.NewMaterial.tab.querySelector("input#create-new-material-file-input"), // image_input,
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
 			);
 
