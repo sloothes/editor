@@ -191,7 +191,8 @@
 
 			const materialdB = new zango.Db( "material", [
 				"rock","floor","wood","metal","fabric","bricks","matcap","plaster",
-				"roofing","terrain","concrete","sandstone","environment","others"
+				"roofing","terrain","concrete","sandstone","environment","others",
+				"materials", textures", "images" // meta.
 			]);
 
 			materialdB.open(function(err, database){
@@ -553,7 +554,7 @@
 
 				}
 
-			//	Viewer Mesh Material watcher.
+			//	Viewer Mesh Material render.
 				watch( materialViewer.mesh, "material", function(prop, action, value){ 
 					clearTimeout( interval ); interval = setTimeout(materialViewer.render, 50);
 					debugMode && console.log({item:prop,action:action,value:value}); // debug.
@@ -567,6 +568,8 @@
 		</script>
 
 		<script>
+
+		//	create-new-material-button.js
 
 			(function(viewer,button,input){
 
@@ -593,6 +596,7 @@
 				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") // input,
 			);
 
+		//	create-new-material-image-input.js
 			(function(viewer,icon,image_button,image_input,map_droplist){
 
 				watch( image_button, "onclick", function(prop, event, value){ image_input.value = ""; image_input.click(); });
@@ -614,14 +618,14 @@
 						icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
 
 					//	make power of two.
-						var canvas = document.createElement("canvas");
-						canvas.width = THREE.Math.floorPowerOfTwo( img.width );
-						canvas.height = THREE.Math.floorPowerOfTwo( img.height );
-						var context = canvas.getContext( "2d" );
-						context.drawImage( img, 0, 0, canvas.width, canvas.height );
+					//	var canvas = document.createElement("canvas");
+					//	canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+					//	canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+					//	var context = canvas.getContext( "2d" );
+					//	context.drawImage( img, 0, 0, canvas.width, canvas.height );
 
 					//	create texture.
-						var texture = new THREE.Texture(canvas); 
+						var texture = new THREE.Texture(img); 
 						texture.name = file.name.replace(".jpg","").replace(".png","");
 						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
 						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
