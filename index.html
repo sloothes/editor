@@ -685,7 +685,7 @@
 								canvas.height = THREE.Math.floorPowerOfTwo( img.height );
 								canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
 								image.url = canvas.toDataURL("image/jpeg");
-								debugMode && console.log( image.url ); // debug!
+							//	debugMode && console.log( image.url ); // debug!
 							}); img.src = image.url; // important!
 
 						})( meta.images[uuid] );
