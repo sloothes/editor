@@ -356,7 +356,7 @@
 
 				keys.forEach(function( key ){
 					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
-				}); select.value = "map";
+				}); select.value = "";
 				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
 				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
