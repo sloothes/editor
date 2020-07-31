@@ -549,12 +549,14 @@
 
 				}
 
-			//	watcher.
-
+			//	Viewer Mesh Material watcher.
 				watch( materialViewer.mesh, "material", function(prop, action, value){ 
 					clearTimeout( interval ); interval = setTimeout(materialViewer.render, 50);
 					debugMode && console.log({item:prop,action:action,value:value}); // debug.
 				}, 0);
+
+			//	Viewer render.
+				materialViewer.render();
 
 			})( materialViewer );
 
@@ -570,7 +572,8 @@
 
 			//	Creates new material, and replaces material viewer material.
 				watch( button, "onclick", function(prop, event, material){ 
-					viewer.dispose(); viewer.material.copy(material); viewer.material.uuid = material.uuid;
+					viewer.dispose(); viewer.mesh.material = material;
+				//	viewer.mesh.material.copy(material); viewer.material.uuid = material.uuid;
 					debugMode && console.log({item:button,event:event,material:material}); // debug.
 				});
 
