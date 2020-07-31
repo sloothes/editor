@@ -185,30 +185,21 @@
 
 		<script>
 
-			var materialdB; // debug!
-/*
 		//	materialdB.js
 
 			const materialdB = new zango.Db( "material", [
-				"rock","floor","wood","metal","fabric","bricks","matcap","plaster",
-				"roofing","terrain","concrete","sandstone","environment","others",
-				"materials", textures", "images" // meta.
+				"rock","floor","wood","metal","fabric","brick","matcap","plaster",
+				"roofing","terrain","concrete","sandstone","environment","others"
+			//	"materials", textures", "images" // meta.
 			]);
 
-			materialdB.open(function(err, database){
-				if (err) console.error(err);
-			}).then( function(){
+			(function(db){
+				db.open(function(err, database){ if (err) console.error(err);
+				}).then( function(){ debugMode && console.log( 
+					"Database", db.name, "(v"+db.version+")", "ready for use.");
+				}).catch(function(err){ console.error(err); });
+			})( materialdB );
 
-				debugMode && console.log( 
-					"Database " + materialdB.name 
-					+ " (v" + materialdB.version 
-					+ ") ready for use."
-				);
-
-			}).catch(function(err){
-				console.error(err);
-			});
-*/
 		</script>
 
 		<script>
@@ -226,7 +217,7 @@
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
 
-				var keys =  "rock,floor,wood,metal,fabric,bricks,terrain,plaster,roofing,matcap,concrete,sandstone,environment,others";
+				var keys = "rock,floor,wood,metal,fabric,brick,terrain,plaster,roofing,matcap,concrete,sandstone,environment,others";
 				keys.split(",").forEach(function( name ){
 					var option = document.createElement("option"); option.text = name; option.value = name; select.appendChild( option );
 				}); watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
@@ -792,10 +783,10 @@
 				}
 
 			})( materialViewer, // viewer,
-				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),     // save_button,
-				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),    // name_input,
-				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"), // map_droplist,
-				TabUI.NewMaterial.tab.querySelector("create-material-collection-droplist"),     // col_droplist,
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),        // save_button,
+				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),       // name_input,
+				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"),    // map_droplist,
+				TabUI.NewMaterial.tab.querySelector("select#create-material-collection-droplist"), // col_droplist,
 				metadB,imgurdB,materialdB // dBs.
 			);
 
