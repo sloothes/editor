@@ -668,6 +668,19 @@
 					var meta = {geometries:{},materials:{},textures:{},images:{}};
 					var json = viewer.mesh.toJSON(meta); debugMode && console.log({meta});
 
+				//	convert image/png;base64 dataURL to image/jpeg;base64 dataURL.
+					for ( var uuid in meta.images ) {
+						(function(data){
+							var img = new Image(); img.src = data.url; 
+							var canvas = document.createElement("canvas");
+							canvas.width = img.width; canvas.height = img.height;
+							canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
+							data.url = canvas.toDataURL("image/jpeg");
+						}){meta.images[uuid]};
+					} 
+
+					debugMode && console.log(meta);
+
 
 
 				});
