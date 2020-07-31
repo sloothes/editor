@@ -184,6 +184,8 @@
 		<script src="/editor/src/images-uploads.js"></script>
 
 		<script>
+
+			var materialdB; // debug!
 /*
 		//	materialdB.js
 
@@ -564,15 +566,13 @@
 
 		<script>
 
-			var materialdB; // debug!
-
-			(function(db,viewer,button,name_input){
+			(function(viewer,button,input){
 
 				var interval;
 
 			//	Creates new material, and replaces material viewer material.
 				watch( button, "onclick", function(prop, event, material){ 
-					viewer.dispose(); viewer.mesh.material = material; name_input.value = material.name;
+					viewer.dispose(); viewer.mesh.material = material; input.value = material.name;
 				//	viewer.mesh.material.copy(material); viewer.material.uuid = material.uuid;
 					debugMode && console.log({item:button,event:event,material:material}); // debug.
 				});
@@ -583,7 +583,10 @@
 					}, 250, this);
 				})
 
-			})( materialdB, materialViewer, TabUI.NewMaterial.tab.querySelector("div#create-new-material-button") );
+			})( materialViewer, 
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-button"), // button,
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-name-input") // input,
+			);
 
 
 
