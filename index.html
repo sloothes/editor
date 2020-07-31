@@ -458,7 +458,7 @@
 
 				materialViewer.scene = (function(){
 					var scene = new THREE.Scene();
-					scene.name = "new material scene";
+					scene.name = "material scene";
 					return scene;
 				})();
 
@@ -467,19 +467,16 @@
 				materialViewer.camera = (function( d ){
 				//	var aspect = canvas.clientWidth / canvas.clientWidth;
 					var camera = new THREE.OrthographicCamera( -d, +d, +d, -d, 1, 100 );
-					camera.name = "new material camera"; camera.position.z = 10; 
-					camera.lookAt( 0,0,0 ); materialViewer.scene.add( camera ); 
-					return camera;
+					camera.name = "camera"; camera.position.z = 10; camera.lookAt( 0,0,0 ); 
+					materialViewer.scene.add( camera ); return camera;
 				})( 1.2 );
 
 			//	Viewer light.
 
 				materialViewer.light = (function(){
-					var light = new THREE.DirectionalLight( 0xffffff, 0.5 );
-					light.name = "new material light";
-					light.position.set( 0,30,50 );
-					materialViewer.scene.add( light );
-					return light;
+					var light = new THREE.DirectionalLight( 0xffffff, 1 ); 
+					light.name = "light"; light.position.set( 0,30,50 ); 
+					materialViewer.scene.add( light ); return light;
 				})();
 
 			//  Viewr Renderer.
@@ -505,7 +502,8 @@
 				materialViewer.mesh = (function(){
 					var mesh = new THREE.Mesh(
 						new THREE.SphereGeometry(1,64,32), new THREE.MeshStandardMaterial()
-					); mesh.name = "material viewer mesh"; mesh.material.name = "New Material";
+					); mesh.material.bumpScale = 0.01; mesh.material.normalScale.set(1,1); 
+					mesh.material.name = "New Material"; mesh.name = "material viewer mesh"; 
 					materialViewer.scene.add( mesh ); return mesh;
 				})();
 
