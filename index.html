@@ -343,7 +343,7 @@
 
 			//	Create New Material Texture droplist. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.textContent = "select:"; row.style.cssText = "height:30px;";
-				var select = document.createElement("select"); select.id = "create-material-map-droplist";
+				var select = document.createElement("select"); select.id = "create-new-material-map-droplist";
 				select.style.cssText  = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
 
@@ -379,20 +379,23 @@
 			//	Create New Material Image button. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;margin-right:15px;";
 
-				var btn = document.createElement("div"); btn.id = "create-new-material-img-button"; btn.textContent = "Import Image";
-				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-				btn.style.cssText  = "width:220px;float:right;height:40px;font-size:large;";
+				var icon = document.createElement("canvas"); icon.id = "create-new-material-icon";
+				icon.width = icon.height = 40; icon.style.cssText = "border-radius:4px;float:left;";
 
-				var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;";
-				watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
-				img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
-				img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
+				var btn = document.createElement("div"); btn.id = "create-new-material-img-button"; 
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.textContent = "Import Image"; btn.style.cssText = "width:220px;float:right;height:40px;font-size:large;";
 
 				var input = document.createElement("input"); input.type = "file"; 
-				input.id = "create-new-material-img-file-input"; input.style.cssText = "display:none;"; 
-				btn.appendChild( input ); row.appendChild( img ); row.appendChild( btn ); tab.appendChild( row );
+				input.id = "create-new-material-file-input"; input.style.cssText = "display:none;"; 
+				btn.appendChild( input ); row.appendChild( icon ); row.appendChild( btn ); tab.appendChild( row );
 
 			})( TabUI.NewMaterial.tab );
+
+			//	var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;";
+			//	watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
+			//	img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+			//	img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
 
 		//	create-new-material-save-button-ui.js
 
@@ -588,9 +591,59 @@
 				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") // input,
 			);
 
+			(function(viewer,icon,button,input,map_droplist){
 
+				button.addEventListener( "change", function(){
 
+					if ( !input.files.length ) return;
+					if ( !map_droplist.value ) return;
 
+					var file = input.files[0];
+
+					var img = new Image();
+					img.addEventListener("load", function(){
+
+						var key = map_droplist.value; if ( !key ) return;
+
+					//	draw icon.
+						icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
+
+					//	make power of two.
+						var canvas = document.createElement("canvas");
+						canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+						canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+						var context = canvas.getContext( "2d" );
+						context.drawImage( img, 0, 0, canvas.width, canvas.height );
+
+					//	create texture.
+						var texture = new THREE.Texture(canvas); 
+						texture.name = file.name.replace(".jpg","").replace(".png","");
+						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
+						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
+
+					//	render material. // important!
+						callWatchers( viewer.mesh, "material", "set", viewer.mesh.material );
+					});
+
+					var reader = new FileReader();
+					reader.addEventListener("load", function() {
+						img.name = file.name;
+						img.src = reader.result;
+					});
+
+					reader.readAsDataURL(file);
+				});
+
+				button.addEventListener( "click", function(){
+					input.value = ""; input.click();
+				});
+
+			})( materialViewer, 
+				TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-icon") // icon,
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-img-button"), // button,
+				TabUI.NewMaterial.tab.querySelector("input#create-new-material-file-input") // input,
+				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
+			);
 
 		</script>
 
