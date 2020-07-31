@@ -668,7 +668,7 @@
 				//	var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
 
 				watch(save_button, "onclick", function(prop, event, material){
-					debugMode && console.log({item:save_button, event:event; material:material});
+					debugMode && console.log({item:save_button, event:event, material:material});
 
 					var meta = {geometries:{},materials:{},textures:{},images:{}};
 					var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
