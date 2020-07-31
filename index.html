@@ -677,13 +677,17 @@
 				//	dataURL to data:image/jpeg;base64 dataURL.
 
 					for ( var uuid in meta.images ) {
-						(function(data){
-							var img = new Image(); img.src = data.url; 
-							var canvas = document.createElement("canvas");
-							canvas.width = THREE.Math.floorPowerOfTwo( img.width );
-							canvas.height = THREE.Math.floorPowerOfTwo( img.height );
-							canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
-							data.url = canvas.toDataURL("image/jpeg");
+						(function(image){
+							var img = new Image(); 
+							img.addEventListener("load", function(){
+								var canvas = document.createElement("canvas");
+								canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+								canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+								canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
+								image.url = canvas.toDataURL("image/jpeg");
+								debugMode && console.log( image.url ); // debug!
+							}); img.src = image.url; // important!
+
 						})( meta.images[uuid] );
 					} 
 
