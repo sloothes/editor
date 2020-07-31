@@ -710,6 +710,7 @@
 					entry.images = Object.keys(meta.images);     // uuid array.
 					entry.textures = Object.keys(meta.textures); // uuid array.
 					entry.preview = viewer.canvas.toDataURL();   // dataURL.
+					entry.uuid = Object.keys(meta.materials).join(); // uuid.
 
 					debugMode && console.log("meta:", meta);     // debug!
 					debugMode && console.log("entry:", entry);   // debug!
@@ -718,16 +719,45 @@
 						debugMode && console.log("results:", results); // debug!
 					}).then(function(){
 
+					//	Save to meta Db.
+						var Images = metadB.collection("images");
+						var Textures = metadB.collection("textures");
+						var Materials = metadB.collection("materials");
+					//	var Geometries = metadB.collection("geometries");
 
+						debugMode && console.log( "images:", Object.values(meta.images) );
+						debugMode && console.log( "textures:", Object.values(meta.textures) );
+						debugMode && console.log( "materials:", Object.values(meta.materials) );
 
+					}).then(function(){
 
+					//	Upload images to imgur.
+
+					}).then(function(){
+
+					//	Replace dataURL with link.
+
+					}).then(function(){
+
+					//	Update material entry.
+
+					}).then(function(){
+
+					//	Cache texture images.
+
+					}).then(function(){
+
+					//	Save material entry.
+						var collection = materialdB.collection( entry.collection );
+						collection.insert(entry, function(err){ if (err) throw err;})
+						.then(function(){ console.log("material", entry.name, "saved!"); })
+						.catch(function(err){ console.error(err); });
 
 					}).catch(function(err){
-						console.error(err); console.log("material", entry.name, "save failed!");
+						console.error(err); console.log("material", entry.name, "failed to save!");
 					}).then(function(){
 						save_button.addEventListener( "click", onSaveButtonClick ); // important!
-						console.log("material", entry.name, "saved successfully!");
-					})
+					});
 
 				});
 
