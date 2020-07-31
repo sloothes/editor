@@ -569,7 +569,7 @@
 
 			(function(viewer,button,input){
 
-				var interval;
+				var interval, k=0;
 
 			//	Creates new material, and replaces material viewer material.
 				watch( button, "onclick", function(prop, event, material){ 
@@ -580,7 +580,10 @@
 
 				button.addEventListener( "click", function(){
 					clearTimeout(interval); interval = setTimeout(function(button){
-						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({name:"New Material"}) );
+						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({ 
+							name:"untitled material " + (++k),
+							bumpScale:0.05,normalScale:1,displacementBias:0,displacementScale:0}) 
+						);
 					}, 250, this);
 				})
 
