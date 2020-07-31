@@ -447,6 +447,8 @@
 
 			(function( materialViewer ){
 
+				var interval;
+
 			//	Viewer scene.
 
 				materialViewer.scene = (function(){
@@ -492,23 +494,23 @@
 				materialViewer.renderer.setPixelRatio( window.devicePixelRatio );
 				materialViewer.renderer.setSize( materialViewer.canvas.width, materialViewer.canvas.height );
 				materialViewer.renderer.domElement.style.background = "none";  // transparent rendering. important!
-				materialViewer.render = function(){ this.renderer.render( this.scene, this.camera ); };
 
-			//	Viewer material.
+			//	Viewer mesh.
 
-				materialViewer.material = (function(){
+				materialViewer.mesh = (function(){
 					var mesh = new THREE.Mesh(
-						new THREE.SphereGeometry(1,64,32),
-						new THREE.MeshStandardMaterial( )
-					);  
-					mesh.name = "new material viewer";
-					mesh.material.name = "New Material";
-					materialViewer.scene.add( mesh );
-					return mesh.material;
-				//	material_entities.add( mesh.material );
+						new THREE.SphereGeometry(1,64,32), new THREE.MeshStandardMaterial()
+					); mesh.name = "material viewer mesh"; mesh.material.name = "New Material";
+					materialViewer.scene.add( mesh ); return mesh;
 				})();
 
-			//	dispose.
+			//	Viewer render.
+
+				materialViewer.render = function(){ 
+					this.mesh.material.needsUpdate = true; this.renderer.render( this.scene, this.camera ); 
+				};
+
+			//	Viewer dispose.
 
 				materialViewer.dispose = function(){
 
@@ -526,36 +528,33 @@
 						material && material.lightMap && material.lightMap.dispose && material.lightMap.dispose();
 						material && material.envMap && material.envMap.dispose && material.envMap.dispose();
 						material && material.aoMap && material.aoMap.dispose && material.aoMap.dispose();
-					})( textureViewer.material );
+					})( materialViewer.mesh.material );
 
 				//	remove textures.
 
-					(function(){
-						materialViewer.material.map = null;
-						materialViewer.material.bumpMap = null;
-						materialViewer.material.alphaMap = null;
-						materialViewer.material.normalMap = null;
-						materialViewer.material.emissiveMap = null;
-						materialViewer.material.roughnessMap = null;
-						materialViewer.material.metalnessMap = null;
-						materialViewer.material.displacementMap = null;
-						materialViewer.material.lightMap = null;
-						materialViewer.material.envMap = null;
-						materialViewer.material.aoMap = null;
-					})();
+					materialViewer.mesh.material.map = null;
+					materialViewer.mesh.material.bumpMap = null;
+					materialViewer.mesh.material.alphaMap = null;
+					materialViewer.mesh.material.normalMap = null;
+					materialViewer.mesh.material.emissiveMap = null;
+					materialViewer.mesh.material.roughnessMap = null;
+					materialViewer.mesh.material.metalnessMap = null;
+					materialViewer.mesh.material.displacementMap = null;
+					materialViewer.mesh.material.lightMap = null;
+					materialViewer.mesh.material.envMap = null;
+					materialViewer.mesh.material.aoMap = null;
 
-				//	update material.
-					materialViewer.material.needsUpdate = true; // important!
+				//	render.
+				//	setTimeout( materialViewer.render ); // important!
+
 				}
 
-			//	reset.
+			//	watcher.
 
-				materialViewer.reset = function(){
-					materialViewer.dispose();
-					materialViewer.material.color.setHex(0xffffff);
-				}
-
-				materialViewer.render(); // important!
+				watch( materialViewer.mesh, "material", function(prop, action, value){ 
+					clearTimeout( interval ); interval = setTimeout(materialViewer.render, 50);
+					debugMode && console.log({item:prop,action:action,value:value}); // debug.
+				}, 0);
 
 			})( materialViewer );
 
@@ -567,23 +566,21 @@
 
 			(function(db,viewer,button){
 
+				var interval;
 
+			//	Creates new material, and replaces material viewer material.
+				watch( button, "onclick", function(prop, event, material){ 
+					viewer.dispose(); viewer.material.copy(material); viewer.material.uuid = material.uuid;
+					debugMode && console.log({item:button,event:event,material:material}); // debug.
+				});
 
+				button.addEventListener( "click", function(){
+					clearTimeout(interval); interval = setTimeout(function(button){
+						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial() );
+					}, 250, this);
+				})
 
-
-
-
-
-
-
-
-
-
-
-
-			})(
-				materialdB, materialViewer, TabUI.NewMaterial.tab.querySelector("div#create-new-material-button")
-			)
+			})( materialdB, materialViewer, TabUI.NewMaterial.tab.querySelector("div#create-new-material-button") );
 
 
 
