@@ -653,6 +653,10 @@
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
 			);
 
+		</script>
+
+		<script>
+
 		//	create-new-material-save-button.js
 
 			(function(viewer,save_button,map_droplist){
@@ -686,14 +690,18 @@
 					debugMode && console.log(meta);
 
 
+					save_button.addEventListener( "click", onSaveButtonClick ); // important!
 
 				});
 
 			//	Parse viewer mesh json meta data to watcher.
-				save_button.addEventListener( "click", function(){
+				save_button.addEventListener( "click", onSaveButtonClick );
+
+				function onSaveButtonClick(){
 					clearTimeout( interval ); 
 					interval = setTimeout( function(button){ 
 						callWatchers( button, "onclick", "save", meta ); 
+						button.removeEventListener( "click", onSaveButtonClick );
 					}, 250, this);
 				});
 
