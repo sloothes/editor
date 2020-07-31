@@ -659,20 +659,23 @@
 
 		//	create-new-material-save-button.js
 
-			(function(viewer,save_button,map_droplist){
+			(function(viewer,save_button,name_input,map_droplist,metadB,imgurdB,materialdB){
 
 				var interval;
 
 				function onSaveButtonClick(){
 					clearTimeout( interval ); 
 					interval = setTimeout( function(){ 
-						callWatchers( save_button, "onclick", "save", viewer.mesh.material ); 
-						save_button.removeEventListener( "click", onSaveButtonClick );
+						callWatchers( save_button, "onclick", "click", viewer.mesh.material ); 
 					}, 250);
 				}
 
+			//	Parse viewer mesh json meta data to watcher.
+				save_button.addEventListener( "click", onSaveButtonClick );
+
 				watch(save_button, "onclick", function(prop, event, material){
 					debugMode && console.log({item:save_button, event:event, material:material});
+					save_button.removeEventListener( "click", onSaveButtonClick ); // important!
 
 					var meta = {geometries:{},materials:{},textures:{},images:{}};
 					var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
@@ -680,33 +683,88 @@
 				//	make power of two and convert image/png; 
 				//	dataURL to data:image/jpeg;base64 dataURL.
 
-					for ( var uuid in meta.images ) {
-						(function(image){
-							var img = new Image(); 
-							img.addEventListener("load", function(){
-								var canvas = document.createElement("canvas");
-								canvas.width = THREE.Math.floorPowerOfTwo( img.width );
-								canvas.height = THREE.Math.floorPowerOfTwo( img.height );
-								canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
-								image.url = canvas.toDataURL("image/jpeg");
-							}); img.src = image.url; // important!
+					var promises = [];
 
-						})( meta.images[uuid] );
+					for ( var uuid in meta.images ) {
+						promises.push( 
+							(function(image){
+								return new Promise(function(resolve,reject){
+									var img = new Image(); 
+									img.addEventListener("load", function(){
+										var canvas = document.createElement("canvas");
+										canvas.width = THREE.Math.floorPowerOfTwo( img.width );
+										canvas.height = THREE.Math.floorPowerOfTwo( img.height );
+										canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
+										image.url = canvas.toDataURL("image/jpeg"); resolve( image );
+									}); img.src = image.url; // important!
+								}).catch(function(err){ 
+									console.error(err);
+								}).then(function(){ return image; });
+							})( meta.images[uuid] );
+						);
 					} 
 
-					debugMode && console.log(meta);
+					var entry = {};
+					entry.name = name_input.value;
+					entry.collection = map_droplist.value;
+					entry.preview = viewer.canvas.toDataURL(); // image/png.
+					entry.images = Object.keys(meta.images);
+					entry.textures = Object.keys(meta.textures);
+
+					debugMode && console.log("meta:", meta);  // debug!
+					debugMode && console.log("entry:" entry); // debug!
+
+					Promise.all(promises).then(function(results){
+						debugMode && console.log("results:", results); // debug!
+					}).then(function(){
 
 
-					save_button.addEventListener( "click", onSaveButtonClick ); // important!
+
+
+
+					}).catch(function(err){
+						console.error(err);
+					}).then(function(){
+						save_button.addEventListener( "click", onSaveButtonClick ); // important!
+					})
 
 				});
 
-			//	Parse viewer mesh json meta data to watcher.
-				save_button.addEventListener( "click", onSaveButtonClick );
+
+				function saveto(collection,data,keyword){
+
+					var result;
+
+					collection.find({uuid:data.uuid}).forEach(
+
+						function(doc){
+
+							result = doc.uuid;
+
+							collection.update({_id:doc._id}, {$set:data}, function(err){
+								if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
+							}).catch(function(err){ console.error(err); });
+
+						},
+
+						function(err){
+
+							if (err) throw err;  
+
+							if (!result) return collection.insert(data, function(err){ 
+								if (err) throw err; console.log(keyword, data.uuid, "saved!" )
+							}).catch(function(err){ console.error(err); });
+						}
+
+					).catch(function(err){ console.error(err); });
+
+				}
 
 			})( materialViewer, 
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"), // save_button,
-				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
+				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"), // name_input,
+				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"), // map_droplist,
+				metadB,imgurdB,materialdB
 			);
 
 		</script>
