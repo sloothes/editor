@@ -656,7 +656,7 @@
 
 				function onSaveButtonClick(){
 					clearTimeout( interval ); 
-					while ( !name_input.value ) { name_input.value = prompt( "Please type a name for this material." ); }
+					if ( !name_input.value ) return name_input.value = prompt( "Please type a name for this material and try again." ); 
 					interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", viewer.mesh.material ); }, 250);
 				}
 
