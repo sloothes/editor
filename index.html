@@ -582,7 +582,7 @@
 					clearTimeout(interval); interval = setTimeout(function(button){
 						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({ 
 							name:"untitled material " + (++k),
-							bumpScale:0.05,normalScale:1,displacementBias:0,displacementScale:0}) 
+							bumpScale:0.01,normalScale:1,displacementBias:0,displacementScale:0}) 
 						);
 					}, 250, this);
 				})
