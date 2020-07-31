@@ -503,7 +503,8 @@
 					var mesh = new THREE.Mesh(
 						new THREE.SphereGeometry(1,64,32), new THREE.MeshStandardMaterial()
 					); mesh.material.bumpScale = 0.01; mesh.material.normalScale.set(1,1); 
-					mesh.material.name = "New Material"; mesh.name = "material viewer mesh"; 
+					mesh.material.displacementBias = 0, mesh.material.displacementScale = 0;
+					mesh.material.name = "new material"; mesh.name = "material viewer mesh"; 
 					materialViewer.scene.add( mesh ); return mesh;
 				})();
 
