@@ -597,6 +597,7 @@
 			);
 
 		//	create-new-material-image-input.js
+
 			(function(viewer,icon,image_button,image_input,map_droplist){
 
 				watch( image_button, "onclick", function(prop, event, value){ image_input.value = ""; image_input.click(); });
@@ -625,7 +626,7 @@
 					//	context.drawImage( img, 0, 0, canvas.width, canvas.height );
 
 					//	create texture.
-						var texture = new THREE.Texture(img); 
+						var texture = new THREE.Texture(img); // or canvas.
 						texture.name = file.name.replace(".jpg","").replace(".png","");
 						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
 						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
@@ -649,6 +650,38 @@
 				TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-icon"), // icon,
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-img-button"), // image_button,
 				TabUI.NewMaterial.tab.querySelector("input#create-new-material-file-input"), // image_input,
+				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
+			);
+
+		//	create-new-material-save-button.js
+
+			(function(viewer,,save_button,map_droplist){
+
+				var interval;
+
+				//	var mesh = viewer.mesh; var material = viewer.mesh.material;
+				//	var meta = {geometries:{},materials:{},textures:{},images:{}};
+				//	var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
+
+				watch(save_button, "onclick", function(prop, event, material){
+					debugMode && console.log({item:save_button, event:event; material:material});
+					var meta = {geometries:{},materials:{},textures:{},images:{}};
+					var json = viewer.mesh.toJSON(meta); debugMode && console.log({meta});
+
+
+
+				});
+
+			//	Parse viewer mesh json meta data to watcher.
+				save_button.addEventListener( "click", function(){
+					clearTimeout( interval ); 
+					interval = setTimeout( function(button){ 
+						callWatchers( button, "onclick", "save", meta ); 
+					}, 250, this);
+				});
+
+			})( materialViewer, 
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"), // save_button,
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
 			);
 
