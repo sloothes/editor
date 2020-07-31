@@ -636,9 +636,9 @@
 					reader.readAsDataURL(file);
 				});
 
+				image_button.addEventListener( "click", function(){ callWatchers( image_button, "onclick", "click" }); );
 				watch( image_button, "onclick", function(prop, event, value){ image_input.value = ""; image_input.click(); });
 				watch( map_droplist, "onchange", function(prop, event, value){ image_input.value = ""; image_input.click(); });
-				button.addEventListener( "click", function(){ callWatchers(image_button, "onclick", "click", map_droplist.value); });
 
 			})( materialViewer, 
 				TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-icon"), // icon,
