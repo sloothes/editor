@@ -663,9 +663,13 @@
 
 				var interval;
 
-				//	var mesh = viewer.mesh; var material = viewer.mesh.material;
-				//	var meta = {geometries:{},materials:{},textures:{},images:{}};
-				//	var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
+				function onSaveButtonClick(){
+					clearTimeout( interval ); 
+					interval = setTimeout( function(){ 
+						callWatchers( save_button, "onclick", "save", viewer.mesh.material ); 
+						save_button.removeEventListener( "click", onSaveButtonClick );
+					}, 250);
+				}
 
 				watch(save_button, "onclick", function(prop, event, material){
 					debugMode && console.log({item:save_button, event:event, material:material});
@@ -685,7 +689,6 @@
 								canvas.height = THREE.Math.floorPowerOfTwo( img.height );
 								canvas.getContext("2d").drawImage( img, 0, 0, canvas.width, canvas.height );
 								image.url = canvas.toDataURL("image/jpeg");
-							//	debugMode && console.log( image.url ); // debug!
 							}); img.src = image.url; // important!
 
 						})( meta.images[uuid] );
@@ -700,14 +703,6 @@
 
 			//	Parse viewer mesh json meta data to watcher.
 				save_button.addEventListener( "click", onSaveButtonClick );
-
-				function onSaveButtonClick(){
-					clearTimeout( interval ); 
-					interval = setTimeout( function(button){ 
-						callWatchers( button, "onclick", "save", viewer.mesh.material ); 
-						button.removeEventListener( "click", onSaveButtonClick );
-					}, 250, this);
-				}
 
 			})( materialViewer, 
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"), // save_button,
