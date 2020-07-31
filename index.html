@@ -700,7 +700,7 @@
 				function onSaveButtonClick(){
 					clearTimeout( interval ); 
 					interval = setTimeout( function(button){ 
-						callWatchers( button, "onclick", "save", meta ); 
+						callWatchers( button, "onclick", "save", viewer.mesh.material ); 
 						button.removeEventListener( "click", onSaveButtonClick );
 					}, 250, this);
 				}
