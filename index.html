@@ -656,9 +656,8 @@
 
 				function onSaveButtonClick(){
 					clearTimeout( interval ); 
-					interval = setTimeout( function(){ 
-						callWatchers( save_button, "onclick", "click", viewer.mesh.material ); 
-					}, 250);
+					while ( !name_input.value ) { name_input.value = prompt( "Please type a name for this material." ); }
+					interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", viewer.mesh.material ); }, 250);
 				}
 
 			//	Parses material viewer mesh material to watcher.
@@ -740,9 +739,10 @@
 
 					//	Save material entry.
 						var collection = materialdB.collection( entry.collection );
-						collection.insert(entry, function(err){ if (err) throw err;})
-						.then(function(){ console.log("material", entry.name, "saved!"); })
-						.catch(function(err){ console.error(err); });
+						collection.insert(entry, function(err){ if (err) throw err; })
+						.then(function(){ name_input.value = ""; // important!
+							console.log("material", entry.name, "saved!"); 
+						}).catch(function(err){ console.error(err); });
 
 					}).catch(function(err){
 						console.error(err); console.log("material", entry.name, "failed to save!");
