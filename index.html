@@ -769,12 +769,12 @@
 								throw "image.url is not DataURL:"+image.url;
 							}
 
+						//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
 							var name = "IMAGE:"+image.uuid;
 							var data = image.url.split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
-						//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
 							data = data.shift(); // important! or .pop(); or .join();
-							debugMode && console.log({data:data, type:type, name:name}); // debug!
+						//	debugMode && console.log({data:data, type:type, name:name}); // debug!
 
 							//	Upload dataURL to imgur.
 
