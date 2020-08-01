@@ -741,7 +741,7 @@
 					//	Save meta.materials.
 						if ( Object.keys(meta.materials).length ) {
 							var collection = db.collection("materials");
-							collection.insert( Object.values(meta.textures), 
+							collection.insert( Object.values(meta.materials), 
 								function(err){ if (err) throw err; })
 							.then(function(){ console.log("materials saved!"); 
 							}).catch(function(err){ console.error(err); });
