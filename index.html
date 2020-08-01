@@ -198,56 +198,91 @@
 
 					debugMode && console.log( data );
 
-					var json = {};
-					json.images = [];
-					json.textures = [];
-					json.materials = [];
-					json.metadata = {
-						version: 4.5, type: "Material",
-						generator: "Material.toJSON"
-					}
+					var geometry = new THREE.BoxGeometry();
+					var object = new THREE.Mesh(geometry);
+					var json = object.toJSON();
+					json.object.material = data.uuid;
 
 					var promises = [];
 
-					promises.push( (function(){
-						return db.collection("materials")
-						.findOne({uuid:data.uuid}).then(function(doc){
-							if (doc) json.materials[data.uuid] = doc;
-						});
-					})());
-
-					data.textures.forEach(function(uuid){
-						promises.push( (function(){
-							return db.collection("textures")
-							.findOne({uuid:uuid}).then(function(doc){
-								if (doc) json.textures[uuid] = doc;
-							});
-						})());
-					});
-
-					data.images.forEach(function(uuid){
-						promises.push(  (function(){
-							return db.collection("images")
-							.findOne({uuid:uuid}).then(function(doc){ 
-								if (doc) json.images[uuid] = doc; 
-							});
-						})());
-					});
-
-				//	debugMode && console.log( promises );
-
-					Promise.all(promises).then(function(){
-						debugMode && console.log( json );
-
-						var loader = new THREE.ObjectLoader();
-						var material = loader.parseMaterials( json.materials );
-						debugMode && console.log( material );
-
-						material_entities.add( material );
-
+					return db.collection("materials")
+					.findOne({uuid:data.uuid}).then(function(doc){
+						if ( !doc ) throw "material not found!";
+						json.materials = [{[data.uuid]:doc}];
+						return {json:json, data:data};
 					}).catch(function(err){
 						console.error(err);
-					})
+					});
+
+				}).then(function(results){
+
+					var data = results.data;
+					var json = results.json;
+
+					debugMode && console.log( json );
+
+					var promises = [];
+
+					data.textures.forEach( function(uuid){
+						promises.push( db.collection("textures")
+							.findOne({uuid:uuid}).then(function(doc){
+								if (!doc) throw "texture "+uuid+" not found!";
+								return {[uuid]:doc};
+							}).catch(function(err){
+								console.error(err);
+							})
+						);
+					});
+
+					return Promise.all(promises)
+					.then(function(textures){
+						console.log( "textures:", textures );
+						json.textures = textures;
+						return {json:json, data:data};
+					}).catch(function(err){
+						console.error(err);
+					});
+
+				}).then(function(results){
+
+					var data = results.data;
+					var json = results.json;
+
+					debugMode && console.log( json );
+
+					var promises = [];
+
+					data.images.forEach( function(uuid){
+						promises.push( db.collection("images")
+							.findOne({uuid:uuid}).then(function(doc){
+								if (!doc) throw "image "+uuid+" not found!";
+								return {[uuid]:doc};
+							}).catch(function(err){
+								console.error(err);
+							})
+						);
+					});
+
+					return Promise.all(promises)
+					.then(function(images){
+						console.log( "images:", images );
+						json.images = images;
+						return json;
+					}).catch(function(err){
+						console.error(err);
+					});
+
+				}).then(function(json){
+
+					debugMode && console.log( json );
+
+					var loader = new THREE.ObjectLoader();
+					var object = loader.parse( json );
+					debugMode && console.log( object );
+
+					var material = object.material;
+					material_entities.add( material );
+					debugMode && console.log( material );
 
 				}, function(err){
 					if (err) throw err;
@@ -256,6 +291,15 @@
 				})
 
 			})( materialdB );
+
+		//	var json = {};
+		//	json.images = [];
+		//	json.textures = [];
+		//	json.materials = [];
+		//	json.metadata = {
+		//		version: 4.5, type: "Object",
+		//		generator: "Object3D.toJSON"
+		//	}
 
 		</script>
 
