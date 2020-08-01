@@ -854,10 +854,10 @@
 							throw "preview is not dataURL:"+entry.preview;
 						}
 
+					//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
 						var name = entry.name+"-preview.png";
 						var data = entry.preview.split(","); 
 						var type = data.shift().replace("data:","").replace(";base64","");
-					//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
 						data = data.shift(); // or .pop(); or .join(); important!
 					//	debugMode && console.log({data:data, type:type, name:name}); // debug!
 
