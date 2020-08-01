@@ -706,7 +706,6 @@
 					debugMode && console.log("meta:", meta);     // debug!
 					debugMode && console.log("entry:", entry);   // debug!
 
-
 					Promise.all(promises).then(function(images){
 						debugMode && console.log("images:", images); // debug!
 
@@ -791,12 +790,11 @@
 										var response = "";
 										if (this.status >= 200 && this.status < 300) {
 											response = JSON.parse(this.responseText);
-											debugMode && console.log(response);
+										//	debugMode && console.log(response);
 											resolve(response.data); // resolve promise.
 										} else {
 											var err = JSON.parse(this.responseText).data.error;
-											console.error( err.type, err );
-											reject( err );
+											console.error( err.type, err ); reject( err );
 										}
 									}
 								};
