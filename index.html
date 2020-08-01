@@ -240,7 +240,7 @@
 						debugMode && console.log( json );
 
 						var loader = new THREE.ObjectLoader();
-						var material = loader.parse( json );
+						var material = loader.parseMaterials( json.materials );
 						debugMode && console.log( material );
 
 						material_entities.add( material );
