@@ -624,7 +624,7 @@
 
 					//	create texture.
 						var texture = new THREE.Texture(img); // or canvas.
-						texture.name = file.name.replace(".jpg","").replace(".png","").replace("_","");
+						texture.name = file.name.replace(".jpg","").replace(".png","").replace(/_/g," ");
 						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
 						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
 
