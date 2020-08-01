@@ -389,13 +389,13 @@
 			//	img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
 			//	img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
 
-		//	create-new-material-save-button-ui.js
+		//	create-new-material-remove-button-ui.js
 
 			(function( tab ){
 
-			//	Create New Material Save button. // var tab = TabUI.NewMaterial.tab;
+			//	Create New Material Remove button. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
-				var btn = document.createElement("div"); btn.id = "create-new-material-save-button"; btn.textContent = "Save Material";
+				var btn = document.createElement("div"); btn.id = "create-new-material-remove-button"; btn.textContent = "Remove Texture";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 				row.appendChild( btn ); tab.appendChild( row );
@@ -415,13 +415,13 @@
 
 			})( TabUI.NewMaterial.tab );
 
-		//	create-new-material-remove-button-ui.js
+		//	create-new-material-save-button-ui.js
 
 			(function( tab ){
 
-			//	Create New Material Remove button. // var tab = TabUI.NewMaterial.tab;
+			//	Create New Material Save button. // var tab = TabUI.NewMaterial.tab;
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
-				var btn = document.createElement("div"); btn.id = "create-new-material-remove-button"; btn.textContent = "Remove Texture";
+				var btn = document.createElement("div"); btn.id = "create-new-material-save-button"; btn.textContent = "Save Material";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 				row.appendChild( btn ); tab.appendChild( row );
