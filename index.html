@@ -196,7 +196,7 @@
 
 			//	Add material to entities.
 
-				collection.find().on("data", function(data){
+				collection.find().forEach(function(data){
 
 					var json = {};
 					json.images = [];
@@ -242,7 +242,9 @@
 						console.error(err);
 					})
 
-				}).toArray();
+				}, function(err){
+					if (err) throw err;
+				});
 
 			})( materialdB );
 
