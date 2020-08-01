@@ -227,7 +227,7 @@
 					data.images.forEach(function(uuid){
 					//	var collection = db.collection("images");
 						promises.push( db.collection("images")
-							collection.findOne({uuid:uuid}).then(function(doc){
+							.findOne({uuid:uuid}).then(function(doc){
 								if (doc) json.images[uuid] = doc; 
 							})
 						);
