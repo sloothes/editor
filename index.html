@@ -770,8 +770,7 @@
 							}
 
 						//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
-							var name = "IMAGE:"+image.uuid;
-							var data = image.url.split(","); 
+							var name = "IMAGE:"+image.uuid; var data = image.url.split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
 							data = data.shift(); // important! or .pop(); or .join();
 						//	debugMode && console.log({data:data, type:type, name:name}); // debug!
@@ -855,8 +854,7 @@
 						}
 
 					//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
-						var name = entry.name+"-preview.png";
-						var data = entry.preview.split(","); 
+						var name = entry.name+"-preview.png"; var data = entry.preview.split(","); 
 						var type = data.shift().replace("data:","").replace(";base64","");
 						data = data.shift(); // or .pop(); or .join(); important!
 					//	debugMode && console.log({data:data, type:type, name:name}); // debug!
