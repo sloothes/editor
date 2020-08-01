@@ -312,7 +312,7 @@
 
 							var data = _doc[key][index].split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
-							var name = "IMG-" + _doc.uuid + " (" + (index+1) + " of " + (_doc[key].length) + ")";
+							var name = "IMAGE:" + _doc.uuid + " (" + (index+1) + " of " + (_doc[key].length) + ")";
 							data = data.shift(); // important! or data = data.pop(); or data = data.join();
 							debugMode && console.log({data:data, type:type, name:name}); // debug!
 
