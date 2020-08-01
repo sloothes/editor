@@ -190,6 +190,66 @@
 
 		<script>
 
+			(function(db){
+
+				var collection = db.collection("terrain");
+
+			//	Add material to entities.
+
+				collection.find().on("data", function(data){
+
+					var json = {};
+					json.images = [];
+					json.textures = [];
+					json.materials = [];
+					json.metadata = {
+						version: 4.5, type: "Material",
+						generator: Material.toJSON"
+					}
+
+					var promises = [];
+
+					promises.push( db.collection("materials")
+						.findOne({uuid:data.uuid}).then(function(doc){
+							if (doc) json.materials[uuid] = doc;
+						})
+					);
+
+					data.textures.forEach(function(uuid){
+					//	var collection = db.collection("textures");
+						promises.push( db.collection("textures")
+							.findOne({uuid:uuid}).then(function(doc){
+								if (doc) json.textures[uuid] = doc;
+							})
+						);
+					});
+
+					data.images.forEach(function(uuid){
+					//	var collection = db.collection("images");
+						promises.push( db.collection("images")
+							collection.findOne({uuid:uuid}).then(function(doc){
+								if (doc) json.images[uuid] = doc; 
+							})
+						);
+					});
+
+					Promise.all(promises).then(function(){
+						debugMode && console.log( json );
+
+
+
+					}).catch(function(err){
+						console.error(err);
+					})
+
+				}).toArray();
+
+			})( materialdB );
+
+		</script>
+
+		<script>
+
 			TabUI.NewMaterial.role.classList.add("active");
 			TabUI.NewMaterial.tab.classList.add("in","active");
 
