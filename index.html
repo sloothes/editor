@@ -239,6 +239,12 @@
 					Promise.all(promises).then(function(){
 						debugMode && console.log( json );
 
+						var loader = new THREE.ObjectLoader();
+						var material = loader.parse( json );
+						debugMode && console.log( material );
+
+						material_entities.add( material );
+
 					}).catch(function(err){
 						console.error(err);
 					})
