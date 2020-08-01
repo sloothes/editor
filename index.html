@@ -898,16 +898,7 @@
 							caches.open("previews").then(function(cache){
 								return cache.add(url).then(function(){ return url; });
 							}).then(function(url){ 
-								console.log( --k+":", url, "preview completed!");
-
-							//	Success!
-								if ( !k ) { callWatchers(button_new, "onclick", "click", 
-									new THREE.MeshStandardMaterial({ bumpScale:0.01,
-										normalScale:new THREE.Vector2(1,1),
-										displacementBias:0, displacementScale:0, 
-									})); console.log( "material saved successfully!" );
-								}
-
+								console.log( url, "preview completed!");
 							}).catch(function(err){ console.error(err); });
 
 						}).catch(function(err){
