@@ -850,7 +850,7 @@
 							//	Cache texture image.
 								caches.open("textures").then(function(cache){
 									return cache.add(url).then(function(){ return url; });
-								}).then(function(url){ console.log("save", url, "completed!");
+								}).then(function(url){ console.log( url, "completed!");
 								}).catch(function(err){ console.error(err); });
 
 							}).catch(function(err){
