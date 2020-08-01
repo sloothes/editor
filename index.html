@@ -864,7 +864,7 @@
 
 					}).catch(function(err){
 						console.error(err); console.log("material", entry.name, "failed to save!");
-					}).then(function(){
+					}).then(function(){ map_droplist.value = ""; // important!
 						save_button.addEventListener( "click", onSaveButtonClick ); // important!
 					});
 
