@@ -192,11 +192,11 @@
 
 			(function(db){
 
-				var collection = db.collection("terrain");
-
 			//	Add material to entities.
 
-				collection.find().forEach(function(data){
+				db.collection("terrain").find().forEach(function(data){
+
+					debugMode && console.log( data );
 
 					var json = {};
 					json.images = [];
@@ -209,32 +209,32 @@
 
 					var promises = [];
 
-					promises.push( function(){
+					promises.push( (function(){
 						return db.collection("materials")
 						.findOne({uuid:data.uuid}).then(function(doc){
 							if (doc) json.materials[data.uuid] = doc;
 						});
-					});
+					})());
 
 					data.textures.forEach(function(uuid){
-						promises.push( function(){
+						promises.push( (function(){
 							return db.collection("textures")
 							.findOne({uuid:uuid}).then(function(doc){
 								if (doc) json.textures[uuid] = doc;
 							});
-						});
+						})());
 					});
 
 					data.images.forEach(function(uuid){
-						promises.push(  function(){
+						promises.push(  (function(){
 							return db.collection("images")
 							.findOne({uuid:uuid}).then(function(doc){ 
 								if (doc) json.images[uuid] = doc; 
 							});
-						});
+						})());
 					});
 
-					debugMode && console.log( promises );
+				//	debugMode && console.log( promises );
 
 					Promise.all(promises).then(function(){
 						debugMode && console.log( json );
