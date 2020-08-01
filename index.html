@@ -209,34 +209,35 @@
 
 					var promises = [];
 
-					promises.push( db.collection("materials")
+					promises.push( function(){
+						return db.collection("materials")
 						.findOne({uuid:data.uuid}).then(function(doc){
 							if (doc) json.materials[data.uuid] = doc;
-						})
-					);
+						});
+					});
 
 					data.textures.forEach(function(uuid){
-					//	var collection = db.collection("textures");
-						promises.push( db.collection("textures")
+						promises.push( function(){
+							return db.collection("textures")
 							.findOne({uuid:uuid}).then(function(doc){
 								if (doc) json.textures[uuid] = doc;
-							})
-						);
+							});
+						});
 					});
 
 					data.images.forEach(function(uuid){
-					//	var collection = db.collection("images");
-						promises.push( db.collection("images")
-							.findOne({uuid:uuid}).then(function(doc){
+						promises.push(  function(){
+							return db.collection("images")
+							.findOne({uuid:uuid}).then(function(doc){ 
 								if (doc) json.images[uuid] = doc; 
-							})
-						);
+							});
+						});
 					});
+
+					debugMode && console.log( promises );
 
 					Promise.all(promises).then(function(){
 						debugMode && console.log( json );
-
-
 
 					}).catch(function(err){
 						console.error(err);
@@ -244,7 +245,9 @@
 
 				}, function(err){
 					if (err) throw err;
-				});
+				}).catch(function(err){
+					console.error(err);
+				})
 
 			})( materialdB );
 
