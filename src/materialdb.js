@@ -1,4 +1,4 @@
-//	material-dB.js
+//	material-db.js
 
 	const materialdB = new zango.Db( "material", [
 		"imgur",                      // metadata collection.
