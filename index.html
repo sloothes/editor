@@ -650,7 +650,7 @@
 
 		//	create-new-material-save-button.js
 
-			(function(db,viewer,save_button,name_input,map_droplist,col_droplist){
+			(function(db,viewer,button_new,save_button,name_input,map_droplist,col_droplist){
 
 				var interval;
 
@@ -705,6 +705,8 @@
 
 					debugMode && console.log("meta:", meta);     // debug!
 					debugMode && console.log("entry:", entry);   // debug!
+
+					var k = promises.length; // counter.
 
 					Promise.all(promises).then(function(images){
 						debugMode && console.log("images:", images); // debug!
@@ -821,11 +823,21 @@
 							}).then(function(url){
 
 							//	Cache texture image.
-								caches.open("textures").then(function(cache){
+								return caches.open("textures").then(function(cache){
 									return cache.add(url).then(function(){ return url; });
-								}).then(function(url){ console.log( url, "texture completed!");
-								}).catch(function(err){ console.error(err); });
+								}).then(function(url){ 
+									console.log( --k+":", url, "texture completed!");
 
+								//	Success!
+									if ( !k ) { callWatchers(button_new, "onclick", "click", 
+										new THREE.MeshStandardMaterial({ bumpScale:0.01,
+											normalScale:new THREE.Vector2(1,1),
+											displacementBias:0, displacementScale:0, 
+										})); console.log( "material saved successfully!" );
+									}
+
+								}).catch(function(err){ console.error(err); });
+								
 							}).catch(function(err){
 								console.error(err); 
 							});
@@ -885,7 +897,17 @@
 						//	Cache material preview.
 							caches.open("previews").then(function(cache){
 								return cache.add(url).then(function(){ return url; });
-							}).then(function(url){ console.log( url, "preview completed!");
+							}).then(function(url){ 
+								console.log( --k+":", url, "preview completed!");
+
+							//	Success!
+								if ( !k ) { callWatchers(button_new, "onclick", "click", 
+									new THREE.MeshStandardMaterial({ bumpScale:0.01,
+										normalScale:new THREE.Vector2(1,1),
+										displacementBias:0, displacementScale:0, 
+									})); console.log( "material saved successfully!" );
+								}
+
 							}).catch(function(err){ console.error(err); });
 
 						}).catch(function(err){
@@ -937,6 +959,7 @@
 				}
 
 			})( materialdB, materialViewer, // db, viewer,
+				TabUI.NewMaterial.tab.querySelector("div#create-new-material-button"),             // button_new,
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),        // save_button,
 				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),       // name_input,
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"),    // map_droplist,
