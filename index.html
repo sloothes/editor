@@ -561,14 +561,13 @@
 
 		//	create-new-material-button.js
 
-			(function(viewer,button,input){
+			(function(viewer,button,input,map_droplist){
 
 				var interval, k=0;
 
 			//	Creates new material, and replaces material viewer material.
-				watch( button, "onclick", function(prop, event, material){ 
+				watch( button, "onclick", function(prop, event, material){ map_droplist.value = "";
 					viewer.dispose(); viewer.mesh.material = material; input.value = material.name;
-				//	viewer.mesh.material.copy(material); viewer.material.uuid = material.uuid;
 					debugMode && console.log({item:button,event:event,material:material}); // debug.
 				});
 
@@ -583,7 +582,8 @@
 
 			})( materialViewer, 
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-button"), // button,
-				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") // input,
+				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"), // input,
+				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
 			);
 
 		//	create-new-material-image-input.js
