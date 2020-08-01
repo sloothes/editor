@@ -764,7 +764,9 @@
 
 						if ( images && images.length ) images.forEach(function(image){
 
-							if ( validator && !validator.isDataURI(image.url) ) throw image.url;
+							if ( validator && !validator.isDataURI(image.url) ) {
+								throw "image.url is not DataURL:"+image.url;
+							}
 
 							var name = "IMAGE:"+image.uuid;
 							var data = image.url.split(","); 
@@ -773,36 +775,9 @@
 							data = data.shift(); // important! or .pop(); or .join();
 							debugMode && console.log({data:data, type:type, name:name}); // debug!
 
-						//	Upload dataURL to imgur.
+							//	Upload dataURL to imgur.
 
-							new Promise(function( resolve, reject ){
-								var formdata = new FormData();
-								formdata.append("image", data);
-								formdata.append("type",  type);
-								formdata.append("name",  name);
-								var endpoint = "https://api.imgur.com/3/image";
-								var clientID = "06217f601180652";  // sloothes app Client-ID.
-								var xhttp = new XMLHttpRequest();
-								xhttp.open("POST", endpoint, true);
-								xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
-								xhttp.onreadystatechange = function () {
-									if (this.readyState === 4) {
-										var response = "";
-										if (this.status >= 200 && this.status < 300) {
-											response = JSON.parse(this.responseText);
-										//	debugMode && console.log(response);
-											resolve(response.data); // resolve promise.
-										} else {
-											var err = JSON.parse(this.responseText).data.error;
-											console.error( err.type, err ); reject( err );
-										}
-									}
-								};
-
-								xhttp.send(formdata);
-								xhttp = null;
-
-							}).then(function(data){
+							uploadDataURL(data, type, name).then(function(data){
 
 								debugMode && console.log( data );
 								if ( data.error ) throw data.error;
@@ -848,18 +823,74 @@
 							//	Cache texture image.
 								caches.open("textures").then(function(cache){
 									return cache.add(url).then(function(){ return url; });
-								}).then(function(url){ console.log( url, "completed!");
+								}).then(function(url){ console.log( url, "texture completed!");
 								}).catch(function(err){ console.error(err); });
 
 							}).catch(function(err){
 								console.error(err); 
 							});
 
-
 						}); // end forEach.
 
 					//	TODO: to clear icon.
 					//	TODO: to reset viewer.mesh.material (new material);
+
+					}).then(function(){
+
+					//	Upload entry.preview (.png).
+
+						if ( validator && !validator.isDataURI(entry.preview) ) {
+							throw "preview is not dataURL:"+entry.preview;
+						}
+
+						var name = entry.name+"-preview.png";
+						var data = entry.preview.split(","); 
+						var type = data.shift().replace("data:","").replace(";base64","");
+					//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
+						data = data.shift(); // or .pop(); or .join(); important!
+						debugMode && console.log({data:data, type:type, name:name}); // debug!
+
+						//	Upload dataURL to imgur.
+
+						uploadDataURL(data, type, name).then(function(data){
+
+							debugMode && console.log( data );
+							if ( data.error ) throw data.error;
+
+						//	Save meta data.
+							db.collection("imgur")
+							.insert( data, function(err){ 
+								if (err) throw err; 
+							}).catch(function(err){ 
+								console.error(err); 
+							});
+
+							return data;
+
+						}).then(function(data){
+
+						//	Replace dataURL with link.
+							db.collection(entry.collection)
+							.update( {uuid:entry.uuid},     // selector, 
+								{$set:{preview:data.link}}, // modifier, 
+								function(err){ if (err) throw err; 
+							}).catch(function(err){ 
+								console.error(err); 
+							});
+
+							return data.link;
+
+						}).then(function(url){
+
+						//	Cache material preview.
+							caches.open("previews").then(function(cache){
+								return cache.add(url).then(function(){ return url; });
+							}).then(function(url){ console.log( url, "preview completed!");
+							}).catch(function(err){ console.error(err); });
+
+						}).catch(function(err){
+							console.error(err); 
+						});
 
 					}).catch(function(err){
 						console.error(err); console.log("material", entry.name, "failed to save!");
@@ -868,6 +899,42 @@
 					});
 
 				});
+
+				function uploadDataURL(data, type, name){
+
+				//  Returns a resolved promise with record data from imgur.com.
+				//	debugMode && console.log("uploading:", file.name);
+					return new Promise(function( resolve, reject ){
+
+						var formdata = new FormData();
+						formdata.append("image", data);
+						formdata.append("type",  type);
+						formdata.append("name",  name);
+
+						var endpoint = "https://api.imgur.com/3/image";
+						var clientID = "06217f601180652";  // sloothes app Client-ID.
+
+						var xhttp = new XMLHttpRequest();
+						xhttp.open("POST", endpoint, true);
+						xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
+						xhttp.onreadystatechange = function () {
+							if (this.readyState === 4) {
+								var response = "";
+								if (this.status >= 200 && this.status < 300) {
+									response = JSON.parse(this.responseText);
+								//	debugMode && console.log(response);
+									resolve(response.data); // resolve promise.
+								} else {
+									var err = JSON.parse(this.responseText).data.error;
+									console.error( err.type, err ); reject( err );
+								}
+							}
+						};
+
+						xhttp.send(formdata);
+						xhttp = null;
+					});
+				}
 
 			})( materialdB, materialViewer, // db, viewer,
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),        // save_button,
@@ -880,42 +947,6 @@
 
 		<script>
 /*
-			function uploadDataURL(data, type, name){
-
-			//  Returns a resolved promise with record data from imgur.com.
-			//	debugMode && console.log("uploading:", file.name);
-				return new Promise(function( resolve, reject ){
-
-					var formdata = new FormData();
-					formdata.append("image", data);
-					formdata.append("type",  type);
-					formdata.append("name",  name);
-
-					var endpoint = "https://api.imgur.com/3/image";
-					var clientID = "06217f601180652";  // sloothes app Client-ID.
-
-					var xhttp = new XMLHttpRequest();
-					xhttp.open("POST", endpoint, true);
-					xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
-					xhttp.onreadystatechange = function () {
-						if (this.readyState === 4) {
-							var response = "";
-							if (this.status >= 200 && this.status < 300) {
-								response = JSON.parse(this.responseText);
-								debugMode && console.log(response);
-								resolve(response.data); // resolve promise.
-							} else {
-								var err = JSON.parse(this.responseText).data.error;
-								console.error( err.type, err );
-								reject( err );
-							}
-						}
-					};
-
-					xhttp.send(formdata);
-					xhttp = null;
-				});
-			}
 
 			function saveto(collection,data,keyword){
 
