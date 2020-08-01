@@ -765,12 +765,12 @@
 					}).then(function( images ){
 
 					//	Save material entry.
-						var collection = materialdB.collection( entry.collection );
+						var collection = db.collection( entry.collection );
 						collection.insert(entry, function(err){ 
 							if (err) throw err; 
 						}).then(function(){
 
-						//	Resets. TODO: clear icon.
+						//	Success!
 							callWatchers(button_new, "onclick", "click", 
 								new THREE.MeshStandardMaterial({ bumpScale:0.01,
 									normalScale:new THREE.Vector2(1,1),
@@ -778,11 +778,8 @@
 								})
 							); 
 
-							callWatchers( name_input, "onchange", "change", name_input.value = "" );
-							callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" );
-						//	save_button.addEventListener( "click", onSaveButtonClick ); // important!
-
-						//	Success!
+						//	TODO: clear icon.
+							name_input.value = ""; map_droplist.value = "";
 							console.log( "material saved successfully!" );
 
 						}).catch(function(err){ 
@@ -922,7 +919,7 @@
 
 					}).catch(function(err){
 						console.error(err); console.log("material", entry.name, "failed to save!");
-					}).then(function(){ map_droplist.value = ""; // important!
+					}).then(function(){ 
 						save_button.addEventListener( "click", onSaveButtonClick ); // important!
 					});
 
