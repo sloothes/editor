@@ -793,7 +793,7 @@
 						if ( images && images.length ) images.forEach(function(image){
 
 							if ( validator && !validator.isDataURI(image.url) ) {
-								throw "image.url is not DataURL:"+image.url;
+								throw "image url is not DataURL:"+image.url;
 							}
 
 						//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
