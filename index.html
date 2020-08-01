@@ -211,7 +211,7 @@
 
 					promises.push( db.collection("materials")
 						.findOne({uuid:data.uuid}).then(function(doc){
-							if (doc) json.materials[uuid] = doc;
+							if (doc) json.materials[data.uuid] = doc;
 						})
 					);
 
