@@ -586,6 +586,20 @@
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
 			);
 
+		//	create-new-material-name-input.js
+
+			(function(viewer,name_input){
+
+				watch( name_input, "onchange", function(prop, event, value){ viewer.mesh.material.name = value;
+					debugMode && console.log({item:name_input,event:event,value:value}); // debug.
+				});
+
+				name_input.addEventListener( "change", function(){
+					callWatchers( this, "onchange", "change", this.value );
+				});
+
+			})( materialViewer,  TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") ); // name_input,
+
 		//	create-new-material-image-input.js
 
 			(function(viewer,icon,image_button,image_input,map_droplist){
