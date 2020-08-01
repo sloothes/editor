@@ -766,10 +766,28 @@
 
 					//	Save material entry.
 						var collection = materialdB.collection( entry.collection );
-						collection.insert(entry, function(err){ if (err) throw err; })
-						.then(function(){ name_input.value = ""; // important!
-							console.log("material entry", entry.name, "saved!"); 
-						}).catch(function(err){ console.error(err); });
+						collection.insert(entry, function(err){ 
+							if (err) throw err; 
+						}).then(function(){
+
+						//	Resets. TODO: clear icon.
+							callWatchers(button_new, "onclick", "click", 
+								new THREE.MeshStandardMaterial({ bumpScale:0.01,
+									normalScale:new THREE.Vector2(1,1),
+									displacementBias:0, displacementScale:0, 
+								})
+							); 
+
+							callWatchers( name_input, "onchange", "change", name_input.value = "" );
+							callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" );
+						//	save_button.addEventListener( "click", onSaveButtonClick ); // important!
+
+						//	Success!
+							console.log( "material saved successfully!" );
+
+						}).catch(function(err){ 
+							console.error(err); 
+						});
 
 						return images;
 
@@ -837,15 +855,6 @@
 									return cache.add(url).then(function(){ return url; });
 								}).then(function(url){ 
 									console.log( --k+":", url, "texture completed!");
-
-								//	Success!
-									if ( !k ) { callWatchers(button_new, "onclick", "click", 
-										new THREE.MeshStandardMaterial({ bumpScale:0.01,
-											normalScale:new THREE.Vector2(1,1),
-											displacementBias:0, displacementScale:0, 
-										})); console.log( "material uploaded successfully!" );
-									}
-
 								}).catch(function(err){ console.error(err); });
 								
 							}).catch(function(err){
@@ -853,9 +862,6 @@
 							});
 
 						}); // end forEach.
-
-					//	TODO: to clear icon.
-					//	TODO: to reset viewer.mesh.material (new material);
 
 					}).then(function(){
 
