@@ -189,8 +189,8 @@
 
 			const materialdB = new zango.Db( "material", [
 				"rock","floor","wood","metal","fabric","brick","matcap","plaster",
-				"roofing","terrain","concrete","sandstone","environment","others"
-			//	"materials", textures", "images" // meta.
+				"roofing","terrain","concrete","sandstone","environment","others",
+				"materials","textures","images","imgur"  // meta-data collections.
 			]);
 
 			(function(db){
@@ -650,7 +650,7 @@
 
 		//	create-new-material-save-button.js
 
-			(function(viewer,save_button,name_input,map_droplist,col_droplist,metadB,imgurdB,materialdB){
+			(function(db,viewer,save_button,name_input,map_droplist,col_droplist){
 
 				var interval;
 
@@ -701,48 +701,164 @@
 					entry.textures = Object.keys(meta.textures); // uuid array.
 					entry.preview = viewer.canvas.toDataURL();   // dataURL.
 					entry.uuid = Object.keys(meta.materials).join(); // uuid.
+					entry.links = []; entry.imgIds = [];
 
 					debugMode && console.log("meta:", meta);     // debug!
 					debugMode && console.log("entry:", entry);   // debug!
 
-					Promise.all(promises).then(function(results){
-						debugMode && console.log("results:", results); // debug!
-					}).then(function(){
 
-					//	Save to meta Db.
-						var Images = metadB.collection("images");
-						var Textures = metadB.collection("textures");
-						var Materials = metadB.collection("materials");
-					//	var Geometries = metadB.collection("geometries");
+					Promise.all(promises).then(function(images){
+						debugMode && console.log("images:", images); // debug!
 
-						debugMode && console.log( "images:", Object.values(meta.images) );
-						debugMode && console.log( "textures:", Object.values(meta.textures) );
-						debugMode && console.log( "materials:", Object.values(meta.materials) );
+					//	Save meta.images.
+						if ( images.length ) {
+							var collection = db.collection("images");
+							return collection.insert( images, function(err){ 
+								if (err) throw err; 
+							}).then(function(){ 
+								console.log("images saved!"); 
+							}).then(function(){ 
+								return images; 
+							}).catch(function(err){ 
+								console.error(err); 
+							});
+						}
 
-					}).then(function(){
+					}).then(function( images ){
 
-					//	Upload images to imgur.
+					//	Save meta.textures.
+						if ( Object.keys(meta.textures).length ) {
+							var collection = db.collection("textures");
+							collection.insert( Object.values(meta.textures), 
+								function(err){ if (err) throw err; })
+							.then(function(){ console.log("textures saved!"); 
+							}).catch(function(err){ console.error(err); });
+						}
 
-					}).then(function(){
+						return images;
 
-					//	Replace dataURL with link.
+					}).then(function( images ){
 
-					}).then(function(){
+					//	Save meta.materials.
+						if ( Object.keys(meta.materials).length ) {
+							var collection = db.collection("materials");
+							collection.insert( Object.values(meta.textures), 
+								function(err){ if (err) throw err; })
+							.then(function(){ console.log("materials saved!"); 
+							}).catch(function(err){ console.error(err); });
+						}
 
-					//	Update material entry.
+						return images;
 
-					}).then(function(){
-
-					//	Cache texture images.
-
-					}).then(function(){
+					}).then(function( images ){
 
 					//	Save material entry.
 						var collection = materialdB.collection( entry.collection );
 						collection.insert(entry, function(err){ if (err) throw err; })
 						.then(function(){ name_input.value = ""; // important!
-							console.log("material", entry.name, "saved!"); 
+							console.log("material entry", entry.name, "saved!"); 
 						}).catch(function(err){ console.error(err); });
+
+						return images;
+
+					}).then(function( images ){
+
+						if ( images && images.length ) images.forEach(function(image){
+
+							if ( validator && !validator.isDataURI(image.url) ) throw image.url;
+
+							var name = "IMAGE:"+image.uuid;
+							var data = image.url.split(","); 
+							var type = data.shift().replace("data:","").replace(";base64","");
+						//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
+							data = data.shift(); // important! or .pop(); or .join();
+							debugMode && console.log({data:data, type:type, name:name}); // debug!
+
+						//	Upload dataURL to imgur.
+
+							new Promise(function( resolve, reject ){
+								var formdata = new FormData();
+								formdata.append("image", data);
+								formdata.append("type",  type);
+								formdata.append("name",  name);
+								var endpoint = "https://api.imgur.com/3/image";
+								var clientID = "06217f601180652";  // sloothes app Client-ID.
+								var xhttp = new XMLHttpRequest();
+								xhttp.open("POST", endpoint, true);
+								xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
+								xhttp.onreadystatechange = function () {
+									if (this.readyState === 4) {
+										var response = "";
+										if (this.status >= 200 && this.status < 300) {
+											response = JSON.parse(this.responseText);
+											debugMode && console.log(response);
+											resolve(response.data); // resolve promise.
+										} else {
+											var err = JSON.parse(this.responseText).data.error;
+											console.error( err.type, err );
+											reject( err );
+										}
+									}
+								};
+
+								xhttp.send(formdata);
+								xhttp = null;
+
+							}).then(function(data){
+
+								debugMode && console.log( data );
+								if ( data.error ) throw data.error;
+
+							//	Save meta data.
+								db.collection("imgur")
+								.insert( data, function(err){ 
+									if (err) throw err; 
+								}).catch(function(err){ 
+									console.error(err); 
+								});
+
+								return data;
+
+							}).then(function(data){
+
+							//	Replace dataURL with link.
+								db.collection("images")
+								.update( {uuid:image.uuid}, // selector, 
+									{$set:{url:data.link}}, // modifier, 
+									function(err){ if (err) throw err; 
+								}).catch(function(err){ 
+									console.error(err); 
+								});
+
+								return data;
+
+							}).then(function(data){
+
+							//	Update material entry.
+								db.collection(entry.collection)
+								.update({uuid:entry.uuid}, {$push:{
+									links:data.link,imgIds:data.id}},
+									function(err){ if (err) throw err; 
+								}).catch(function(err){ 
+									console.error(err); 
+								});
+
+								return data.link;
+
+							}).then(function(url){
+
+							//	Cache texture image.
+								caches.open("textures").then(function(cache){
+									return cache.add(url).then(function(){ return url; });
+								}).then(function(url){ console.log("save", url, "completed!");
+								}).catch(function(err){ console.error(err); });
+
+							}).catch(function(err){
+								console.error(err); 
+							});
+
+
+						}); // end forEach.
 
 					}).catch(function(err){
 						console.error(err); console.log("material", entry.name, "failed to save!");
@@ -752,44 +868,83 @@
 
 				});
 
-
-				function saveto(collection,data,keyword){
-
-					var result;
-
-					collection.find({uuid:data.uuid}).forEach(
-
-						function(doc){
-
-							result = doc.uuid;
-
-							collection.update({_id:doc._id}, {$set:data}, function(err){
-								if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-							}).catch(function(err){ console.error(err); });
-
-						},
-
-						function(err){
-
-							if (err) throw err;  
-
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-							}).catch(function(err){ console.error(err); });
-						}
-
-					).catch(function(err){ console.error(err); });
-
-				}
-
-			})( materialViewer, // viewer,
+			})( materialdB, materialViewer, // db, viewer,
 				TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),        // save_button,
 				TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),       // name_input,
 				TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"),    // map_droplist,
-				TabUI.NewMaterial.tab.querySelector("select#create-material-collection-droplist"), // col_droplist,
-				metadB,imgurdB,materialdB // dBs.
+				TabUI.NewMaterial.tab.querySelector("select#create-material-collection-droplist")  // col_droplist,
 			);
 
+		</script>
+
+		<script>
+/*
+			function uploadDataURL(data, type, name){
+
+			//  Returns a resolved promise with record data from imgur.com.
+			//	debugMode && console.log("uploading:", file.name);
+				return new Promise(function( resolve, reject ){
+
+					var formdata = new FormData();
+					formdata.append("image", data);
+					formdata.append("type",  type);
+					formdata.append("name",  name);
+
+					var endpoint = "https://api.imgur.com/3/image";
+					var clientID = "06217f601180652";  // sloothes app Client-ID.
+
+					var xhttp = new XMLHttpRequest();
+					xhttp.open("POST", endpoint, true);
+					xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
+					xhttp.onreadystatechange = function () {
+						if (this.readyState === 4) {
+							var response = "";
+							if (this.status >= 200 && this.status < 300) {
+								response = JSON.parse(this.responseText);
+								debugMode && console.log(response);
+								resolve(response.data); // resolve promise.
+							} else {
+								var err = JSON.parse(this.responseText).data.error;
+								console.error( err.type, err );
+								reject( err );
+							}
+						}
+					};
+
+					xhttp.send(formdata);
+					xhttp = null;
+				});
+			}
+
+			function saveto(collection,data,keyword){
+
+				var result;
+
+				collection.find({uuid:data.uuid}).forEach(
+
+					function(doc){
+
+						result = doc.uuid;
+
+						collection.update({_id:doc._id}, {$set:data}, function(err){
+							if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
+						}).catch(function(err){ console.error(err); });
+
+					},
+
+					function(err){
+
+						if (err) throw err;  
+
+						if (!result) return collection.insert(data, function(err){ 
+							if (err) throw err; console.log(keyword, data.uuid, "saved!" )
+						}).catch(function(err){ console.error(err); });
+					}
+
+				).catch(function(err){ console.error(err); });
+
+			}
+*/
 		</script>
 
 		<script>
