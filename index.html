@@ -288,12 +288,12 @@
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
-				watch( next_doc, "onclick", function( prop, event, value ){ if ( index > limit ) index = 0; 
+				watch( next_doc, "onclick", function( prop, event, value ){ if ( index >= limit ) index = 0; 
 					if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
 					if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 				});
 
-				watch( prev_doc, "onclick", function( prop, event, value ){ if ( index < 0 ) index = limit; 
+				watch( prev_doc, "onclick", function( prop, event, value ){ if ( index <= 0 ) index = limit; 
 					if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
 					if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 				});
