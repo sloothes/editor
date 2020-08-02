@@ -369,9 +369,9 @@
 				button.addEventListener( "click", onUploadImagesButtonClick );
 
 				function onUploadImagesButtonClick(){
-					clearTimeout(interval); debugMode && console.log("clearTimeout":, interval);
+					clearTimeout(interval); debugMode && console.log("clearTimeout:", interval);
 					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", index ); }, 250);
-					debugMode && console.log("setTimeout":, interval);
+					debugMode && console.log("setTimeout:", interval);
 				}
 
 			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-upload-images") ); // db, button.
