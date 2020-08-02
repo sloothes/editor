@@ -342,7 +342,7 @@
 				}
 
 				watch( button, "onclick", function( prop, event, value ){
-					debugMode && console.log({item:button,event:event,index:value,interval:interval});
+				//	debugMode && console.log({item:button,event:event,index:value,interval:interval});
 
 					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
 						debugMode && console.log( doc, "isDataURI:", validator.isDataURI(doc.url) );
