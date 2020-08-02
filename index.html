@@ -401,7 +401,22 @@
 
 					}).then(function(material){
 
-						material_entities.add( material ); debugMode && console.log("material:", material);
+						if ( !material ) return; debugMode && console.log("material:", material); 
+
+						var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+							keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+
+					//	replace uuids.
+						material.uuid = THREE.Math.generateUUID(); // replace material uuid.
+						keys.split(",").forEach(function(key){ 
+							if ( material[key] != null ) material[key].uuid = THREE.Math.generateUUID();
+						});
+
+					//	add entities.
+						material_entities.add( material ); // add to material entities.
+						keys.split(",").forEach(function(key){ 
+							if ( material[key] != null ) textures_entities.add( material[ key ] ); // add to texture entities.
+						});
 
 					}).catch(function(err){ console.error(err); })
 
