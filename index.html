@@ -301,7 +301,7 @@
 			(function(db,validator,button){
 
 				var collection = db.collection("images");
-				var interval; var index = 0; var timeout = 72000; 
+				var interval; var index = 0; var timeout = 72000;
 
 				function uploadDataURL(data, type, name){
 
@@ -355,7 +355,7 @@
 
 							debugMode && console.log("uploading...", {data:data, type:type, name:name, index:index}); // debug!
 
-							return interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, timeout);
+							return interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 1000); // debug! timeout:72000;
 						}
 
 					}).catch(function(err){
