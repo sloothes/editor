@@ -408,7 +408,7 @@
 				});
 
 				load_btn.addEventListener( "click", function(){
-					clearTimeout( interval );  interval = setTimeout( function(){ callWatchers( this, "onclick", "click", index ); }, 250); // important!	
+					clearTimeout( interval );  interval = setTimeout( function(){ callWatchers( load_btn, "onclick", "click", index ); }, 250); // important!	
 				});
 
 
