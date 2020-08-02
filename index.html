@@ -274,7 +274,7 @@
 
 				}).then(function(json){
 
-					debugMode && console.log( JSON.parse(JSON.stringify(json)) );
+					debugMode && console.log( json );
 
 					var loader = new THREE.ObjectLoader();
 					var object = loader.parse( json );
