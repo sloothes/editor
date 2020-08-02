@@ -347,19 +347,18 @@
 						if ( data === undefined ) return;
 
 						var item = { _id: data._id };
-
 						if ( data.uuid !== undefined ) item.uuid = data.uuid;
 						if ( data.name !== undefined ) item.name = data.name;
 						if ( data.preview !== undefined ) item.preview = data.preview;
-
 						items.push( item ); ++index; ++limit; // debugMode && console.log( item );
 
 					}).on("end", function(){
 
-						index = 0; limit = items.length - 1;  // debugMode && console.log( items );
+						index = 0; limit = items.length - 1;  // debugMode && console.log( items ); // important!
 
 					}).toArray().then(function(){ 
 
+						if ( items[index] === undefined ) { name_input.value = ""; img_viewer.src = ":0"; return; }
 						if ( items[index].name === undefined ) name_input.value = ""; else name_input.value = items[index].name;
 						if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 
