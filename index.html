@@ -219,7 +219,7 @@
 					var data = results.data;
 					var json = results.json;
 
-					debugMode && console.log( json );
+					debugMode && console.log( JSON.parse(JSON.stringify(json)) );
 
 					var promises = [];
 
@@ -248,7 +248,7 @@
 					var data = results.data;
 					var json = results.json;
 
-					debugMode && console.log( json );
+					debugMode && console.log( JSON.parse(JSON.stringify(json)) );
 
 					var promises = [];
 
@@ -274,7 +274,7 @@
 
 				}).then(function(json){
 
-					debugMode && console.log( json );
+					debugMode && console.log( JSON.parse(JSON.stringify(json)) );
 
 					var loader = new THREE.ObjectLoader();
 					var object = loader.parse( json );
