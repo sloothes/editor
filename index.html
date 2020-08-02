@@ -194,7 +194,9 @@
 
 			//	Add material to entities.
 
-				db.collection("terrain").findOne().then(function(data){
+				db.collection("terrain").find().skip(3).limit(1)
+				.toArray().then(function(docs){ return docs[0]; })
+				.then(function(data){
 
 					debugMode && console.log( data );
 
