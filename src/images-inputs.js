@@ -12,7 +12,7 @@
 
 			try { 
 
-				collection = db.collection( value ); // debugMode && console.log( "collection:", collection ); 
+				var collection = db.collection( value ); // debugMode && console.log( "collection:", collection ); 
 
 			} catch(err){
 
