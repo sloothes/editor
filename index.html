@@ -342,7 +342,7 @@
 				}
 
 				watch( button, "onclick", function( prop, event, value ){
-					debugMode && console.log({item:button,event:event,index:value});
+					debugMode && console.log({item:button,event:event,index:value,interval:interval});
 
 					collection.find().skip(value).limit(1).toArray()
 					.then(function(docs){return docs[0];}).then(function(doc){
@@ -371,7 +371,9 @@
 				button.addEventListener( "click", onUploadImagesButtonClick );
 
 				function onUploadImagesButtonClick(){
-					clearTimeout(interval); interval = setTimeout(function(){ callWatchers( button, "onclick", "click", index ); }, 250);
+					clearTimeout(interval); debugMode && console.log("clearTimeout": interval);
+					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", index ); }, 250);
+					debugMode && console.log("setTimeout": interval);
 				}
 
 			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-upload-images") ); // db, button.
