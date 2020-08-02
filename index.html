@@ -370,7 +370,7 @@
 
 				function onUploadImagesButtonClick(){
 					clearTimeout(interval); debugMode && console.log("clearTimeout:", interval);
-					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", index ); }, 250);
+					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
 					debugMode && console.log("setTimeout:", interval);
 				}
 
