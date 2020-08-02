@@ -288,12 +288,14 @@
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
-				watch( next_doc, "onclick", function( prop, event, value ){ if ( index > limit ) index = 0; 
+				watch( next_doc, "onclick", function( prop, event, value ){ 
+					if ( index > limit ) index = 0; if ( items[index] === undefined ) return;
 					if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
 					if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 				});
 
-				watch( prev_doc, "onclick", function( prop, event, value ){ if ( index < 0 ) index = limit; 
+				watch( prev_doc, "onclick", function( prop, event, value ){ if ( 
+					index < 0 ) index = limit; if ( items[index] === undefined ) return;
 					if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
 					if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 				});
@@ -303,7 +305,8 @@
 
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval );
-					interval = setTimeout(function increase(){ ++index; if ( index > limit ) index = 0; 
+					interval = setTimeout(function increase(){ 
+						++index; if ( index > limit ) index = 0; if ( items[index] === undefined ) return;
 						if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
 						if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 						interval = setTimeout(increase, 100);
@@ -312,7 +315,8 @@
 
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); 
-					interval = setTimeout(function decrease(){ --index;  if ( index < 0 ) index = limit; 
+					interval = setTimeout(function decrease(){ 
+						--index;  if ( index < 0 ) index = limit; if ( items[index] === undefined ) return;
 						if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
 						if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 						interval = setTimeout(decrease, 100);
