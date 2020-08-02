@@ -255,10 +255,7 @@
 				input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 
 				watch( input, "onchange", function(prop, event, value){ }); // debugMode && console.log({item:input,event:event,value:value});
-				watch( input, "onerror",  function(prop, event, value){ input.value = value; }); // debugMode && console.log({item:input,event:event,value:value}); 
-
-				input.addEventListener("error",  function(error){ callWatchers( this, "onerror", "error", "" ); });
-				input.addEventListener("change", function(event){ callWatchers( this, "onchange", "change", this.value ); });
+				input.addEventListener("change", function(event){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
 				row.appendChild(prev); row.appendChild(input); row.appendChild(next); tab.appendChild( row );
 
@@ -290,6 +287,29 @@
 				var interval, index = 0, limit = 100, items = [];
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				watch( next_doc, "onclick", function( prop, event, value ){ if ( index > limit ) index = 0; 
+					if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
+					if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
+				});
+
+				watch( prev_doc, "onclick", function( prop, event, value ){ if ( index < 0 ) index = limit; 
+					if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
+					if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
+				});
+
+
+
+			//	on mouse click.
+
+				next_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); callWatchers( this, "onclick", "click", ++index ); // important!
+				});
+
+				prev_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); callWatchers( this, "onclick", "click", --index ); // important!
+				});
+
 
 			//	Collection droplist.
 
@@ -327,8 +347,6 @@
 					}).catch(function(err){ console.error(err); });
 
 				});
-
-
 
 				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
 		})(
