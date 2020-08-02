@@ -306,13 +306,14 @@
 				var collection = db.collection("images");
 
 				watch( button, "onclick", function( prop, event, value ){
-					debugMode && console.log({item:button,event:event,value:value});
+					debugMode && console.log({item:button,event:event,index:value});
 
-					collection.find().skip(index).limit(1).toArray()
-					.then(function(docs){return docs[0];}).then(function(doc)){
+					collection.find().skip(value).limit(1).toArray()
+					.then(function(docs){return docs[0];}).then(function(doc){
 						debugMode && console.log( doc );
 						debugMode && console.log( validator.isDataURI(doc.url) );
 
+						if ( validator.isURL(doc.url) ) { ++index; callWatchers( button, "onclick", "click", index ); }
 
 					}).catch(function(err){
 						console.error(err);
@@ -361,7 +362,7 @@
 				button.addEventListener( "click", onUploadImagesButtonClick );
 
 				function onUploadImagesButtonClick(){
-					clearTimeout(interval); interval = setTimeout(function(){ callWatchers( button, "onclick", "click" ); },250);
+					clearTimeout(interval); interval = setTimeout(function(){ callWatchers( button, "onclick", "click", index ); },250);
 				}
 
 			})( materialdB, valdator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-upload-images") ); // db, button.
