@@ -299,6 +299,25 @@
 				});
 
 
+			//	on mouse down.
+
+				next_doc.addEventListener( "click", function(){
+					clearTimeout( interval );
+					interval = setTimeout(function increase(){ ++index; if ( index >= limit ) index = 0; 
+						if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
+						if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
+						interval = setTimeout(increase, 100);
+					}, 500);
+				});
+
+				prev_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); 
+					interval = setTimeout(function decrease(){ --index;  if ( index <= 0 ) index = limit; 
+						if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
+						if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
+						interval = setTimeout(decrease, 100);
+					}, 500);
+				});
 
 			//	on mouse click.
 
