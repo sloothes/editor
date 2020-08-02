@@ -368,8 +368,8 @@
 				button.addEventListener( "click", onUploadImagesButtonClick );
 
 				function onUploadImagesButtonClick(){
-				//	cancels this upload and procced to next doc.
-					clearTimeout(interval); interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
+					clearTimeout(interval); //	cancel this upload and procced to next doc.
+					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
 				}
 
 			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-upload-images") ); // db, button.
