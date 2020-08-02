@@ -344,10 +344,8 @@
 				watch( button, "onclick", function( prop, event, value ){
 					debugMode && console.log({item:button,event:event,index:value,interval:interval});
 
-					collection.find().skip(value).limit(1).toArray()
-					.then(function(docs){return docs[0];}).then(function(doc){
-						debugMode && console.log( doc );
-						debugMode && console.log( validator.isDataURI(doc.url) );
+					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
+						debugMode && console.log( doc, "isDataURI:", validator.isDataURI(doc.url) );
 
 						if ( validator.isURL(doc.url) ) return callWatchers( button, "onclick", "click", ++index );
 
