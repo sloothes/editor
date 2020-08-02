@@ -299,7 +299,7 @@
 		//	Checks material dB images collection,
 		//	and uploads an image every 75 secs.
 
-			(function(db,valdator,button){
+			(function(db,validator,button){
 
 				var interval; 
 				var index = 0; var timeout = 75000; 
@@ -374,7 +374,7 @@
 					clearTimeout(interval); interval = setTimeout(function(){ callWatchers( button, "onclick", "click", index ); }, 250);
 				}
 
-			})( materialdB, valdator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-upload-images") ); // db, button.
+			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-upload-images") ); // db, button.
 
 
 		</script>
