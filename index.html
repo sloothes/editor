@@ -282,7 +282,7 @@
 
 		//	material-library-inputs.js
 
-			(function(db,next_doc,prev_doc,name_input,img_viewer,collection_droplist){
+			(function(db,next_doc,prev_doc,load_btn,name_input,img_viewer,collection_droplist){
 
 				var interval, index = 0, limit = 100, items = [];
 
@@ -334,6 +334,84 @@
 				});
 
 
+			//	Load button.
+
+				watch( load_btn, "onclick", function( prop, event, index ){ 
+					if ( !collection_droplist.value ) return;
+
+					var name = collection_droplist.value;
+
+					db.collection( name ).find().skip(index).limit(1).toArray()
+					.then(function(docs){ return docs[0]; }).then(function(data){
+
+						debugMode && console.log( data );
+
+						var object = new THREE.Mesh( new THREE.BoxGeometry() );
+						var json = object.toJSON(); json.object.material = data.uuid;
+
+						return db.collection("materials").findOne({uuid:data.uuid})
+						.then(function(doc){ if ( !doc ) throw "material not found!";
+							json.materials = [doc]; return {json:json, data:data};
+						}).catch(function(err){ console.error(err); });
+
+					}).then(function(results){
+
+						var data = results.data; var json = results.json;
+					//	debugMode && console.log( JSON.parse(JSON.stringify(json)) );
+
+						var promises = []; data.textures.forEach( function(uuid){
+							promises.push( db.collection("textures").findOne({uuid:uuid})
+								.then(function(doc){ 
+									if (!doc) throw "texture "+uuid+" not found!"; return doc;
+								}).catch(function(err){ console.error(err); })
+							);
+						});
+
+						return Promise.all(promises).then(function(textures){
+							debugMode && console.log( "textures:", textures );
+							json.textures = textures; return {json:json, data:data};
+						}).catch(function(err){ console.error(err); });
+
+					}).then(function(results){
+
+						var data = results.data; var json = results.json;
+					//	debugMode && console.log( JSON.parse(JSON.stringify(json)) );
+
+						var promises = []; data.images.forEach( function(uuid){
+							promises.push( db.collection("images").findOne({uuid:uuid})
+								.then(function(doc){
+									if (!doc) throw "image "+uuid+" not found!"; return doc;
+								}).catch(function(err){ console.error(err); })
+							);
+						});
+
+						return Promise.all(promises).then(function(images){
+							debugMode && console.log( "images:", images );
+							json.images = images; return json;
+						}).catch(function(err){ console.error(err); });
+
+					}).then(function(json){
+
+						debugMode && console.log( "json:", json );
+						var loader = new THREE.ObjectLoader(); 
+						var object = loader.parse( json );
+						debugMode && console.log( "object:", object );
+
+						return object.material;
+
+					}).then(function(material){
+
+						material_entities.add( material ); debugMode && console.log("material:", material);
+
+					}).catch(function(err){ console.error(err); })
+
+				});
+
+				load_btn.addEventListener( "click", function(){
+					clearTimeout( interval );  interval = setTimeout( function(){ callWatchers( this, "onclick", "click", index ); }, 250); // important!	
+				});
+
+
 			//	Collection droplist.
 
 				watch(collection_droplist, "onchange",function(prop, event, value){
@@ -375,6 +453,7 @@
 			materialdB, // db,
 			TabUI.MaterialLibrary.tab.querySelector("li#material-library-next"),                   // next_doc,
 			TabUI.MaterialLibrary.tab.querySelector("li#material-library-previous"),               // prev_doc,
+			TabUI.MaterialLibrary.tab.querySelector("div#material-library-load-button"),           // load_btn,
 			TabUI.MaterialLibrary.tab.querySelector("input#material-library-name-input"),          // name_input,
 			TabUI.MaterialLibrary.tab.querySelector("img#material-library-preview-viewer"),        // img_viewer,
 			TabUI.MaterialLibrary.tab.querySelector("select#material-library-collection-droplist") // collection_droplist,
@@ -383,7 +462,7 @@
 		</script>
 
 		<script>
-
+/*
 			(function(db){
 
 			//	Call a material from database 
@@ -461,7 +540,6 @@
 				})
 
 			})( materialdB );
-
 		//	var json = {};
 		//	json.images = [];
 		//	json.textures = [];
@@ -470,13 +548,14 @@
 		//		version: 4.5, type: "Object",
 		//		generator: "Object3D.toJSON"
 		//	}
-
+*/
 		</script>
 
 		<script>
 
 			TabUI.MaterialLibrary.role.classList.add("active");
 			TabUI.MaterialLibrary.tab.classList.add("in","active");
+			TabUI.MaterialLibrary.pill.scrollIntoViewIfNeeded(false);
 
 		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
