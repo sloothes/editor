@@ -86,12 +86,12 @@
 		img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		watch( img, "onload", function(prop, event, value){
-			debugMode && console.log({item:img,event:event,src:value});
+		//	debugMode && console.log({item:img,event:event,src:value});
 		});
 
-		watch( img, "onerror", function(prop, event, value){
-			img.src = value; // debugMode && console.log({item:img,event:event,src:value}); 
-		});
+		watch( img, "onerror", function(prop, event, value){ img.src = value; });
+	//	debugMode && console.log({item:img,event:event,src:value}); 
+		
 
 		img.addEventListener("load",function(event){
 			callWatchers( this, "onload", "load", this.src );
