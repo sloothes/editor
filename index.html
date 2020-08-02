@@ -307,7 +307,7 @@
 						if ( data.name !== undefined ) item.name = data.name;
 						if ( data.preview !== undefined ) item.preview = data.preview;
 
-						items.push( item ); // debugMode && console.log( item );
+						items.push( item ); ++index; ++limit; // debugMode && console.log( item );
 
 					}).on("end", function(){
 
