@@ -276,16 +276,15 @@
 
 					debugMode && console.log( json );
 
+				//	var loader = new THREE.ObjectLoader();
+				//	var object = loader.parse( json );
+				//	debugMode && console.log( object );
+
 					var loader = new THREE.ObjectLoader();
-					var object = loader.parse( json );
-					debugMode && console.log( object );
-
-					var material = object.material;
-					material_entities.add( material );
+					var material = loader.parseMaterials( json );
 					debugMode && console.log( material );
+					material_entities.add( material );
 
-				}, function(err){
-					if (err) throw err;
 				}).catch(function(err){
 					console.error(err);
 				})
