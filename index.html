@@ -278,13 +278,15 @@
 
 					debugMode && console.log( json );
 
-				//	var loader = new THREE.ObjectLoader();
-				//	var object = loader.parse( json );
-				//	debugMode && console.log( object );
-
 					var loader = new THREE.ObjectLoader();
-					var material = loader.parseMaterials( json );
-					debugMode && console.log( material );
+					var object = loader.parse( json );
+					debugMode && console.log( object );
+
+					return object.material;
+
+				}).then(function(material){
+
+					debugMode && console.log(material);
 					material_entities.add( material );
 
 				}).catch(function(err){
