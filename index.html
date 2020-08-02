@@ -347,7 +347,7 @@
 
 						if ( validator.isURL(doc.url) ) return callWatchers( button, "onclick", "click", ++index );
 
-						if ( validator.isDataURI(doc.url) ) { 
+						if ( validator.isDataURI(doc.url) ) return (function(doc){
 
 						//	data must NOT contain the prefix "data:image/jpeg;base64," important!
 							var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
@@ -355,7 +355,7 @@
 							data = data.shift(); // important! or .pop(); or .join();
 							debugMode && console.log({"uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
 
-							return uploadDataURL(data, type, name).then(function(data){
+							uploadDataURL(data, type, name).then(function(data){
 
 								debugMode && console.log( data );
 								if ( data.error ) throw data.error;
@@ -387,15 +387,14 @@
 
 							}).then(function(){
 
+							//	Call button watcher after 72 secs.
 								return interval = setTimeout(function(){ 
-									callWatchers( button, "onclick", "click", ++index 
-								); }, timeout);
+									callWatchers( button, "onclick", "click", ++index ); 
+								}, timeout);
 
-							}).catch(function(err){
-								console.error(err); 
-							});
+							}).catch(function(err){ console.error(err); });
 
-						}
+						})( doc );
 
 					}).catch(function(err){ console.error(err); clearTimeout(interval); });
 
@@ -409,7 +408,6 @@
 				}
 
 			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-upload") );
-
 
 		</script>
 
