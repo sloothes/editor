@@ -210,7 +210,7 @@
 					return db.collection("materials")
 					.findOne({uuid:data.uuid}).then(function(doc){
 						if ( !doc ) throw "material not found!";
-						json.materials = [{[data.uuid]:doc}];
+						json.materials = [doc];
 						return {json:json, data:data};
 					}).catch(function(err){
 						console.error(err);
@@ -229,7 +229,7 @@
 						promises.push( db.collection("textures")
 							.findOne({uuid:uuid}).then(function(doc){
 								if (!doc) throw "texture "+uuid+" not found!";
-								return {[uuid]:doc};
+								return doc;
 							}).catch(function(err){
 								console.error(err);
 							})
@@ -258,7 +258,7 @@
 						promises.push( db.collection("images")
 							.findOne({uuid:uuid}).then(function(doc){
 								if (!doc) throw "image "+uuid+" not found!";
-								return {[uuid]:doc};
+								return doc;
 							}).catch(function(err){
 								console.error(err);
 							})
