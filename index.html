@@ -301,7 +301,7 @@
 
 			//	on mouse down.
 
-				next_doc.addEventListener( "click", function(){
+				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval );
 					interval = setTimeout(function increase(){ ++index; if ( index >= limit ) index = 0; 
 						if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
@@ -310,7 +310,7 @@
 					}, 500);
 				});
 
-				prev_doc.addEventListener( "click", function(){
+				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); 
 					interval = setTimeout(function decrease(){ --index;  if ( index <= 0 ) index = limit; 
 						if ( items[index].name === undefined ) name_input.value = items[index]._id; else name_input.value = items[index].name;
