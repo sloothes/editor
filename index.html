@@ -316,7 +316,7 @@
 					}).toArray().then(function(){ 
 
 						name_input.value = items[index].name;
-						img_viewer.src = item[index].preview;
+						img_viewer.src = items[index].preview;
 
 					}).catch(function(err){ console.error(err); });
 
