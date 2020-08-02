@@ -235,6 +235,28 @@
 
 			})( TabUI.EditMaterial.tab );
 
+			(function( tab ){
+
+			//	Edit Material name input.
+
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin:10px 15px;";
+
+				var prev = document.createElement("li"); prev.id = "edit-material-previous";
+				prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+
+				var next = document.createElement("li"); next.id = "edit-material-next";
+				next.innerHTML = "&#9658;"; next.style.display = "inline";
+				next.classList.add("btn","btn-primary","get-next-btn","pull-right");
+
+				var input = document.createElement("input"); input.id = "edit-material-name-input";
+				input.setAttribute("placeholder", "material name" );input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
+				input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
+
+				row.appendChild(prev); row.appendChild(input); row.appendChild(next); tab.appendChild( row );
+
+			})( TabUI.EditMaterial.tab );
 
 
 
@@ -253,7 +275,8 @@
 
 			(function(db){
 
-			//	Add material to entities (demo).
+			//	Call a material from database 
+			//	and add to material entities (demo).
 
 				db.collection("terrain").find().skip(3).limit(1)
 				.toArray().then(function(docs){ return docs[0]; })
