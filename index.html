@@ -228,8 +228,8 @@
 				watch( img, "onload",  function(prop, event, value){ }); // debugMode && console.log({item:img,event:event,src:value});
 				watch( img, "onerror", function(prop, event, value){ img.src = value; }); // debugMode && console.log({item:img,event:event,src:value}); 
 
-				img.addEventListener("load", function(event){ callWatchers( this, "onload", "load", this.src ); });
-				img.addEventListener("error", function(err){ callWatchers( this, "onerror", "error", dummy_src ); });
+				img.addEventListener("load",  function(event){ callWatchers( this, "onload", "load", this.src ); });
+				img.addEventListener("error", function(error){ callWatchers( this, "onerror", "error", dummy_src ); });
 
 				row.appendChild( img ); tab.appendChild( row );
 
@@ -253,6 +253,12 @@
 				input.setAttribute("placeholder", "material name" );input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
 				input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
+
+				watch( input, "onchange", function(prop, event, value){ }); // debugMode && console.log({item:input,event:event,value:value});
+				watch( input, "onerror",  function(prop, event, value){ input.value = value; }); // debugMode && console.log({item:input,event:event,value:value}); 
+
+				input.addEventListener("error",  function(error){ callWatchers( this, "onerror", "error", "" ); });
+				input.addEventListener("change", function(event){ callWatchers( this, "onchange", "change", this.value ); });
 
 				row.appendChild(prev); row.appendChild(input); row.appendChild(next); tab.appendChild( row );
 
@@ -324,7 +330,7 @@
 
 
 
-
+				callWatchers( collection_droplist, "onchange", "change", collection_droplist.value );
 		})(
 			materialdB, // db,
 			TabUI.MaterialLibrary.tab.querySelector("li#material-library-next"),                   // next_doc,
