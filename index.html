@@ -283,7 +283,7 @@
 				//	debugMode && console.log( object );
 
 					var loader = new THREE.ObjectLoader();
-					var material = loader.parseMaterials( json.materials );
+					var material = loader.parseMaterials( json );
 					debugMode && console.log( material );
 					material_entities.add( material );
 
