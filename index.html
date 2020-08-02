@@ -358,9 +358,7 @@
 							return interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 1000); // debug! timeout:72000;
 						}
 
-					}).catch(function(err){
-						console.error(err);
-					});
+					}).catch(function(err){ console.error(err); clearTimeout(interval); });
 
 				});
 
