@@ -357,7 +357,7 @@
 							var type = data.shift().replace("data:","").replace(";base64","");
 							data = data.shift(); // important! or .pop(); or .join();
 
-							debugMode && console.log("uploading:"{data:data, type:type, name:name}); // debug!
+							debugMode && console.log("uploading:", {data:data, type:type, name:name}); // debug!
 
 							interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 72000);
 						}
