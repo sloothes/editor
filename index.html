@@ -321,8 +321,8 @@
 
 					}).toArray().then(function(){ 
 
-						name_input.value = items[index].name;
-						img_viewer.src = items[index].preview;
+						if ( items[index].name === undefined ) name_input.value = ""; else name_input.value = items[index].name;
+						if ( items[index].preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = items[index].preview;
 
 					}).catch(function(err){ console.error(err); });
 
