@@ -349,11 +349,12 @@
 
 						if ( validator.isDataURI(doc.url) ) { 
 
+						//	data must NOT contain the prefix "data:image/jpeg;base64," important!
 							var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
 							var type = data.shift().replace("data:","").replace(";base64","");
 							data = data.shift(); // important! or .pop(); or .join();
 
-							debugMode && console.log("uploading...", {data:data, type:type, name:name, index:index}); // debug!
+							debugMode && console.log("uploading...", {data:data, type:type, name:name, _id:doc._id}); // debug!
 
 							return interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 1000); // debug! timeout:72000;
 						}
