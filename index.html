@@ -357,7 +357,7 @@
 
 							debugMode && console.log("uploading...",{data:data, type:type, name:name, interval:interval}); // debug!
 
-							interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 72000);
+							return interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 72000);
 						}
 
 					}).catch(function(err){
