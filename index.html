@@ -486,10 +486,10 @@
 
 						}).catch(function(err){ console.error(err); });
 
-					}).catch(function(err){ console.error(err); }).then(function(){ 
+					}).then(function(){ 
 						callWatchers(update_button, "onclick", "click", ++index ); 
-					});
-
+					}).catch(function(err){ console.error(err); });
+						
 				});
 
 				update_button.addEventListener( "click", function(){ 
