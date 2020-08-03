@@ -313,7 +313,7 @@
 		<script>
 
 		//	material-library-collection-images-upload-button.js
-		//	Checks material dB images collection and uploads an image every 72 secs.
+		//	Checks material dB images collection and uploads an image every 60 secs.
 
 			(function(db,validator,button){
 
@@ -404,17 +404,15 @@
 									return console.log( name, "completed:", url);
 								}).catch(function(err){ console.error(err); });
 
+							}).then(function(){
+
+								setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, timeout); // Call button watcher after 60 secs.
+
 							});
 
 						}
 
-				//	Call button watcher after 60 secs.
-
-					}).then(function(){
-
-						setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, timeout);
-
-					}).catch(function(err){ console.error(err); clearTimeout(interval); });
+					}).catch(function(err){ console.error(err); });
 
 				});
 
