@@ -281,8 +281,25 @@
 			//	Material Library Upload Collection Images button.
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
 
-				var button = document.createElement("div"); button.id = "material-library-images-upload"; 
+				var button = document.createElement("div"); 
+				button.id = "material-library-images-upload-button"; 
 				button.textContent = "Start Collection Images Upload";
+				button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
+				button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+
+				row.appendChild( button ); tab.appendChild( row );
+
+			})( TabUI.MaterialLibrary.tab );
+
+			(function( tab ){
+
+			//	Material Library Update Collection Images button.
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
+
+				var button = document.createElement("div"); 
+				button.id = "material-library-images-update-button"; 
+				button.textContent = "Collection Images Update";
 				button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 				button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
@@ -333,6 +350,13 @@
 						xhttp.send(formdata); xhttp = null;
 					});
 				}
+
+				function onUploadImagesButtonClick(){
+					clearTimeout(interval); //	cancel this upload and procced to next doc.
+					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
+				}
+
+				button.addEventListener( "click", onUploadImagesButtonClick );
 
 				watch( button, "onclick", function( prop, event, value ){
 				//	debugMode && console.log({item:button,event:event,index:value,interval:interval});
@@ -395,14 +419,74 @@
 
 				});
 
-				function onUploadImagesButtonClick(){
-					clearTimeout(interval); //	cancel this upload and procced to next doc.
-					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
-				}
+			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-upload-button") );
 
-				button.addEventListener( "click", onUploadImagesButtonClick );
+		</script>
 
-			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-upload") );
+		<script>
+
+		//	material-library-collection-images-update-button.js
+
+			(function(db,validator,button,collection_droplist){
+
+				var interval, collection, index = 0, limit;
+
+				watch( collection_droplist, "onchange", function(prop, event, value){ collection = db.collection( value );
+					db.collection( value ).find().on("data", function(data){ ++limit; }).on("end", function(){ index = 0; }).toArray()
+					.then(function(){ debugMode && console( "index:", index, "limit:", limit ); }).catch(function(err){ console.error(err); });
+				});
+
+				watch( button, "onclick", function( prop, event, value ){
+				//	debugMode && console.log({item:button,event:event,index:value,interval:interval});
+
+					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
+
+						if (  doc.images === undefined ) throw "this material images is undefined!"
+						if ( !doc.images.length ) throw "this material doesn't have texture images!"
+						if ( doc.images.length && doc.links.length === doc.images.length && doc.imgIds.length === doc.images.length ) {
+							throw "doc images are up to date! (this is a good error)";
+						}
+
+						var imgIds = []; var links = []; debugMode && console.log( doc ); 
+
+						doc.images.forEach(function(uuid){
+
+							db.collection("images").findOne({uuid:uuid}).then(function(img){
+
+								if ( !img ) throw "image", uuid, "not found!";
+
+							//	collect.
+
+								if ( validator.isURL(img.url) ) { links.push( img.url ); 
+									imgIds.push( img.url.replace("https://i.imgur.com/","")
+									.replace(".png","").replace(".jpg","").replace(".jpeg","") )
+								}
+
+							//	update.
+
+								if ( links.length === doc.images.length && imgIds.length === doc.images.length ) {
+									collection.update({_id:doc._id}, {$set:{links:links,imgIds:imgIds}}, 
+										function(err){ if (err) throw err; 
+									}).then(function(){ collection.findOne({_id:doc._id}).then(function(doc){ 
+										console.log("doc", doc.name, " images are up to date:", doc); });
+									}).catch(function(err){ console.error(err); });
+								}
+
+							}).catch(function(err){ console.error(err); });
+
+						});
+
+					}).catch(function(err){ console.error(err); });
+
+					button.addEventListener( "click", function(){ ++index; });
+
+				});
+
+			})( 
+				materialdB, validator, // db, validator,
+				TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-update-button"), // button,
+				TabUI.MaterialLibrary.tab.querySelector("select#material-library-collection-droplist") // collection_droplist,
+			);
 
 		</script>
 
@@ -412,7 +496,7 @@
 
 			(function(db,next_doc,prev_doc,load_btn,name_input,img_viewer,collection_droplist){
 
-				var interval, index = 0, limit = 100, items = [];
+				var interval, index = 0, limit = 1000, items = [];
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
@@ -557,7 +641,7 @@
 
 			//	Collection droplist.
 
-				watch(collection_droplist, "onchange",function(prop, event, value){
+				watch(collection_droplist, "onchange", function(prop, event, value){
 
 					var collection = db.collection( value ); // debugMode && console.log( "collection:", collection ); 
 
