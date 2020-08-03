@@ -359,6 +359,8 @@
 				watch( button, "onclick", function( prop, event, value ){
 				//	debugMode && console.log({item:button,event:event,index:value,interval:interval});
 
+					button.removeEventListener( "click", onUploadImagesButtonClick );
+
 					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
 						debugMode && console.log( doc, "isDataURI:", validator.isDataURI(doc.url) );
 
@@ -410,7 +412,7 @@
 
 						}
 
-					}).catch(function(err){ console.error(err); });
+					}).catch(function(err){ console.error(err); button.addEventListener( "click", onUploadImagesButtonClick ); }); // important!
 
 				});
 
