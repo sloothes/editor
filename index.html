@@ -443,7 +443,7 @@
 
 						if ( !limit ) throw "Collection does not contain some document!";
 						if ( limit && index > limit) throw "end of collection reached: "+index; 
-						if ( !doc ) throw "FatalError: end of collection docs detected!"; // fatal!
+						if ( !doc ) throw "end of collection docs detected!"; // fatal!
 
 						if ( doc.name === undefined ) name_input.value = doc._id; else name_input.value = doc.name;
 						if ( doc.preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = doc.preview;
