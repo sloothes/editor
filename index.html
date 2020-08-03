@@ -317,7 +317,7 @@
 
 				var interval; 
 				var collection = db.collection("images");
-				var index = 0; var timeout = 50 * 60 * 1000; // min * sec * msec.
+				var index = 0; var timeout = 60 * 60 * 1000; // min * sec * msec.
 
 				function uploadDataURL(data, type, name){
 				//  Returns a resolved promise with record data from imgur.com.
@@ -360,17 +360,15 @@
 				watch( upload_button, "onclick", function( prop, event, value ){
 				//	debugMode && console.log({item:upload_button,event:event,index:value,interval:interval});
 
-					upload_button.removeEventListener( "click", onUploadImagesButtonClick ); // important!
+					var k = 0; upload_button.removeEventListener( "click", onUploadImagesButtonClick ); // important!
 
-					collection.find().on("data", function(){ ++index; }).on("end", function(){
-						upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
-					}).forEach( 
+					collection.find().forEach( 
 
 						function(doc){
 
 							debugMode && console.log( index, doc, "isDataURI:", validator.isDataURI(doc.url) );
 
-							if ( validator.isURL(doc.url) ) return; // callWatchers( upload_button, "onclick", "click", ++index );
+							if ( validator.isURL(doc.url) ) return; if ( k >= 50 ) throw "maximum uploads reached: "+k;
 
 							if ( validator.isDataURI(doc.url) ) {
 
@@ -380,7 +378,7 @@
 								data = data.shift(); // important! or .pop(); or .join();
 								debugMode && console.log({"uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
 
-								uploadDataURL(data, type, name).then(function(data){
+								 ++k; uploadDataURL(data, type, name).then(function(data){
 
 									debugMode && console.log( data );
 									if ( data.error ) throw data.error;
@@ -418,8 +416,14 @@
 						function(err){ if (err) throw err; }
 
 					).catch(function(err){ 
-						console.error(err); // upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
-						clearTimeout(interval); interval = setTimeout(function(){ callWatchers( upload_button, "onclick", "click", index ); }, timeout); // Call upload_button watcher after 50 min.
+
+						if ( err.code !== undefined && err.code === 429 && err.message ) {
+							console.warn( err.message ); return setTimeout(function(){ 
+								callWatchers( upload_button, "onclick", "click", index ); 
+							}, timeout); // Call upload_button watcher after 60 min.
+						}
+
+						console.error(err);  upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
 					});
 
 				});
