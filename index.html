@@ -364,9 +364,7 @@
 
 					collection.find().on("data", function(){ ++index; }).on("end", function(){
 						upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
-					}).forEach( 
-
-						function(doc){
+					}).forEach( function(doc){
 
 							debugMode && console.log( index, doc, "isDataURI:", validator.isDataURI(doc.url) );
 
