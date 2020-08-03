@@ -427,7 +427,7 @@
 
 		//	material-library-collection-images-update-button.js
 
-			(function(db,validator,next_doc,button,collection_droplist){
+			(function(db,validator,next_doc,name_input,img_viewer,update_button,collection_droplist){
 
 				var interval, collection, index = 0, limit = 0;
 
@@ -436,8 +436,8 @@
 					.then(function(){ debugMode && console.log( "index:", index, "limit:", limit ); }).catch(function(err){ console.error(err); });
 				});
 
-				watch( button, "onclick", function( prop, event, value ){
-				//	debugMode && console.log({item:button,event:event,index:value,interval:interval});
+				watch( update_button, "onclick", function( prop, event, value ){
+				//	debugMode && console.log({item:update_button,event:event,index:value,interval:interval});
 
 					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
 
@@ -480,18 +480,20 @@
 
 				});
 
-				button.addEventListener( "click", function(){ 
+				update_button.addEventListener( "click", function(){ 
 					clearTimeout(interval); 
 					callWatchers(next_doc, "onclick", "click", ++index ); 
 					interval = setTimeout(function(){ 
-						callWatchers(button, "onclick", "click", index ); 
+						callWatchers(update_button, "onclick", "click", index ); 
 					}, 250);
 				});
 
 			})( 
 				materialdB, validator, // db, validator,
-				TabUI.MaterialLibrary.tab.querySelector("li#material-library-next"), // next_doc,
-				TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-update-button"),  // button,
+				TabUI.MaterialLibrary.tab.querySelector("li#material-library-next"),                   // next_doc,
+				TabUI.MaterialLibrary.tab.querySelector("input#material-library-name-input"),          // name_input,
+				TabUI.MaterialLibrary.tab.querySelector("img#material-library-preview-viewer"),        // img_viewer,
+				TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-update-button"),  // update_button,
 				TabUI.MaterialLibrary.tab.querySelector("select#material-library-collection-droplist") // collection_droplist,
 			);
 
