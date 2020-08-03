@@ -366,7 +366,7 @@
 
 						function(doc){
 
-							debugMode && console.log( index, doc, "isDataURI:", validator.isDataURI(doc.url) );
+							debugMode && console.log( index++, doc, "isDataURI:", validator.isDataURI(doc.url) );
 
 							if ( validator.isURL(doc.url) ) return; if ( k >= 50 ) throw "maximum uploads reached: "+k;
 
