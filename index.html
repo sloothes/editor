@@ -366,7 +366,7 @@
 
 						function(doc){
 
-							debugMode && console.log( index++, doc, "isDataURI:", validator.isDataURI(doc.url) );
+							console.log({ "index":index++, "doc":doc, "isDataURI":validator.isDataURI(doc.url) });
 
 							if ( validator.isURL(doc.url) ) return; if ( k >= 50 ) throw "maximum uploads reached: "+k;
 
@@ -376,9 +376,9 @@
 								var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
 								var type = data.shift().replace("data:","").replace(";base64","");
 								data = data.shift(); // important! or .pop(); or .join();
-								debugMode && console.log({"uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
+								console.log({++k, "uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
 
-								 ++k; uploadDataURL(data, type, name).then(function(data){
+								 uploadDataURL(data, type, name).then(function(data){
 
 									debugMode && console.log( data );
 									if ( data.error ) throw data.error;
