@@ -460,7 +460,7 @@
 								return db.collection("images").findOne({uuid:uuid}).then(function(img){
 
 									if ( !img ) throw "image", uuid, "not found!";
-									if ( !validator.isURL(img.url) ) throw "image", uuid, "is not URL!";
+									if ( !validator.isURL(img.url) ) throw "image "+uuid+" is not URL!";
 
 								//	collect.
 
