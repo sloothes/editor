@@ -313,10 +313,11 @@
 		//	material-library-collection-images-upload-button.js
 		//	Checks material dB images collection and uploads an image every 60 secs.
 
-			(function(db,validator,button){
+			(function(db,validator,upload_button){
 
+				var interval; 
 				var collection = db.collection("images");
-				var interval; var index = 0; var timeout = 60000;
+				var index = 0; var timeout = 50 * 60 * 1000; // min * sec * msec.
 
 				function uploadDataURL(data, type, name){
 				//  Returns a resolved promise with record data from imgur.com.
@@ -351,72 +352,79 @@
 
 				function onUploadImagesButtonClick(){
 					clearTimeout(interval);
-					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
+					interval = setTimeout(function(){ callWatchers( upload_button, "onclick", "click", ++index ); }, 250);
 				}
 
-				button.addEventListener( "click", onUploadImagesButtonClick );
+				upload_button.addEventListener( "click", onUploadImagesButtonClick );
 
-				watch( button, "onclick", function( prop, event, value ){
-				//	debugMode && console.log({item:button,event:event,index:value,interval:interval});
+				watch( upload_button, "onclick", function( prop, event, value ){
+				//	debugMode && console.log({item:upload_button,event:event,index:value,interval:interval});
 
-					button.removeEventListener( "click", onUploadImagesButtonClick );
+					upload_button.removeEventListener( "click", onUploadImagesButtonClick ); // important!
 
-					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
-						debugMode && console.log( doc, "isDataURI:", validator.isDataURI(doc.url) );
+					collection.find().on("data", function(){ ++index; }).on("end", function(){
+						upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
+					}).forEach( 
 
-						if ( validator.isURL(doc.url) ) return callWatchers( button, "onclick", "click", ++index );
+						function(doc){
 
-						if ( validator.isDataURI(doc.url) ) {
+							debugMode && console.log( index, doc, "isDataURI:", validator.isDataURI(doc.url) );
 
-						//	data must NOT contain the prefix "data:image/jpeg;base64," important!
-							var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
-							var type = data.shift().replace("data:","").replace(";base64","");
-							data = data.shift(); // important! or .pop(); or .join();
-							debugMode && console.log({"uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
+							if ( validator.isURL(doc.url) ) return; // callWatchers( upload_button, "onclick", "click", ++index );
 
-							return uploadDataURL(data, type, name).then(function(data){
+							if ( validator.isDataURI(doc.url) ) {
 
-								debugMode && console.log( data );
-								if ( data.error ) throw data.error;
+							//	data must NOT contain the prefix "data:image/jpeg;base64," important!
+								var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
+								var type = data.shift().replace("data:","").replace(";base64","");
+								data = data.shift(); // important! or .pop(); or .join();
+								debugMode && console.log({"uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
 
-							//	Save meta data.
-								db.collection("imgur").insert( data, 
-									function(err){ if (err) throw err; 
-								}).catch(function(err){ console.error(err); });
+								uploadDataURL(data, type, name).then(function(data){
 
-								return data;
+									debugMode && console.log( data );
+									if ( data.error ) throw data.error;
 
-							}).then(function(data){
+								//	Save meta data.
+									db.collection("imgur").insert( data, 
+										function(err){ if (err) throw err; 
+									}).catch(function(err){ console.error(err); });
 
-							//	Replace dataURL with link.
-								collection.update( {_id:doc._id}, {$set:{url:data.link}}, 
-									function(err){ if (err) throw err; 
-								}).catch(function(err){ console.error(err); });
+									return data;
 
-								return data.link;
+								}).then(function(data){
 
-							}).then(function(url){
+								//	Replace dataURL with link.
+									collection.update( {_id:doc._id}, {$set:{url:data.link}}, 
+										function(err){ if (err) throw err; 
+									}).catch(function(err){ console.error(err); });
 
-							//	Cache material preview.
-								return caches.open("textures").then(function(cache){
-									return cache.add(url).then(function(){ return url; });
-								}).then(function(url){ 
-									return console.log( name, "completed:", url);
-								}).catch(function(err){ console.error(err); });
+									return data.link;
 
-							}).then(function(){
+								}).then(function(url){
 
-								setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, timeout); // Call button watcher after 60 secs.
+								//	Cache material preview.
+									return caches.open("textures").then(function(cache){
+										return cache.add(url).then(function(){ return url; });
+									}).then(function(url){ 
+										return console.log( name, "completed:", url);
+									}).catch(function(err){ console.error(err); });
 
-							});
+								});
+							}
 
-						}
+						},
 
-					}).catch(function(err){ console.error(err); button.addEventListener( "click", onUploadImagesButtonClick ); }); // important!
+						function(err){ if (err) throw err; }
+
+					}).catch(function(err){ 
+						console.error(err); // upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
+						setTimeout(function(){ callWatchers( upload_button, "onclick", "click", index ); }, timeout); // Call upload_button watcher after 50 min.
+					});
 
 				});
 
-			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-upload-button") );
+			})( materialdB, validator, TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-upload-button") ); // db, validator, upload_button
 
 		</script>
 
