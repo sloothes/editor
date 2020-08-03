@@ -444,17 +444,16 @@
 						if ( doc.name === undefined ) name_input.value = doc._id; else name_input.value = doc.name;
 						if ( doc.preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = doc.preview;
 
-						if (  doc.images === undefined ) throw "this material images is undefined!";
-						if ( !doc.images.length ) throw "this material doesn't have texture images!";
+						if (  doc.images === undefined ) throw "doc images is undefined!";
+						if ( !doc.images.length ) throw "doc doesn't have texture images!";
 						if ( doc.images.length && doc.links.length === doc.images.length && doc.imgIds.length === doc.images.length ) {
 							throw "doc images are up to date! (this is a good error)";
 						}
 
-						var imgIds = []; var links = []; debugMode && console.log( doc ); 
+						var imgIds = []; var links = []; var promises = []; debugMode && console.log( doc ); 
 
-						doc.images.forEach(function(uuid){
-
-							db.collection("images").findOne({uuid:uuid}).then(function(img){
+						doc.images.forEach(function(uuid){ 
+							promises.push( db.collection("images").findOne({uuid:uuid}).then(function(img){
 
 								if ( !img ) throw "image", uuid, "not found!";
 
@@ -465,19 +464,25 @@
 									.replace(".png","").replace(".jpg","").replace(".jpeg","") )
 								}
 
-							//	update.
 
-								if ( links.length === doc.images.length && imgIds.length === doc.images.length ) {
-									collection.update({_id:doc._id}, {$set:{links:links,imgIds:imgIds}}, 
-										function(err){ if (err) throw err; 
-									}).then(function(){ collection.findOne({_id:doc._id}).then(function(doc){ 
-										console.log("doc", doc.name, " images are up to date:", doc); });
-									}).catch(function(err){ console.error(err); });
-								}
-
-							}).catch(function(err){ console.error(err); });
+							}).catch(function(err){ console.error(err); }) ); // end push.
 
 						});
+
+						Promise.all(promises).then(function(results){
+
+							debugMode && console.log({imgIds:imgIds, links:links}); // debug!
+
+						//	update.
+							if ( links.length === doc.images.length && imgIds.length === doc.images.length ) {
+								collection.update({_id:doc._id}, {$set:{links:links,imgIds:imgIds}}, 
+									function(err){ if (err) throw err; 
+								}).then(function(){ collection.findOne({_id:doc._id}).then(function(doc){ 
+									console.log("doc", doc.name, " images are up to date:", doc); });
+								}).catch(function(err){ console.error(err); });
+							}
+
+						}).catch(function(err){ console.error(err); });
 
 					}).catch(function(err){ console.error(err); });
 
@@ -487,7 +492,7 @@
 					clearTimeout(interval); 
 					++index; if ( index > limit ) index = 0;
 					interval = setTimeout(function(){ 
-						callWatchers(update_button, "onclick", "click", index ); 
+						callWatchers(update_button, "onclick", "click", index++ ); 
 					}, 250);
 				});
 
