@@ -427,7 +427,7 @@
 
 		//	material-library-collection-images-update-button.js
 
-			(function(db,validator,button,collection_droplist){
+			(function(db,validator,next_doc,button,collection_droplist){
 
 				var interval, collection, index = 0, limit;
 
@@ -478,13 +478,20 @@
 
 					}).catch(function(err){ console.error(err); });
 
-					button.addEventListener( "click", function(){ ++index; });
+					button.addEventListener( "click", function(){ 
+						clearTimeout(interval); 
+						callWatchers(next_doc, "onclick", "click", ++index ); 
+						interval = setTimeout(function(){ 
+							callWatchers(button, "onclick", "click", index ); 
+						}, 250);
+					});
 
 				});
 
 			})( 
 				materialdB, validator, // db, validator,
-				TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-update-button"), // button,
+				TabUI.MaterialLibrary.tab.querySelector("li#material-library-next"), // next_doc,
+				TabUI.MaterialLibrary.tab.querySelector("div#material-library-images-update-button"),  // button,
 				TabUI.MaterialLibrary.tab.querySelector("select#material-library-collection-droplist") // collection_droplist,
 			);
 
