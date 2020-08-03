@@ -464,27 +464,31 @@
 									.replace(".png","").replace(".jpg","").replace(".jpeg","") )
 								}
 
-
 							}).catch(function(err){ console.error(err); }) ); // end push.
 
 						});
 
-						Promise.all(promises).then(function(results){
+						return Promise.all(promises).then(function(results){
 
 							debugMode && console.log({imgIds:imgIds, links:links}); // debug!
 
 						//	update.
+
 							if ( links.length === doc.images.length && imgIds.length === doc.images.length ) {
-								collection.update({_id:doc._id}, {$set:{links:links,imgIds:imgIds}}, 
+								return collection.update({_id:doc._id}, {$set:{links:links,imgIds:imgIds}}, 
 									function(err){ if (err) throw err; 
 								}).then(function(){ collection.findOne({_id:doc._id}).then(function(doc){ 
-									console.log("doc", doc.name, " images are up to date:", doc); });
+									return console.log("doc", doc.name, " images are up to date:", doc); });
 								}).catch(function(err){ console.error(err); });
 							}
 
+							return;
+
 						}).catch(function(err){ console.error(err); });
 
-					}).catch(function(err){ console.error(err); });
+					}).catch(function(err){ console.error(err); }).then(function(){ 
+						callWatchers(update_button, "onclick", "click", ++index ); 
+					});
 
 				});
 
@@ -492,7 +496,7 @@
 					clearTimeout(interval); 
 					++index; if ( index > limit ) index = 0;
 					interval = setTimeout(function(){ 
-						callWatchers(update_button, "onclick", "click", index++ ); 
+						callWatchers(update_button, "onclick", "click", index ); 
 					}, 250);
 				});
 
