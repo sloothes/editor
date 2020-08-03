@@ -333,13 +333,13 @@
 				}).then(function(data){
 
 				//	Replace dataURL with link.
-					db.collection(entry.collection)
-					.update( {uuid:entry.uuid},     // selector, 
-						{$set:{preview:data.link}}, // modifier, 
-						function(err){ if (err) throw err; 
-					}).catch(function(err){ 
-						console.error(err); 
-					});
+				//	db.collection(entry.collection)
+				//	.update( {uuid:entry.uuid},     // selector, 
+				//		{$set:{preview:data.link}}, // modifier, 
+				//		function(err){ if (err) throw err; 
+				//	}).catch(function(err){ 
+				//		console.error(err); 
+				//	});
 
 					return data.link;
 
