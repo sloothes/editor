@@ -441,8 +441,11 @@
 
 					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
 
-						if (  doc.images === undefined ) throw "this material images is undefined!"
-						if ( !doc.images.length ) throw "this material doesn't have texture images!"
+						if ( doc.name === undefined ) name_input.value = doc._id; else name_input.value = doc.name;
+						if ( doc.preview === undefined ) img_viewer.src = ":0"; else img_viewer.src = doc.preview;
+
+						if (  doc.images === undefined ) throw "this material images is undefined!";
+						if ( !doc.images.length ) throw "this material doesn't have texture images!";
 						if ( doc.images.length && doc.links.length === doc.images.length && doc.imgIds.length === doc.images.length ) {
 							throw "doc images are up to date! (this is a good error)";
 						}
@@ -482,7 +485,7 @@
 
 				update_button.addEventListener( "click", function(){ 
 					clearTimeout(interval); 
-					callWatchers(next_doc, "onclick", "click", ++index ); 
+					++index; if ( index > limit ) index = 0;
 					interval = setTimeout(function(){ 
 						callWatchers(update_button, "onclick", "click", index ); 
 					}, 250);
