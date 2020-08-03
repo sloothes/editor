@@ -442,7 +442,7 @@
 					collection.find().skip(value).limit(1).toArray().then(function(docs){return docs[0];}).then(function(doc){
 
 						if ( !limit ) throw "Collection does not contain some document!";
-						if ( limit && index > limit) throw "end of collection reached:", index ); 
+						if ( limit && index > limit) throw "end of collection reached: "+index ); 
 						if ( !doc ) throw "FatalError: end of collection docs detected!"; // fatal!
 
 						if ( doc.name === undefined ) name_input.value = doc._id; else name_input.value = doc.name;
