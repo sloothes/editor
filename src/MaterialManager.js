@@ -99,7 +99,7 @@
 						break;
 					}
 					var option = document.createElement("option");
-					option.text = str+id+dot+type+col+name+id;
+					option.text = str+id+dot+type+col+name+col+id;
 					option.value = String(material.id);
 					material_droplist.appendChild( option );
 				})( materials.shift() );
