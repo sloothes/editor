@@ -454,7 +454,8 @@
 
 						var imgIds = []; var links = []; var promises = []; debugMode && console.log( doc ); 
 
-						doc.images.forEach(function(uuid){ promises.push( 
+						doc.images.forEach(function(uuid){ 
+							promises.push( 
 
 								db.collection("images").findOne({uuid:uuid}, 
 								function(err){ if (err) throw err; }).then(function(img){
