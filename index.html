@@ -478,14 +478,14 @@
 
 					}).catch(function(err){ console.error(err); });
 
-					button.addEventListener( "click", function(){ 
-						clearTimeout(interval); 
-						callWatchers(next_doc, "onclick", "click", ++index ); 
-						interval = setTimeout(function(){ 
-							callWatchers(button, "onclick", "click", index ); 
-						}, 250);
-					});
+				});
 
+				button.addEventListener( "click", function(){ 
+					clearTimeout(interval); 
+					callWatchers(next_doc, "onclick", "click", ++index ); 
+					interval = setTimeout(function(){ 
+						callWatchers(button, "onclick", "click", index ); 
+					}, 250);
 				});
 
 			})( 
