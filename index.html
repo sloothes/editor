@@ -455,18 +455,22 @@
 						var imgIds = []; var links = []; var promises = []; debugMode && console.log( doc ); 
 
 						doc.images.forEach(function(uuid){ 
-							promises.push( db.collection("images").findOne({uuid:uuid}).then(function(img){
+							promises.push( (function(){
 
-								if ( !img ) throw "image", uuid, "not found!";
+								return db.collection("images").findOne({uuid:uuid}).then(function(img){
 
-							//	collect.
+									if ( !img ) throw "image", uuid, "not found!";
 
-								if ( validator.isURL(img.url) ) { links.push( img.url ); 
-									imgIds.push( img.url.replace("https://i.imgur.com/","")
-									.replace(".png","").replace(".jpg","").replace(".jpeg","") )
-								}
+								//	collect.
 
-							}).catch(function(err){ console.error(err); }) ); // end push.
+									if ( validator.isURL(img.url) ) { links.push( img.url ); 
+										imgIds.push( img.url.replace("https://i.imgur.com/","")
+										.replace(".png","").replace(".jpg","").replace(".jpeg","") )
+									}
+
+								}).catch(function(err){ console.error(err); });
+
+							})()); // end push.
 
 						});
 
