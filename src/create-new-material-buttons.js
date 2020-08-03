@@ -95,7 +95,7 @@
 
 //	create-new-material-save-button.js
 
-	(function(db,viewer,button_new,save_button,name_input,map_droplist,col_droplist){
+	(function(db,viewer,validator,button_new,save_button,name_input,map_droplist,col_droplist){
 
 		var interval;
 
@@ -231,7 +231,7 @@
 
 				if ( images && images.length ) images.forEach(function(image){
 
-					if ( validator && !validator.isDataURI(image.url) ) {
+					if ( !validator.isDataURI(image.url) ) {
 						throw "image url is not DataURL:"+image.url;
 					}
 
@@ -303,7 +303,7 @@
 
 			//	Upload entry.preview (.png).
 
-				if ( validator && !validator.isDataURI(entry.preview) ) {
+				if ( !validator.isDataURI(entry.preview) ) {
 					throw "preview is not dataURL:"+entry.preview;
 				}
 
@@ -400,7 +400,7 @@
 			});
 		}
 
-	})( materialdB, materialViewer, // db, viewer,
+	})( materialdB, materialViewer, validator, // db, viewer, validator,
 		TabUI.NewMaterial.tab.querySelector("div#create-new-material-button"),             // button_new,
 		TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),        // save_button,
 		TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),       // name_input,
