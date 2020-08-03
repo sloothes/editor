@@ -429,7 +429,7 @@
 
 			(function(db,validator,next_doc,button,collection_droplist){
 
-				var interval, collection, index = 0, limit;
+				var interval, collection, index = 0, limit = 0;
 
 				watch( collection_droplist, "onchange", function(prop, event, value){ collection = db.collection( value );
 					db.collection( value ).find().on("data", function(data){ ++limit; }).on("end", function(){ index = 0; }).toArray()
