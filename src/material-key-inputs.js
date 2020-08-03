@@ -25,6 +25,7 @@
 						var str="",dot=".",col=":";
 						var selector = "option[value='" + id + "']";
 						var option = entity_droplist.querySelector(selector); 
+					//	entity_droplist.selectedOptions[0]; // fast and dirty.
 					//	debugMode && console.log({params:{id:id,name:name,type:type,option:option}});
 						if ( !option ) return;
 						switch ( type ) {
