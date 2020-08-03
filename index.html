@@ -318,7 +318,7 @@
 			(function(db,validator,button){
 
 				var collection = db.collection("images");
-				var interval; var index = 0; var timeout = 72000;
+				var interval; var index = 0; var timeout = 60000;
 
 				function uploadDataURL(data, type, name){
 				//  Returns a resolved promise with record data from imgur.com.
@@ -352,7 +352,7 @@
 				}
 
 				function onUploadImagesButtonClick(){
-					clearTimeout(interval); //	cancel this upload and procced to next doc.
+					clearTimeout(interval);
 					interval = setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, 250);
 				}
 
@@ -366,7 +366,7 @@
 
 						if ( validator.isURL(doc.url) ) return callWatchers( button, "onclick", "click", ++index );
 
-						if ( validator.isDataURI(doc.url) ) return (function(doc){
+						if ( validator.isDataURI(doc.url) ) {
 
 						//	data must NOT contain the prefix "data:image/jpeg;base64," important!
 							var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
@@ -374,7 +374,7 @@
 							data = data.shift(); // important! or .pop(); or .join();
 							debugMode && console.log({"uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
 
-							uploadDataURL(data, type, name).then(function(data){
+							return uploadDataURL(data, type, name).then(function(data){
 
 								debugMode && console.log( data );
 								if ( data.error ) throw data.error;
@@ -401,19 +401,18 @@
 								return caches.open("textures").then(function(cache){
 									return cache.add(url).then(function(){ return url; });
 								}).then(function(url){ 
-									console.log( name, "completed:", url);
+									return console.log( name, "completed:", url);
 								}).catch(function(err){ console.error(err); });
 
-							}).then(function(){
+							});
 
-							//	Call button watcher after 72 secs.
-								return interval = setTimeout(function(){ 
-									callWatchers( button, "onclick", "click", ++index ); 
-								}, timeout);
+						}
 
-							}).catch(function(err){ console.error(err); });
+				//	Call button watcher after 60 secs.
 
-						})( doc );
+					}).then(function(){
+
+						setTimeout(function(){ callWatchers( button, "onclick", "click", ++index ); }, timeout);
 
 					}).catch(function(err){ console.error(err); clearTimeout(interval); });
 
