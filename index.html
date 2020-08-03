@@ -376,39 +376,44 @@
 								var name = "IMAGE:"+doc.uuid; var data = doc.url.split(","); 
 								var type = data.shift().replace("data:","").replace(";base64","");
 								data = data.shift(); // important! or .pop(); or .join();
-								console.log({k:++k, "uploading": {data:data, type:type, name:name, _id:doc._id}}); // debug!
+								console.log({"k":++k, "uploading":{data:data, type:type, name:name, _id:doc._id}}); // debug! ++k;
 
-								 uploadDataURL(data, type, name).then(function(data){
+								(function(k){
 
-									debugMode && console.log( data );
-									if ( data.error ) throw data.error;
+									 return uploadDataURL(data, type, name).then(function(data){
 
-								//	Save meta data.
-									db.collection("imgur").insert( data, 
-										function(err){ if (err) throw err; 
-									}).catch(function(err){ console.error(err); });
+										debugMode && console.log({ "k":k, "data":data });
+										if ( data.error ) throw data.error;
 
-									return data;
+									//	Save meta data.
+										db.collection("imgur").insert( data, 
+											function(err){ if (err) throw err; 
+										}).catch(function(err){ console.error(err); });
 
-								}).then(function(data){
+										return data;
 
-								//	Replace dataURL with link.
-									collection.update( {_id:doc._id}, {$set:{url:data.link}}, 
-										function(err){ if (err) throw err; 
-									}).catch(function(err){ console.error(err); });
+									}).then(function(data){
 
-									return data.link;
+									//	Replace dataURL with link.
+										collection.update( {_id:doc._id}, {$set:{url:data.link}}, 
+											function(err){ if (err) throw err; 
+										}).catch(function(err){ console.error(err); });
 
-								}).then(function(url){
+										return data.link;
 
-								//	Cache material preview.
-									return caches.open("textures").then(function(cache){
-										return cache.add(url).then(function(){ return url; });
-									}).then(function(url){ 
-										return console.log( name, "completed:", url);
-									}).catch(function(err){ console.error(err); });
+									}).then(function(url){
 
-								});
+									//	Cache material preview.
+										return caches.open("textures").then(function(cache){
+											return cache.add(url).then(function(){ return url; });
+										}).then(function(url){ 
+											return console.log( k, name, "completed:", url);
+										}).catch(function(err){ console.error(err); });
+
+									});
+
+								})( k );
+
 							}
 
 						},
