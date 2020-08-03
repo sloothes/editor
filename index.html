@@ -455,9 +455,9 @@
 						var imgIds = []; var links = []; var promises = []; debugMode && console.log( doc ); 
 
 						doc.images.forEach(function(uuid){ 
-							promises.push( (function(){
+							promises.push( (
 
-								return db.collection("images").findOne({uuid:uuid}).then(function(img){
+								db.collection("images").findOne({uuid:uuid}).then(function(img){
 
 									if ( !img ) throw "image", uuid, "not found!";
 									if ( !validator.isURL(img.url) ) throw "image "+uuid+" is not URL!";
@@ -469,9 +469,9 @@
 										.replace(".png","").replace(".jpg","").replace(".jpeg","") )
 									}
 
-								});
+								})
 
-							})()); // end push.
+							); // end push.
 
 						});
 
