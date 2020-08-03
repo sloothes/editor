@@ -417,7 +417,7 @@
 
 						function(err){ if (err) throw err; }
 
-					}).catch(function(err){ 
+					).catch(function(err){ 
 						console.error(err); // upload_button.addEventListener( "click", onUploadImagesButtonClick );  // important!
 						clearTimeout(interval); interval = setTimeout(function(){ callWatchers( upload_button, "onclick", "click", index ); }, timeout); // Call upload_button watcher after 50 min.
 					});
