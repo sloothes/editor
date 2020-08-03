@@ -447,7 +447,7 @@
 						if (  doc.images === undefined ) throw "doc images is undefined!";
 						if ( !doc.images.length ) throw "doc doesn't have texture images!";
 						if ( doc.images.length && doc.links.length === doc.images.length && doc.imgIds.length === doc.images.length ) {
-							console.log("doc images are up to date!"); throw "(escape)";
+							return console.log("doc images are up to date:", {links:doc.links,imgIds:doc.imgIds}); 
 						}
 
 						var imgIds = []; var links = []; var promises = []; debugMode && console.log( doc ); 
