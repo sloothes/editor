@@ -480,7 +480,7 @@
 								return collection.update({_id:doc._id}, {$set:{links:links,imgIds:imgIds}}, 
 									function(err){ if (err) throw err; 
 								}).then(function(){ collection.findOne({_id:doc._id}).then(function(doc){ 
-									return console.log("doc", doc.name, "images are up to date:", doc); });
+									return console.log(doc.name, "images are up to date:", doc); });
 								}).catch(function(err){ console.error(err); });
 							}
 
