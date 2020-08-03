@@ -431,7 +431,7 @@
 
 				var interval, collection, index = 0, limit = 0;
 
-				watch( collection_droplist, "onchange", function(prop, event, value){ collection = db.collection( value );
+				watch( collection_droplist, "onchange", function(prop, event, value){ collection = db.collection( value ); index = 0, limit = 0;
 					db.collection( value ).find().on("data", function(data){ ++limit; }).on("end", function(){ index = 0; }).toArray()
 					.then(function(){ debugMode && console.log( "index:", index, "limit:", limit ); }).catch(function(err){ console.error(err); });
 				});
