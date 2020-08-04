@@ -482,6 +482,104 @@
 
 		<script>
 
+		//	material-editor-textures-mouse-inputs.js
+
+
+
+
+
+			(function( editor,entity_droplist,vector_x,vector_y,increase_x,increase_y,decrease_x,decrease_y,vector_droplist,map_droplist ){
+
+				var key, textures = []; 
+				const maps = (function(){
+					var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+					    keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					return keys.split(",")
+				})(); 
+
+				watch( vector_droplist, "onchange", function(prop, event, value){ key = value; }); // important!
+				var interval; window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				function get_textures(){
+					textures.length = 0; maps.forEach(function(name){ if ( editor[name] ) textures.push( editor[name] ); }); 
+					debugMode && console.log( textures );
+				}
+
+				watch( map_droplist,    "onchange", function(prop, event, value){ get_textures(); });
+				watch( vector_droplist, "onchange", function(prop, event, value){ get_textures(); });
+				watch( entity_droplist, "onchange", function(prop, event, value){ get_textures(); });
+
+				function onMouseClickInputValue(button){ 
+
+					function updateVectorValues( button, min,max,step ){
+						if ( textures.length ) { var texture = textures[0];
+							if ( button === increase_x ) texture[key].x = round( THREE.Math.clamp( texture[key].x+step, min, max ), 6);
+							if ( button === decrease_x ) texture[key].x = round( THREE.Math.clamp( texture[key].x-step, min, max ), 6);
+							if ( button === increase_y ) texture[key].y = round( THREE.Math.clamp( texture[key].y+step, min, max ), 6);
+							if ( button === decrease_y ) texture[key].y = round( THREE.Math.clamp( texture[key].y-step, min, max ), 6);
+							for ( var i = 1; i < textures.length; i++ ) { textures[i][key].copy( texture[key] ); }
+						}
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						interval = setTimeout( function update_textures( button ){
+							switch ( key ){
+								case "center":
+									interval = setTimeout( update_textures, 20, button );
+									return updateVectorValues( button, 0, 1, 1/100 );
+								break;
+								case "offset":
+									interval = setTimeout( update_textures, 10, button );
+									return updateVectorValues( button,-100,100,1/1000 );
+								break;
+								case "repeat":
+									interval = setTimeout( update_textures, 10, button );
+									return updateVectorValues( button, -100,100,1/1000 );
+								break;
+							}
+						}, 500, this);
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+						switch ( key ){
+							case "center":
+								return updateVectorValues( button, 0, 1, 1/100 );
+							break;
+							case "offset":
+								return updateVectorValues( button, -100,100,1/1000 );
+							break;
+							case "repeat":
+								return updateVectorValues( button, -100,100,1/1000 );
+							break;
+						}
+					});
+
+				}
+
+				onMouseClickInputValue(increase_x); onMouseClickInputValue(increase_y);
+				onMouseClickInputValue(decrease_x); onMouseClickInputValue(decrease_y);
+
+			})(
+				materialEditor, // editor,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-x-increase"),   // increase_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-y-increase"),   // increase_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-x-decrease"),   // decrease_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-y-decrease"),   // decrease_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
+
+			);
+
+
+		</script>
+
+		<script>
+
 		//	material-editor-textures-droplist.js
 
 		//	material-editor-textures-key-droplist.js
