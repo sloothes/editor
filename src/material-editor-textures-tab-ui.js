@@ -248,7 +248,7 @@
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
 		var input = document.createElement("input"); input.type = "file";
-		input.id = "image-file-input"; input.style.cssText = "display:none;";
+		input.id = "material-editor-textures-file-input"; input.style.cssText = "display:none;";
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.MaterialEditorTextures.tab );

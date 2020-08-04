@@ -374,6 +374,8 @@
 
 		//	material-editor-textures-buttons.js
 
+		//	material-editor-viewer-grid-toggle.js
+
 			(function(viewer,grid_button){
 
 				watch( grid_button, "onclick", function(prop, event, value){ debugMode && console.log({item:grid_button,event:event,value:value}); });  // debug!
@@ -400,7 +402,7 @@
 
 			})( materialEditor, TabUI.MaterialEditorTextures.tab.querySelector("div#material-editor-textures-needs-update") ); // editor, needs_update.
 
-		//	material-editor-textures-remove-map.js
+		//	material-editor-textures-map-remove.js
 
 			(function(editor,remove_button,map_droplist){
 
@@ -416,9 +418,11 @@
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist") // map_droplist.
 			);
 
-			(function(editor,replace_button,map_droplist){
+		//	material-editor-textures-image-replace.js
 
-				watch( replace_button, "onclick", function(prop, event, value){ debugMode && console.log({item:replace_button,event:event,value:value}); });  // debug!
+			(function(editor,input,button,map_droplist){
+
+				watch( button, "onclick", function(prop, event, value){ debugMode && console.log({item:button,event:event,value:value}); });  // debug!
 
 
 
@@ -438,7 +442,8 @@
 
 			})( 
 				materialEditor, // editor,
-				TabUI.MaterialEditorTextures.tab.querySelector("div#material-editor-textures-replace-image"),  // replace_button,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-file-input"),   // input,
+				TabUI.MaterialEditorTextures.tab.querySelector("div#material-editor-textures-replace-image"),  // button,
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist") // map_droplist.
 			);
 
