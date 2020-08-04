@@ -398,7 +398,9 @@
 
 				watch( needs_update, "onclick", function(prop, event, value){
 					maps.forEach(function(key){ if ( !editor[key] ) return; editor[key].needsUpdate = true; editor.needsUpdate = true; }); 
-				}); needs_update.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", true ); });
+				}); 
+
+				needs_update.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", true ); });
 
 			})( materialEditor, TabUI.MaterialEditorTextures.tab.querySelector("div#material-editor-textures-needs-update") ); // editor, needs_update.
 
@@ -410,7 +412,10 @@
 
 				watch( remove_button, "onclick", function(prop, event, key){ 
 					if ( !key ) return; if ( !editor[key] ) return; editor[key] = null; editor.needsUpdate = true;
-				}); remove_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
+					callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" );
+				}); 
+
+				remove_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
 
 			})( 
 				materialEditor, // editor,
@@ -451,6 +456,8 @@
 						if ( texture.image !== undefined ) texture.needsUpdate = editor.needsUpdate = true; // important!
 						debugMode && console.log( texture );
 
+					//	reset droplist.
+						callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" );
 					});
 
 					var reader = new FileReader();
