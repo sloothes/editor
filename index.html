@@ -376,6 +376,8 @@
 
 			(function(viewer,grid_button){
 
+				watch( grid_button, "onclick", function(prop, event, value){ debugMode && console.log({item:grid_button,event:event,value:value}); });  // debug!
+
 				watch( grid_button, "onclick", function(prop, event, value){ viewer.grid.visible = !viewer.grid.visible; });
 				grid_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", viewer.grid.visible ); });
 
@@ -385,18 +387,16 @@
 
 			(function(editor,needs_update){
 
+				watch( needs_update, "onclick", function(prop, event, value){ debugMode && console.log({item:needs_update,event:event,value:value}); });  // debug!
+
 				var keys = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 					keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
 
 				const maps = keys.split(",");
 
 				watch( needs_update, "onclick", function(prop, event, value){
-
 					maps.forEach(function(key){ if ( !editor[key] ) return; editor[key].needsUpdate = true; editor.needsUpdate = true; }); 
-
-				});
-
-				needs_update.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", true ); });
+				}); needs_update.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", true ); });
 
 			})( materialEditor, TabUI.MaterialEditorTextures.tab.querySelector("div#material-editor-textures-needs-update") ); // editor, needs_update.
 
@@ -404,11 +404,11 @@
 
 			(function(editor,remove_button,map_droplist){
 
+				watch( remove_button, "onclick", function(prop, event, value){ debugMode && console.log({item:remove_button,event:event,value:value}); });  // debug!
+
 				watch( remove_button, "onclick", function(prop, event, key){ 
 					if ( !key ) return; if ( !editor[key] ) return; editor[key] = null; editor.needsUpdate = true;
-				});
-
-				remove_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
+				}); remove_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
 
 			})( 
 				materialEditor, // editor,
@@ -418,6 +418,7 @@
 
 			(function(editor,replace_button,map_droplist){
 
+				watch( replace_button, "onclick", function(prop, event, value){ debugMode && console.log({item:replace_button,event:event,value:value}); });  // debug!
 
 
 
