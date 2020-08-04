@@ -1,13 +1,13 @@
-//	textures-tab-ui.js
+//	material-editor-textures-tab-ui.js
 
-	TabUI.add( "MaterialTextures", "material-texture-tab" ); 
-	TabUI.append( "MaterialTextures" ); TabUI.MaterialTextures.pill.innerHTML = "Textures";
+	TabUI.add( "MaterialEditorTextures", "material-editor-texture-tab" ); 
+	TabUI.append( "MaterialEditorTextures" ); TabUI.MaterialEditorTextures.pill.innerHTML = "Textures";
 
-//	material-textures-map-droplist-ui.js
+//	material-editor-textures-map-droplist-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures map droplist.
+	//	MaterialEditorTextures map droplist.
 
 		var row = document.createElement("h3"); row.textContent = "select:"; row.style.cssText = "height:30px;"
 
@@ -24,25 +24,25 @@
 
 		row.appendChild( select ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-viewer-ui.js
+//	material-editor-textures-viewer-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures viewer.
+	//	MaterialEditorTextures viewer.
 		var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;";
 		var canvas = document.createElement("canvas"); canvas.id = "material-textures-viewer"; 
 		canvas.width = 256; canvas.height = 256; canvas.style.cssText = "width:256px;height:256px;margin:auto;";
 		row.appendChild( canvas ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-undo-redo-ui.js
+//	material-editor-textures-undo-redo-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Undo/Redo button.
+	//	MaterialEditorTextures Undo/Redo button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;display:none;"
 
@@ -58,13 +58,13 @@
 
 		row.appendChild( redo ); row.appendChild( undo ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-text-input-ui.js
+//	material-editor-textures-text-input-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Text input.
+	//	MaterialEditorTextures Text input.
 		var row = document.createElement("h3"); row.style.cssText = "margin-right:20px;height:30px;";
 		var input = document.createElement("input"); input.type = "text"; 
 		input.id = "material-textures-text-input"; input.setAttribute("placeholder", "text input" );
@@ -73,13 +73,13 @@
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 		row.appendChild(input); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-key-droplist-ui.js
+//	material-editor-textures-key-droplist-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Key droplist.
+	//	MaterialEditorTextures Key droplist.
 
 		var row = document.createElement("h3"); row.textContent = "key:"; row.style.cssText = "height:40px;"
 		var select = document.createElement("select"); select.id = "material-textures-key-droplist";
@@ -94,13 +94,13 @@
 
 		row.appendChild( select ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-value-input-ui.js
+//	material-editor-textures-value-input-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Value input.
+	//	MaterialEditorTextures Value input.
 
 		var row = document.createElement("h3");row.textContent = "value:";row.style.cssText = "margin:10px 15px;height:30px;";
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
@@ -120,13 +120,13 @@
 
 		vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-vector-droplist-ui.js
+//	material-editor-textures-vector-droplist-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Vector mode droplist.
+	//	MaterialEditorTextures Vector mode droplist.
 		var row = document.createElement("h3"); row.textContent = "select:"; row.style.cssText = "height:40px;"
 		var select = document.createElement("select"); select.id = "material-textures-vector-droplist";
 		select.style.cssText = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;"
@@ -140,13 +140,13 @@
 
 		row.appendChild( select ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-vector-x-ui.js
+//	material-editor-textures-vector-x-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures vector x.
+	//	MaterialEditorTextures vector x.
 
 		var row = document.createElement("h3"); row.textContent = "axis x:"; row.style.cssText = "margin:10px 15px;height:40px;";
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
@@ -164,13 +164,13 @@
 
 		vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-vector-y-ui.js
+//	material-editor-textures-vector-y-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures vector y.
+	//	MaterialEditorTextures vector y.
 
 		var row = document.createElement("h3"); row.textContent = "axis y:"; row.style.cssText = "margin:10px 15px;height:40px;";
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
@@ -188,13 +188,13 @@
 
 		vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-reset-vectors-ui.js
+//	material-editor-textures-reset-vectors-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Reset vectors button.
+	//	MaterialEditorTextures Reset vectors button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div");
@@ -203,13 +203,13 @@
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-needs-update-ui.js
+//	material-editor-textures-needs-update-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures NeedsUpdate texture button.
+	//	MaterialEditorTextures NeedsUpdate texture button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div");
@@ -218,13 +218,13 @@
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-image-replace-ui.js
+//	material-editor-textures-image-replace-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Replace Image button.
+	//	MaterialEditorTextures Replace Image button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
@@ -236,13 +236,13 @@
 		input.id = "image-file-input"; input.style.cssText = "display:none;";
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-remove-ui.js
+//	material-editor-textures-remove-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Map Remove button.
+	//	MaterialEditorTextures Map Remove button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
@@ -251,11 +251,13 @@
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
+
+//	material-editor-textures-toggle-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Grid Toggle button.
+	//	MaterialEditorTextures Grid Toggle button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
@@ -264,13 +266,13 @@
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-textures-exit-editor-ui.js
+//	material-editor-textures-exit-editor-ui.js
 
 	(function( tab ){
 
-	//	MaterialTextures Exit Edit Mode button.
+	//	MaterialEditorTextures Exit Edit Mode button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
@@ -279,7 +281,7 @@
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 
 //	===================================================================================================================  //
 
@@ -287,7 +289,7 @@
 /*
 	(function( tab ){
 
-	//	MaterialTextures droplist.
+	//	MaterialEditorTextures droplist.
 	//	When option is selected, switches to EditMode.
 
 		var row = document.createElement("h3");
@@ -311,5 +313,5 @@
 
 		return select;
 
-	})( TabUI.MaterialTextures.tab );
+	})( TabUI.MaterialEditorTextures.tab );
 */

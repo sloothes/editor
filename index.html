@@ -143,7 +143,7 @@
 		<script src="/editor/src/editor-tab-ui.js"></script>
 		<script src="/editor/src/geometry-tab-ui.js"></script>
 		<script src="/editor/src/material-tab-ui.js"></script>
-		<script src="/editor/src/material-textures-tab-ui.js"></script>
+		<script src="/editor/src/material-editor-textures-tab-ui.js"></script>
 		<script src="/editor/src/images-tab-ui.js"></script>
 		<script src="/editor/src/skydome-tab-ui.js"></script>
 		<script src="/editor/src/textures-tab-ui.js"></script>
@@ -196,11 +196,11 @@
 
 		<script>
 
-		//	MaterialTexturesViewer.js
+		//	MaterialEditorViewer.js
 
 			const materialEditorViewer = {
 
-				canvas: TabUI.MaterialTextures.tab.querySelector("canvas#material-textures-viewer"),
+				canvas: TabUI.MaterialEditorTextures.tab.querySelector("canvas#material-textures-viewer"),
 
 			};
 
@@ -372,19 +372,18 @@
 
 		<script>
 
-		//	material-textures-buttons.js
+		//	material-editor-textures-buttons.js
 
-		//	material-textures-toglle-grid-button.js
+		//	material-editor-textures-viewer-grid.js
 
 			(function(viewer,grid_button){
 
 				watch( grid_button, "onclick", function(prop, event, value){ viewer.grid.visible = !viewer.grid.visible; });
+				grid_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", viewer.grid.visible ); });
 
-				grid_button.addEventListener( "click", function(){ callWatchers( grid_button, "onclick", "click", viewer.grid.visible ); });
+			})( materialEditorViewer, TabUI.MaterialEditorTextures.tab.querySelector("div#material-textures-viewer-grid") ); // viewer, grid_button.
 
-			})( materialEditorViewer, TabUI.MaterialTextures.tab.querySelector("div#material-textures-viewer-grid") ); // viewer, grid_button.
-
-		//	material-textures-needs-update-button.js
+		//	material-editor-textures-needs-update.js
 
 			(function(editor,needs_update){
 
@@ -393,21 +392,43 @@
 					var maps = ",map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
 
-					maps.split(",").forEach(function(key){ editor[key].needsUpdate = true; }); editor.needsUpdate = true;
+					maps.split(",").forEach(function(key){ 
+						if ( editor[key] != null ) editor[key].needsUpdate = true; editor.needsUpdate = true; 
+					}); 
 
 				});
 
-				grid_button.addEventListener( "click", function(){ callWatchers( needs_update, "onclick", "click", true ); });
+				needs_update.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", true ); });
 
-			})( materialEditor, TabUI.MaterialTextures.tab.querySelector("div#material-textures-needs-update") ); // editor, needs_update.
+			})( materialEditor, TabUI.MaterialEditorTextures.tab.querySelector("div#material-textures-needs-update") ); // editor, needs_update.
+
+		//	material-editor-textures-remove-map.js
+
+			(function(editor,remove_map,map_droplist){
+
+				watch( remove_map, "onclick", function(prop, event, key){ editor[key] = null; editor.needsUpdate = true; });
+				remove_map.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
+
+			})( 
+				materialEditor, // editor,
+				TabUI.MaterialEditorTextures.tab.querySelector("div#material-textures-remove-button"),  // remove_map,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-textures-map-droplist") // map_droplist.
+			);
+
+
+
+
+		</script>
+
+		<script>
 
 
 
 
 
-		//	material-texture-inputs.js
+		//	material-editor-textures-inputs.js
 
-			(function(editor,map_droplist,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist){
+			(function(editor,text_input,value_input,vector_x,vector_y,key_droplist,map_droplist,vector_droplist){
 
 
 
@@ -437,13 +458,13 @@
 
 			})(
 				materialEditor, // editor,
-				TabUI.MaterialTextures.tab.querySelector("select#material-textures-map-droplist"),   // map_droplist.
-				TabUI.MaterialTextures.tab.querySelector("input#material-textures-text-input"),      // text_input,
-				TabUI.MaterialTextures.tab.querySelector("input#material-textures-value-input"),     // value_input,
-				TabUI.MaterialTextures.tab.querySelector("input#material-textures-vector-x-input"),  // vector_x,
-				TabUI.MaterialTextures.tab.querySelector("input#material-textures-vector-y-input"),  // vector_y,
-				TabUI.MaterialTextures.tab.querySelector("select#material-textures-key-droplist"),   // key_droplist.
-				TabUI.MaterialTextures.tab.querySelector("select#material-textures-vector-droplist") // vector_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-textures-text-input"),      // text_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-textures-value-input"),     // value_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-textures-vector-x-input"),  // vector_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-textures-vector-y-input"),  // vector_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-textures-key-droplist"),   // key_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-textures-map-droplist"),   // map_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-textures-vector-droplist") // vector_droplist.
 			);
 
 
@@ -451,9 +472,9 @@
 
 		<script>
 
-			TabUI.MaterialTextures.role.classList.add("active");
-			TabUI.MaterialTextures.tab.classList.add("in","active");
-			TabUI.MaterialTextures.pill.scrollIntoViewIfNeeded(false);
+			TabUI.MaterialEditorTextures.role.classList.add("active");
+			TabUI.MaterialEditorTextures.tab.classList.add("in","active");
+			TabUI.MaterialEditorTextures.pill.scrollIntoViewIfNeeded(false);
 
 		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
