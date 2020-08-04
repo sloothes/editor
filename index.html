@@ -372,7 +372,9 @@
 
 		<script>
 
-		//	material-textures-viewer-grid-button.js
+		//	material-textures-buttons.js
+
+		//	material-textures-toglle-grid-button.js
 
 			(function(viewer,grid_button){
 
@@ -381,7 +383,25 @@
 				grid_button.addEventListener( "click", function(){ callWatchers( grid_button, "onclick", "click", viewer.grid.visible ); });
 
 			})( materialEditorViewer, TabUI.MaterialTextures.tab.querySelector("div#material-textures-viewer-grid") ); // viewer, grid_button.
-			
+
+		//	material-textures-needs-update-button.js
+
+			(function(editor,needs_update){
+
+				watch( needs_update, "onclick", function(prop, event, value){
+
+					var maps = ",map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+
+					maps.split(",").forEach(function(key){ editor[key].needsUpdate = true; }); editor.needsUpdate = true;
+
+				});
+
+				grid_button.addEventListener( "click", function(){ callWatchers( needs_update, "onclick", "click", true ); });
+
+			})( materialEditor, TabUI.MaterialTextures.tab.querySelector("div#material-textures-needs-update") ); // editor, needs_update.
+
+
 
 
 
