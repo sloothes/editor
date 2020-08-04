@@ -372,6 +372,17 @@
 
 		<script>
 
+			(function(editor,grid_button){
+
+				watch( grid_button, "onclick", function(prop, event, value){ editor.grid.visible = !editor.grid.visible; });
+
+				grid_button.addEventListener( "click", function(){ callWatchers( grid_button, "onclick", "click", editor.grid.visible ); });
+
+			})( materialEditor, TabUI.Material.tab.querySelector("div#material-textures-viewer-grid") ); // editor, grid_button.
+			
+
+
+
 		//	material-texture-inputs.js
 
 			(function(editor,map_droplist,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist){
