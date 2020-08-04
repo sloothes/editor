@@ -467,8 +467,8 @@
 				});
 
 				button.addEventListener( "click", function(){ 
-					if ( !map_droplist.value ) return;
-					input.value = ""; input.click();
+					callWatchers( this, "onclick", "click", input.click() );
+				//	if ( !map_droplist.value ) return; input.value = ""; input.click();
 				});
 
 
