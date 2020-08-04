@@ -487,14 +487,81 @@
 
 		<script>
 
-		//	material-editor-textures-inputs.js
+		//	material-editor-textures-key-droplist.js
 
+			(function(editor,text_input,value_input,key_droplist,map_droplist){
 
+				watch( key_droplist, "onchange", function(prop, event, value){ debugMode && console.log({item:key_droplist,event:event,key:value}); });  // debug!
 
+				watch( key_droplist, "onchange", function(prop, event, key){ 
+
+					if ( !map_droplist.value ) return [ text_input.value, value_input.value ] = [ "", "" ];
+
+					var texture = editor[ map_droplist.value ]; 
+					if ( !key ) return [ text_input.value, value_input.value ] = [ "", "" ];
+					if ( !texture ) return [ text_input.value, value_input.value ] = [ "", "" ];
+
+					switch ( key ){
+						case "":
+							return text_input.value = ""; value_input.value = "";
+						break;
+						case "name":
+						case "uuid":
+							return text_input.value = texture[key]; value_input.value = "";
+						break;
+						default:
+							return text_input.value = ""; value_input = texture[key];
+						break;
+					}
+
+				});
+
+				key_droplist.addEventListener( "change", function(){ 
+					this.blur(); callWatchers( this, "onchange", "change", this.value ); 
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-text-input"),       // text_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-value-input"),      // value_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-key-droplist"),    // key_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
+			);
+
+		//	material-editor-textures-vector-droplist.js
+
+			(function(editor,vector_x,vector_y,vector_droplist,map_droplist){
+
+				watch( vector_droplist, "onchange", function(prop, event, value){ debugMode && console.log({item:vector_droplist,event:event,vector:value}); });  // debug!
+
+				watch( vector_droplist, "onchange", function(prop, event, key){ 
+
+					if ( !map_droplist.value ) return [ vector_x.value, vector_y.value ] = [ "", "" ];
+
+					var texture = editor[ map_droplist.value ]; 
+					if ( !key ) return [ vector_x.value, vector_y.value ] = [ "", "" ];
+					if ( !texture ) return [ vector_x.value, vector_y.value ] = [ "", "" ];
+
+					if ( key ) { vector_x.value = texture[key].x; vector_y.value = texture[key].y; }
+
+				});
+
+				vector_droplist.addEventListener( "change", function(){ 
+					this.blur(); callWatchers( this, "onchange", "change", this.value ); 
+				});
+
+			})(
+				materialEditor, // editor,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
+			);
 
 		//	material-editor-textures-map-droplist.js
 
 			(function(editor,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist,map_droplist){
+				watch( map_droplist, "onchange", function(prop, event, value){ debugMode && console.log({item:map_droplist,event:event,value:value}); }); // debug!
 
 				var keys = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 					keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
@@ -510,31 +577,41 @@
 					debugMode && console.log( textures );
 				});
 
+				watch( map_droplist, "onchange", function(prop, event, value){ 
+					callWatchers( key_droplist, "onchange", "change", key_droplist.value ); 
+					callWatchers( vector_droplist, "onchange", "change", vector_droplist.value ); 
+				});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-				map_droplist.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
+				map_droplist.addEventListener( "change", function(){ 
+					this.blur(); callWatchers( this, "onchange", "change", this.value ); 
+				});
 
 				callWatchers( map_droplist, "onchange", "change", map_droplist.value );
+
+			})(
+				materialEditor, // editor,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-text-input"),       // text_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-value-input"),      // value_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-key-droplist"),    // key_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
+			);
+
+		</script>
+
+		<script>
+
+		//	material-editor-textures-inputs.js
+
+			(function(editor,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist,map_droplist){
+
+
+
+
+
+
 
 			})(
 				materialEditor, // editor,
