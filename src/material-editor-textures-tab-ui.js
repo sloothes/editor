@@ -1,6 +1,6 @@
 //	material-editor-textures-tab-ui.js
 
-	TabUI.add( "MaterialEditorTextures", "material-editor-texture-tab" ); 
+	TabUI.add( "MaterialEditorTextures", "material-editor-textures-tab" ); 
 	TabUI.append( "MaterialEditorTextures" ); TabUI.MaterialEditorTextures.pill.innerHTML = "Texture";
 
 //	material-editor-textures-map-droplist-ui.js
@@ -11,7 +11,7 @@
 
 		var row = document.createElement("h3"); row.textContent = "select:"; row.style.cssText = "height:30px;"
 
-		var select = document.createElement("select"); select.id = "material-textures-map-droplist";
+		var select = document.createElement("select"); select.id = "material-editor-textures-map-droplist";
 		select.style.cssText = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -32,7 +32,7 @@
 
 	//	MaterialEditorTextures viewer.
 		var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;";
-		var canvas = document.createElement("canvas"); canvas.id = "material-textures-viewer"; 
+		var canvas = document.createElement("canvas"); canvas.id = "material-editor-textures-viewer"; 
 		canvas.width = 256; canvas.height = 256; canvas.style.cssText = "width:256px;height:256px;margin:auto;";
 		row.appendChild( canvas ); tab.appendChild( row );
 
@@ -47,12 +47,12 @@
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;display:none;"
 
 		var redo = document.createElement("div"); 
-		redo.id = "material-textures-redo-button"; redo.textContent = "Redo";
+		redo.id = "material-editor-textures-redo-button"; redo.textContent = "Redo";
 		redo.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		redo.style.cssText = "width:44%;float:left;height:40px;font-size:large;margin-right:15px;";
 
 		var undo = document.createElement("div");
-		undo.id = "material-textures-undo-button"; undo.textContent = "Undo";
+		undo.id = "material-editor-textures-undo-button"; undo.textContent = "Undo";
 		undo.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		undo.style.cssText = "width:44%;float:right;height:40px;font-size:large;margin-right:15px;";
 
@@ -67,7 +67,7 @@
 	//	MaterialEditorTextures Text input.
 		var row = document.createElement("h3"); row.style.cssText = "margin-right:20px;height:30px;";
 		var input = document.createElement("input"); input.type = "text"; 
-		input.id = "material-textures-text-input"; input.setAttribute("placeholder", "text input" );
+		input.id = "material-editor-textures-text-input"; input.setAttribute("placeholder", "text input" );
 		input.classList.add("form-control","text-center");
 		input.style.cssText = "width:-webkit-fill-available;color:#000;display:inline;margin:0px 5px;";
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
@@ -82,7 +82,7 @@
 	//	MaterialEditorTextures Key droplist.
 
 		var row = document.createElement("h3"); row.textContent = "key:"; row.style.cssText = "height:40px;"
-		var select = document.createElement("select"); select.id = "material-textures-key-droplist";
+		var select = document.createElement("select"); select.id = "material-editor-textures-key-droplist";
 		select.style.cssText = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -105,15 +105,15 @@
 		var row = document.createElement("h3");row.textContent = "value:";row.style.cssText = "margin:10px 15px;height:30px;";
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 
-		var prev = document.createElement("li"); prev.id = "material-textures-value-decrease";
+		var prev = document.createElement("li"); prev.id = "material-editor-textures-value-decrease";
 		prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 		prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
-		var next = document.createElement("li"); next.id = "material-textures-value-increase";
+		var next = document.createElement("li"); next.id = "material-editor-textures-value-increase";
 		next.innerHTML = "&#9658;"; next.style.display = "inline";
 		next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
-		var input = document.createElement("input"); input.id = "material-textures-value-input";
+		var input = document.createElement("input"); input.id = "material-editor-textures-value-input";
 		input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
 		input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;";
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
@@ -128,7 +128,7 @@
 
 	//	MaterialEditorTextures Vector mode droplist.
 		var row = document.createElement("h3"); row.textContent = "select:"; row.style.cssText = "height:40px;"
-		var select = document.createElement("select"); select.id = "material-textures-vector-droplist";
+		var select = document.createElement("select"); select.id = "material-editor-textures-vector-droplist";
 		select.style.cssText = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;"
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -151,13 +151,13 @@
 		var row = document.createElement("h3"); row.textContent = "axis x:"; row.style.cssText = "margin:10px 15px;height:40px;";
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 
-		var prev = document.createElement("li"); prev.id = "material-textures-vector-x-decrease";
+		var prev = document.createElement("li"); prev.id = "material-editor-textures-vector-x-decrease";
 		prev.innerHTML = "&#9668;"; prev.style.display = "inline"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
-		var next = document.createElement("li"); next.id = "material-textures-vector-x-increase";
+		var next = document.createElement("li"); next.id = "material-editor-textures-vector-x-increase";
 		next.innerHTML = "&#9658;"; next.style.display = "inline"; next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
-		var input = document.createElement("input"); input.id = "material-textures-vector-x-input";
+		var input = document.createElement("input"); input.id = "material-editor-textures-vector-x-input";
 		input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
 		input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;";
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
@@ -175,13 +175,13 @@
 		var row = document.createElement("h3"); row.textContent = "axis y:"; row.style.cssText = "margin:10px 15px;height:40px;";
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 
-		var prev = document.createElement("li"); prev.id = "material-textures-vector-y-decrease";
+		var prev = document.createElement("li"); prev.id = "material-editor-textures-vector-y-decrease";
 		prev.innerHTML = "&#9668;"; prev.style.display = "inline"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
-		var next = document.createElement("li"); next.id = "material-textures-vector-y-increase";
+		var next = document.createElement("li"); next.id = "material-editor-textures-vector-y-increase";
 		next.innerHTML = "&#9658;"; next.style.display = "inline"; next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
-		var input = document.createElement("input"); input.id = "material-textures-vector-y-input";
+		var input = document.createElement("input"); input.id = "material-editor-textures-vector-y-input";
 		input.setAttribute("placeholder", "y" ); input.classList.add("form-control","text-center");
 		input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;";
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
@@ -198,7 +198,7 @@
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div");
-		button.id = "material-textures-vectors-reset"; button.textContent = "Reset Vectors";
+		button.id = "material-editor-textures-vectors-reset"; button.textContent = "Reset Vectors";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
@@ -213,7 +213,7 @@
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
-		button.id = "material-textures-viewer-grid"; button.textContent = "Toggle Viewer Grid";
+		button.id = "material-editor-textures-viewer-grid"; button.textContent = "Toggle Viewer Grid";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
@@ -228,7 +228,7 @@
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
-		button.id = "material-textures-remove-button"; button.textContent = "Remove Texture Map";
+		button.id = "material-editor-textures-remove-map"; button.textContent = "Remove Texture Map";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
@@ -243,7 +243,7 @@
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
-		button.id = "material-textures-replace-image-button"; button.textContent = "Replace Texture Image";
+		button.id = "material-editor-textures-replace-image"; button.textContent = "Replace Texture Image";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
@@ -261,7 +261,7 @@
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div");
-		button.id = "material-textures-needs-update"; button.textContent = "Textures needs Update";
+		button.id = "material-editor-textures-needs-update"; button.textContent = "Textures needs Update";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
@@ -276,7 +276,7 @@
 
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
 		var button = document.createElement("div"); 
-		button.id = "material-textures-exit-mode"; button.textContent = "Exit Edit Mode";
+		button.id = "material-editor-textures-exit-mode"; button.textContent = "Exit Edit Mode";
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		row.appendChild( button ); tab.appendChild( row );
@@ -297,7 +297,7 @@
 		row.style.cssText = "height:30px;"
 
 		var select = document.createElement("select");
-		select.id = "material-textures-droplist";
+		select.id = "material-editor-textures-droplist";
 		select.style.cssText = "width:170px;color:#000;float:right;"
 		+ "border:1px solid;border-radius:4px;padding:2px 4px 4px 4px;"
 		+ "font-size:20px;margin-left:10px;margin-right:15px;";
