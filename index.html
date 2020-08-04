@@ -484,8 +484,24 @@
 
 		//	material-editor-textures-mouse-inputs.js
 
-		//	material-editor-textures-key-mouse-inputs.js
+		//	material-editor-textures-value-mouse-inputs.js
 
+			(function( editor,entity_droplist,text_input,value_input,increase,decrease,key_droplist,map_droplist ){
+
+
+
+
+
+
+			})(
+				materialEditor, TabUI.Material.tab.querySelector("select#material-entities-droplist"), // (material) entity_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-text-input"),       // text_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-value-input"),      // value_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-value-increase"),   // increase,
+				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-value-decrease"),   // decrease,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-key-droplist"), // key_droplist
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")  // map_droplist.
+			);
 
 
 		//	material-editor-textures-vector-mouse-inputs.js
@@ -564,8 +580,7 @@
 				onMouseClickInputValue(decrease_x); onMouseClickInputValue(decrease_y);
 
 			})(
-				materialEditor, // editor,
-				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // entity_droplist.
+				materialEditor, TabUI.Material.tab.querySelector("select#material-entities-droplist"), // (material) entity_droplist.
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
 				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-x-increase"),   // increase_x,
@@ -574,7 +589,6 @@
 				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-y-decrease"),   // decrease_y,
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
-
 			);
 
 
