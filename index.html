@@ -389,11 +389,11 @@
 
 				watch( needs_update, "onclick", function(prop, event, value){
 
-					var maps = ",map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+					var maps = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
 
 					maps.split(",").forEach(function(key){ 
-						if ( editor[key] != null ) editor[key].needsUpdate = true; editor.needsUpdate = true; 
+						if ( !editor[key] ) return; editor[key].needsUpdate = true; editor.needsUpdate = true; 
 					}); 
 
 				});
@@ -406,7 +406,10 @@
 
 			(function(editor,remove_map,map_droplist){
 
-				watch( remove_map, "onclick", function(prop, event, key){ editor[key] = null; editor.needsUpdate = true; });
+				watch( remove_map, "onclick", function(prop, event, key){ 
+					if ( !key ) return; if ( !editor[key] ) return; editor[key] = null; editor.needsUpdate = true;
+				});
+
 				remove_map.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
 
 			})( 
