@@ -422,7 +422,7 @@
 
 			(function(editor,input,button,map_droplist){
 
-				watch( button, "onclick", function(prop, event, value){ debugMode && console.log({item:button,event:event,value:value}); });  // debug!
+				watch( button, "onclick", function(prop, event, value){ debugMode && console.log({item:button,event:event}); });  // debug!
 
 				var interval;
 
@@ -467,8 +467,8 @@
 				});
 
 				button.addEventListener( "click", function(){ 
+					if ( !map_droplist.value ) return; input.value = "";
 					callWatchers( this, "onclick", "click", input.click() );
-				//	if ( !map_droplist.value ) return; input.value = ""; input.click();
 				});
 
 
