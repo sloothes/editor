@@ -1,7 +1,7 @@
 //	material-editor-textures-tab-ui.js
 
 	TabUI.add( "MaterialEditorTextures", "material-editor-texture-tab" ); 
-	TabUI.append( "MaterialEditorTextures" ); TabUI.MaterialEditorTextures.pill.innerHTML = "Textures";
+	TabUI.append( "MaterialEditorTextures" ); TabUI.MaterialEditorTextures.pill.innerHTML = "Texture";
 
 //	material-editor-textures-map-droplist-ui.js
 
