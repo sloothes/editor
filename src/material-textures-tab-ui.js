@@ -1,7 +1,7 @@
 //	textures-tab-ui.js
 
-	TabUI.add( "MaterialTextures", "material-texture-tab" );
-	TabUI.append( "MaterialTextures" );  TabUI.MaterialTextures.pill.innerHTML = "Edit&nbsp;Textures";
+	TabUI.add( "MaterialTextures", "material-texture-tab" ); 
+	TabUI.append( "MaterialTextures" ); TabUI.MaterialTextures.pill.innerHTML = "Edit&nbsp;Textures";
 
 //	material-textures-map-droplist-ui.js
 
@@ -17,7 +17,6 @@
 
 		var keys = ",map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 			keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
 			option.text = name; option.value = name; select.appendChild( option );
@@ -88,7 +87,6 @@
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
 		var keys = ",uuid,name,flipY,format,rotation,mapping,minFilter,magFilter,anisotropy,wrapS,wrapT";
-
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option"); 
 			option.text = name; option.value = name; select.appendChild( option );
@@ -175,7 +173,6 @@
 	//	MaterialTextures vector y.
 
 		var row = document.createElement("h3"); row.textContent = "axis y:"; row.style.cssText = "margin:10px 15px;height:40px;";
-
 		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 
 		var prev = document.createElement("li"); prev.id = "material-textures-vector-y-decrease";
@@ -189,99 +186,85 @@
 		input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;";
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 
-		vect.appendChild(prev);
-		vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+		vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
 	})( TabUI.MaterialTextures.tab );
 
-//	reset-vectors-ui.js
+//	material-textures-reset-vectors-ui.js
 
 	(function( tab ){
 
-	//	Reset vectors button.
-	//	Resets vector mode values.
-	//	var tab = TabUI.Texture.tab;
+	//	MaterialTextures Reset vectors button.
 
-		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
-
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div");
-		button.id = "texture-vectors-reset";
-		button.textContent = "Reset Vectors";
+		button.id = "material-textures-vectors-reset"; button.textContent = "Reset Vectors";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-
-		row.appendChild( button );
-		tab.appendChild( row );
+		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.MaterialTextures.tab );
 
-//	needs-update-ui.js
+//	material-textures-needs-update-ui.js
 
 	(function( tab ){
 
-	//	NeedsUpdate texture button.
-	//	var tab = TabUI.Texture.tab;
+	//	MaterialTextures NeedsUpdate texture button.
 
-		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
-
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 		var button = document.createElement("div");
-		button.id = "texture-needs-update";
-		button.textContent = "Texture needs Update";
+		button.id = "material-textures-needs-update"; button.textContent = "Texture needs Update";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-
-		row.appendChild( button );
-		tab.appendChild( row );
+		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.MaterialTextures.tab );
 
-//	image-replace-ui.js
+//	material-textures-image-replace-ui.js
 
 	(function( tab ){
 
-	//	Replace image button.
-	//	var tab = TabUI.Texture.tab;
+	//	MaterialTextures Replace Image button.
 
-		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "replace-image-button";
-		button.textContent = "Replace Texture Image";
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); 
+		button.id = "material-textures-replace-image-button"; button.textContent = "Replace Texture Image";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
-		var input = document.createElement("input");
-		input.type = "file";
-		input.id = "image-file-input";
-		input.style.cssText = "display:none;";
-		button.appendChild( input );
-
-		row.appendChild( button );
-		tab.appendChild( row );
+		var input = document.createElement("input"); input.type = "file";
+		input.id = "image-file-input"; input.style.cssText = "display:none;";
+		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.MaterialTextures.tab );
 
-//	exit-editor-ui.js
+//	material-textures-remove-ui.js
 
 	(function( tab ){
 
-	//	Exit edit mode button.
-	//	var tab = TabUI.Texture.tab;
+	//	MaterialTextures Map Remove button.
 
-		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); 
+		button.id = "material-textures-remove-button"; button.textContent = "Remove Texture Map";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
 
-		var button = document.createElement("div");
-		button.id = "texture-exit-mode";
-		button.textContent = "Exit Edit Mode";
+	})( TabUI.MaterialTextures.tab );
+
+//	material-textures-exit-editor-ui.js
+
+	(function( tab ){
+
+	//	MaterialTextures Exit Edit Mode button.
+
+		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
+		var button = document.createElement("div"); 
+		button.id = "material-textures-exit-mode"; button.textContent = "Exit Edit Mode";
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-
-		row.appendChild( button );
-		tab.appendChild( row );
+		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.MaterialTextures.tab );
 
