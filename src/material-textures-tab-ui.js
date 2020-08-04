@@ -1,7 +1,7 @@
 //	textures-tab-ui.js
 
 	TabUI.add( "MaterialTextures", "material-texture-tab" );
-	TabUI.append( "MaterialTextures" );  TabUI.MaterialTextures.pill.innerHTML = "Texture";
+	TabUI.append( "MaterialTextures" );  TabUI.MaterialTextures.pill.innerHTML = "Edit&nbsp;Textures";
 
 //	material-textures-map-droplist-ui.js
 
