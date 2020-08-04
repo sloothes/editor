@@ -431,9 +431,7 @@
 					if ( input.files.length === 0 ) return;
 
 					var file = input.files[0];
-
-				//	get texture.
-					var texture = editor[ map_droplist.value ];
+					var key = map_droplist.value;
 
 					var img = new Image();
 					img.addEventListener("load", function(){
@@ -447,11 +445,10 @@
 						debugMode && console.log( canvas );
 
 					//	replace image.
-						if ( !texture ) texture = new THREE.Texture(); 
+						var texture = editor[ key ]; if ( !editor[key] ) texture = editor[ key ] = new THREE.Texture(); 
 						texture.image = canvas; texture.sourceFile = file.name; 
-						texture.name = file.name.replace(".png","").replace(".jpg","").replace(".jpeg","");
-						if ( texture.image !== undefined ) texture.needsUpdate = true; 
-						editor.needsUpdate = true; // important!
+						texture.name = file.name.replace(".png","").replace(".jpg","").replace(/_/g," ");
+						if ( texture.image !== undefined ) texture.needsUpdate = editor.needsUpdate = true; // important!
 						debugMode && console.log( texture );
 
 					});
