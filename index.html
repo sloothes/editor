@@ -374,8 +374,6 @@
 
 		//	material-editor-textures-buttons.js
 
-		//	material-editor-textures-viewer-grid.js
-
 			(function(viewer,grid_button){
 
 				watch( grid_button, "onclick", function(prop, event, value){ viewer.grid.visible = !viewer.grid.visible; });
@@ -404,17 +402,17 @@
 
 		//	material-editor-textures-remove-map.js
 
-			(function(editor,remove_map,map_droplist){
+			(function(editor,remove_btn,map_droplist){
 
-				watch( remove_map, "onclick", function(prop, event, key){ 
+				watch( remove_btn, "onclick", function(prop, event, key){ 
 					if ( !key ) return; if ( !editor[key] ) return; editor[key] = null; editor.needsUpdate = true;
 				});
 
-				remove_map.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
+				remove_btn.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
 
 			})( 
 				materialEditor, // editor,
-				TabUI.MaterialEditorTextures.tab.querySelector("div#material-textures-remove-button"),  // remove_map,
+				TabUI.MaterialEditorTextures.tab.querySelector("div#material-textures-remove-button"),  // remove_btn,
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-textures-map-droplist") // map_droplist.
 			);
 
