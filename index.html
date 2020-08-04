@@ -570,9 +570,7 @@
 				watch( map_droplist, "onchange", function(prop, event, value){ 
 
 					var textures = []; var maps = keys.split(","); 
-					maps.forEach(function(key){ 
-						if ( editor[key] ) textures.push( editor[key]); 
-					}); 
+					maps.forEach(function(key){ if ( editor[key] ) textures.push( editor[key] ); }); 
 
 					debugMode && console.log( textures );
 				});
