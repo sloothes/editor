@@ -480,13 +480,28 @@
 
 		<script>
 
-
-
-
-
 		//	material-editor-textures-inputs.js
 
-			(function(editor,text_input,value_input,vector_x,vector_y,key_droplist,map_droplist,vector_droplist){
+
+
+
+		//	material-editor-textures-map-droplist.js
+
+			(function(editor,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist,map_droplist){
+
+				var keys = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+					keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+
+				watch( map_droplist, "onchange", function(prop, event, value){ 
+					debugMode && console.log({item:map_droplist,event:event,value:value}); // debug!
+
+					var textures = []; var maps = keys.split(","); 
+					maps.forEach(function(key){ 
+						if ( editor[key] ) textures.push( editor[key]); 
+					}); 
+
+					debugMode && console.log( textures );
+				});
 
 
 
@@ -510,21 +525,20 @@
 
 
 
+				map_droplist.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
-
-
+				callWatchers( map_droplist, "onchange", "change", map_droplist.value );
 
 			})(
 				materialEditor, // editor,
-				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-text-input"),      // text_input,
-				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-value-input"),     // value_input,
-				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),  // vector_x,
-				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),  // vector_y,
-				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-key-droplist"),   // key_droplist.
-				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist"),   // map_droplist.
-				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist") // vector_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-text-input"),       // text_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-value-input"),      // value_input,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-key-droplist"),    // key_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
 			);
-
 
 		</script>
 
