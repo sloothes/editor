@@ -372,13 +372,13 @@
 
 		<script>
 
-			(function(editor,grid_button){
+			(function(viewer,grid_button){
 
-				watch( grid_button, "onclick", function(prop, event, value){ editor.grid.visible = !editor.grid.visible; });
+				watch( grid_button, "onclick", function(prop, event, value){ viewer.grid.visible = !viewer.grid.visible; });
 
-				grid_button.addEventListener( "click", function(){ callWatchers( grid_button, "onclick", "click", editor.grid.visible ); });
+				grid_button.addEventListener( "click", function(){ callWatchers( grid_button, "onclick", "click", viewer.grid.visible ); });
 
-			})( materialEditor, TabUI.MaterialTextures.tab.querySelector("div#material-textures-viewer-grid") ); // editor, grid_button.
+			})( materialEditorViewer, TabUI.MaterialTextures.tab.querySelector("div#material-textures-viewer-grid") ); // viewer, grid_button.
 			
 
 
