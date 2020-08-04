@@ -255,6 +255,8 @@
 				viewer.renderer.domElement.style.background = "none";  // transparent rendering. important!
 				viewer.render = function(){ viewer.renderer.render( viewer.scene, viewer.camera ); };
 
+				(function render(){ requestAnimationFrame( render ); viewer.render(); })(); // debug!
+
 			//	Viewer material.
 
 				viewer.mesh = (function(){
