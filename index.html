@@ -503,14 +503,14 @@
 
 					switch ( key ){
 						case "":
-							return text_input.value = ""; value_input.value = "";
+							text_input.value = ""; value_input.value = ""; return;
 						break;
 						case "name":
 						case "uuid":
-							return text_input.value = texture[key]; value_input.value = "";
+							text_input.value = texture[key]; value_input.value = ""; return;
 						break;
 						default:
-							return text_input.value = ""; value_input = texture[key];
+							text_input.value = ""; value_input = texture[key]; return;
 						break;
 					}
 
@@ -536,13 +536,9 @@
 
 				watch( vector_droplist, "onchange", function(prop, event, key){ 
 
-					if ( !map_droplist.value ) return [ vector_x.value, vector_y.value ] = [ "", "" ];
-
 					var texture = editor[ map_droplist.value ]; 
-					if ( !key ) return [ vector_x.value, vector_y.value ] = [ "", "" ];
-					if ( !texture ) return [ vector_x.value, vector_y.value ] = [ "", "" ];
-
-					if ( key ) { vector_x.value = texture[key].x; vector_y.value = texture[key].y; }
+					if ( !( key && texture ) ) [ vector_x.value, vector_y.value ] = [ "", "" ];
+					else [ vector_x.value, vector_y.value ] = [ texture[key].x, texture[key].y ];
 
 				});
 
@@ -583,7 +579,7 @@
 					this.blur(); callWatchers( this, "onchange", "change", this.value ); 
 				});
 
-			//	callWatchers( map_droplist, "onchange", "change", map_droplist.value );
+				callWatchers( map_droplist, "onchange", "change", map_droplist.value );
 
 			})(
 				materialEditor, // editor,
