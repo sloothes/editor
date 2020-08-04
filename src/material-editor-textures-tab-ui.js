@@ -205,15 +205,30 @@
 
 	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-editor-textures-needs-update-ui.js
+//	material-editor-textures-toggle-ui.js
 
 	(function( tab ){
 
-	//	MaterialEditorTextures NeedsUpdate texture button.
+	//	MaterialEditorTextures Grid Toggle button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
-		var button = document.createElement("div");
-		button.id = "material-textures-needs-update"; button.textContent = "Textures needs Update";
+		var button = document.createElement("div"); 
+		button.id = "material-textures-viewer-grid"; button.textContent = "Toggle Viewer Grid";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
+
+	})( TabUI.MaterialEditorTextures.tab );
+
+//	material-editor-textures-remove-ui.js
+
+	(function( tab ){
+
+	//	MaterialEditorTextures Map Remove button.
+
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); 
+		button.id = "material-textures-remove-button"; button.textContent = "Remove Texture Map";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
@@ -238,30 +253,15 @@
 
 	})( TabUI.MaterialEditorTextures.tab );
 
-//	material-editor-textures-remove-ui.js
+//	material-editor-textures-needs-update-ui.js
 
 	(function( tab ){
 
-	//	MaterialEditorTextures Map Remove button.
+	//	MaterialEditorTextures NeedsUpdate texture button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
-		var button = document.createElement("div"); 
-		button.id = "material-textures-remove-button"; button.textContent = "Remove Texture Map";
-		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-		row.appendChild( button ); tab.appendChild( row );
-
-	})( TabUI.MaterialEditorTextures.tab );
-
-//	material-editor-textures-toggle-ui.js
-
-	(function( tab ){
-
-	//	MaterialEditorTextures Grid Toggle button.
-
-		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
-		var button = document.createElement("div"); 
-		button.id = "material-textures-viewer-grid"; button.textContent = "Toggle Viewer Grid";
+		var button = document.createElement("div");
+		button.id = "material-textures-needs-update"; button.textContent = "Textures needs Update";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
