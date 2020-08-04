@@ -204,7 +204,7 @@
 
 			};
 
-			(function( viewer ){
+			(function( viewer, materialEditor ){
 
 			//	Viewer scene.
 
@@ -257,10 +257,11 @@
 
 			//	Viewer material.
 
-				viewer.material = (function(){
-					var mesh = new THREE.Mesh( new THREE.PlaneGeometry(252,252,1,1).rotateX(-Math.PI/2) );  
-					mesh.material = materialEditor; mesh.name = "viewer mesh"; viewer.scene.add( mesh ); 
-					return mesh.material;
+				viewer.mesh = (function(){
+					var material = materialEditor.clone();
+					var geometry = new THREE.PlaneGeometry(252,252,1,1).rotateX(-Math.PI/2);
+					var mesh = new THREE.Mesh( geometry, material ); mesh.name = "viewer mesh"; 
+					viewer.scene.add( mesh ); return mesh;
 				})();
 
 			//	Viewer center helper.
@@ -360,7 +361,7 @@
 
 				viewer.render(); // important!
 
-			})( materialEditorViewer );
+			})( materialEditorViewer, materialEditor ); // viewer, material.
 
 		</script>
 
