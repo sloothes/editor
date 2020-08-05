@@ -190,13 +190,45 @@
 		//	json.
 
 			var meta = { geometries:{}, materials:{}, textures:{}, images:{} };
-			try { getMaterialByEntityId( value ).toJSON( meta ); } catch(err){ 
+
+			try { 
+				var json = getMaterialByEntityId( value ).toJSON( meta ); 
+			} catch(err){ 
 				console.error("Couldn't save", getMaterialByEntityId() ); return; 
 			}
 
-			debugMode && console.log( meta );
+			debugMode && console.log( meta ); debugMode && console.log( json );
 
-			(function(meta){
+			function saveto(collection,data,keyword){
+
+				var result;
+
+				collection.find({uuid:data.uuid}).forEach(
+
+					function(doc){
+
+						result = doc.uuid;
+
+						collection.update({_id:doc._id}, {$set:data}, function(err){
+							if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
+						}).catch(function(err){ console.error(err); });
+
+					},
+
+					function(err){
+
+						if (err) throw err;  
+
+						if (!result) return collection.insert(data, function(err){ 
+							if (err) throw err; console.log(keyword, data.uuid, "saved!" )
+						}).catch(function(err){ console.error(err); });
+					}
+
+				).catch(function(err){ console.error(err); });
+
+			}
+
+			if ( json ) {
 
 			//	images.
 
@@ -214,52 +246,11 @@
 
 				}
 
-			//	materials.
+			//	material.
 
-				for (var key in meta.materials){
+				saveto( Materials, json, "material" );
 
-					saveto(Materials, meta.materials[key], "material");
-
-				}
-
-			//	geometries.
-
-				for (var key in meta.geometries){
-
-				//	saveto(Geometries, meta.geometries[key], "geometry");
-
-				}
-
-				function saveto(collection,data,keyword){
-
-					var result;
-
-					collection.find({uuid:data.uuid}).forEach(
-
-						function(doc){
-
-							result = doc.uuid;
-
-							collection.update({_id:doc._id}, {$set:data}, function(err){
-								if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-							}).catch(function(err){ console.error(err); });
-
-						},
-
-						function(err){
-
-							if (err) throw err;  
-
-							if (!result) return collection.insert(data, function(err){ 
-								if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-							}).catch(function(err){ console.error(err); });
-						}
-
-					).catch(function(err){ console.error(err); });
-
-				}
-
-			})( meta );
+			}
 
 		});
 
