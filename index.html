@@ -799,6 +799,8 @@
 
 			(function(editor,text_input,value_input,key_droplist,map_droplist){
 
+				const RAD2DEG = 57.29577951308232; const DEG2RAD = 0.017453292519943295;
+
 				watch( key_droplist, "onchange", function(prop, event, value){ debugMode && console.log({item:key_droplist,event:event,key:value}); });  // debug!
 
 				watch( key_droplist, "onchange", function(prop, event, key){ 
@@ -816,6 +818,9 @@
 						case "name":
 						case "uuid":
 							text_input.value = texture[key]; value_input.value = ""; return;
+						break;
+						case "rotation":
+							text_input.value = ""; value_input.value = (RAD2DEG*value).toFixed(1); return;
 						break;
 						default:
 							text_input.value = ""; value_input.value = texture[key]; return;
