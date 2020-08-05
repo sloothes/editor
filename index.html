@@ -443,7 +443,7 @@
 			//	function get_textures(material){
 			//		var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 			//			maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-			//		return maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
+			//		return maps.split(",").map(function(name){ return material[name]; }).filter(Boolean); 
 			//	}
 
 			})( 
@@ -830,7 +830,7 @@
 				function get_textures(material){
 					var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-					return maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
+					return maps.split(",").map(function(name){ return material[name]; }).filter(Boolean); 
 				}
 
 				watch( vector_x, "onchange", function(property, event, value){
