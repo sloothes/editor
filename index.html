@@ -425,12 +425,6 @@
 
 				watch( apply_button, "onclick", function(prop, event, value){ debugMode && console.log({item:apply_button,event:event,object:value}); });  // debug!
 
-			//	function get_textures(material){
-			//		var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
-			//			maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-			//		return maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
-			//	}
-
 			//	watch( apply_button, "onclick", function(prop, event, object){ 
 			//		if ( object ) object.material.copy( editor );  // fast and dirty!
 			//	});
@@ -443,6 +437,12 @@
 				}); 
 
 				apply_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", getObjectByEntityId() ); });
+
+			//	function get_textures(material){
+			//		var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+			//			maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+			//		return maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
+			//	}
 
 			})( 
 				materialEditor, // editor,
@@ -459,7 +459,7 @@
 				function get_textures(material){
 					var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-					var textures = maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
+					var textures = maps.split(",").map(function(name){ return material[name]; }).filter(Boolean); 
 					if ( textures.length ) return textures[0]; return;
 				}
 
