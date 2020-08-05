@@ -501,9 +501,7 @@
 
 		<script>
 
-		//	material-editor-textures-mouse-inputs.js
-
-		//	material-editor-textures-value-mouse-inputs.js
+		//	material-editor-textures-value-mouse-input.js
 
 			(function( editor,entity_droplist,text_input,value_input,increase,decrease,key_droplist,map_droplist ){
 
@@ -700,8 +698,7 @@
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")  // map_droplist.
 			);
 
-
-		//	material-editor-textures-vector-mouse-inputs.js
+		//	material-editor-textures-vector-mouse-input.js
 
 			(function( editor,entity_droplist,vector_x,vector_y,increase_x,increase_y,decrease_x,decrease_y,vector_droplist,map_droplist ){
 
@@ -788,12 +785,9 @@
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
 			);
 
-
 		</script>
 
 		<script>
-
-		//	material-editor-textures-droplist.js
 
 		//	material-editor-textures-key-droplist.js
 
@@ -811,9 +805,9 @@
 
 				watch( key_droplist, "onchange", function(prop, event, key){ 
 					
-					var texture; 
-					if ( !map_droplist.value ) texture = get_textures( editor );
-					else texture = editor[ map_droplist.value ];
+					var texture, name = map_droplist.value;
+					if ( name ) texture = editor[ name ];
+					if ( !texture ) texture = get_textures( editor );
 					if ( !texture ) return [ text_input.value, value_input.value ] = [ "", "" ];
 
 					switch ( key ){
@@ -860,9 +854,9 @@
 
 				watch( vector_droplist, "onchange", function(prop, event, key){ 
 
-					var texture; 
-					if ( !map_droplist.value ) texture = get_textures( editor );
-					else texture = editor[ map_droplist.value ];
+					var texture, name = map_droplist.value;
+					if ( name ) texture = editor[ name ];
+					if ( !texture ) texture = get_textures( editor );
 
 					if ( !( key && texture ) ) [ vector_x.value, vector_y.value ] = [ "", "" ];
 					else [ vector_x.value, vector_y.value ] = [ texture[key].x, texture[key].y ];
