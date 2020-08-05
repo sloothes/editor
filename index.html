@@ -426,14 +426,16 @@
 				watch( apply_button, "onclick", function(prop, event, value){ debugMode && console.log({item:apply_button,event:event,object:value}); });  // debug!
 
 			//	watch( apply_button, "onclick", function(prop, event, object){ 
-			//		if ( object ) object.material.copy( editor );  // fast and dirty!
 			//	});
 
 				watch( apply_button, "onclick", function(prop, event, object){ 
-					if ( !object ) return; var textures = [];
+					if ( !object ) return; 
+				//	if ( object ) object.material.copy( editor ); return; // fast and dirty!
 					var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
 						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-					maps.split(",").forEach(function(name){ if ( !editor[name] ) return; object.material[name] = editor[name]; });
+					maps.split(",").forEach(function(name){ 
+						if ( editor[name] !== undefined ) object.material[name] = editor[name]; 
+					});
 				}); 
 
 				apply_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", getObjectByEntityId() ); });
