@@ -422,16 +422,31 @@
 
 			(function(editor,input,button,map_droplist){
 
-				watch( button, "onclick", function(prop, event, value){ debugMode && console.log({item:button,event:event}); });  // debug!
+				function get_textures(material){
+					var textures = []; // textures.length = 0;
+					var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					keys.split(",").forEach(function(name){ if ( material[name] ) textures.push( material[name] ); }); 
+					if ( textures.length ) return textures[0];
+				}
 
-				var interval;
+				function copy_values( source, texture ){
+					if ( !texture ) texture = new THREE.Texture(); if ( !source ) return texture; 
+					var keys = "flipY,format,rotation,mapping,minFilter,magFilter,anisotropy,wrapS,wrapT";
+					var vectors = "offset,repeat,center"; 
+					keys.split(",").forEach(function(key){ texture[key] = source[key]; });
+					vectors.split(",").forEach(function(vec){ texture[vec].copy(source[vec]); });
+					return texture;
+				}
 
-				input.addEventListener( "change", function(e){
+				watch( button, "onclick", function(prop, event){ debugMode && console.log({item:button,event:event}); }); // get_textures();
+
+				watch( input, "onchange", "change", function(prop, event, key){
+					debugMode && console.log({item:button,event:event,value:key});
 
 					if ( input.files.length === 0 ) return;
 
 					var file = input.files[0];
-					var key = map_droplist.value;
 
 					var img = new Image();
 					img.addEventListener("load", function(){
@@ -445,13 +460,15 @@
 						debugMode && console.log( canvas );
 
 					//	replace image.
-						var texture = editor[ key ]; if ( !editor[key] ) texture = editor[ key ] = new THREE.Texture(); 
+						var texture; if ( editor[ key ] ) texture = editor[ key ];
+						else texture = editor[ key ] = copy_values( get_textures(editor), new THREE.Texture() );
+					//	var texture = editor[ key ]; if ( !editor[key] ) texture = editor[ key ] = new THREE.Texture(); 
 						texture.image = canvas; texture.sourceFile = file.name; 
 						texture.name = file.name.replace(".png","").replace(".jpg","").replace(/_/g," ");
 						if ( texture.image !== undefined ) texture.needsUpdate = editor.needsUpdate = true; // important!
 						debugMode && console.log( texture );
 
-					//	reset droplist.
+					//	reset map droplist.
 						callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" );
 					});
 
@@ -462,7 +479,6 @@
 					});
 
 					reader.readAsDataURL(file);
-
 				});
 
 				button.addEventListener( "click", function(){ 
@@ -470,6 +486,9 @@
 					callWatchers( this, "onclick", "click", input.click() );
 				});
 
+				input.addEventListener( "change", function(){
+					callWatchers( input, "onchange", "change", map_droplist.value );
+				});
 
 			})( 
 				materialEditor, // editor,
@@ -536,6 +555,7 @@
 							if ( button === increase_y ) texture[key].y = round( THREE.Math.clamp( texture[key].y+step, min, max ), 6);
 							if ( button === decrease_y ) texture[key].y = round( THREE.Math.clamp( texture[key].y-step, min, max ), 6);
 							for ( var i = 1; i < textures.length; i++ ) { textures[i][key].copy( texture[key] ); }
+							[ vector_x.value, vector_y.value ] = [ texture[key].x,  texture[key].y ]; return;
 						}
 					}
 
