@@ -877,18 +877,18 @@
 						case "repeat":
 
 							return (function(value){
-								if ( isNaN(value) ) return Number.value = get_textures(editor)[0][key].y.toFixed(3);
+								if ( isNaN(value) ) return vector_y.value = get_textures(editor)[0][key].y.toFixed(3);
 								get_textures(editor).forEach(function(texture){ texture[key].y = value; });
-								return Number.value = value.toFixed(3);
+								return vector_y.value = value.toFixed(3);
 							})( THREE.Math.clamp( Number(value), -100, 100 ) );
 
 						break;
 
 						case "center":
 							return (function(value){
-								if ( isNaN(value) ) return Number.value = get_textures(editor)[0][key].y.toFixed(3);
+								if ( isNaN(value) ) return vector_y.value = get_textures(editor)[0][key].y.toFixed(3);
 								get_textures(editor).forEach(function(texture){ texture[key].y = value; });
-								return Number.value = value.toFixed(3);
+								return vector_y.value = value.toFixed(3);
 							})( Number(THREE.Math.clamp( Number(value), 0, 1 )) );
 						break;
 					}
