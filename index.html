@@ -801,14 +801,19 @@
 
 				const RAD2DEG = 57.29577951308232; const DEG2RAD = 0.017453292519943295;
 
-				watch( key_droplist, "onchange", function(prop, event, value){ debugMode && console.log({item:key_droplist,event:event,key:value}); });  // debug!
+				function get_textures(material){
+					var textures = []; // textures.length = 0;
+					var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					keys.split(",").forEach(function(name){ if ( material[name] ) textures.push( material[name] ); }); 
+					if ( textures.length ) return textures[0];
+				}
 
 				watch( key_droplist, "onchange", function(prop, event, key){ 
-
-					if ( !map_droplist.value ) return [ text_input.value, value_input.value ] = [ "", "" ];
-
-					var texture = editor[ map_droplist.value ]; 
-					if ( !key ) return [ text_input.value, value_input.value ] = [ "", "" ];
+					
+					var texture; 
+					if ( !map_droplist.value ) texture = get_textures( editor );
+					else texture = editor[ map_droplist.value ];
 					if ( !texture ) return [ text_input.value, value_input.value ] = [ "", "" ];
 
 					switch ( key ){
@@ -845,11 +850,20 @@
 
 			(function(editor,vector_x,vector_y,vector_droplist,map_droplist){
 
-				watch( vector_droplist, "onchange", function(prop, event, value){ debugMode && console.log({item:vector_droplist,event:event,vector:value}); });  // debug!
+				function get_textures(material){
+					var textures = []; // textures.length = 0;
+					var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					keys.split(",").forEach(function(name){ if ( material[name] ) textures.push( material[name] ); }); 
+					if ( textures.length ) return textures[0];
+				}
 
 				watch( vector_droplist, "onchange", function(prop, event, key){ 
 
-					var texture = editor[ map_droplist.value ]; 
+					var texture; 
+					if ( !map_droplist.value ) texture = get_textures( editor );
+					else texture = editor[ map_droplist.value ];
+
 					if ( !( key && texture ) ) [ vector_x.value, vector_y.value ] = [ "", "" ];
 					else [ vector_x.value, vector_y.value ] = [ texture[key].x, texture[key].y ];
 
