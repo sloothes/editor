@@ -535,7 +535,7 @@
 						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
 						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max ); // rad.
 						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max ); // rad.
-						for ( var i = 0; i < textures.length; i++ ) { textures[i][key] = value; }
+						textures.forEach(function(texture, i){ textures[i][key] = value; })
 						value_input.value = (RAD2DEG*value).toFixed(1);
 					}
 
@@ -543,7 +543,7 @@
 						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
 						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max );
 						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max );
-						for ( var i = 0; i < textures.length; i++ ) { textures[i][key] = value; }
+						textures.forEach(function(texture, i){ textures[i][key] = value; })
 						value_input.value = value.toFixed(3);
 					}
 
@@ -552,7 +552,7 @@
 						var index = values.findIndex(function( item ){ return item === value; });
 						if ( button === increase ) value = values[ ( ++index % max + max ) % max ]; // mod();
 						if ( button === decrease ) value = values[ ( --index % max + max ) % max ]; // mod();
-						for ( var i = 0; i < textures.length; i++ ) { textures[i][key] = value; }
+						textures.forEach(function(texture, i){ textures[i][key] = value; })
 						value_input.value = value.toFixed(0);
 					}
 
@@ -564,6 +564,8 @@
 
 							case "uuid": 
 								return (function( value ){
+									if (!map_droplist.value) return;
+									var name = map_droplist.value;
 									if ( texture.id === editor[name].id ) 
 										text_input.value = texture[ key ] = value;
 								})( THREE.Math.generateUUID() );
@@ -578,6 +580,7 @@
 								return (function( value ){
 									textures.forEach(function(texture, i){ 
 										textures[i][key] = value; 
+										textures[i].needs_update = true;
 									}); value_input.value = value;
 								})( !texture[ key ] );
 							break;
@@ -586,48 +589,55 @@
 
 							case "wrapS":
 							case "wrapT":
-								return updateConstantNumberValue(button, [
+								updateConstantNumberValue(button, [
 									THREE.RepeatWrapping,THREE.ClampToEdgeWrapping,THREE.MirroredRepeatWrapping 
-								], texture[key]);
+								], texture[key]); 
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "type":
-								return updateConstantNumberValue(button, [], texture[key]);
+								updateConstantNumberValue(button, [], texture[key]);
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "format":
-								return updateConstantNumberValue(button, [
+								updateConstantNumberValue(button, [
 									THREE.AlphaFormat,THREE.RGBFormat,THREE.RGBAFormat,
 									THREE.LuminanceFormat,THREE.LuminanceAlphaFormat
 								], texture[key]);
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "mapping":
-								return updateConstantNumberValue(button, [
+								updateConstantNumberValue(button, [
 									THREE.UVMapping,THREE.CubeReflectionMapping,THREE.CubeRefractionMapping,
 									THREE.EquirectangularReflectionMapping,THREE.EquirectangularRefractionMapping,
 									THREE.SphericalReflectionMapping,THREE.CubeUVReflectionMapping,THREE.CubeUVRefractionMapping
 								], texture[key]);
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "encoding":
-								return updateConstantNumberValue(button, [
+								updateConstantNumberValue(button, [
 									THREE.LinearEncoding,THREE.sRGBEncoding,THREE.GammaEncoding,THREE.RGBEEncoding,
 									THREE.LogLuvEncoding,THREE.RGBM7Encoding,THREE.RGBM16Encoding,THREE.RGBDEncoding,
 									THREE.BasicDepthPacking,THREE.RGBADepthPacking 
 								], texture[key]);
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "magFilter":
-								return updateConstantNumberValue(button, [THREE.NearestFilter,THREE.LinearFilter], texture[key]);
+								updateConstantNumberValue(button, [THREE.NearestFilter,THREE.LinearFilter], texture[key]);
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "minFilter":
-								return updateConstantNumberValue(button, [
+								updateConstantNumberValue(button, [
 									THREE.NearestFilter,THREE.NearestMipMapNearestFilter,
 									THREE.NearestMipMapLinearFilter,THREE.LinearFilter,
 									THREE.LinearMipMapNearestFilter,THREE.LinearMipMapLinearFilter 
 								], texture[key]);
+								return textures.forEach(function(texture, i){ textures[i].needsUpdate = true; });  // important!
 							break;
 
 							case "anisotropy":
