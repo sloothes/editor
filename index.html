@@ -538,8 +538,7 @@
 				var interval; window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
 				function get_textures(){
-					textures.length = 0; maps.forEach(function(name){ if ( editor[name] ) textures.push( editor[name] ); }); 
-					debugMode && console.log( textures );
+					textures.length = 0; maps.forEach(function(name){ if ( editor[name] ) textures.push( editor[name] ); }); // debugMode && console.log( textures );
 				}
 
 				watch( map_droplist,    "onchange", function(prop, event, value){ get_textures(); });
