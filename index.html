@@ -390,7 +390,10 @@
 				const maps = keys.split(",");
 
 				watch( needs_update, "onclick", function(prop, event, value){
-					maps.forEach(function(key){ if ( !editor[key] ) return; editor[key].needsUpdate = true; editor.needsUpdate = true; }); 
+					maps.forEach(function(name){ 
+						if ( !editor[name] ) return; 
+						editor[name].needsUpdate = true; // or value;
+					}); editor.needsUpdate = true; 
 				}); 
 
 				needs_update.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", true ); });
@@ -405,7 +408,7 @@
 
 				watch( remove_button, "onclick", function(prop, event, key){ 
 					if ( !key ) return; if ( !editor[key] ) return; editor[key] = null; editor.needsUpdate = true;
-					callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" );
+					callWatchers( map_droplist, "onchange", "change", map_droplist.value = "" ); // reset droplist.
 				}); 
 
 				remove_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", map_droplist.value ); });
@@ -416,28 +419,57 @@
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist") // map_droplist.
 			);
 
+		//	material-editor-textures-apply-textures.js
+
+			(function(editor,apply_button,map_droplist){
+
+				watch( apply_button, "onclick", function(prop, event, value){ debugMode && console.log({item:apply_button,event:event,object:value}); });  // debug!
+
+			//	function get_textures(material){
+			//		var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+			//			maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+			//		return maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
+			//	}
+
+			//	watch( apply_button, "onclick", function(prop, event, object){ 
+			//		if ( object ) object.material.copy( editor );  // fast and dirty!
+			//	});
+
+				watch( apply_button, "onclick", function(prop, event, object){ 
+					if ( !object ) return; var textures = [];
+					var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					maps.forEach(function(name){ if ( !editor[name] ) return; object.material[name] = editor[name]; });
+				}); 
+
+				apply_button.addEventListener( "click", function(){ callWatchers( this, "onclick", "click", getObjectByEntityId() ); });
+
+			})( 
+				materialEditor, // editor,
+				TabUI.MaterialEditorTextures.tab.querySelector("div#material-editor-textures-apply-button"),  // apply_button,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist") // map_droplist.
+			);
+
 		//	material-editor-textures-replace-image.js
 
 			(function(editor,input,button,map_droplist){
 
+				watch( button, "onclick", function(prop, event){ debugMode && console.log({item:button,event:event}); }); // get_textures();
+
 				function get_textures(material){
-					var textures = []; // textures.length = 0;
-					var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
-						keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
-					keys.split(",").forEach(function(name){ if ( material[name] ) textures.push( material[name] ); }); 
-					if ( textures.length ) return textures[0];
+					var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					var textures = maps.split(",").map(function(name){ return material[name] ); }).filter(Boolean); 
+					if ( textures.length ) return textures[0]; return;
 				}
 
 				function copy_values( source, texture ){
 					if ( !texture ) texture = new THREE.Texture(); if ( !source ) return texture; 
-					var keys = "flipY,format,rotation,mapping,minFilter,magFilter,anisotropy,wrapS,wrapT";
 					var vectors = "offset,repeat,center"; 
-					keys.split(",").forEach(function(key){ texture[key] = source[key]; });
-					vectors.split(",").forEach(function(vec){ texture[vec].copy(source[vec]); });
-					return texture;
+					var keys = "flipY,format,rotation,mapping,minFilter,magFilter,anisotropy,wrapS,wrapT";
+					keys.split(",").forEach(function(key){ texture[key] = source[key]; }); 
+					vectors.split(",").forEach(function(vec){ texture[vec].copy(source[vec]); }); return texture;
 				}
-
-				watch( button, "onclick", function(prop, event){ debugMode && console.log({item:button,event:event}); }); // get_textures();
 
 				watch( input, "onchange", function(prop, event, key){
 					debugMode && console.log({item:button,event:event,value:key});
