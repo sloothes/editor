@@ -261,13 +261,27 @@
 
 				viewer.material = materialEditor;
 
+			//	viewer.mesh = (function( material ){
+			//		var geometry = new THREE.PlaneGeometry(252,252,1,1);
+			//		geometry.rotateX(-Math.PI/2);
+			//		var mesh = new THREE.Mesh( geometry, material ); 
+			//		mesh.name = "viewer mesh"; viewer.scene.add( mesh ); 
+			//		return mesh;
+			//	})( materialEditor );
+
 				viewer.mesh = (function( material ){
-					var geometry = new THREE.PlaneGeometry(252,252,1,1);
-					geometry.rotateX(-Math.PI/2);
+					var geometry = new THREE.SphereGeometry(128,64,32);
+				//	geometry.rotateX(-Math.PI/2);
 					var mesh = new THREE.Mesh( geometry, material ); 
 					mesh.name = "viewer mesh"; viewer.scene.add( mesh ); 
 					return mesh;
 				})( materialEditor );
+
+
+
+
+
+
 
 			//	Viewer center helper.
 
