@@ -234,7 +234,7 @@
 
 				viewer.grid = (function(){
 					var helper = new THREE.GridHelper( 250, 10, 0x444444, 0x444444 );
-					helper.name = "viewer grid";  helper.visible = false; 
+					helper.name = "viewer grid";  helper.visible = true; 
 					helper.position.y = 0.01; viewer.scene.add( helper ); return helper;
 				})();
 
@@ -734,7 +734,7 @@
 
 		//	material-editor-textures-vector-mouse-input.js
 
-			(function( editor,entity_droplist,vector_x,vector_y,increase_x,increase_y,decrease_x,decrease_y,vector_droplist,map_droplist ){
+			(function( editor,viewer,entity_droplist,vector_x,vector_y,increase_x,increase_y,decrease_x,decrease_y,vector_droplist,map_droplist ){
 
 				var key, textures = []; 
 				const maps = (function(){
@@ -757,13 +757,22 @@
 				function onMouseClickInputValue(button){ 
 
 					function updateVectorValues( button, min,max,step ){
-						if ( textures.length ) { var texture = textures[0];
+						if ( textures.length ) { 
+							var texture = textures[0];
 							if ( button === increase_x ) texture[key].x = round( THREE.Math.clamp( texture[key].x+step, min, max ), 6);
 							if ( button === decrease_x ) texture[key].x = round( THREE.Math.clamp( texture[key].x-step, min, max ), 6);
 							if ( button === increase_y ) texture[key].y = round( THREE.Math.clamp( texture[key].y+step, min, max ), 6);
 							if ( button === decrease_y ) texture[key].y = round( THREE.Math.clamp( texture[key].y-step, min, max ), 6);
 							for ( var i = 1; i < textures.length; i++ ) { textures[i][key].copy( texture[key] ); }
-							[ vector_x.value, vector_y.value ] = [ texture[key].x.toFixed(3),  texture[key].y.toFixed(3) ]; return;
+							[ vector_x.value, vector_y.value ] = [ texture[key].x.toFixed(3),  texture[key].y.toFixed(3) ];
+
+							(function( key ){ // Update viewer center helper.
+								if ( vector_droplist.value !== key ) return;
+								try {	viewer.center.position.x = -125 + (250 * texture.center.x); // update center position (x).
+										viewer.center.position.z =  125 - (250 * texture.center.y); // update center position (z).
+								} catch(err){ debugMode && console.error(err); }
+							})( "center" );
+
 						}
 					}
 
@@ -808,7 +817,8 @@
 				onMouseClickInputValue(decrease_x); onMouseClickInputValue(decrease_y);
 
 			})(
-				materialEditor, TabUI.Material.tab.querySelector("select#material-entities-droplist"), // (material) entity_droplist.
+				materialEditor, materialEditorViewer, // editor, viewer,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // (material) entity_droplist.
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
 				TabUI.MaterialEditorTextures.tab.querySelector("li#material-editor-textures-vector-x-increase"),   // increase_x,
@@ -825,7 +835,7 @@
 
 		//	material-editor-textures-key-inputs.js
 
-			(function(editor,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist,map_droplist){
+			(function(editor,viewer,text_input,value_input,vector_x,vector_y,key_droplist,vector_droplist,map_droplist){
 
 				const RAD2DEG = 57.29577951308232; const DEG2RAD = 0.017453292519943295;
 
@@ -859,6 +869,8 @@
 							return (function(value){
 								if ( isNaN(value) ) return vector_x.value = get_textures(editor)[0][key].x.toFixed(3);
 								get_textures(editor).forEach(function(texture){ texture[key].x = value; });
+							//	update viewer center position (x).
+								try { viewer.center.position.x = -125 + (250 * value); } catch(err){ debugMode && console.error(err); }
 								return vector_x.value = value.toFixed(3);
 							})( Number(THREE.Math.clamp( Number(value), 0, 1 )) );
 						break;
@@ -890,6 +902,8 @@
 							return (function(value){
 								if ( isNaN(value) ) return vector_y.value = get_textures(editor)[0][key].y.toFixed(3);
 								get_textures(editor).forEach(function(texture){ texture[key].y = value; });
+							//	update center position (z).
+								try { viewer.center.position.z =  125 - (250 * value); } catch(err){ debugMode && console.error(err); }
 								return vector_y.value = value.toFixed(3);
 							})( Number(THREE.Math.clamp( Number(value), 0, 1 )) );
 						break;
@@ -988,7 +1002,7 @@
 				value_input.addEventListener( "change", function(){ this.blur(); callWatchers(this, "onchange", "change", this.value); });
 
 			})(
-				materialEditor, // editor,
+				materialEditor, materialEditorViewer, // editor, viewer,
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-text-input"),       // text_input,
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-value-input"),      // value_input,
 				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
@@ -1127,6 +1141,40 @@
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist.
 				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
 			);
+
+		</script>
+
+		<script>
+/*
+		//	material-editor-textures-viewer-center.js
+
+			(function( editor,viewer,entity_droplist,vector_x,vector_y,vector_droplist,map_droplist ){
+
+				var texture = new THREE.Texture(); 
+
+				function get_texture( name ){
+					var maps  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+						maps += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					var textures = maps.split(",").map(function(name){ return material[name]; }).filter(Boolean);
+					if ( !textures.length ) return texture = undefined;
+					if ( name && editor[ name ] ) texture = editor[ name ];
+					else if ( textures.length ) texture = textures[0];
+					else return texture = undefined; 
+				}
+
+				watch( map_droplist,    "onchange", function(prop, event, value){ get_texture(map_droplist.value); });
+				watch( vector_droplist, "onchange", function(prop, event, value){ get_texture(map_droplist.value); });
+				watch( entity_droplist, "onchange", function(prop, event, value){ get_texture(map_droplist.value); });
+
+			})( 
+				materialEditor, materialEditorViewer, // editor, viewer,
+				TabUI.Material.tab.querySelector("select#material-entities-droplist"), // (material) entity_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-x-input"),   // vector_x,
+				TabUI.MaterialEditorTextures.tab.querySelector("input#material-editor-textures-vector-y-input"),   // vector_y,
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-vector-droplist"), // vector_droplist.
+				TabUI.MaterialEditorTextures.tab.querySelector("select#material-editor-textures-map-droplist")     // map_droplist.
+			);
+*/
 
 		</script>
 
