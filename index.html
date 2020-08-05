@@ -507,10 +507,178 @@
 
 			(function( editor,entity_droplist,text_input,value_input,increase,decrease,key_droplist,map_droplist ){
 
+				const RAD2DEG = 57.29577951308232; const DEG2RAD = 0.017453292519943295;
 
+				var key, textures = []; 
+				const maps = (function(){
+					var keys  = "map,aoMap,envMap,lightMap,bumpMap,alphaMap,normalMap,specularMap,";
+					    keys += "gradientMap,emissiveMap,metalnessMap,roughnessMap,displacementMap";
+					return keys.split(",")
+				})(); 
 
+				watch( key_droplist, "onchange", function(prop, event, value){ key = value; }); // important!
+				var interval; window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
+				function get_textures(){
+					textures.length = 0; maps.forEach(function(name){ if ( editor[name] ) textures.push( editor[name] ); });
+				}
 
+			//	watch( map_droplist,    "onchange", function(prop, event, value){ get_textures(); });
+				watch( key_droplist,    "onchange", function(prop, event, value){ get_textures(); });
+				watch( entity_droplist, "onchange", function(prop, event, value){ get_textures(); });
+
+				function onMouseClickInputValue(button){ 
+
+					function updateFloatRotationValue(button, min, max, step, value){
+						var step = 0.1 * Math.PI/180; // 0.1 deg.
+						var min = -Math.PI, max = Math.PI;
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max ); // rad.
+						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max ); // rad.
+						for ( var i = 0; i < textures.length; i++ ) { textures[i][key] = value; }
+						value_input.value = (RAD2DEG*value).toFixed(1);
+					}
+
+					function updateFloatNumberValue(button, min, max, step, value){
+						if ( isNaN(value) ) return value_input.value = ""; // avoid to pass NaN editor[key] value.
+						if ( button === increase ) value = THREE.Math.clamp( value+step, min, max );
+						if ( button === decrease ) value = THREE.Math.clamp( value-step, min, max );
+						for ( var i = 0; i < textures.length; i++ ) { textures[i][key] = value; }
+						value_input.value = value.toFixed(3);
+					}
+
+					function updateConstantNumberValue(button, values, value){
+						var min = 0, max = values.length;
+						var index = values.findIndex(function( item ){ return item === value; });
+						if ( button === increase ) value = values[ ( ++index % max + max ) % max ]; // mod();
+						if ( button === decrease ) value = values[ ( --index % max + max ) % max ]; // mod();
+						for ( var i = 0; i < textures.length; i++ ) { textures[i][key] = value; }
+						value_input.value = value.toFixed(0);
+					}
+
+					function update_textures_value( button, texture ){
+
+						switch( key ){
+
+						//	string types:
+
+							case "uuid": 
+								return (function( value ){
+									if ( texture.id === editor[name].id ) 
+										text_input.value = texture[ key ] = value;
+								})( THREE.Math.generateUUID() );
+							break;
+
+						//	boolean types:
+
+							case "flipY":
+							case "premultiplyAlpha":
+							case "matrixAutoUpdate":
+							case "generateMipmaps":
+								return (function( value ){
+									textures.forEach(function(texture, i){ 
+										textures[i][key] = value; 
+									}); value_input.value = value;
+								})( !texture[ key ] );
+							break;
+
+						//	number types:
+
+							case "wrapS":
+							case "wrapT":
+								return updateConstantNumberValue(button, [
+									THREE.RepeatWrapping,THREE.ClampToEdgeWrapping,THREE.MirroredRepeatWrapping 
+								], texture[key]);
+							break;
+
+							case "type":
+								return updateConstantNumberValue(button, [], texture[key]);
+							break;
+
+							case "format":
+								return updateConstantNumberValue(button, [
+									THREE.AlphaFormat,THREE.RGBFormat,THREE.RGBAFormat,
+									THREE.LuminanceFormat,THREE.LuminanceAlphaFormat
+								], texture[key]);
+							break;
+
+							case "mapping":
+								return updateConstantNumberValue(button, [
+									THREE.UVMapping,THREE.CubeReflectionMapping,THREE.CubeRefractionMapping,
+									THREE.EquirectangularReflectionMapping,THREE.EquirectangularRefractionMapping,
+									THREE.SphericalReflectionMapping,THREE.CubeUVReflectionMapping,THREE.CubeUVRefractionMapping
+								], texture[key]);
+							break;
+
+							case "encoding":
+								return updateConstantNumberValue(button, [
+									THREE.LinearEncoding,THREE.sRGBEncoding,THREE.GammaEncoding,THREE.RGBEEncoding,
+									THREE.LogLuvEncoding,THREE.RGBM7Encoding,THREE.RGBM16Encoding,THREE.RGBDEncoding,
+									THREE.BasicDepthPacking,THREE.RGBADepthPacking 
+								], texture[key]);
+							break;
+
+							case "magFilter":
+								return updateConstantNumberValue(button, [THREE.NearestFilter,THREE.LinearFilter], texture[key]);
+							break;
+
+							case "minFilter":
+								return updateConstantNumberValue(button, [
+									THREE.NearestFilter,THREE.NearestMipMapNearestFilter,
+									THREE.NearestMipMapLinearFilter,THREE.LinearFilter,
+									THREE.LinearMipMapNearestFilter,THREE.LinearMipMapLinearFilter 
+								], texture[key]);
+							break;
+
+							case "anisotropy":
+								return updateFloatNumberValue(button, -1, 1, 1/100, texture[key]);
+							break;
+
+							case "rotation":
+								return updateFloatRotationValue(button, null, null, null, texture[key]);
+							break;
+						}
+					}
+
+					button.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+
+						var texture; var name = map_droplist.value;
+						if ( name && editor[ name ] ) texture = editor[ name ];
+						else if ( textures.length ) texture = textures[0]; 
+						else return;
+
+						interval = setTimeout( function update_textures(button){
+
+							switch( key ){
+								case "anisotropy":
+									interval = setTimeout( update_textures, 20, button );
+									return updateFloatNumberValue( button,-1, 1, 1/100, texture[key] );
+								break;
+								case "rotation":
+									interval = setTimeout( update_textures, 20, button );
+									return updateFloatRotationValue( button, null, null, null, texture[key]);
+								break;
+							}
+
+						}, 500, this);
+					});
+
+					button.addEventListener( "click", function(){
+						clearTimeout( interval );
+
+						var texture; var name = map_droplist.value;
+						if ( name && editor[ name ] ) texture = editor[ name ];
+						else if ( textures.length ) texture = textures[0];
+						else return;
+
+						update_textures_value( this, texture );
+					});
+
+				}
+
+				onMouseClickInputValue(increase);
+				onMouseClickInputValue(decrease);
 
 			})(
 				materialEditor, TabUI.Material.tab.querySelector("select#material-entities-droplist"), // (material) entity_droplist.
@@ -541,7 +709,7 @@
 					textures.length = 0; maps.forEach(function(name){ if ( editor[name] ) textures.push( editor[name] ); }); // debugMode && console.log( textures );
 				}
 
-				watch( map_droplist,    "onchange", function(prop, event, value){ get_textures(); });
+			//	watch( map_droplist,    "onchange", function(prop, event, value){ get_textures(); });
 				watch( vector_droplist, "onchange", function(prop, event, value){ get_textures(); });
 				watch( entity_droplist, "onchange", function(prop, event, value){ get_textures(); });
 
