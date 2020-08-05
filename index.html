@@ -441,7 +441,7 @@
 
 				watch( button, "onclick", function(prop, event){ debugMode && console.log({item:button,event:event}); }); // get_textures();
 
-				watch( input, "onchange", "change", function(prop, event, key){
+				watch( input, "onchange", function(prop, event, key){
 					debugMode && console.log({item:button,event:event,value:key});
 
 					if ( input.files.length === 0 ) return;
