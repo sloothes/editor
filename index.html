@@ -367,8 +367,6 @@
 
 		<script>
 
-		//	material-editor-textures-buttons.js
-
 		//	material-editor-viewer-toggle-grid.js
 
 			(function(viewer,grid_button){
@@ -819,10 +817,12 @@
 							text_input.value = texture[key]; value_input.value = ""; return;
 						break;
 						case "rotation":
-							text_input.value = ""; value_input.value = (RAD2DEG*value).toFixed(1); return;
+							var value = RAD2DEG*texture[key];
+							text_input.value = ""; value_input.value = value.toFixed(1); return;
 						break;
 						default:
-							text_input.value = ""; value_input.value = texture[key]; return;
+							var value = texture[key];
+							text_input.value = ""; value_input.value = value; return;
 						break;
 					}
 
