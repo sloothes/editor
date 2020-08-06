@@ -9,8 +9,7 @@
 	//	var tab = TabUI.Images.tab;
 
 		var row = document.createElement("h3");
-		row.textContent = "Collections:";
-		row.style.cssText = "height:30px;"
+		row.textContent = "Collections:"; row.style.cssText = "height:30px;"
 
 		var select = document.createElement("select");
 		select.id = "imgur-collection-droplist";
@@ -23,13 +22,11 @@
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
-			option.text = name;
-			option.value = name;
+			option.text = name; option.value = name;
 			select.appendChild( option );
 		});
 
-		row.appendChild( select );
-		tab.appendChild( row );
+		row.appendChild( select ); tab.appendChild( row );
 
 	})( TabUI.Images.tab );
 
@@ -39,8 +36,7 @@
 	//	var tab = TabUI.Images.tab;
 
 		var row = document.createElement("h3");
-		row.textContent = "Environment:";
-		row.style.cssText = "height:30px;"
+		row.textContent = "Environment:"; row.style.cssText = "height:30px;display:none;"
 
 		var select = document.createElement("select");
 		select.id = "imgur-environment-droplist";
@@ -53,15 +49,11 @@
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
-			option.text = name;
-			option.value = name;
+			option.text = name; option.value = name;
 			select.appendChild( option );
 		});
 
-		row.appendChild( select );
-		tab.appendChild( row );
-
-		return select;
+		row.appendChild( select ); tab.appendChild( row );
 
 	})( TabUI.Images.tab );
 
@@ -77,30 +69,17 @@
 		var row = document.createElement("h3");
 		row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
 
-		var img = new Image(256,256)
-		img.src = dummy_src;
-		img.id = "imgur-image-viewer";
+		var img = new Image(256,256); img.src = dummy_src; img.id = "imgur-image-viewer";
 		img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 		img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
-		watch( img, "onload", function(prop, event, value){
-		//	debugMode && console.log({item:img,event:event,src:value});
-		});
-
+		watch( img, "onload", function(prop, event, value){ ; }); // debugMode && console.log({item:img,event:event,value:img.src});
 		watch( img, "onerror", function(prop, event, value){ img.src = value; });
-	//	debugMode && console.log({item:img,event:event,src:value}); 
-		
 
-		img.addEventListener("load",function(event){
-			callWatchers( this, "onload", "load", this.src );
-		})
+		img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); })
+		img.addEventListener("error",function(err){ callWatchers( this, "onerror", "error", dummy_src ); })
 
-		img.addEventListener("error",function(err){
-			callWatchers( this, "onerror", "error", dummy_src );
-		})
-
-		row.appendChild( img );
-		tab.appendChild( row );
+		row.appendChild( img ); tab.appendChild( row );
 
 	})( TabUI.Images.tab );
 
