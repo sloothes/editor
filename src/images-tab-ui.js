@@ -1,7 +1,6 @@
 //	Imgur Images Tab.
 
-	TabUI.add( "Images", "images-tab" );
-	TabUI.append( "Images" );
+	TabUI.add( "Images", "images-tab" ); TabUI.append( "Images" );
 
 	(function( tab ){
 

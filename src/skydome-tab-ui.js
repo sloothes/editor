@@ -1,7 +1,6 @@
 //	skydome-tab-ui.js
 
-	TabUI.add( "Skydome", "skydome-tab" );
-	TabUI.append( "Skydome" );
+	TabUI.add( "Skydome", "skydome-tab" ); TabUI.append( "Skydome" );
 
 	const skydome_droplist = (function( tab ){
 

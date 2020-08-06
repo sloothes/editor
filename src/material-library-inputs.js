@@ -191,7 +191,7 @@
 		TabUI.MaterialLibrary.tab.querySelector("li#material-library-previous"),               // prev_doc,
 		TabUI.MaterialLibrary.tab.querySelector("div#material-library-load-button"),           // load_btn,
 		TabUI.MaterialLibrary.tab.querySelector("input#material-library-name-input"),          // name_input,
-		TabUI.MaterialLibrary.tab.querySelector("img#material-library-preview-viewer"),        // img_viewer,
+		TabUI.MaterialLibrary.tab.querySelector("img#material-library-image-viewer"),        // img_viewer,
 		TabUI.MaterialLibrary.tab.querySelector("select#material-library-collection-droplist") // collection_droplist,
 	);
 
