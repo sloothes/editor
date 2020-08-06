@@ -35,7 +35,7 @@
 		canvas.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 		canvas.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
-		var img = new Image(256,256); img.id = "material-library-image-viewer"; img.style.cssText = "width:256px;height:256px;margin:auto;display:none;";
+		var img = new Image(256,256); img.id = "material-library-image-viewer"; img.style.cssText = "margin:0 30px;display:none;";
 	//	img.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 		watch( img, "onload",  function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 0, 0, canvas.width, canvas.height ); });
 		watch( img, "onerror", function(prop, event, value){ img.src = value; }); // debugMode && console.log({item:img,event:event,src:value}); 
