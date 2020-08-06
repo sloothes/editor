@@ -81,7 +81,7 @@
 
 		});
 
-		background_droplist.value = "QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm"; // "space5".
+		background_droplist.value = "QMKy05Z,eys5BBV,8l6Pi8Q,Z1KEwRy,wSs16BJ,DwVYZWm"; // "space 5".
 		callWatchers( background_droplist, "onchange", "change", background_droplist.value );
 
 	})( scene, TabUI.Skydome.tab.querySelector("select#background-texture-droplist") );
