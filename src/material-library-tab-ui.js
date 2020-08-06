@@ -42,7 +42,7 @@
 		img.addEventListener("load",  function(event){ callWatchers( this, "onload", "load", this.src ); });
 		img.addEventListener("error", function(error){ callWatchers( this, "onerror", "error", dummy_src ); });
 
-		row.appendChild( canvas ); tab.appendChild( row );
+		row.appendChild( canvas ); tab.appendChild( row ); tab.appendChild( img );
 
 	})( TabUI.MaterialLibrary.tab );
 
