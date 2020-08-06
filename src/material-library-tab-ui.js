@@ -88,7 +88,7 @@
 	(function( tab ){
 
 	//	Material Library Upload Collection Images button.
-		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;display:none;";
 
 		var button = document.createElement("div"); 
 		button.id = "material-library-images-upload-button"; 
@@ -104,7 +104,7 @@
 	(function( tab ){
 
 	//	Material Library Update Collection Images button.
-		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;display:none;";
 
 		var button = document.createElement("div"); 
 		button.id = "material-library-images-update-button"; 
