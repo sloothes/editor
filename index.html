@@ -308,16 +308,19 @@
 
 			(function( tab ){
 
+				var row = document.createElement("h3"); 
+				row.textContent = "Upload"; row.style.cssText = "height:30px;text-align:center;"
+
 			//	Sweethome3D Uploader droplist.
 
 				var row = document.createElement("h3"); 
-				row.textContent = "Upload:"; row.style.cssText = "height:30px;margin-left:15px;"
+				row.textContent = "select:"; row.style.cssText = "height:30px;margin-left:15px;"
 
 				var select = document.createElement("select"); select.id = "sweethome-3d-upload-droplist";
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
-				var keys  = "trees,scopia,reallusion,katorlegaz,contributions,lucapresidente,blendswap-cc-0,blendswap-cc-by"; // debug!
+				var keys  = ",image,textures,.mtl file,.obj file"; // debug!
 
 				keys.split(",").forEach(function( name ){
 					var option = document.createElement("option");
