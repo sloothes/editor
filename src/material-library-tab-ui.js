@@ -1,7 +1,7 @@
 
 //	material-library-tab-ui.js
 
-	TabUI.add( "MaterialLibrary", "edit-material-tab" ); 
+	TabUI.add( "MaterialLibrary", "material-library-tab" ); 
 	TabUI.append( "MaterialLibrary" ); TabUI.MaterialLibrary.pill.innerHTML = "Material&nbsp;Library";
 
 	(function( tab ){
