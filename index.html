@@ -207,19 +207,19 @@
 
 		//	sweethome-model3D-tab-ui.js
 
-			TabUI.add( "Sweethome3D", "sweethome-3d-tab" ); 
-			TabUI.append( "Sweethome3D" ); TabUI.Sweethome3D.pill.innerHTML = "3D&nbsp;Models";
+			TabUI.add( "Model3D", "model-3d-tab" ); 
+			TabUI.append( "Model3D" ); TabUI.Sweethome3D.pill.innerHTML = "3D&nbsp;Models";
 
-		//	sweethome-collection-droplist-ui.js
+		//	model3D-collection-droplist-ui.js
 
 			(function( tab ){
 
-			//	Sweethome3D Collections droplist.
+			//	model3D Collections droplist.
 
 				var row = document.createElement("h3"); 
 				row.textContent = "Collection:"; row.style.cssText = "height:30px;"
 
-				var select = document.createElement("select"); select.id = "sweethome-3d-collection-droplist";
+				var select = document.createElement("select"); select.id = "model-3d-collection-droplist";
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -232,18 +232,18 @@
 
 				row.appendChild( select ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
-		//	sweethome-viewer-ui.js
+		//	model3D-viewer-ui.js
 
 			(function( tab ){
 
-			//	Sweethome3D viewer.
+			//	model3D viewer.
 
 				const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 				var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
 
-				var img = new Image(256,256); img.src = dummy_src; img.id = "sweethome-3d-image-viewer";
+				var img = new Image(256,256); img.src = dummy_src; img.id = "model-3d-image-viewer";
 				img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 				img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
@@ -255,34 +255,34 @@
 
 				row.appendChild( img ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
-		//	sweethome-name-input-ui.js
+		//	model3D-name-input-ui.js
 
 			(function( tab ){
 
-			//	Sweethome3D name input.
+			//	model3D name input.
 
 				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin:10px 15px;";
 
-				var prev = document.createElement("li"); prev.id = "sweethome-3d-doc-previous";
+				var prev = document.createElement("li"); prev.id = "model-3d-doc-previous";
 				prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 
-				var next = document.createElement("li"); next.id = "sweethome-3d-doc-next";
+				var next = document.createElement("li"); next.id = "model-3d-doc-next";
 				next.innerHTML = "&#9658;"; next.style.display = "inline";
 				next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
-				var input = document.createElement("input"); input.id = "sweethome-3d-name-input";
+				var input = document.createElement("input"); input.id = "model-3d-name-input";
 				input.setAttribute("placeholder", "name" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
 				input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 
 				row.appendChild(prev); row.appendChild(input); row.appendChild(next); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
-		//	sweethome-import-button-ui.js
+		//	model3D-import-button-ui.js
 
 			(function( tab ){
 
@@ -291,29 +291,29 @@
 				var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
 
 				var button = document.createElement("div"); 
-				button.id = "sweethome-3d-import-button"; button.textContent = "Import Model";
+				button.id = "model-3d-import-button"; button.textContent = "Import Model";
 				button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 				button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
 
 				row.appendChild( button ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		</script>
 
 		<script>
 
-		//	sweethome-uploader-droplist-ui.js
+		//	sweethome-upload-droplist-ui.js
 
 			(function( tab ){
 
 			//	Sweethome3D Uploader droplist.
 
 				var row = document.createElement("h3"); 
-				row.textContent = "Uploader:"; row.style.cssText = "height:30px;"
+				row.textContent = "Upload:"; row.style.cssText = "height:30px;"
 
-				var select = document.createElement("select"); select.id = "sweethome-3d-uploader-droplist";
+				var select = document.createElement("select"); select.id = "sweethome-3d-upload-droplist";
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -326,7 +326,7 @@
 
 				row.appendChild( select ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		//	sweethome-mtl-file-ui.js
 
@@ -346,7 +346,7 @@
 				input.id = "sweethome-3d-mtl-file-input"; input.style.cssText = "display:none;"; 
 				button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		//	sweethome-texture-files-ui.js
 
@@ -368,7 +368,7 @@
 				
 				button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		//	sweethome-obj-file-ui.js
 
@@ -388,7 +388,7 @@
 				input.id = "sweethome-3d-obj-file-input"; input.style.cssText = "display:none;"; 
 				button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		//	sweethome-preview-file-ui.js
 
@@ -408,7 +408,7 @@
 				input.id = "sweethome-3d-preview-file-input"; input.style.cssText = "display:none;"; 
 				button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		//	sweethome-upload-button-ui.js
 
@@ -426,7 +426,7 @@
 
 				row.appendChild( button ); tab.appendChild( row );
 
-			})( TabUI.Sweethome3D.tab );
+			})( TabUI.Model3D.tab );
 
 		</script>
 
