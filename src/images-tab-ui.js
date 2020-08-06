@@ -31,8 +31,6 @@
 		row.appendChild( select );
 		tab.appendChild( row );
 
-		return select;
-
 	})( TabUI.Images.tab );
 
 	(function( tab ){
