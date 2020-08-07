@@ -219,7 +219,7 @@
 				select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
 
-				var keys = ",matcap,environment,others"; // debug!
+				var keys = "matcap,environment,others"; // debug!
 
 				keys.split(",").forEach(function( name ){
 					var option = document.createElement("option"); option.text = name; option.value = name; select.appendChild( option );
@@ -416,7 +416,7 @@
 
 			const matcapViewer = {
 
-				canvas: TabUI.NewMaterial.tab.querySelector("canvas#create-matcap-viewer"),
+				canvas: TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-viewer"),
 
 			};
 
