@@ -437,6 +437,100 @@
 
 		<script>
 
+/*
+			(function(){
+
+				var material;
+				var textures = {};
+				var tab = TabUI.Material.tab;
+				var Signal = signals.Signal;
+				var textureClicked = new Signal();
+
+				textures.dispose = function(){
+					for (var uuid in this ) {
+						var texture = this[ uuid ];
+						texture.dispose && texture.dispose();
+					}
+				}
+
+				textureClicked.add( function( uuid ){
+					material.roughness = 0;
+					material.metalness = 1;
+					material.envMap = textures[ uuid ];
+					material.envMap.needsUpdate = true;
+					material.needsUpdate = true;
+				});
+
+				var matcaps = (
+				//	"MZV8PzS,L509oY2,Bw7q38p,2FA0yx1,vVDGl7g,3nmnKd4,E36SPOB,MXqauTz,YHsPLdq,soRJv4a," // (large:2K)
+					"bixnsMm,MS1GDja,pUytALG,4KwC8wH,Wiqsp9s,gXRFY3U,2tkhy7C,D64zaTR,Id8k2u4,Fx9154f,"
+					+ "dqKYFPo,l0Lf1LN,7bH7Ajw,IeAwKEi,VysdwUU,dWAhf12,9ufYr2S,iAWd8i1,mkGDAn5,gf3PsvD,"
+					+ "BeHwxKA,GYBQ8Xr,9gxylAS,0p2RT39,aHeUCko,epbmrGs,NKMFDGB,pvXMCj9,QbZ8H2v,aCAVXQb,"
+					+ "qU0AEUM,yvwt1wj,D5UeFcC,6GZMeko,rSlm3oM,Xqg7n0A,PzHZLHy,MEzwCJq,wgf7Vl0,GcLQiey,"
+					+ "3xH34nj,vhdhgMe,jRTIv3l,xELCxlQ,wtJaViy,Qb0qKtc,7kq8wQ3,F6kcile,0LRxFql,rxUXS8C,"
+					+ "qXg0NKn,LSB7hqR,EolEkFt,gOtyiMy,YTE0R32,thsIYPF,ee6stBn,gyYhQao,QOEE3jO,0V4rQPV,"
+					+ "l9Tugo0,R86xHzg,IDlk0H9,tUparH7,GISkhjO,JQzRceW,Jl6XqD0,4tyRlwP,aFIJ3Iu,BCqRnS4,"
+					+ "1OcGlAa,PqIxyYE,S7J95Cf,QPUvzXD,Stdy1eT,k0nOt5N,rWuDYYe,SGRUmyD,1Ia4Qbk,FFYLtQa,"
+					+ "szmc38X,NJSPJlS,8HsVNJA,n3wbE5E,88autaS,7jwTUiI,H1F3Yrv,kgV7aSY,PDFIrWw,Uun8Lpr,"
+					+ "Oz16d2L,02gRNwL,bV94g46,eUEtBHC,e1N7JYN,bWpofvm,uzlo3mR,YaXveL2,mw2f1lF,HkWGQb1,"
+					+ "N9xoehs,53rWmmo,sBPySdS,1YZKblR,ywKHb7r,3UcbBN7,pWPtSJS,n1a2nB8,lecZa2Q,e3bxY9I,"
+					+ "WxVSuFW," // normal matcap.
+				).split(",")
+
+				matcaps.pop(); // removes last empty item. (important!)
+
+				var container = document.createElement("div");
+				container.id = "matcap-buttons";
+				container.style.width = "300px";
+
+				while ( matcaps.length ) {
+					(function( id ){
+
+						var button = document.createElement("div");
+						button.id = id;
+						button.classList.add("btn", "btn-white-outline", "btn-terrain");
+						button.style.cssText = "background-size:contain;background-image:url(https://i.imgur.com/"+id+"s.png);";
+					//
+						var url = "https://i.imgur.com/"+id+".png";   // TODO: cache matcaps.
+						var loader = new THREE.ImageLoader();
+						loader.setCrossOrigin("anonymous");						// important!
+						loader.load( url, function( image ){
+							var mapping = THREE.SphericalReflectionMapping;		// important!
+							var texture = new THREE.Texture( image, mapping );	// important!
+							texture.sourceFile = url;							// important!
+							textures[ texture.uuid ] = texture;
+							button.setAttribute("uuid", texture.uuid);
+							container.appendChild( button );
+						});
+					//
+						button.addEventListener( "click", function(){
+							var select = document.getElementById("material-droplist");
+							var selected = scene.getObjectByProperty("uuid", select.value);
+							if ( !selected ) return;
+							var material = selected.material;
+							if ( !material ) return;
+							var uuid = button.getAttribute("uuid");
+							material.roughness = 0;
+							material.metalness = 1;
+							material.envMap = textures[ uuid ];
+							material.envMap.needsUpdate = true;
+							material.needsUpdate = true;
+							textures.dispose();
+						//	textureClicked.dispatch( uuid );
+						});
+
+					})( matcaps.shift() );
+
+				}
+
+				tab.appendChild( container );
+
+			})();
+*/
+		</script>
+
+		<script>
+
 			TabUI.Model3D.role.classList.add("active");
 			TabUI.Model3D.tab.classList.add("in","active");
 			TabUI.Model3D.pill.scrollIntoViewIfNeeded(false);
