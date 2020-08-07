@@ -296,11 +296,10 @@
 
 				keys.forEach(function( key ){
 					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
-				}); select.value = "";
-				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
+				}); watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
 				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
-				row.appendChild( select ); tab.appendChild( row );
+				row.appendChild( select ); tab.appendChild( row );  select.value = "";
 
 			})( TabUI.NewMatcap.tab );
 
@@ -335,6 +334,7 @@
 				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
 
 				var keys =  [
+					{name:"", value:""},
 					{name:"roughness", value:"roughness"},
 					{name:"metalness", value:"metalness"},
 					{name:"bumpScale", value:"bumpScale"},
@@ -346,11 +346,10 @@
 
 				keys.forEach(function( key ){
 					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
-				}); select.value = "";
-				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
+				}); watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
 				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
-				row.appendChild( select ); tab.appendChild( row );
+				row.appendChild( select ); tab.appendChild( row );  select.value = "";
 
 			})( TabUI.NewMatcap.tab );
 
@@ -660,7 +659,7 @@
 					debugMode && console.log( "envMap:", texture);
 
 					var matcap = new THREE.MeshStandardMaterial({
-						name: name_input.value,
+						name: name_input.value, 
 						envMap: texture, roughness:0, metalness:1, 
 					}); 
 
