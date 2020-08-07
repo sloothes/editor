@@ -476,7 +476,7 @@
 						new THREE.SphereGeometry(1,64,32), new THREE.MeshStandardMaterial()
 					); mesh.material.bumpScale = 0; mesh.material.normalScale.set(1,1); 
 					mesh.material.displacementBias = 0, mesh.material.displacementScale = 0;
-					mesh.material.roughness = 0; mesh.material.metalness = 1; // important!
+					mesh.material.roughness = 0.5; mesh.material.metalness = 0.5; // important!
 					mesh.material.name = "new matcap"; mesh.name = "matcap viewer mesh"; 
 					viewer.scene.add( mesh ); return mesh;
 				})();
@@ -554,7 +554,7 @@
 					clearTimeout(interval); interval = setTimeout(function(button){
 						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({ 
 							name:"untitled matcap " + (++k), bumpScale:0, 
-							displacementBias:0, displacementScale:0,roughness:0, metalness:1, })
+							displacementBias:0, displacementScale:0,roughness:0.5, metalness:0.5, })
 						);
 					}, 250, this);
 				})
