@@ -526,7 +526,7 @@
 			//	Viewer Mesh Material render.
 				watch( viewer.mesh, "material", function(prop, action, value){ 
 					debugMode && console.log({item:prop,action:action,value:value}); // debug.
-					clearTimeout( interval ); interval = setTimeout(viewer.render, 50); // important!
+					clearTimeout( interval ); interval = setTimeout( viewer.render ); // important!
 				}, 0);
 
 			//	Viewer render.
@@ -547,7 +547,7 @@
 			//	Creates new material, and replaces matcap viewer material.
 				watch( button, "onclick", function(prop, event, material){ map_droplist.value = "";
 					viewer.dispose(); viewer.mesh.material = material; input.value = material.name;
-					debugMode && console.log({item:button,event:event,matcap:material}); // debug.
+					debugMode && console.log({item:button,event:event,material:material}); // debug.
 				});
 
 				button.addEventListener( "click", function(){
@@ -565,6 +565,63 @@
 				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
 			);
 
+		//	create-matcap-name-input.js
+
+			(function(viewer,name_input){
+
+				watch( name_input, "onchange", function(prop, event, value){ viewer.mesh.material.name = value; });
+				name_input.addEventListener( "change", function(){ callWatchers( this, "onchange", "change", this.value ); });
+
+			})( matcapViewer, TabUI.NewMatcap.tab.querySelector("input#create-matcap-name-input") ); // name_input,
+
+		//	create-matcap-image-input.js
+
+			(function(viewer,icon,image_button,image_input,map_droplist){
+
+				watch( image_button, "onclick", function(prop, event, value){ image_input.value = ""; image_input.click(); });
+				watch( map_droplist, "onchange", function(prop, event, value){ image_input.value = ""; image_input.click(); });
+
+				image_input.addEventListener( "change", function(){
+
+					if ( !map_droplist.value ) return;
+					if ( !image_input.files.length ) return;
+
+					var file = image_input.files[0];
+
+					var img = new Image();
+					img.addEventListener("load", function(){
+
+						var key = map_droplist.value; if ( !key ) return;
+
+					//	draw icon.
+						icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
+
+					//	create texture.
+						var texture = new THREE.Texture(img); // or canvas.
+						texture.name = file.name.replace(".jpg","").replace(".png","").replace(/_/g," ");
+						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
+						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
+
+					//	render material. // important!
+						callWatchers( viewer.mesh, "material", "render", viewer.mesh.material );
+					});
+
+					var reader = new FileReader();
+					reader.addEventListener("load", function() {
+						img.name = file.name; img.src = reader.result;
+					});
+
+					reader.readAsDataURL(file);
+				});
+
+				image_button.addEventListener( "click", function(){ callWatchers( image_button, "onclick", "click"); });
+
+			})( matcapViewer, 
+				TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"), // icon,
+				TabUI.NewMatcap.tab.querySelector("div#create-matcap-img-button"), // image_button,
+				TabUI.NewMatcap.tab.querySelector("input#create-matcap-file-input"), // image_input,
+				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
+			);
 
 
 

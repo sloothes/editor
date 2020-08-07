@@ -39,7 +39,7 @@
 			callWatchers( this, "onchange", "change", this.value );
 		});
 
-	})( materialViewer,  TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") ); // name_input,
+	})( materialViewer, TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input") ); // name_input,
 
 
 //	create-new-material-image-input.js
