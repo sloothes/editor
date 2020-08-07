@@ -200,9 +200,9 @@
 
 	(function( tab ){
 
-	//	Create New Material Apply button. // var tab = TabUI.NewMaterial.tab;
+	//	Create New Material Matcap button. // var tab = TabUI.NewMaterial.tab;
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
-		var btn = document.createElement("div"); btn.id = "create-new-material-load-button"; btn.textContent = "Load Material";
+		var btn = document.createElement("div"); btn.id = "create-new-material-matcap-button"; btn.textContent = "Save Matcap";
 		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 		row.appendChild( btn ); tab.appendChild( row );
