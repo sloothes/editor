@@ -79,7 +79,7 @@
 
 	(function( tab ){
 
-	//	Sweethome3D Import button.
+	//	model3D Load button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
 
@@ -94,21 +94,23 @@
 	})( TabUI.Model3D.tab );
 
 
-//	sweethome-upload-droplist-ui.js
+//	model3D-obj-uploader-header-ui.js
 
 	(function( tab ){ 
-		var row = document.createElement("h3"); row.textContent = "Uploader"; 
+		var row = document.createElement("h3"); row.textContent = "OBJ Uploader"; 
 		row.style.cssText = "text-align:center;"; tab.appendChild( row ); 
 	})( TabUI.Model3D.tab );
 
+//	model3D-obj-upload-droplist-ui.js
+
 	(function( tab ){
 
-	//	Sweethome3D Uploader droplist.
+	//	model3D OBJ Upload droplist.
 
 		var row = document.createElement("h3"); 
 		row.textContent = "select:"; row.style.cssText = "height:30px;margin-left:15px;"
 
-		var select = document.createElement("select"); select.id = "sweethome-3d-upload-droplist";
+		var select = document.createElement("select"); select.id = "model-3d-obj-upload-droplist";
 		select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
@@ -123,98 +125,98 @@
 
 	})( TabUI.Model3D.tab );
 
-//	sweethome-texture-files-ui.js
+//	model3D-texture-files-ui.js
 
 	(function( tab ){
 
-	//	Sweethome3D textures button.
+	//	model3D textures button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div"); 
-		button.id = "sweethome-3d-textures-button"; button.textContent = "Select Textures";
+		button.id = "model-3d-textures-button"; button.textContent = "Select Textures";
 		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
 
 		var input = document.createElement("input"); input.type = "file"; 
-		input.id = "sweethome-3d-textures-file-input"; input.style.cssText = "display:none;"; 
+		input.id = "model-3d-textures-file-input"; input.style.cssText = "display:none;"; 
 		input.setAttribute( "multiple", "" ); // true.
 
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Model3D.tab );
 
-//	sweethome-mtl-file-ui.js
+//	model3D-mtl-file-ui.js
 
 	(function( tab ){
 
-	//	Sweethome3D mtl button.
+	//	model3D mtl button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div"); 
-		button.id = "sweethome-3d-mtl-button"; button.textContent = "Select MTL file";
+		button.id = "model-3d-mtl-button"; button.textContent = "Select MTL file";
 		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
 
 		var input = document.createElement("input"); input.type = "file"; 
-		input.id = "sweethome-3d-mtl-file-input"; input.style.cssText = "display:none;"; 
+		input.id = "model-3d-mtl-file-input"; input.style.cssText = "display:none;"; 
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Model3D.tab );
 
-//	sweethome-obj-file-ui.js
+//	model3D-obj-file-ui.js
 
 	(function( tab ){
 
-	//	Sweethome3D obj button.
+	//	model3D obj button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div"); 
-		button.id = "sweethome-3d-obj-button"; button.textContent = "Select OBJ file";
+		button.id = "model-3d-obj-button"; button.textContent = "Select OBJ file";
 		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
 
 		var input = document.createElement("input"); input.type = "file"; 
-		input.id = "sweethome-3d-obj-file-input"; input.style.cssText = "display:none;"; 
+		input.id = "model-3d-obj-file-input"; input.style.cssText = "display:none;"; 
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Model3D.tab );
 
-//	sweethome-preview-file-ui.js
+//	model3D-preview-file-ui.js
 
 	(function( tab ){
 
-	//	Sweethome3D preview button.
+	//	model3D preview button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div"); 
-		button.id = "sweethome-3d-preview-button"; button.textContent = "Select Image file";
+		button.id = "model-3d-preview-button"; button.textContent = "Select Image file";
 		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
 
 		var input = document.createElement("input"); input.type = "file"; 
-		input.id = "sweethome-3d-preview-file-input"; input.style.cssText = "display:none;"; 
+		input.id = "model-3d-preview-file-input"; input.style.cssText = "display:none;"; 
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Model3D.tab );
 
-//	sweethome-upload-button-ui.js
+//	model3D-upload-button-ui.js
 
 	(function( tab ){
 
-	//	Sweethome3D Upload button.
+	//	model3D Upload button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
 
 		var button = document.createElement("div"); 
-		button.id = "sweethome-3d-upload-button"; button.textContent = "Upload Model";
+		button.id = "model-3d-upload-button"; button.textContent = "Upload Model";
 		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
 		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
