@@ -636,10 +636,12 @@
 
 					//	create texture.
 						
-						if ( key && key === "envMap" ) 
+						if ( key && key === "envMap" ) {
 							var texture = new THREE.Texture( img, 305 ); // THREE.SphericalReflectionMapping;
-						else 
+							viewer.mesh.material.roughness = 0; viewer.mesh.material.metalness = 1;
+						} else {
 							var texture = new THREE.Texture( img ); // or canvas?
+						}
 
 						texture.name = file.name.replace(".jpg","").replace(".png","").replace(/_/g," ");
 						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
