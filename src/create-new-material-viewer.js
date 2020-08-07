@@ -9,13 +9,13 @@
 
 //	New Material Viewer scene.
 
-	(function( materialViewer ){
+	(function( viewer ){
 
 		var interval;
 
 	//	Viewer scene.
 
-		materialViewer.scene = (function(){
+		viewer.scene = (function(){
 			var scene = new THREE.Scene();
 			scene.name = "material scene";
 			return scene;
@@ -23,59 +23,59 @@
 
 	//	Viewer camera.
 
-		materialViewer.camera = (function( d ){
+		viewer.camera = (function( d ){
 		//	var aspect = canvas.clientWidth / canvas.clientWidth;
 			var camera = new THREE.OrthographicCamera( -d, +d, +d, -d, 1, 100 );
 			camera.name = "camera"; camera.position.z = 10; camera.lookAt( 0,0,0 ); 
-			materialViewer.scene.add( camera ); return camera;
+			viewer.scene.add( camera ); return camera;
 		})( 1 );
 
 	//	Viewer light.
 
-		materialViewer.light = (function(){
+		viewer.light = (function(){
 			var light = new THREE.DirectionalLight( 0xffffff, 1 ); 
 			light.name = "light"; light.position.set( 0,30,50 ); 
-			materialViewer.scene.add( light ); return light;
+			viewer.scene.add( light ); return light;
 		})();
 
 	//  Viewr Renderer.
 
-		materialViewer.renderer = new THREE.WebGLRenderer({
+		viewer.renderer = new THREE.WebGLRenderer({
 			alpha: true,  // for transparent rendering set alpha:true, important!
-			canvas: materialViewer.canvas,
+			canvas: viewer.canvas,
 			antialias: true,
 			preserveDrawingBuffer: true,
 		});
 
-		materialViewer.renderer.gammaInput = true;
-		materialViewer.renderer.gammaOutput = true;
-		materialViewer.renderer.shadowMap.enabled = true;
-		materialViewer.renderer.setClearAlpha( 0 ); // for transparent rendering set clear alpha: 0.
-		materialViewer.renderer.setClearColor( 0x000000, 0 ); // for transparent rendering set clear alpha: 0.
-		materialViewer.renderer.setPixelRatio( window.devicePixelRatio );
-		materialViewer.renderer.setSize( materialViewer.canvas.width, materialViewer.canvas.height );
-		materialViewer.renderer.domElement.style.background = "none";  // transparent rendering. important!
+		viewer.renderer.gammaInput = true;
+		viewer.renderer.gammaOutput = true;
+		viewer.renderer.shadowMap.enabled = true;
+		viewer.renderer.setClearAlpha( 0 ); // for transparent rendering set clear alpha: 0.
+		viewer.renderer.setClearColor( 0x000000, 0 ); // for transparent rendering set clear alpha: 0.
+		viewer.renderer.setPixelRatio( window.devicePixelRatio );
+		viewer.renderer.setSize( viewer.canvas.width, viewer.canvas.height );
+		viewer.renderer.domElement.style.background = "none";  // transparent rendering. important!
 
 	//	Viewer mesh.
 
-		materialViewer.mesh = (function(){
+		viewer.mesh = (function(){
 			var mesh = new THREE.Mesh(
 				new THREE.SphereGeometry(1,64,32), new THREE.MeshStandardMaterial()
 			); mesh.material.bumpScale = 0.01; mesh.material.normalScale.set(1,1); 
 			mesh.material.displacementBias = 0, mesh.material.displacementScale = 0;
 			mesh.material.name = "new material"; mesh.name = "material viewer mesh"; 
-			materialViewer.scene.add( mesh ); return mesh;
+			viewer.scene.add( mesh ); return mesh;
 		})();
 
 	//	Viewer render.
 
-		materialViewer.render = function(){ materialViewer.mesh.material.needsUpdate = true; 
-			materialViewer.renderer.render( materialViewer.scene, materialViewer.camera ); 
+		viewer.render = function(){ viewer.mesh.material.needsUpdate = true; 
+			viewer.renderer.render( viewer.scene, viewer.camera ); 
 		};
 
 	//	Viewer dispose.
 
-		materialViewer.dispose = function(){
+		viewer.dispose = function(){
 
 		//	dispose textures.
 
@@ -91,34 +91,34 @@
 				material && material.lightMap && material.lightMap.dispose && material.lightMap.dispose();
 				material && material.envMap && material.envMap.dispose && material.envMap.dispose();
 				material && material.aoMap && material.aoMap.dispose && material.aoMap.dispose();
-			})( materialViewer.mesh.material );
+			})( viewer.mesh.material );
 
 		//	remove textures.
 
-			materialViewer.mesh.material.map = null;
-			materialViewer.mesh.material.bumpMap = null;
-			materialViewer.mesh.material.alphaMap = null;
-			materialViewer.mesh.material.normalMap = null;
-			materialViewer.mesh.material.emissiveMap = null;
-			materialViewer.mesh.material.roughnessMap = null;
-			materialViewer.mesh.material.metalnessMap = null;
-			materialViewer.mesh.material.displacementMap = null;
-			materialViewer.mesh.material.lightMap = null;
-			materialViewer.mesh.material.envMap = null;
-			materialViewer.mesh.material.aoMap = null;
+			viewer.mesh.material.map = null;
+			viewer.mesh.material.bumpMap = null;
+			viewer.mesh.material.alphaMap = null;
+			viewer.mesh.material.normalMap = null;
+			viewer.mesh.material.emissiveMap = null;
+			viewer.mesh.material.roughnessMap = null;
+			viewer.mesh.material.metalnessMap = null;
+			viewer.mesh.material.displacementMap = null;
+			viewer.mesh.material.lightMap = null;
+			viewer.mesh.material.envMap = null;
+			viewer.mesh.material.aoMap = null;
 
 		//	render.
-		//	setTimeout( materialViewer.render ); // important!
+		//	setTimeout( viewer.render ); // important!
 
 		}
 
 	//	Viewer Mesh Material render.
-		watch( materialViewer.mesh, "material", function(prop, action, value){ 
-			clearTimeout( interval ); interval = setTimeout(materialViewer.render, 50);
+		watch( viewer.mesh, "material", function(prop, action, value){ 
+			clearTimeout( interval ); interval = setTimeout(viewer.render, 50);
 			debugMode && console.log({item:prop,action:action,value:value}); // debug.
 		}, 0);
 
 	//	Viewer render.
-		materialViewer.render();
+		viewer.render();
 
 	})( materialViewer );
