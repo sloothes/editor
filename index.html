@@ -348,7 +348,7 @@
 			(function( tab ){
 
 			//	Create Matcap Bump Scale input.
-				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
+				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
 				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
@@ -413,6 +413,25 @@
 				next.id = "create-matcap-offset-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
 
 				var input = document.createElement("input"); input.id = "create-matcap-offset-input";
+				input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-light-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Light (x) input.
+				var row = document.createElement("h3");row.textContent = "offset:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-light-x-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-light-x-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-light-x-input";
 				input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
