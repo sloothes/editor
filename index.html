@@ -371,10 +371,10 @@
 				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-displacement-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-displacement-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+				prev.id = "create-matcap-displace-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-displace-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
 
-				var input = document.createElement("input"); input.id = "create-matcap-displacement-input";
+				var input = document.createElement("input"); input.id = "create-matcap-displace-input";
 				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
