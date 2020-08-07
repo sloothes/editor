@@ -1,7 +1,7 @@
 //	material-db.js
 
 	const materialdB = new zango.Db( "material", [
-		"imgur",                      // metadata collection.
+		"imgur", // metadata collection.
 		"materials","textures","images", // data collections.
 		"rock","floor","wood","metal","fabric","brick","matcap","plaster", // entry collections.
 		"roofing","terrain","concrete","sandstone","environment","others"  // entry collections.
