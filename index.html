@@ -760,7 +760,61 @@
 							data = data.shift(); // important! or .pop(); or .join();
 							debugMode && console.log({data:data, type:type, name:name}); // debug!
 
+						/*
+							uploadDataURL(data, type, name).then(function(data){
 
+								debugMode && console.log( data );
+								if ( data.error ) throw data.error;
+
+							//	Save meta data.
+								db.collection("imgur")
+								.insert( data, function(err){ 
+									if (err) throw err; 
+								}).catch(function(err){ 
+									console.error(err); 
+								});
+
+								return data;
+
+							}).then(function(data){
+
+							//	Replace dataURL with link.
+								db.collection("images")
+								.update( {uuid:image.uuid}, // selector, 
+									{$set:{url:data.link}}, // modifier, 
+									function(err){ if (err) throw err; 
+								}).catch(function(err){ 
+									console.error(err); 
+								});
+
+								return data;
+
+							}).then(function(data){
+
+							//	Update material entry.
+								db.collection(entry.collection)
+								.update({uuid:entry.uuid}, {$push:{
+									links:data.link,imgIds:data.id}},
+									function(err){ if (err) throw err; 
+								}).catch(function(err){ 
+									console.error(err); 
+								});
+
+								return data.link;
+
+							}).then(function(url){
+
+							//	Cache texture image.
+								return caches.open("textures").then(function(cache){
+									return cache.add(url).then(function(){ return url; });
+								}).then(function(url){ 
+									console.log( --k+":", url, "texture completed!");
+								}).catch(function(err){ console.error(err); });
+
+							}).catch(function(err){
+								console.error(err); 
+							});
+						*/
 
 						}); // end forEach.
 
