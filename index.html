@@ -334,7 +334,15 @@
 				select.style.cssText  = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
 				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
 
-				var keys =  ["bumpScale,normalScale,metalness,roughness,offset-x,light-x,light-y"];
+				var keys =  [
+					{name:"bumpScale", value:"bumpScale"},
+					{name:"normalScale", value:"normalScale"},
+					{name:"metalness", value:"metalness"},
+					{name:"roughness", value:"roughness"},
+					{name:"offset", value:"texture.offset.x"},
+					{name:"light x", value:"light.position.x"},
+					{name:"light y", value:"light.position.y"},
+				];
 
 				keys.forEach(function( key ){
 					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
