@@ -629,10 +629,194 @@
 				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
 			);
 
+		//	create-matcap-save-button.js
+
+			(function(db,viewer,validator,button_new,save_button,name_input,map_droplist,collection_droplist){
+
+				var interval;
+
+				function onSaveButtonClick(){
+					clearTimeout( interval ); 
+
+					if ( !name_input.value ) {
+						var msg = "Please type a name for this matcap and try again.";
+						return viewer.mesh.material.name = name_input.value = prompt(msg);
+					}
+
+					interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", viewer.mesh.material ); }, 250);
+				}
+
+			//	Parses material viewer mesh material to watcher.
+				save_button.addEventListener( "click", onSaveButtonClick );
+
+				watch(save_button, "onclick", function(prop, event, material){
+					debugMode && console.log({item:save_button, event:event, material:material});
+					save_button.removeEventListener( "click", onSaveButtonClick ); // important!
+
+					var meta = {geometries:{},materials:{},textures:{},images:{}};
+
+					var mapping = THREE.SphericalReflectionMapping; // 305
+					var texture = new THREE.Texture( viewer.canvas, mapping );
+					debugMode && console.log( "envMap:", texture);
+
+					var matcap = new THREE.MeshStandardMaterial({
+						name: name_input.value,
+						envMap: texture, roughness:0, metalness:1, 
+					}); 
+
+					debugMode && console.log( "matcap:", matcap);
+
+					var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
+					var json = mesh.toJSON(meta); debugMode && console.log(meta);
+
+					var entry = {}; 
+					entry.name = name_input.value;                   // string.
+					entry.collection = collection_droplist.value;    // string.
+					entry.images = Object.keys(meta.images);         // uuid array.
+					entry.textures = Object.keys(meta.textures);     // uuid array.
+					entry.preview = viewer.canvas.toDataURL();       // dataURL.
+					entry.uuid = Object.keys(meta.materials).join(); // uuid.
+					entry.links = []; entry.imgIds = [];
+
+					debugMode && console.log("meta:", meta);     // debug!
+					debugMode && console.log("entry:", entry);   // debug!
+
+					var images = [];
+					for ( var uuid in meta.images ) {
+						images.push( meta.images[uuid] );
+					} 
+
+					return debugMode && console.log("images:", images);   // breakpoint!
+
+					(function( images ){
+
+					//	Save meta.images.
+						var collection = db.collection("images");
+						return collection.insert( images, function(err){ 
+							if (err) throw err; 
+						}).then(function(){ 
+							console.log("images saved!"); 
+						}).then(function(){ 
+							return images; 
+						}).catch(function(err){ 
+							console.error(err); 
+						});
+
+					})( images ).then(function(){
+
+					//	Save meta.textures.
+						if ( Object.keys(meta.textures).length ) {
+							var collection = db.collection("textures");
+							collection.insert( Object.values(meta.textures), 
+								function(err){ if (err) throw err; })
+							.then(function(){ console.log("textures saved!"); 
+							}).catch(function(err){ console.error(err); });
+						}
+
+					}).then(function(){
+
+					//	Save meta.materials.
+						if ( Object.keys(meta.materials).length ) {
+							var collection = db.collection("materials");
+							collection.insert( Object.values(meta.materials), 
+								function(err){ if (err) throw err; })
+							.then(function(){ console.log("material saved!"); 
+							}).catch(function(err){ console.error(err); });
+						}
+
+					}).then(function(){
+
+					//	Save material entry.
+						var collection = db.collection( entry.collection );
+						collection.insert(entry, function(err){ 
+							if (err) throw err; 
+						}).then(function(){
+
+						//	Success!
+							callWatchers(button_new, "onclick", "click", 
+								new THREE.MeshStandardMaterial({ bumpScale:0.01,
+									normalScale:new THREE.Vector2(1,1),
+									displacementBias:0, displacementScale:0, 
+								})
+							); 
+
+						//	TODO: clear icon.
+							console.log( "material saved successfully!" );
+							name_input.value = ""; map_droplist.value = "";
+
+						}).catch(function(err){ 
+							console.error(err); 
+						});
+
+					}).then(function(){
+
+						if ( images && images.length ) images.forEach(function(image){
+
+							if ( !validator.isDataURI(image.url) ) {
+								throw "image url is not DataURL:"+image.url;
+							}
+
+						//	important: data must NOT contain the prefix "data:image/jpeg;base64,"
+							var name = "IMAGE:"+image.uuid; var data = image.url.split(","); 
+							var type = data.shift().replace("data:","").replace(";base64","");
+							data = data.shift(); // important! or .pop(); or .join();
+							debugMode && console.log({data:data, type:type, name:name}); // debug!
 
 
 
+						}); // end forEach.
 
+					}).catch(function(err){
+						console.error(err); console.log("material", entry.name, "failed to save!");
+					}).then(function(){ 
+						save_button.addEventListener( "click", onSaveButtonClick ); // important!
+					});
+
+				});
+
+				function uploadDataURL(data, type, name){
+
+				//  Returns a resolved promise with record data from imgur.com.
+				//	debugMode && console.log("uploading:", file.name);
+					return new Promise(function( resolve, reject ){
+
+						var formdata = new FormData();
+						formdata.append("image", data);
+						formdata.append("type",  type);
+						formdata.append("name",  name);
+
+						var endpoint = "https://api.imgur.com/3/image";
+						var clientID = "06217f601180652";  // sloothes app Client-ID.
+
+						var xhttp = new XMLHttpRequest();
+						xhttp.open("POST", endpoint, true);
+						xhttp.setRequestHeader("Authorization", "Client-ID " + clientID);
+						xhttp.onreadystatechange = function () {
+							if (this.readyState === 4) {
+								var response = "";
+								if (this.status >= 200 && this.status < 300) {
+									response = JSON.parse(this.responseText);
+								//	debugMode && console.log(response);
+									resolve(response.data); // resolve promise.
+								} else {
+									var err = JSON.parse(this.responseText).data.error;
+									console.error( err.type, err ); reject( err );
+								}
+							}
+						};
+
+						xhttp.send(formdata);
+						xhttp = null;
+					});
+				}
+
+			})( materialdB, matcapViewer, validator, // db, viewer, validator,
+				TabUI.NewMatcap.tab.querySelector("div#create-matcap-button"),                 // button_new,
+				TabUI.NewMatcap.tab.querySelector("div#create-matcap-save-button"),            // save_button,
+				TabUI.NewMatcap.tab.querySelector("input#create-matcap-name-input"),           // name_input,
+				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist"),        // map_droplist,
+				TabUI.NewMatcap.tab.querySelector("select#create-matcap-collection-droplist")  // collection_droplist,
+			);
 
 		</script>
 

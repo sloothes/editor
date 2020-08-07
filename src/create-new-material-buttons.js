@@ -118,7 +118,7 @@
 			save_button.removeEventListener( "click", onSaveButtonClick ); // important!
 
 			var meta = {geometries:{},materials:{},textures:{},images:{}};
-			var json = viewer.mesh.toJSON(meta); debugMode && console.log(meta);
+			var json = viewer.mesh.toJSON(meta); // debugMode && console.log(meta);
 
 		//	makes power of two and convert image/png; 
 		//	dataURL to data:image/jpeg;base64 dataURL.
