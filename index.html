@@ -324,151 +324,42 @@
 
 			})( TabUI.NewMatcap.tab );
 
-		//	create-matcap-metalness-ui.js
+		//	create-matcap-key-droplist-ui.js
 
 			(function( tab ){
 
-			//	Create Matcap Roughness input.
+			//	Create Matcap Key droplist.
+				var row = document.createElement("h3"); row.textContent = "key:"; row.style.cssText = "height:30px;";
+				var select = document.createElement("select"); select.id = "create-matcap-key-droplist";
+				select.style.cssText  = "width:170px;color:#000;float:right;border:1px solid;border-radius:4px;";
+				select.style.cssText += "font-size:20px;margin-left:0px;margin-right:15px;padding:2px 4px 4px 4px;";
+
+				var keys =  ["bumpScale,normalScale,metalness,roughness,offset-x,light-x,light-y"];
+
+				keys.forEach(function( key ){
+					var option = document.createElement("option"); option.text = key.name; option.value = key.value; select.appendChild( option );
+				}); select.value = "";
+				watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
+				select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
+
+				row.appendChild( select ); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-value-input-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Value input.
 				var row = document.createElement("h3");row.textContent = "metal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
 				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-metalness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-metalness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+				prev.id = "create-matcap-value-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-value-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
 
-				var input = document.createElement("input"); input.id = "create-matcap-metalness-input";
+				var input = document.createElement("input"); input.id = "create-matcap-value-input";
 				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-bump-scale-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Bump Scale input.
-				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-bump-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-bump-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-bump-input";
-				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-roughness-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Roughness input.
-				var row = document.createElement("h3");row.textContent = "rough:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-roughness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-roughness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-roughness-input";
-				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-normal-scale-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Normal Scale input.
-				var row = document.createElement("h3");row.textContent = "normal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-normal-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-normal-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-normal-input";
-				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-offset-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Offset (x) input.
-				var row = document.createElement("h3");row.textContent = "offset:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-offset-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-offset-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-offset-input";
-				input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-light-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Light (x) input.
-				var row = document.createElement("h3");row.textContent = "light-x:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-light-x-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-light-x-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-light-x-input";
-				input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-			(function( tab ){
-
-			//	Create Matcap Light (y) input.
-				var row = document.createElement("h3");row.textContent = "light-y:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-light-y-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-light-y-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-light-y-input";
-				input.setAttribute("placeholder", "y" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-displacement-scale-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Displacement Scale input.
-				var row = document.createElement("h3");row.textContent = "displac:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-displace-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-displace-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-displace-input";
-				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
@@ -738,7 +629,6 @@
 		</script>
 
 		<script>
-
 /*
 			(function(){
 
@@ -828,6 +718,160 @@
 				tab.appendChild( container );
 
 			})();
+*/
+		</script>
+
+		<script>
+/*
+		//	create-matcap-metalness-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Roughness input.
+				var row = document.createElement("h3");row.textContent = "metal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-metalness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-metalness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-metalness-input";
+				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-bump-scale-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Bump Scale input.
+				var row = document.createElement("h3");row.textContent = "bump:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-bump-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-bump-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-bump-input";
+				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-roughness-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Roughness input.
+				var row = document.createElement("h3");row.textContent = "rough:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-roughness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-roughness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-roughness-input";
+				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-normal-scale-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Normal Scale input.
+				var row = document.createElement("h3");row.textContent = "normal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-normal-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-normal-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-normal-input";
+				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-offset-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Offset (x) input.
+				var row = document.createElement("h3");row.textContent = "offset:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-offset-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-offset-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-offset-input";
+				input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-light-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Light (x) input.
+				var row = document.createElement("h3");row.textContent = "light-x:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-light-x-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-light-x-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-light-x-input";
+				input.setAttribute("placeholder", "x" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+			(function( tab ){
+
+			//	Create Matcap Light (y) input.
+				var row = document.createElement("h3");row.textContent = "light-y:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-light-y-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-light-y-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-light-y-input";
+				input.setAttribute("placeholder", "y" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-displacement-scale-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Displacement Scale input.
+				var row = document.createElement("h3");row.textContent = "displac:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;display:none;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-displace-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-displace-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-displace-input";
+				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
 */
 		</script>
 
