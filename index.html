@@ -521,7 +521,6 @@
 					viewer.mesh.material.lightMap = null;
 					viewer.mesh.material.envMap = null;
 					viewer.mesh.material.aoMap = null;
-
 				}
 
 			//	Viewer Mesh Material render.
@@ -531,7 +530,7 @@
 				}, 0);
 
 			//	Viewer render.
-				viewer.render();
+				viewer.render(); // important!
 
 			})( matcapViewer );
 
