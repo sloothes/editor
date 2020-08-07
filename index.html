@@ -405,7 +405,7 @@
 			(function( tab ){
 
 			//	Create Matcap Roughness input.
-				var row = document.createElement("h3");row.textContent = "rough:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
+				var row = document.createElement("h3");row.textContent = "metal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
 				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
 				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
 				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
@@ -424,7 +424,7 @@
 			(function( tab ){
 
 			//	Create Matcap Remove button.
-				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;display:none;";
 				var btn = document.createElement("div"); btn.id = "create-matcap-remove-button"; btn.textContent = "Remove Texture";
 				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
