@@ -515,8 +515,8 @@
 				}
 
 			//	Viewer Mesh Material render.
-				watch( viewer.mesh, "material", function(prop, action, value){ 
-					debugMode && console.log({item:prop,action:action,value:value}); // debug.
+				watch( viewer.mesh, "material", function(prop, action, newValue, oldValue){ 
+					debugMode && console.log({item:prop,action:action,"new material":newValue,"old material":oldValue}); // debug.
 					clearTimeout( interval ); interval = setTimeout( viewer.render ); // important!
 				}, 0);
 
