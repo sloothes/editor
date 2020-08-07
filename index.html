@@ -569,20 +569,29 @@
 
 			(function(viewer,icon,image_button,image_input,map_droplist){
 
-				watch( image_button, "onclick", function(prop, event, value){ image_input.value = ""; image_input.click(); });
-				watch( map_droplist, "onchange", function(prop, event, value){ image_input.value = ""; image_input.click(); });
+				watch( image_button, "onclick", function(prop, event){ 
+				//	image_input.value = ""; image_input.click(); 
+					debugMode && console.log({item:image_button,event:event}); 
+				});
 
-				image_input.addEventListener( "change", function(){
+				watch( map_droplist, "onchange", function(prop, event, value){ 
+				//	image_input.value = ""; image_input.click(); 
+					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
+					callWatchers( image_button, "onclick", "click", image_input.click() ); 
+				});
 
-					if ( !map_droplist.value ) return;
-					if ( !image_input.files.length ) return;
+				watch(image_input, "onchange", function(prop, event, key){
+					debugMode && console.log({item:button,event:event,value:key});
+
+				//	if ( !map_droplist.value ) return;
+					if ( !key ) return; if ( !image_input.files.length ) return; 
 
 					var file = image_input.files[0];
 
 					var img = new Image();
 					img.addEventListener("load", function(){
 
-						var key = map_droplist.value; if ( !key ) return;
+					//	var key = map_droplist.value; if ( !key ) return;
 
 					//	draw icon.
 						icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
@@ -619,7 +628,14 @@
 					reader.readAsDataURL(file);
 				});
 
-				image_button.addEventListener( "click", function(){ callWatchers( image_button, "onclick", "click"); });
+				image_button.addEventListener( "click", function(){ 
+					if ( !map_droplist.value ) return image_input.value = "";
+					callWatchers( this, "onclick", "click", image_input.click() ); 
+				});
+
+				image_input.addEventListener( "change", function(){
+					callWatchers( this, "onchange", "change", map_droplist.value );
+				});
 
 			})( matcapViewer, 
 				TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"), // icon,
@@ -630,7 +646,7 @@
 
 		//	create-matcap-save-button.js
 
-			(function(db,viewer,validator,button_new,save_button,name_input,map_droplist,collection_droplist){
+			(function(db,viewer,validator,button_new,thumb_icon,save_button,name_input,map_droplist,collection_droplist){
 
 				var interval;
 
@@ -738,9 +754,8 @@
 								})
 							); 
 
-						//	TODO: clear icon.
-							console.log( "material saved successfully!" );
-							name_input.value = ""; map_droplist.value = "";
+							console.log( "matcap saved successfully!" ); name_input.value = ""; map_droplist.value = "";
+							thumb_icon.getContext("2d").clearRect(0,0,thumb_icon.width,thumb_icon.height); // clear icon.
 
 						}).catch(function(err){ 
 							console.error(err); 
@@ -864,6 +879,7 @@
 
 			})( materialdB, matcapViewer, validator, // db, viewer, validator,
 				TabUI.NewMatcap.tab.querySelector("div#create-matcap-button"),                 // button_new,
+				TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"),                // thumb_icon,
 				TabUI.NewMatcap.tab.querySelector("div#create-matcap-save-button"),            // save_button,
 				TabUI.NewMatcap.tab.querySelector("input#create-matcap-name-input"),           // name_input,
 				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist"),        // map_droplist,

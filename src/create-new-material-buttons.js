@@ -46,8 +46,14 @@
 
 	(function(viewer,icon,image_button,image_input,map_droplist){
 
-		watch( image_button, "onclick", function(prop, event, value){ image_input.value = ""; image_input.click(); });
-		watch( map_droplist, "onchange", function(prop, event, value){ image_input.value = ""; image_input.click(); });
+		watch( image_button, "onclick", function(prop, event, value){ 
+			image_input.value = ""; image_input.click(); 
+		});
+
+		watch( map_droplist, "onchange", function(prop, event, value){ 
+			image_input.value = ""; image_input.click(); 
+			icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
+		});
 
 		image_input.addEventListener( "change", function(){
 
@@ -95,7 +101,7 @@
 
 //	create-new-material-save-button.js
 
-	(function(db,viewer,validator,button_new,save_button,name_input,map_droplist,col_droplist){
+	(function(db,viewer,validator,button_new,thumb_icon,save_button,name_input,map_droplist,col_droplist){
 
 		var interval;
 
@@ -217,9 +223,8 @@
 						})
 					); 
 
-				//	TODO: clear icon.
-					console.log( "material saved successfully!" );
-					name_input.value = ""; map_droplist.value = "";
+					console.log( "material saved successfully!" ); name_input.value = ""; map_droplist.value = "";
+					thumb_icon.getContext("2d").clearRect(0,0,thumb_icon.width,thumb_icon.height); // clear icon.
 
 				}).catch(function(err){ 
 					console.error(err); 
@@ -401,7 +406,9 @@
 		}
 
 	})( materialdB, materialViewer, validator, // db, viewer, validator,
+
 		TabUI.NewMaterial.tab.querySelector("div#create-new-material-button"),             // button_new,
+		TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-icon"),            // thumb_icon,
 		TabUI.NewMaterial.tab.querySelector("div#create-new-material-save-button"),        // save_button,
 		TabUI.NewMaterial.tab.querySelector("input#create-new-material-name-input"),       // name_input,
 		TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist"),    // map_droplist,
