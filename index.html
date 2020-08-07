@@ -667,11 +667,11 @@
 					debugMode && console.log( "matcap:", matcap);
 
 					var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
-					var json = mesh.toJSON(meta); debugMode && console.log(meta);
+					var json = mesh.toJSON(meta); // debugMode && console.log(meta);
 
 					var entry = {}; 
 					entry.name = name_input.value;                   // string.
-					entry.collection = collection_droplist.value;    // string.
+					entry.collection = "matcap";                     // string.
 					entry.images = Object.keys(meta.images);         // uuid array.
 					entry.textures = Object.keys(meta.textures);     // uuid array.
 					entry.preview = viewer.canvas.toDataURL();       // dataURL.
@@ -681,8 +681,7 @@
 					debugMode && console.log("meta:", meta);     // debug!
 					debugMode && console.log("entry:", entry);   // debug!
 
-					var images = [];
-					for ( var uuid in meta.images ) {
+					var images = []; for ( var uuid in meta.images ) {
 						images.push( meta.images[uuid] );
 					} 
 
@@ -727,7 +726,7 @@
 					}).then(function(){
 
 					//	Save material entry.
-						var collection = db.collection( entry.collection );
+						var collection = db.collection( "matcap" );
 						collection.insert(entry, function(err){ 
 							if (err) throw err; 
 						}).then(function(){
