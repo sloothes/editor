@@ -570,15 +570,13 @@
 			(function(viewer,icon,image_button,image_input,map_droplist){
 
 				watch( image_button, "onclick", function(prop, event){ 
-					debugMode && console.log({item:image_button,event:event}); 
-				//	image_input.value = ""; image_input.click(); 
 					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
+					image_input.value = ""; image_input.click(); 
 				});
 
 				watch( map_droplist, "onchange", function(prop, event, value){ 
-				//	image_input.value = ""; image_input.click(); 
 					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
-					callWatchers( image_button, "onclick", "click", image_input.click() ); 
+					image_input.value = ""; image_input.click(); 
 				});
 
 				watch(image_input, "onchange", function(prop, event, key){
@@ -631,7 +629,7 @@
 
 				image_button.addEventListener( "click", function(){ 
 					if ( !map_droplist.value ) return image_input.value = "";
-					callWatchers( this, "onclick", "click", image_input.click() ); 
+					callWatchers( this, "onclick", "click" ); 
 				});
 
 				image_input.addEventListener( "change", function(){
