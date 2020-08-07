@@ -474,15 +474,17 @@
 				viewer.mesh = (function(){
 					var mesh = new THREE.Mesh(
 						new THREE.SphereGeometry(1,64,32), new THREE.MeshStandardMaterial()
-					); mesh.material.bumpScale = 0.01; mesh.material.normalScale.set(1,1); 
+					); mesh.material.bumpScale = 0; mesh.material.normalScale.set(1,1); 
 					mesh.material.displacementBias = 0, mesh.material.displacementScale = 0;
-					mesh.material.name = "new material"; mesh.name = "material viewer mesh"; 
+					mesh.material.roughness = 0; mesh.material.metalness = 1; // important!
+					mesh.material.name = "new matcap"; mesh.name = "matcap viewer mesh"; 
 					viewer.scene.add( mesh ); return mesh;
 				})();
 
 			//	Viewer render.
 
-				viewer.render = function(){ viewer.mesh.material.needsUpdate = true; 
+				viewer.render = function(){ 
+					viewer.mesh.material.needsUpdate = true; 
 					viewer.renderer.render( viewer.scene, viewer.camera ); 
 				};
 
@@ -520,15 +522,12 @@
 					viewer.mesh.material.envMap = null;
 					viewer.mesh.material.aoMap = null;
 
-				//	render.
-				//	setTimeout( viewer.render ); // important!
-
 				}
 
 			//	Viewer Mesh Material render.
 				watch( viewer.mesh, "material", function(prop, action, value){ 
-					clearTimeout( interval ); interval = setTimeout(viewer.render, 50);
 					debugMode && console.log({item:prop,action:action,value:value}); // debug.
+					clearTimeout( interval ); interval = setTimeout(viewer.render, 50); // important!
 				}, 0);
 
 			//	Viewer render.
