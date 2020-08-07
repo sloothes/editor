@@ -696,7 +696,7 @@
 						envMap: texture, roughness:0, metalness:1, 
 					}); debugMode && console.log( "matcap:", matcap);
 
-					interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", matcap.toJSON(); }, 250);
+					interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", matcap.toJSON() }, 250);
 				}
 
 			//	Parses material viewer mesh material to watcher.
@@ -724,7 +724,7 @@
 					entry.collection = "matcap";                     // string.
 					entry.preview = viewer.canvas.toDataURL();       // dataURL.
 					entry.uuid = json.uuid;                          // uuid.
-					entry.json = json;
+					entry.json = json;                               // json (material).
 
 					debugMode && console.log("entry:", entry);   // debug!
 
