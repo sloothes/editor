@@ -13,12 +13,13 @@
 		select.style.cssText += "font-size:20px;margin-left:10px;margin-right:15px;padding:2px 4px 4px 4px;";
 
 		var keys = "rock,floor,wood,metal,fabric,brick,terrain,plaster,roofing,matcap,concrete,sandstone,environment,others";
+
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option"); option.text = name; option.value = name; select.appendChild( option );
 		}); watch( select, "onchange", function(prop, event, value){ console.log({item:select,event:event,value:value}); });
 		select.addEventListener( "change", function(){ this.blur(); callWatchers( this, "onchange", "change", this.value ); });
 
-		row.appendChild( select ); tab.appendChild( row );
+		row.appendChild( select ); tab.appendChild( row ); select.value = "others";
 
 	})( TabUI.NewMaterial.tab );
 
