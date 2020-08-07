@@ -635,8 +635,12 @@
 						icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
 
 					//	create texture.
-						var texture = new THREE.Texture( img ); // or canvas?
-						if ( key && key === "envMap" ) texture.mapping = THREE.SphericalReflectionMapping; // 305.
+						
+						if ( key && key === "envMap" ) 
+							var texture = new THREE.Texture( img, 305 ); // THREE.SphericalReflectionMapping;
+						else 
+							var texture = new THREE.Texture( img ); // or canvas?
+
 						texture.name = file.name.replace(".jpg","").replace(".png","").replace(/_/g," ");
 						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
 						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
