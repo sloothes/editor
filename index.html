@@ -399,6 +399,19 @@
 
 			})( TabUI.NewMatcap.tab );
 
+		//	create-matcap-save-as-material-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Save As Material button.
+				var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
+				var btn = document.createElement("div"); btn.id = "create-matcap-save-as-material"; btn.textContent = "Save as Material";
+				btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+				btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
+				row.appendChild( btn ); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
 		</script>
 
 		<script>
@@ -660,9 +673,97 @@
 				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
 			);
 
-		//	create-matcap-save-button.js
+		//	create-matcap-save-as-matcap.js
 
 			(function(db,viewer,validator,button_new,thumb_icon,save_button,name_input,map_droplist,collection_droplist){
+
+				var interval;
+
+				function onSaveButtonClick(){
+					clearTimeout( interval ); 
+
+					if ( !name_input.value ) {
+						var msg = "Please type a name for this matcap and try again.";
+						return viewer.mesh.material.name = name_input.value = prompt(msg);
+					}
+
+					var mapping = THREE.SphericalReflectionMapping; // 305
+					var texture = new THREE.Texture( viewer.canvas, mapping );
+					debugMode && console.log( "envMap:", texture);
+
+					var matcap = new THREE.MeshStandardMaterial({
+						name: name_input.value, 
+						envMap: texture, roughness:0, metalness:1, 
+					}); debugMode && console.log( "matcap:", matcap);
+
+					interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", matcap.toJSON(); }, 250);
+				}
+
+			//	Parses material viewer mesh material to watcher.
+				save_button.addEventListener( "click", onSaveButtonClick );
+
+				watch(save_button, "onclick", function(prop, event, json){
+				//	debugMode && console.log({item:save_button, event:event, matcap:matcap});
+					save_button.removeEventListener( "click", onSaveButtonClick ); // important!
+
+				//	var meta = {geometries:{},materials:{},textures:{},images:{}};
+				//	var mapping = THREE.SphericalReflectionMapping; // 305
+				//	var texture = new THREE.Texture( viewer.canvas, mapping );
+				//	debugMode && console.log( "envMap:", texture);
+				//	var matcap = new THREE.MeshStandardMaterial({
+				//		name: name_input.value, 
+				//		envMap: texture, roughness:0, metalness:1, 
+				//	}); 
+				//	debugMode && console.log( "matcap:", matcap);
+				//	var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
+				//	var json = matcap.toJSON(); // debugMode && console.log(meta);
+
+					debugMode && console.log( "json:", json);
+
+					var entry = {}; 
+					entry.name = name_input.value;                   // string.
+					entry.collection = "matcap";                     // string.
+					entry.preview = viewer.canvas.toDataURL();       // dataURL.
+					entry.uuid = json.uuid;                          // uuid.
+					entry.json = json;
+
+					debugMode && console.log("entry:", entry);   // debug!
+
+				//	Save matcap entry.
+					var collection = db.collection( "matcap" );
+					collection.insert(entry, function(err){ 
+						if (err) throw err; 
+					}).then(function(){
+
+					//	Success!
+						callWatchers(button_new, "onclick", "click", new THREE.MeshStandardMaterial({ 
+							bumpScale:0, displacementBias:0, displacementScale:0,roughness:0.5, metalness:0.5, })
+						);
+
+						console.log( "matcap saved successfully!" ); name_input.value = ""; map_droplist.value = "";
+						thumb_icon.getContext("2d").clearRect(0,0,thumb_icon.width,thumb_icon.height); // clear icon.
+
+					}).catch(function(err){
+						console.error(err); console.log("matcap", entry.name, "failed to save!");
+					}).then(function(){ 
+						save_button.addEventListener( "click", onSaveButtonClick ); // important!
+					});
+
+				});
+
+			})( materialdB, matcapViewer, validator, // db, viewer, validator,
+				TabUI.NewMatcap.tab.querySelector("div#create-matcap-button"),                 // button_new,
+				TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"),                // thumb_icon,
+				TabUI.NewMatcap.tab.querySelector("div#create-matcap-save-button"),            // save_button,
+				TabUI.NewMatcap.tab.querySelector("input#create-matcap-name-input"),           // name_input,
+				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist"),        // map_droplist,
+				TabUI.NewMatcap.tab.querySelector("select#create-matcap-collection-droplist")  // collection_droplist,
+			);
+
+
+		//	create-matcap-save-as-material.js
+
+			(function(db,viewer,validator,button_new,thumb_icon,name_input,map_droplist,save_button,collection_droplist){
 
 				var interval;
 
@@ -702,7 +803,7 @@
 
 					var entry = {}; 
 					entry.name = name_input.value;                   // string.
-					entry.collection = "matcap";                     // string.
+					entry.collection = "environment";                // string.
 					entry.images = Object.keys(meta.images);         // uuid array.
 					entry.textures = Object.keys(meta.textures);     // uuid array.
 					entry.preview = viewer.canvas.toDataURL();       // dataURL.
@@ -757,20 +858,17 @@
 					}).then(function(){
 
 					//	Save material entry.
-						var collection = db.collection( "matcap" );
+						var collection = db.collection( "environment" );
 						collection.insert(entry, function(err){ 
 							if (err) throw err; 
 						}).then(function(){
 
 						//	Success!
-							callWatchers(button_new, "onclick", "click", 
-								new THREE.MeshStandardMaterial({ bumpScale:0.01,
-									normalScale:new THREE.Vector2(1,1),
-									displacementBias:0, displacementScale:0, 
-								})
+							callWatchers(button_new, "onclick", "click", new THREE.MeshStandardMaterial({ 
+								bumpScale:0, displacementBias:0, displacementScale:0,roughness:0.5, metalness:0.5, })
 							); 
 
-							console.log( "matcap saved successfully!" ); name_input.value = ""; map_droplist.value = "";
+							console.log( "matcap saved as material!" ); name_input.value = ""; map_droplist.value = "";
 							thumb_icon.getContext("2d").clearRect(0,0,thumb_icon.width,thumb_icon.height); // clear icon.
 
 						}).catch(function(err){ 
@@ -896,9 +994,9 @@
 			})( materialdB, matcapViewer, validator, // db, viewer, validator,
 				TabUI.NewMatcap.tab.querySelector("div#create-matcap-button"),                 // button_new,
 				TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"),                // thumb_icon,
-				TabUI.NewMatcap.tab.querySelector("div#create-matcap-save-button"),            // save_button,
 				TabUI.NewMatcap.tab.querySelector("input#create-matcap-name-input"),           // name_input,
 				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist"),        // map_droplist,
+				TabUI.NewMatcap.tab.querySelector("div#create-matcap-save-as-material"),       // save_button,
 				TabUI.NewMatcap.tab.querySelector("select#create-matcap-collection-droplist")  // collection_droplist,
 			);
 
