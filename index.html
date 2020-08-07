@@ -637,14 +637,13 @@
 					//	create texture.
 						var texture;
 						switch (key){
-
 							case "envMap":
 								texture = new THREE.Texture( img, 305 ); // THREE.SphericalReflectionMapping;
 								viewer.mesh.material.roughness = 0; viewer.mesh.material.metalness = 1; // important?
 							break;
 							case "emissive":
-								texture = new THREE.Texture( img );
-								viewer.mesh.material.color.setHex(0x000000); viewer.mesh.material.emissive.setHex(0xffffff); 
+								texture = new THREE.Texture( img ); viewer.mesh.material.emissive.setHex(0xffffff); 
+							//	viewer.mesh.material.color.setHex(0x000000); 
 							break;
 							default:
 								texture = new THREE.Texture( img ); // or canvas?
