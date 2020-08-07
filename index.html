@@ -570,8 +570,9 @@
 			(function(viewer,icon,image_button,image_input,map_droplist){
 
 				watch( image_button, "onclick", function(prop, event){ 
-				//	image_input.value = ""; image_input.click(); 
 					debugMode && console.log({item:image_button,event:event}); 
+				//	image_input.value = ""; image_input.click(); 
+					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
 				});
 
 				watch( map_droplist, "onchange", function(prop, event, value){ 
