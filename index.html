@@ -565,17 +565,34 @@
 
 			})( matcapViewer, TabUI.NewMatcap.tab.querySelector("input#create-matcap-name-input") ); // name_input,
 
+		//	create-matcap-icon-draw.js
+
+			(function(viewer,icon,map_droplist){
+
+				watch( map_droplist, "onchange", function(prop, event, value){
+				//	clear icon.
+					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); if ( !value ) return; 
+					if ( !(viewer.mesh.material[value] && viewer.mesh.material[value].image) ) return;
+				//	draw icon.
+					icon.getContext( "2d" ).drawImage( viewer.mesh.material[value].image, 0, 0, icon.width, icon.height );
+				});
+
+			})( matcapViewer, 
+				TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"), // icon,
+				TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
+			);
+
 		//	create-matcap-image-input.js
 
 			(function(viewer,icon,image_button,image_input,map_droplist){
 
 				watch( image_button, "onclick", function(prop, event){ 
-					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
+				//	icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
 					image_input.value = ""; image_input.click(); 
 				});
 
 				watch( map_droplist, "onchange", function(prop, event, value){ 
-					icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
+				//	icon.getContext("2d").clearRect(0,0,icon.width,icon.height); // clear icon.
 					image_input.value = ""; image_input.click(); 
 				});
 
