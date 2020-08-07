@@ -638,7 +638,7 @@
 						
 						if ( key && key === "envMap" ) {
 							var texture = new THREE.Texture( img, 305 ); // THREE.SphericalReflectionMapping;
-							viewer.mesh.material.roughness = 0; viewer.mesh.material.metalness = 1;
+							viewer.mesh.material.roughness = 0; viewer.mesh.material.metalness = 1; // important?
 						} else {
 							var texture = new THREE.Texture( img ); // or canvas?
 						}
