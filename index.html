@@ -324,6 +324,25 @@
 
 			})( TabUI.NewMatcap.tab );
 
+		//	create-matcap-metalness-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Roughness input.
+				var row = document.createElement("h3");row.textContent = "metal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-metalness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-metalness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-metalness-input";
+				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
 		//	create-matcap-bump-scale-ui.js
 
 			(function( tab ){
@@ -338,6 +357,25 @@
 
 				var input = document.createElement("input"); input.id = "create-matcap-bump-input";
 				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
+				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
+				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+			})( TabUI.NewMatcap.tab );
+
+		//	create-matcap-roughness-ui.js
+
+			(function( tab ){
+
+			//	Create Matcap Roughness input.
+				var row = document.createElement("h3");row.textContent = "rough:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
+				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
+				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
+				prev.id = "create-matcap-roughness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+				next.id = "create-matcap-roughness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
+
+				var input = document.createElement("input"); input.id = "create-matcap-roughness-input";
+				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
@@ -376,44 +414,6 @@
 
 				var input = document.createElement("input"); input.id = "create-matcap-displace-input";
 				input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-roughness-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Roughness input.
-				var row = document.createElement("h3");row.textContent = "rough:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-roughness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-roughness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-roughness-input";
-				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
-				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
-				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
-
-			})( TabUI.NewMatcap.tab );
-
-		//	create-matcap-metalness-ui.js
-
-			(function( tab ){
-
-			//	Create Matcap Roughness input.
-				var row = document.createElement("h3");row.textContent = "metal:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
-				var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
-				var prev = document.createElement("li"); prev.innerHTML = "&#9668;"; prev.style.display = "inline";
-				var next = document.createElement("li"); next.innerHTML = "&#9658;"; next.style.display = "inline";
-				prev.id = "create-matcap-metalness-decrease"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
-				next.id = "create-matcap-metalness-increase"; next.classList.add("btn","btn-primary","get-next-btn","pull-right"); 
-
-				var input = document.createElement("input"); input.id = "create-matcap-metalness-input";
-				input.setAttribute("placeholder", "value" ); input.classList.add("form-control","text-center");
 				input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;text-align:center;font-size:large;font-weigth:bold;background:none;";
 				vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
@@ -635,7 +635,8 @@
 						icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
 
 					//	create texture.
-						var texture = new THREE.Texture(img); // or canvas.
+						var texture = new THREE.Texture( img ); // or canvas?
+						if ( key && key === "envMap" ) texture.mapping = THREE.SphericalReflectionMapping; // 305.
 						texture.name = file.name.replace(".jpg","").replace(".png","").replace(/_/g," ");
 						texture.sourceFile = file.name; viewer.mesh.material[key] = texture; 
 						viewer.mesh.material[key].needsUpdate = viewer.mesh.material.needsUpdate = true;
