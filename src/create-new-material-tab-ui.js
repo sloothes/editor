@@ -59,19 +59,6 @@
 
 	})( TabUI.NewMaterial.tab );
 
-//	create-new-material-button-ui.js
-
-	(function( tab ){
-
-	//	Create New Material button.
-		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;";
-		var btn = document.createElement("div"); btn.id = "create-new-material-button"; btn.textContent = "New Material";
-		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-		btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
-		row.appendChild( btn ); tab.appendChild( row );
-
-	})( TabUI.NewMaterial.tab );
-
 //	create-new-material-name-input-ui.js
 
 	(function( tab ){
@@ -86,30 +73,18 @@
 
 	})( TabUI.NewMaterial.tab );
 
-//	create-new-material-image-button-ui.js
+//	create-new-material-button-ui.js
 
 	(function( tab ){
 
-	//	Create New Material Image button.
-		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;margin-right:15px;";
-
-		var icon = document.createElement("canvas"); icon.id = "create-new-material-icon";
-		icon.width = icon.height = 36; icon.style.cssText = "border:thin solid #888888;border-radius:4px;float:left;";
-
-		var btn = document.createElement("div"); btn.id = "create-new-material-img-button"; 
+	//	Create New Material button.
+		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;";
+		var btn = document.createElement("div"); btn.id = "create-new-material-button"; btn.textContent = "New Material";
 		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-		btn.textContent = "Import Image"; btn.style.cssText = "width:220px;float:right;height:40px;font-size:large;";
-
-		var input = document.createElement("input"); input.type = "file"; 
-		input.id = "create-new-material-file-input"; input.style.cssText = "display:none;"; 
-		btn.appendChild( input ); row.appendChild( icon ); row.appendChild( btn ); tab.appendChild( row );
+		btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
+		row.appendChild( btn ); tab.appendChild( row );
 
 	})( TabUI.NewMaterial.tab );
-
-	//	var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;";
-	//	watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
-	//	img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
-	//	img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
 
 //	create-new-material-map-droplist-ui.js
 
@@ -145,6 +120,31 @@
 		row.appendChild( select ); tab.appendChild( row );
 
 	})( TabUI.NewMaterial.tab );
+
+//	create-new-material-image-button-ui.js
+
+	(function( tab ){
+
+	//	Create New Material Image button.
+		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;margin-right:15px;";
+
+		var icon = document.createElement("canvas"); icon.id = "create-new-material-icon";
+		icon.width = icon.height = 36; icon.style.cssText = "border:thin solid #888888;border-radius:4px;float:left;";
+
+		var btn = document.createElement("div"); btn.id = "create-new-material-img-button"; 
+		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		btn.textContent = "Import Image"; btn.style.cssText = "width:220px;float:right;height:40px;font-size:large;";
+
+		var input = document.createElement("input"); input.type = "file"; 
+		input.id = "create-new-material-file-input"; input.style.cssText = "display:none;"; 
+		btn.appendChild( input ); row.appendChild( icon ); row.appendChild( btn ); tab.appendChild( row );
+
+	})( TabUI.NewMaterial.tab );
+
+	//	var img = new Image(40,40); img.style.cssText = "border-radius:4px;float:left;";
+	//	watch( img, "onload", function(prop, event, value){ console.log({item:img,event:event,src:value}); });
+	//	img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); });
+	//	img.addEventListener("error",function(){ this.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; });
 
 //	create-new-material-bump-scale-ui.js
 
