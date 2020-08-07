@@ -36,11 +36,11 @@
 		canvas.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		var img = new Image(256,256); img.id = "material-library-image-viewer"; img.src = dummy_src; img.style.cssText = "margin:0 30px;display:none;";
-	//	img.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 		watch( img, "onload",  function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 0, 0, canvas.width, canvas.height ); });
 		watch( img, "onerror", function(prop, event, value){ canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height ); });
 		img.addEventListener("load",  function(event){ callWatchers( this, "onload", "load", this.src ); });
 		img.addEventListener("error", function(error){ callWatchers( this, "onerror", "error", dummy_src ); });
+	//	img.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		row.appendChild( img ); row.appendChild( canvas ); tab.appendChild( row ); 
 
