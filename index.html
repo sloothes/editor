@@ -536,6 +536,35 @@
 
 			})( matcapViewer );
 
+		</script>
+
+		<script>
+
+		//	create-matcap-buttons.js
+
+			(function(viewer,button,input,map_droplist){
+
+				var interval, k=0;
+
+			//	Creates new material, and replaces matcap viewer material.
+				watch( button, "onclick", function(prop, event, material){ map_droplist.value = "";
+					viewer.dispose(); viewer.mesh.material = material; input.value = material.name;
+					debugMode && console.log({item:button,event:event,matcap:material}); // debug.
+				});
+
+				button.addEventListener( "click", function(){
+					clearTimeout(interval); interval = setTimeout(function(button){
+						callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({ 
+							name:"untitled matcap " + (++k), bumpScale:0, roughness:0, metalness:1 })
+						);
+					}, 250, this);
+				})
+
+			})( matcapViewer, 
+				TabUI.NewMatcap.tab.querySelector("div#create-new-material-button"), // button,
+				TabUI.NewMatcap.tab.querySelector("input#create-new-material-name-input"), // input,
+				TabUI.NewMatcap.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
+			);
 
 
 
