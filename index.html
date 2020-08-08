@@ -373,25 +373,11 @@
 				next_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
 
-					if ( !items.length ) { 
-						name_input.value = ""; 
-						img_viewer.src = ":0"; return;
-					}
+					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":0"; return; }
 
-					var max = items.length - 1;
-					var i = index = THREE.Math.clamp(++index, 0, max);
+					var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
 
-
-					if ( items[i].name !== undefined )
-						name_input.value = items[i].name
-						.replace(".jpg","").replace(".png","")
-						.replace(".jpeg","");
-					else 
-						name_input.value = items[i]._id; 
-
-					interval = setTimeout(function(){
-						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
-					},250);
+					name_input.value = items[i]; img_viewer.src = "/"+"models"+"/"+collection_droplist.value+"/"+items[i]+".png";
 
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
@@ -399,24 +385,11 @@
 				prev_doc.addEventListener( "click", function(){
 					clearTimeout( interval ); // important!
 
-					if ( !items.length ) { 
-						name_input.value = ""; 
-						img_viewer.src = ":0"; return; 
-					}
+					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":0"; return; }
 
-					var max = items.length - 1;
-					var i = index = THREE.Math.clamp(--index, 0, max);
+					var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
 
-					if ( items[i].name !== undefined )
-						name_input.value = items[i].name
-						.replace(".jpg","").replace(".png","")
-						.replace(".jpeg","");
-					else 
-						name_input.value = items[i]._id; 
-
-					interval = setTimeout(function(){
-						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
-					},250);
+					name_input.value = items[i]; img_viewer.src = "/"+"models"+"/"+collection_droplist.value+"/"+items[i]+".png";
 
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
@@ -427,26 +400,13 @@
 
 				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 			})( 
 				TabUI.Model3D.tab.querySelector("li#model-3d-doc-next"), // next_doc,
 				TabUI.Model3D.tab.querySelector("li#model-3d-doc-previous"), // prev_doc,
 				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"), // name_input,
 				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), // img_viewer,
 				TabUI.Model3D.tab.querySelector("div#model-3d-load-button"),  // load_button,
-				TabUI.Model3D.tab.querySelector("select#model-3d-collection-droplist"), // collection_droplist,
+				TabUI.Model3D.tab.querySelector("select#model-3d-collection-droplist") // collection_droplist,
 			);
 
 
