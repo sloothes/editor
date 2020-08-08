@@ -386,8 +386,8 @@
 							material_entities.add( materials.materials[ name ] );
 						}
 
-						var objLoader = new THREE.OBJLoader(); objLoader.setPath( baseUrl ); 
-						objLoader.setCrossOrigin("anonymous"); objLoader.setMaterials( materials );
+						var objLoader = new THREE.OBJLoader();
+						objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
 						objLoader.load( objfilename, function ( group ) {
 
 							group.name = name;
