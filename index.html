@@ -388,12 +388,9 @@
 						objLoader.load( objfilename, 
 
 							function ( model ) {
-
 								model.position.set(0,0,0); 
 								debugMode && console.log( model ); 
-
 								scene.add( model ); entities.add( model );
-
 							//	model.traverse(function(object){ entities.add(object); })
 
 							}, 
@@ -405,10 +402,8 @@
 									var x = Math.ceil( (loaded / total) * 100 ); 
 									debugMode && console.log( x+"%:", xhr.loaded );
 								}
-							}, 
-
+							}
 						);
-
 
 					});
 
