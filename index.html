@@ -402,7 +402,7 @@
 
 				watch( load_button, "onclick", function(prop, event, name){
 
-					var filepath = "/"+"models"+"/"+collection_droplist.value+"/"+name;
+					var filepath = "/"+"models"+"/"+collection_droplist.value+"/"+name+"/";
 					var mtlfilename = name + ".mtl"; var objfilename = name + ".obj";
 
 					var mtlLoader = new THREE.MTLLoader(); mtlLoader.setPath( filepath ); 
