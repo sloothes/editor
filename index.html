@@ -372,40 +372,43 @@
 
 				watch( load_button, "onclick", function(prop, event, name){
 
-					var filepath = "/"+"models"+"/"+collection_droplist.value+"/"+name+"/";
+					var baseUrl = "/"+"models"+"/"+collection_droplist.value+"/"+name+"/";
 					var mtlfilename = name + ".mtl"; var objfilename = name + ".obj";
 
-					var mtlLoader = new THREE.MTLLoader(); mtlLoader.setPath( filepath ); 
+					var mtlLoader = new THREE.MTLLoader(); 
+					mtlLoader.setCrossOrigin("anonymous"); mtlLoader.setPath( baseUrl ); 
 					mtlLoader.load( mtlfilename, function onLoad( materials ) {
 
 						materials.preload(); debugMode && console.log( materials ); 
 
-						var objLoader = new THREE.OBJLoader();
-						objLoader.setPath( filepath );
-						objLoader.setMaterials( materials );
+					//	add material entities.
+						for ( var name in materials.materials ) {
+							material_entities.add( materials.materials[ name ] );
+						}
+
+						var objLoader = new THREE.OBJLoader(); objLoader.setPath( baseUrl ); 
+						objLoader.setCrossOrigin("anonymous"); objLoader.setMaterials( materials );
 						objLoader.load( objfilename, function ( group ) {
 
-								group.name = name;
-								group.position.set(0,0,0); 
-								debugMode && console.log( group ); 
-								scene.add( group ); entities.add( group );
-							//	group.traverse(function(mesh){ entities.add(object); })
+							group.name = name;
+							group.position.set(0,0,0); 
+							debugMode && console.log( group ); 
+							scene.add( group ); entities.add( group );
+						//	group.traverse(function(mesh){ entities.add(object); })
 
-							}, 
+						}, function onProgress( xhr ) {
 
-							function onProgress( xhr ) {
-								if ( xhr.lengthComputable ) {
-									var loaded = xhr.loaded; 
-									var total = xhr.total;
-									var x = Math.ceil( (loaded / total) * 100 ); 
-								//	debugMode && console.log( x+"%:", xhr.loaded );
-								}
+							if ( xhr.lengthComputable ) {
+								var loaded = xhr.loaded; var total = xhr.total;
+								var x = Math.ceil( ( loaded / total ) * 100 ); 
+							//	debugMode && console.log( x+"%:", xhr.loaded );
 							}
-						);
 
-					});
+						}); // end obj loader.
 
-				});
+					}); // end mtl loader.
+
+				}); // end watch.
 
 				load_button.addEventListener("click", function(){
 					clearTimeout( interval );
