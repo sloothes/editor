@@ -98,7 +98,20 @@
 
 	(function( tab ){ 
 		var row = document.createElement("h3"); row.textContent = "OBJ Uploader"; 
-		row.style.cssText = "text-align:center;"; tab.appendChild( row ); 
+		row.style.cssText = "text-align:center;display:none;"; tab.appendChild( row ); 
+	})( TabUI.Model3D.tab );
+
+//	model3D-new-upload-button-ui.js
+
+	(function( tab ){
+
+	//	model3D New Upload button.
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); button.id = "model-3d-new-upload-button"; 
+		button.textContent = "New Upload"; button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-left:15px;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
+
 	})( TabUI.Model3D.tab );
 
 //	model3D-obj-upload-droplist-ui.js
