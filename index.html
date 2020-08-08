@@ -293,9 +293,7 @@
 
 				watch(collection_droplist, "onchange",function(prop, event, value){
 
-				//	Reset.
-
-					index = 0; items = names[value].split(",");
+					index = 0; items = names[value].split(","); // reset.
 
 				//	Get names.
 
@@ -383,15 +381,15 @@
 						materials.preload(); debugMode && console.log( materials ); 
 
 						var objLoader = new THREE.OBJLoader();
-						objLoader.setMaterials( materials );
 						objLoader.setPath( filepath );
-						objLoader.load( objfilename, 
+						objLoader.setMaterials( materials );
+						objLoader.load( objfilename, function ( group ) {
 
-							function ( model ) {
-								model.position.set(0,0,0); 
-								debugMode && console.log( model ); 
-								scene.add( model ); entities.add( model );
-							//	model.traverse(function(object){ entities.add(object); })
+								group.name = name;
+								group.position.set(0,0,0); 
+								debugMode && console.log( group ); 
+								scene.add( group ); entities.add( group );
+							//	group.traverse(function(mesh){ entities.add(object); })
 
 							}, 
 
@@ -400,7 +398,7 @@
 									var loaded = xhr.loaded; 
 									var total = xhr.total;
 									var x = Math.ceil( (loaded / total) * 100 ); 
-									debugMode && console.log( x+"%:", xhr.loaded );
+								//	debugMode && console.log( x+"%:", xhr.loaded );
 								}
 							}
 						);
