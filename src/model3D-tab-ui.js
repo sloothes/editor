@@ -41,7 +41,7 @@
 
 		var img = new Image(256,256); img.id = "model-3d-image-viewer"; img.src = dummy_src; img.style.cssText = "margin:0 30px;display:none;"; 
 	//	img.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
-		watch( img, "onload", function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 50, 50, canvas.width-50, canvas.height-50 ); }); 
+		watch( img, "onload", function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 0, 0, canvas.width, canvas.height ); }); 
 		watch( img, "onerror", function(prop, event, value){ img.src = value; }); // debugMode && console.log({item:img,event:event,src:value}); 
 		img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); })
 		img.addEventListener("error",function(err){ callWatchers( this, "onerror", "error", dummy_src ); })
