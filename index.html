@@ -277,6 +277,8 @@
 
 		<script>
 
+		//	sweethome objects loader (demo)
+
 			(function(next_doc,prev_doc,name_input,img_viewer,load_button,collection_droplist){
 
 				var interval, index = 0, limit = 100, items = [];
@@ -325,22 +327,6 @@
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function increase(){
-
-						if ( !items.length ) { 
-							name_input.value = ""; 
-							img_viewer.src = ":0"; return;
-						}
-
-						var max = items.length - 1;
-						var i = index = THREE.Math.clamp(++index, 0, max);
-
-						if ( items[i].name !== undefined )
-							name_input.value = items[i].name
-							.replace(".jpg","").replace(".png","")
-							.replace(".jpeg","");
-						else 
-							name_input.value = items[i]._id; 
-
 						interval = setTimeout(increase, 100);
 					}, 500);
 				});
@@ -348,22 +334,6 @@
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function decrease(){
-
-						if ( !items.length ) { 
-							name_input.value = ""; 
-							img_viewer.src = ":0"; return;
-						}
-
-						var max = items.length - 1;
-						var i = index = THREE.Math.clamp(--index, 0, max);
-
-						if ( items[i].name !== undefined )
-							name_input.value = items[i].name
-							.replace(".jpg","").replace(".png","")
-							.replace(".jpeg","");
-						else 
-							name_input.value = items[i]._id; 
-
 						interval = setTimeout(decrease, 100);
 					}, 500);
 				});
@@ -374,10 +344,11 @@
 					clearTimeout( interval ); // important!
 
 					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":0"; return; }
-
 					var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
 
-					name_input.value = items[i]; img_viewer.src = "/"+"models"+"/"+collection_droplist.value+"/"+items[i]+".png";
+					var folder = collection_droplist.value;
+					var src = "/"+"models"+"/"+folder+"/"+items[i]+".png";
+					name_input.value = items[i]; img_viewer.src = src; 
 
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
@@ -386,10 +357,11 @@
 					clearTimeout( interval ); // important!
 
 					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":0"; return; }
-
 					var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
 
-					name_input.value = items[i]; img_viewer.src = "/"+"models"+"/"+collection_droplist.value+"/"+items[i]+".png";
+					var folder = collection_droplist.value;
+					var src = "/"+"models"+"/"+folder+"/"+items[i]+".png";
+					name_input.value = items[i]; img_viewer.src = src; 
 
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
@@ -417,8 +389,12 @@
 
 							function ( model ) {
 
+								model.position.set(0,0,0); 
 								debugMode && console.log( model ); 
-								model.position.set(0,0,0); scene.add( model );
+
+								scene.add( model ); entities.add( model );
+
+							//	model.traverse(function(object){ entities.add(object); })
 
 							}, 
 
