@@ -370,10 +370,10 @@
 
 			//	Load button.
 
-				watch( load_button, "onclick", function(prop, event, name){
+				watch( load_button, "onclick", function(prop, event, value){
 
-					var baseUrl = "/"+"models"+"/"+collection_droplist.value+"/"+name+"/";
-					var mtlfilename = name + ".mtl"; var objfilename = name + ".obj";
+					var baseUrl = "/"+"models"+"/"+collection_droplist.value+"/"+value+"/";
+					var mtlfilename = value + ".mtl"; var objfilename = value + ".obj";
 
 					var mtlLoader = new THREE.MTLLoader(); 
 					mtlLoader.setCrossOrigin("anonymous"); mtlLoader.setPath( baseUrl ); 
@@ -390,7 +390,7 @@
 						objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
 						objLoader.load( objfilename, function ( group ) {
 
-							group.name = name;
+							group.name = value;
 							group.position.set(0,0,0); 
 							debugMode && console.log( group ); 
 							scene.add( group ); entities.add( group );
