@@ -230,28 +230,39 @@
 
 		//	model3D-obj-upload-droplist.js
 
-			(function(viewer_img,mtl_fileinput,obj_fileinput,image_fileinput,textures_fileinput,uploader_droplist){
+			(function(viewer_img,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
 
-				watch( file_droplist, "onchange", function(prop, event, value){ 
-					image_input.value = ""; image_input.click(); 
+				watch( uploader_droplist, "onchange", function(prop, event, value){ 
+
+					switch ( value ) {
+						case "":
+						//	reset!
+						//	img_fileinput.value = "";
+						//	mtl_fileinput.value = "";
+						//	obj_fileinput.value = "";
+						//	textures_fileinput.value = "";
+						break;
+						case "img":
+							img_fileinput.value = "";
+							img_fileinput.click();
+						break;
+						case "mtl":
+							mtl_fileinput.value = "";
+							mtl_fileinput.click();
+						break;
+						case "obj":
+							obj_fileinput.value = "";
+							obj_fileinput.click();
+						break;
+						case "textures":
+							textures_fileinput.value = "";
+							textures_fileinput.click();
+						break;
+					}
+
 				});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				uploader_droplist.addEventListener( "change", function(){ this.blur(); callWatchers(this, "onchange", "change", this.value )})
 
 			})( 
 				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"),           // viewer_img,

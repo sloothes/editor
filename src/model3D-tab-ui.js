@@ -114,11 +114,18 @@
 		select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys  = ",image,textures,.mtl file,.obj file"; // debug!
+		var keys  = [
+			{ name:"", value:"" },
+			{ name:"image", value:"img" },
+			{ name:".mtl file", value:"mtl" },
+			{ name:".obj file", value:"obj" },
+			{ name:"textures", value:"textures" }
+		];
 
-		keys.split(",").forEach(function( name ){
+		keys.forEach(function( item ){
 			var option = document.createElement("option");
-			option.text = name; option.value = name; select.appendChild( option );
+			option.text = item.name; option.value = item.value; 
+			select.appendChild( option );
 		});
 
 		row.appendChild( select ); tab.appendChild( row );
