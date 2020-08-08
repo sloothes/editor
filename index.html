@@ -208,6 +208,33 @@
 		<script src="/editor/src/create-matcap-viewer.js"></script>
 		<script src="/editor/src/create-matcap-buttons.js"></script>
 
+		<script>
+/*
+		//	modeldB.js
+
+			const modeldB = new zango.Db( "model", [
+				"imgur","objects","geometries","materials","textures","images", // data collections.
+				"models"  // entry collections.
+			]);
+
+			(function(db){
+				db.open(function(err, database){ if (err) console.error(err);
+				}).then( function(){ debugMode && console.log( 
+					"Database", db.name, "(v"+db.version+")", "ready for use.");
+				}).catch(function(err){ console.error(err); });
+			})( modeldB );
+*/
+		</script>
+
+		<script>
+
+		//	model3D-obj-upload-droplist.js
+
+			(function(viewer_img,mtl_fileinput,obj_fileinput,image_fileinput,textures_fileinput,uploader_droplist){
+
+				watch( file_droplist, "onchange", function(prop, event, value){ 
+					image_input.value = ""; image_input.click(); 
+				});
 
 
 
@@ -218,6 +245,25 @@
 
 
 
+
+
+
+
+
+
+
+
+			})( 
+				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"),           // viewer_img,
+				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
+				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
+			);
+
+
+		</script>
 
 		<script>
 
