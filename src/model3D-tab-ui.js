@@ -41,7 +41,7 @@
 
 		var img = new Image(256,256); img.id = "model-3d-image-viewer"; img.src = dummy_src; img.style.cssText = "margin:0 30px;display:none;"; 
 	//	img.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
-		watch( img, "onload", function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 0, 0, canvas.width, canvas.height ); }); 
+		watch( img, "onload", function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 50, 50, canvas.width-50, canvas.height-50 ); }); 
 		watch( img, "onerror", function(prop, event, value){ img.src = value; }); // debugMode && console.log({item:img,event:event,src:value}); 
 		img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); })
 		img.addEventListener("error",function(err){ callWatchers( this, "onerror", "error", dummy_src ); })
@@ -82,12 +82,9 @@
 	//	model3D Load button.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
-
-		var button = document.createElement("div"); 
-		button.id = "model-3d-load-button"; button.textContent = "Load Model";
-		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
-		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+		var button = document.createElement("div"); button.id = "model-3d-load-button"; 
+		button.textContent = "Load Model"; button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-left:15px;margin-right:15px;";
 
 		row.appendChild( button ); tab.appendChild( row );
 

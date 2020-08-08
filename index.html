@@ -227,10 +227,10 @@
 		</script>
 
 		<script>
-
+/*
 		//	model3D-obj-upload-droplist.js
 
-			(function(viewer_img,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
+			(function(img_viewer,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
 
 				watch( uploader_droplist, "onchange", function(prop, event, value){ 
 
@@ -265,13 +265,194 @@
 				uploader_droplist.addEventListener( "change", function(){ this.blur(); callWatchers(this, "onchange", "change", this.value )})
 
 			})( 
-				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"),           // viewer_img,
+				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"),           // img_viewer,
 				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
 				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
 				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
 				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
 				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
 			);
+*/
+		</script>
+
+		<script>
+
+			(function(next_doc,prev_doc,name_input,img_viewer,load_button,collection_droplist){
+
+				var interval, index = 0, limit = 100, items = [];
+
+				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				var names = [
+					{trees:"blackTupelo,fanPalm,lombardyPoplar,palm,quakingAspen,sassafras,weepingWillow"},
+				];
+
+			//	Collection droplist.
+
+				watch(collection_droplist, "onchange",function(prop, event, value){
+
+				//	Reset.
+
+					index = 0; items = names[value].split(",");
+
+				//	Get names.
+
+					if ( items.length > index ) {
+
+						name_input.value = items[index]; img_viewer.src = "/"+"models"+"/"+value+"/"+items[index]+".png";
+
+					} else {
+
+						name_input.value = ""; img_viewer.src = ":0";
+					}
+
+				});
+
+				watch( next_doc, "onclick", function( prop, event, value ){
+				//	debugMode && console.log({item:next_doc,event:event,index:value});
+				});
+
+				watch( prev_doc, "onclick", function( prop, event, value ){
+				//	debugMode && console.log({item:prev_doc,event:event,index:value});
+				});
+
+				watch( name_input, "onchange", function( prop, event, value ){ 
+					debugMode && console.log({item:name_input,event:event,index:value});
+				});
+/*
+			//	on mouse down.
+
+				next_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function increase(){
+
+						if ( !items.length ) { 
+							name_input.value = ""; 
+							img_viewer.src = ":0"; return;
+						}
+
+						var max = items.length - 1;
+						var i = index = THREE.Math.clamp(++index, 0, max);
+
+						if ( items[i].name !== undefined )
+							name_input.value = items[i].name
+							.replace(".jpg","").replace(".png","")
+							.replace(".jpeg","");
+						else 
+							name_input.value = items[i]._id; 
+
+						interval = setTimeout(increase, 100);
+					}, 500);
+				});
+
+				prev_doc.addEventListener( "mousedown", function(){
+					clearTimeout( interval ); // important!
+					interval = setTimeout(function decrease(){
+
+						if ( !items.length ) { 
+							name_input.value = ""; 
+							img_viewer.src = ":0"; return;
+						}
+
+						var max = items.length - 1;
+						var i = index = THREE.Math.clamp(--index, 0, max);
+
+						if ( items[i].name !== undefined )
+							name_input.value = items[i].name
+							.replace(".jpg","").replace(".png","")
+							.replace(".jpeg","");
+						else 
+							name_input.value = items[i]._id; 
+
+						interval = setTimeout(decrease, 100);
+					}, 500);
+				});
+*/
+			//	on mouse click.
+
+				next_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+
+					if ( !items.length ) { 
+						name_input.value = ""; 
+						img_viewer.src = ":0"; return;
+					}
+
+					var max = items.length - 1;
+					var i = index = THREE.Math.clamp(++index, 0, max);
+
+
+					if ( items[i].name !== undefined )
+						name_input.value = items[i].name
+						.replace(".jpg","").replace(".png","")
+						.replace(".jpeg","");
+					else 
+						name_input.value = items[i]._id; 
+
+					interval = setTimeout(function(){
+						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
+					},250);
+
+					callWatchers( this, "onclick", "click", index ); // important!
+				});
+
+				prev_doc.addEventListener( "click", function(){
+					clearTimeout( interval ); // important!
+
+					if ( !items.length ) { 
+						name_input.value = ""; 
+						img_viewer.src = ":0"; return; 
+					}
+
+					var max = items.length - 1;
+					var i = index = THREE.Math.clamp(--index, 0, max);
+
+					if ( items[i].name !== undefined )
+						name_input.value = items[i].name
+						.replace(".jpg","").replace(".png","")
+						.replace(".jpeg","");
+					else 
+						name_input.value = items[i]._id; 
+
+					interval = setTimeout(function(){
+						img_viewer.src = "https://i.imgur.com/"+items[i].id+"t.jpg";
+					},250);
+
+					callWatchers( this, "onclick", "click", index ); // important!
+				});
+
+				collection_droplist.addEventListener( "change", function(){
+					this.blur(); callWatchers( this, "onchange", "change", this.value );
+				});
+
+				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			})( 
+				TabUI.Model3D.tab.querySelector("li#model-3d-doc-next"), // next_doc,
+				TabUI.Model3D.tab.querySelector("li#model-3d-doc-previous"), // prev_doc,
+				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"), // name_input,
+				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), // img_viewer,
+				TabUI.Model3D.tab.querySelector("div#model-3d-load-button"),  // load_button,
+				TabUI.Model3D.tab.querySelector("select#model-3d-collection-droplist"), // collection_droplist,
+			);
+
+
+
+
+
 
 
 		</script>
