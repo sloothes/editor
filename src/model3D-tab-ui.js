@@ -111,6 +111,26 @@
 
 	})( TabUI.Model3D.tab );
 
+//	model3D-preview-file-ui.js
+
+	(function( tab ){
+
+	//	model3D preview button.
+
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+
+		var button = document.createElement("div"); 
+		button.id = "model-3d-preview-button"; button.textContent = "Select Image file";
+		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
+		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
+
+		var input = document.createElement("input"); input.type = "file"; 
+		input.id = "model-3d-preview-file-input"; input.style.cssText = "display:none;"; 
+		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
+
+	})( TabUI.Model3D.tab );
+
 //	model3D-obj-upload-droplist-ui.js
 
 	(function( tab ){
@@ -200,26 +220,6 @@
 
 		var input = document.createElement("input"); input.type = "file"; 
 		input.id = "model-3d-obj-file-input"; input.style.cssText = "display:none;"; 
-		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
-
-	})( TabUI.Model3D.tab );
-
-//	model3D-preview-file-ui.js
-
-	(function( tab ){
-
-	//	model3D preview button.
-
-		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
-
-		var button = document.createElement("div"); 
-		button.id = "model-3d-preview-button"; button.textContent = "Select Image file";
-		button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;";
-		button.style.cssText += "font-size:large;margin-left:15px;margin-right:15px;";
-
-		var input = document.createElement("input"); input.type = "file"; 
-		input.id = "model-3d-preview-file-input"; input.style.cssText = "display:none;"; 
 		button.appendChild( input ); row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Model3D.tab );
