@@ -37,6 +37,19 @@
 
 	})( TabUI.NewMatcap.tab );
 
+//	create-matcap-button-ui.js
+
+	(function( tab ){
+
+	//	Create Matcap button.
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
+		var btn = document.createElement("div"); btn.id = "create-matcap-button"; btn.textContent = "New Matcap";
+		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
+		row.appendChild( btn ); tab.appendChild( row );
+
+	})( TabUI.NewMatcap.tab );
+
 //	create-matcap-name-input-ui.js
 
 	(function( tab ){
@@ -48,19 +61,6 @@
 		input.style.cssText = "width:-webkit-fill-available;color:#000;display:inline;margin:0px 5px;";
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 		row.appendChild(input); tab.appendChild( row );
-
-	})( TabUI.NewMatcap.tab );
-
-//	create-matcap-button-ui.js
-
-	(function( tab ){
-
-	//	Create Matcap button.
-		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;";
-		var btn = document.createElement("div"); btn.id = "create-matcap-button"; btn.textContent = "New Matcap";
-		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
-		btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
-		row.appendChild( btn ); tab.appendChild( row );
 
 	})( TabUI.NewMatcap.tab );
 
