@@ -39,8 +39,9 @@
 			if ( viewer.mesh.material[value] === undefined ) return;
 
 			var material = viewer.mesh.material; 
+			var texture = viewer.mesh.material[value];
 
-			material[value] && material[value].image && material[value].dispose();
+			texture && texture.image && texture.dispose();
 			material[value] = null; viewer.render(); // important!
 			icon.getContext("2d").clearRect(0,0,icon.width,icon.height); 
 		});
