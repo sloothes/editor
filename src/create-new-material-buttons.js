@@ -26,6 +26,49 @@
 		TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
 	);
 
+//	create-matcap-remove-button.js
+
+	(function(viewer,icon,remove_button,map_droplist){
+
+		var interval;
+
+		watch( remove_button, "onclick", function(prop, event, value){ 
+
+			if ( !value ) return; if ( !map_droplist.value ) return;
+			if ( viewer.mesh.material[value] === undefined ) return;
+
+			var material = viewer.mesh.material; 
+			var texture  = viewer.mesh.material[value];
+			texture && texture.image && texture.dispose();
+
+			switch (value){
+				case "envMap":
+					viewer.mesh.material.roughness = 0.5; // important?
+					viewer.mesh.material.metalness = 0.5; // important?
+				break;
+				case "emissiveMap":
+					viewer.mesh.material.emissive.setHex(0x000000); 
+				break;
+			}
+
+			material[value] = null; viewer.render(); // important!
+			icon.getContext("2d").clearRect(0,0,icon.width,icon.height); 
+		//	callWatchers( viewer.mesh, "material", "render", material );
+
+		});
+
+		remove_button.addEventListener( "click", function(){
+			clearTimeout(interval); interval = setTimeout(function(button){
+				callWatchers( button, "onclick", "click", map_droplist.value );
+			}, 250, this);
+		});
+
+	})( materialViewer, 
+		TabUI.NewMaterial.tab.querySelector("canvas#create-new-material-icon"),        // icon,
+		TabUI.NewMaterial.tab.querySelector("div#create-new-material-remove-button"),  // remove_button,
+		TabUI.NewMaterial.tab.querySelector("select#create-new-material-map-droplist") // map_droplist,
+	);
+
 
 //	create-new-material-name-input.js
 
