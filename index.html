@@ -282,21 +282,35 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		</script>
 
 		<script>
 
 		//	sweethome objects loader (demo)
 
-			(function(next_doc,prev_doc,name_input,img_viewer,load_button,collection_droplist){
+			(function(canvas,next_doc,prev_doc,name_input,load_button,img_viewer,collection_droplist){
 
 				var interval, index = 0, limit = 100, items = [];
 
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
-				var names = {
-					trees:"blackTupelo,fanPalm,lombardyPoplar,palm,quakingAspen,sassafras,weepingWillow",
-				};
+				var names = { trees:"blackTupelo,fanPalm,lombardyPoplar,palm,quakingAspen,sassafras,weepingWillow", };
 
 			//	Collection droplist.
 
@@ -319,6 +333,7 @@
 
 				watch( next_doc, "onclick", function( prop, event, value ){
 				//	debugMode && console.log({item:next_doc,event:event,index:value});
+
 				});
 
 				watch( prev_doc, "onclick", function( prop, event, value ){
@@ -328,12 +343,13 @@
 				watch( name_input, "onchange", function( prop, event, value ){ 
 					debugMode && console.log({item:name_input,event:event,index:value});
 				});
-/*
+
 			//	on mouse down.
 
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function increase(){
+						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
 						interval = setTimeout(increase, 100);
 					}, 500);
 				});
@@ -341,10 +357,11 @@
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
 					interval = setTimeout(function decrease(){
+						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
 						interval = setTimeout(decrease, 100);
 					}, 500);
 				});
-*/
+
 			//	on mouse click.
 
 				next_doc.addEventListener( "click", function(){
@@ -429,11 +446,12 @@
 				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
 
 			})( 
-				TabUI.Model3D.tab.querySelector("li#model-3d-doc-next"), // next_doc,
-				TabUI.Model3D.tab.querySelector("li#model-3d-doc-previous"), // prev_doc,
+				TabUI.Model3D.tab.querySelector("canvas#model-3d-viewer"),    // canvas,
+				TabUI.Model3D.tab.querySelector("li#model-3d-doc-next"),      // next_doc,
+				TabUI.Model3D.tab.querySelector("li#model-3d-doc-previous"),  // prev_doc,
 				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"), // name_input,
-				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), // img_viewer,
 				TabUI.Model3D.tab.querySelector("div#model-3d-load-button"),  // load_button,
+				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), // img_viewer,
 				TabUI.Model3D.tab.querySelector("select#model-3d-collection-droplist") // collection_droplist,
 			);
 
