@@ -227,82 +227,21 @@
 		</script>
 
 		<script>
-/*
-		//	model3D-obj-upload-droplist.js
 
-			(function(img_viewer,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
+		//	model3d-viewer.js
 
-				watch( uploader_droplist, "onchange", function(prop, event, value){ 
+			const model3DViewer = {
 
-					switch ( value ) {
-						case "":
-						//	reset!
-						//	img_fileinput.value = "";
-						//	mtl_fileinput.value = "";
-						//	obj_fileinput.value = "";
-						//	textures_fileinput.value = "";
-						break;
-						case "img":
-							img_fileinput.value = "";
-							img_fileinput.click();
-						break;
-						case "mtl":
-							mtl_fileinput.value = "";
-							mtl_fileinput.click();
-						break;
-						case "obj":
-							obj_fileinput.value = "";
-							obj_fileinput.click();
-						break;
-						case "textures":
-							textures_fileinput.value = "";
-							textures_fileinput.click();
-						break;
-					}
+				img: TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), 
+				canvas: TabUI.Model3D.tab.querySelector("canvas#model-3d-viewer"),
 
-				});
-
-				uploader_droplist.addEventListener( "change", function(){ this.blur(); callWatchers(this, "onchange", "change", this.value )})
-
-			})( 
-				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"),           // img_viewer,
-				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
-				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
-				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
-				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
-				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
-			);
-*/
-		</script>
-
-		<script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			};
 
 		</script>
 
 		<script>
 
-		//	sweethome objects loader (demo)
+		//	sweethome models loader (demo)
 
 			(function(canvas,next_doc,prev_doc,name_input,load_button,img_viewer,collection_droplist){
 
@@ -322,7 +261,8 @@
 
 					if ( items.length > index ) {
 
-						name_input.value = items[index]; img_viewer.src = "/"+"models"+"/"+value+"/"+items[index]+".png";
+						var src = "/"+"models"+"/"+value+"/"+items[index]+".png";
+						name_input.value = items[index]; img_viewer.src = srcl
 
 					} else {
 
@@ -469,6 +409,195 @@
 				TabUI.Model3D.tab.querySelector("div#model-3d-load-button"),  // load_button,
 				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), // img_viewer,
 				TabUI.Model3D.tab.querySelector("select#model-3d-collection-droplist") // collection_droplist,
+			);
+
+		</script>
+
+		<script>
+/*
+		//	model3D-obj-upload-droplist.js
+
+			(function(img_viewer,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
+
+				watch( uploader_droplist, "onchange", function(prop, event, value){ 
+
+					switch ( value ) {
+						case "":
+						//	reset!
+						//	img_fileinput.value = "";
+						//	mtl_fileinput.value = "";
+						//	obj_fileinput.value = "";
+						//	textures_fileinput.value = "";
+						break;
+						case "img":
+							img_fileinput.value = "";
+							img_fileinput.click();
+						break;
+						case "mtl":
+							mtl_fileinput.value = "";
+							mtl_fileinput.click();
+						break;
+						case "obj":
+							obj_fileinput.value = "";
+							obj_fileinput.click();
+						break;
+						case "textures":
+							textures_fileinput.value = "";
+							textures_fileinput.click();
+						break;
+					}
+
+				});
+
+				uploader_droplist.addEventListener( "change", function(){ this.blur(); callWatchers(this, "onchange", "change", this.value )})
+
+			})( 
+				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"),           // img_viewer,
+				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
+				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
+			);
+*/
+		</script>
+
+		<script>
+
+		//	New upload button.
+
+			(function(viewer,name_input,button_new,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
+
+				var interval;
+
+				watch( button_new, "onclick", function(prop, event, value){ 
+
+					mtl_fileinput.value = ""; obj_fileinput.value = "";
+					name_input.value = ""; viewer.img.src = ":error.png";
+					img_fileinput.value = ""; textures_fileinput.value = "";
+				//	viewer.canvas.getContext( "2d" ).clearRect( 0, 0, viewer.canvas.width, viewer.canvas.height );
+
+				});
+
+				button_new.addEventListener( "click", function(){ 
+					clearTimeout(interval);
+					interval = setTimeout(function(){
+						callWatchers(button, "onclick", "click"); 
+					}, 250, this);
+				});
+
+			})( 
+				model3DViewer, // viewer,
+				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"),           // name_input,
+				TabUI.Model3D.tab.querySelector("div#model-3d-new-upload-button"),      // button_new,
+				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
+				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
+			);
+
+		//	Uploader droplist.
+
+			(function(viewer,name_input,button_new,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
+
+				watch( uploader_droplist, "onchange", function(prop, event, value){ 
+
+					switch ( value ) {
+
+						case "":
+						break;
+
+						case "img":
+							img_fileinput.value = "";
+						//	img_fileinput.click();
+						break;
+						case "mtl":
+							mtl_fileinput.value = "";
+						//	mtl_fileinput.click();
+						break;
+						case "obj":
+							obj_fileinput.value = "";
+						//	obj_fileinput.click();
+						break;
+						case "textures":
+							textures_fileinput.value = "";
+						//	textures_fileinput.click();
+						break;
+					}
+
+				});
+
+				uploader_droplist.addEventListener( "change", function(){ this.blur(); callWatchers(this, "onchange", "change", this.value )})
+
+			})( 
+				model3DViewer, // viewer,
+				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"),           // name_input,
+				TabUI.Model3D.tab.querySelector("div#model-3d-new-upload-button"),      // button_new,
+				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
+				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
+			);
+
+		//	MTL file input.
+
+
+
+
+
+
+		//	OBJ file input.
+
+
+
+
+
+
+
+		//	Upload button.
+
+			(function(viewer,name_input,upload_button,mtl_fileinput,obj_fileinput,img_fileinput,textures_fileinput,uploader_droplist){
+
+				var interval;
+
+				watch( upload_button, "onclick", function(prop, event, value){ 
+
+					if ( !name_input.value ) return;
+					if ( !img_fileinput.files.length ) return;
+
+					var entry = {};
+					entry.name = name_input.value;
+
+					(function(fileinput){
+						var file = fileinput.files[0];
+						var reader = new FileReader();
+						reader.addEventListener( "load", function(){
+							entry.icon = reader.result;
+						}); reader.readAsDataURL(file);
+					})( img_fileinput );
+
+					debugMode && console.log( entry );
+				});
+
+				upload_button.addEventListener( "click", function(){ 
+					clearTimeout(interval);
+					interval = setTimeout(function(){
+						callWatchers(button, "onclick", "click"); 
+					}, 250, this);
+				});
+
+
+			})( 
+				model3DViewer, // viewer,
+				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"),           // name_input,
+				TabUI.Model3D.tab.querySelector("div#model-3d-upload-button"),          // upload_button,
+				TabUI.Model3D.tab.querySelector("input#model-3d-mtl-file-input"),       // mtl_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-obj-file-input"),       // obj_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-preview-file-input"),   // image_fileinput,
+				TabUI.Model3D.tab.querySelector("input#model-3d-textures-file-input"),  // textures_fileinput,
+				TabUI.Model3D.tab.querySelector("select#model-3d-obj-upload-droplist"), // uploader_droplist,
 			);
 
 		</script>
