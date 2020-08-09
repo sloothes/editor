@@ -47,7 +47,7 @@
 
 		remove_button.addEventListener( "click", function(){
 			clearTimeout(interval); interval = setTimeout(function(button){
-				callWatchers( this, "onclick", "click", map_droplist.value );
+				callWatchers( button, "onclick", "click", map_droplist.value );
 			}, 250, this);
 		});
 
