@@ -209,7 +209,7 @@
 
 		watch(save_button, "onclick", function(prop, event, json){
 		//	debugMode && console.log({item:save_button, event:event, matcap:matcap});
-			save_button.removeEventListener( "click", onSaveButtonClick ); // important!
+			if ( !json ) return; save_button.removeEventListener( "click", onSaveButtonClick ); // important!
 
 			debugMode && console.log( "json:", json);
 
@@ -217,8 +217,8 @@
 			entry.name = name_input.value;                   // string.
 			entry.collection = "matcap";                     // string.
 			entry.preview = viewer.canvas.toDataURL();       // dataURL.
-			entry.uuid = json.uuid;                          // uuid.
-			entry.material = json;                           // json (material).
+			entry.uuid = THREE.Math.generateUUID();          // uuid.
+			entry.json = json;                               // json (material).
 
 			return debugMode && console.log("entry:", entry); // breakpoint!
 
@@ -286,7 +286,7 @@
 
 		watch(save_button, "onclick", function(prop, event, json){
 		//	debugMode && console.log({item:save_button, event:event, material:material});
-			save_button.removeEventListener( "click", onSaveButtonClick ); // important!
+			if ( !json ) return; save_button.removeEventListener( "click", onSaveButtonClick ); // important!
 
 		//	var meta = {geometries:{},materials:{},textures:{},images:{}};
 		//	var mapping = THREE.SphericalReflectionMapping; // 305
@@ -315,8 +315,8 @@
 			entry.name = name_input.value;                   // string.
 			entry.collection = collection_droplist.value;    // string.
 			entry.preview = viewer.canvas.toDataURL();       // dataURL.
-			entry.uuid = json.uuid;                          // uuid.
-			entry.material = json;                           // json (material).
+			entry.uuid = THREE.Math.generateUUID();          // uuid.
+			entry.json = json;                               // json (material).
 
 			return debugMode && console.log("entry:", entry); // breakpoint!
 
