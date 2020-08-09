@@ -383,13 +383,8 @@
 							scene.add( group ); entities.add( group );
 						//	group.traverse(function(mesh){ entities.add(object); })
 
-						}, function onProgress( xhr ) {
-
-							if ( xhr.lengthComputable ) {
-								var loaded = xhr.loaded; var total = xhr.total;
-								var x = Math.ceil( ( loaded / total ) * 100 ); 
-							//	debugMode && console.log( x+"%:", xhr.loaded );
-							}
+							var entity_droplist = document.querySelector("select#editor-entities-droplist");
+							entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
 
 						}); // end obj loader.
 
