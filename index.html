@@ -258,8 +258,9 @@
 
 				watch(collection_droplist, "onchange",function(prop, event, value){
 
-					index = 0; items = names[value].split(","); // reset.
-					canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
+					index = 0; items.length = 0; canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height ); // reset.
+
+					if ( names[value] === undefined ) return; items = names[value].split(",");
 
 				//	Get names.
 
