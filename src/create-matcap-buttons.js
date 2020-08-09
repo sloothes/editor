@@ -26,6 +26,37 @@
 		TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
 	);
 
+
+//	create-matcap-remove-button.js
+
+	(function(viewer,icon,remove_button,map_droplist){
+
+		var interval;
+
+		watch( remove_button, "onclick", function(prop, event, value){ 
+
+			if ( !value ) return; if ( !map_droplist.value ) return;
+			if ( viewer.mesh.material[value] === undefined ) return;
+
+			var material = viewer.mesh.material; 
+
+			material[value] && material[value].image && material[value].dispose(); 
+			material[value] = null; icon.getContext("2d").clearRect(0,0,icon.width,icon.height);
+
+		});
+
+		remove_button.addEventListener( "click", function(){
+			clearTimeout(interval); interval = setTimeout(function(button){
+				callWatchers( this, "onclick", "click", map_droplist.value );
+			}, 250, this);
+		});
+
+	})( matcapViewer, 
+		TabUI.NewMatcap.tab.querySelector("canvas#create-matcap-icon"),        // icon,
+		TabUI.NewMatcap.tab.querySelector("div#create-matcap-remove-button"),  // remove_button,
+		TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
+	);
+
 //	create-matcap-name-input.js
 
 	(function(viewer,name_input){
@@ -129,6 +160,8 @@
 		TabUI.NewMatcap.tab.querySelector("input#create-matcap-file-input"), // image_input,
 		TabUI.NewMatcap.tab.querySelector("select#create-matcap-map-droplist") // map_droplist,
 	);
+
+
 
 //	create-matcap-save-as-matcap.js
 
