@@ -348,16 +348,30 @@
 
 				next_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
+					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":0"; return; }
+					var max = items.length - 1; var folder = collection_droplist.value;
 					interval = setTimeout(function increase(){
+
+						var i = index = THREE.Math.clamp(++index, 0, max);
+						var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
+						name_input.value = items[index]; img_viewer.src = src; 
+
 						interval = setTimeout(increase, 100);
 					}, 500);
 				});
 
 				prev_doc.addEventListener( "mousedown", function(){
 					clearTimeout( interval ); // important!
+					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":0"; return; }
+					var max = items.length - 1; var folder = collection_droplist.value;
 					interval = setTimeout(function decrease(){
+
+						var i = index = THREE.Math.clamp(++index, 0, max);
+						var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
+						name_input.value = items[index]; img_viewer.src = src; 
+
 						interval = setTimeout(decrease, 100);
 					}, 500);
 				});
@@ -371,8 +385,8 @@
 					var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
 
 					var folder = collection_droplist.value;
-					var src = "/"+"models"+"/"+folder+"/"+items[i]+".png";
-					name_input.value = items[i]; img_viewer.src = src; 
+					var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+					name_input.value = items[index]; img_viewer.src = src; 
 
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
@@ -384,8 +398,8 @@
 					var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
 
 					var folder = collection_droplist.value;
-					var src = "/"+"models"+"/"+folder+"/"+items[i]+".png";
-					name_input.value = items[i]; img_viewer.src = src; 
+					var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+					name_input.value = items[index]; img_viewer.src = src; 
 
 					callWatchers( this, "onclick", "click", index ); // important!
 				});
