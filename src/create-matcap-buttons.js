@@ -40,9 +40,9 @@
 
 			var material = viewer.mesh.material; 
 
-			material[value] && material[value].image && material[value].dispose(); 
-			material[value] = null; icon.getContext("2d").clearRect(0,0,icon.width,icon.height);
-
+			material[value] && material[value].image && material[value].dispose();
+			material[value] = null; viewer.render(); // important!
+			icon.getContext("2d").clearRect(0,0,icon.width,icon.height); 
 		});
 
 		remove_button.addEventListener( "click", function(){
