@@ -39,9 +39,19 @@
 			if ( viewer.mesh.material[value] === undefined ) return;
 
 			var material = viewer.mesh.material; 
-			var texture = viewer.mesh.material[value];
-
+			var texture  = viewer.mesh.material[value];
 			texture && texture.image && texture.dispose();
+
+			switch (value){
+				case "envMap":
+					viewer.mesh.material.roughness = 0.5; // important?
+					viewer.mesh.material.metalness = 0.5; // important?
+				break;
+				case "emissiveMap":
+					viewer.mesh.material.emissive.setHex(0x000000); 
+				break;
+			}
+
 			material[value] = null; viewer.render(); // important!
 			icon.getContext("2d").clearRect(0,0,icon.width,icon.height); 
 		//	callWatchers( viewer.mesh, "material", "render", material );
