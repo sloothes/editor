@@ -44,6 +44,8 @@
 			texture && texture.image && texture.dispose();
 			material[value] = null; viewer.render(); // important!
 			icon.getContext("2d").clearRect(0,0,icon.width,icon.height); 
+		//	callWatchers( viewer.mesh, "material", "render", material );
+
 		});
 
 		remove_button.addEventListener( "click", function(){
@@ -115,18 +117,18 @@
 				icon.getContext( "2d" ).drawImage( img, 0, 0, icon.width, icon.height );
 
 			//	create texture.
-				var texture;
+				var texture = new THREE.Texture( img );
+
 				switch (key){
 					case "envMap":
-						texture = new THREE.Texture( img, 305 ); // THREE.SphericalReflectionMapping;
-						viewer.mesh.material.roughness = 0; viewer.mesh.material.metalness = 1; // important?
+						texture.mapping = THREE.SphericalReflectionMapping;
+						viewer.mesh.material.roughness = 0; // important?
+						viewer.mesh.material.metalness = 1; // important?
 					break;
 					case "emissiveMap":
-						texture = new THREE.Texture( img ); 
-						viewer.mesh.material.emissive.setHex(0xffffff); viewer.mesh.material.color.setHex(0x000000); 
-					break;
-					default:
-						texture = new THREE.Texture( img ); // or canvas?
+					//	texture = new THREE.Texture( img ); 
+					//	viewer.mesh.material.color.setHex(0x000000); 
+						viewer.mesh.material.emissive.setHex(0xffffff); 
 					break;
 				}
 
