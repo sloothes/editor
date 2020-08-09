@@ -187,7 +187,7 @@
 
 	//	Create Matcap Save button.
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;";
-		var btn = document.createElement("div"); btn.id = "create-matcap-save-button"; btn.textContent = "Save Matcap";
+		var btn = document.createElement("div"); btn.id = "create-matcap-save-button"; btn.textContent = "Save As Matcap";
 		btn.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		btn.style.cssText = "width:-webkit-fill-available;height:40px;font-size:large;margin-right:15px;float:right;";
 		row.appendChild( btn ); tab.appendChild( row );
