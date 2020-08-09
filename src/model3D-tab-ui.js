@@ -36,8 +36,8 @@
 		var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
 
 		var canvas = document.createElement("canvas"); canvas.width = 256; canvas.height = 256; canvas.id = "model-3d-viewer";
-		canvas.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
-		canvas.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
+		canvas.style.cssText = "width:256px;height:256px;margin:auto;";
+	//	canvas.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		var img = new Image(256,256); img.id = "model-3d-image-viewer"; img.src = dummy_src; img.style.cssText = "margin:0 30px;display:none;"; 
 		watch( img, "onload",  function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 0, 0, canvas.width, canvas.height ); });
