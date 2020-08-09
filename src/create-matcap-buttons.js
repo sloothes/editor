@@ -2,22 +2,23 @@
 
 	(function(viewer,button,input,map_droplist){
 
-		var interval, k=0;
+		var interval, k = 0;
 
 	//	Creates new material, and replaces matcap viewer material.
-		watch( button, "onclick", function(prop, event, material){ map_droplist.value = "";
-			viewer.dispose(); viewer.mesh.material = material; input.value = material.name;
+		watch( button, "onclick", function(prop, event, material){ 
+			viewer.dispose(); map_droplist.value = ""; 
+			material.name = "untitled matcap " + (++k); 
+			viewer.mesh.material = material; input.value = material.name;
 			debugMode && console.log({item:button,event:event,material:material}); // debug.
 		});
 
 		button.addEventListener( "click", function(){
 			clearTimeout(interval); interval = setTimeout(function(button){
-				callWatchers(button, "onclick", "click", new THREE.MeshStandardMaterial({ 
-					name:"untitled matcap " + (++k), bumpScale:0, 
-					displacementBias:0, displacementScale:0,roughness:0.5, metalness:0.5, })
+				callWatchers( button, "onclick", "click", new THREE.MeshStandardMaterial({ 
+					bumpScale:0, displacementBias:0, displacementScale:0,roughness:0.5, metalness:0.5, })
 				);
 			}, 250, this);
-		})
+		});
 
 	})( matcapViewer, 
 		TabUI.NewMatcap.tab.querySelector("div#create-matcap-button"), // button,
@@ -152,7 +153,9 @@
 				envMap: texture, roughness:0, metalness:1, 
 			}); debugMode && console.log( "matcap:", matcap);
 
-			interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", matcap.toJSON() ); }, 250);
+			interval = setTimeout( function(){ 
+				callWatchers( save_button, "onclick", "click", matcap.toJSON() ); 
+			}, 250);
 		}
 
 	//	Parses material viewer mesh material to watcher.
@@ -162,17 +165,6 @@
 		//	debugMode && console.log({item:save_button, event:event, matcap:matcap});
 			save_button.removeEventListener( "click", onSaveButtonClick ); // important!
 
-		//	var meta = {geometries:{},materials:{},textures:{},images:{}};
-		//	var mapping = THREE.SphericalReflectionMapping; // 305
-		//	var texture = new THREE.Texture( viewer.canvas, mapping );
-		//	debugMode && console.log( "envMap:", texture);
-		//	var matcap = new THREE.MeshStandardMaterial({
-		//		name: name_input.value, 
-		//		envMap: texture, roughness:0, metalness:1, 
-		//	}); debugMode && console.log( "matcap:", matcap);
-		//	var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
-		//	var json = matcap.toJSON(); // debugMode && console.log(meta);
-
 			debugMode && console.log( "json:", json);
 
 			var entry = {}; 
@@ -180,23 +172,21 @@
 			entry.collection = "matcap";                     // string.
 			entry.preview = viewer.canvas.toDataURL();       // dataURL.
 			entry.uuid = json.uuid;                          // uuid.
-			entry.json = json;                               // json (material).
+			entry.material = json;                           // json (material).
 
-			debugMode && console.log("entry:", entry);   // debug!
+			return debugMode && console.log("entry:", entry); // breakpoint!
 
 		//	Save matcap entry.
 			var collection = db.collection( "matcap" );
-			collection.insert(entry, function(err){ 
-				if (err) throw err; 
-			}).then(function(){
+			collection.insert(entry, function(err){ if (err) throw err; }).then(function(){
 
 			//	Success!
+				console.log( "matcap saved successfully!" ); name_input.value = ""; map_droplist.value = "";
+				thumb_icon.getContext("2d").clearRect(0,0,thumb_icon.width,thumb_icon.height); // clear icon.
+
 				callWatchers(button_new, "onclick", "click", new THREE.MeshStandardMaterial({ 
 					bumpScale:0, displacementBias:0, displacementScale:0,roughness:0.5, metalness:0.5, })
 				);
-
-				console.log( "matcap saved successfully!" ); name_input.value = ""; map_droplist.value = "";
-				thumb_icon.getContext("2d").clearRect(0,0,thumb_icon.width,thumb_icon.height); // clear icon.
 
 			}).catch(function(err){
 				console.error(err); console.log("matcap", entry.name, "failed to save!");
@@ -215,6 +205,16 @@
 		TabUI.NewMatcap.tab.querySelector("select#create-matcap-collection-droplist")  // collection_droplist,
 	);
 
+	//	var meta = {geometries:{},materials:{},textures:{},images:{}};
+	//	var mapping = THREE.SphericalReflectionMapping; // 305
+	//	var texture = new THREE.Texture( viewer.canvas, mapping );
+	//	debugMode && console.log( "envMap:", texture);
+	//	var matcap = new THREE.MeshStandardMaterial({
+	//		name: name_input.value, 
+	//		envMap: texture, roughness:0, metalness:1, 
+	//	}); debugMode && console.log( "matcap:", matcap);
+	//	var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
+	//	var json = matcap.toJSON(); // debugMode && console.log(meta);
 
 //	create-matcap-save-as-material.js
 
@@ -230,43 +230,49 @@
 				return viewer.mesh.material.name = name_input.value = prompt(msg);
 			}
 
-			interval = setTimeout( function(){ callWatchers( save_button, "onclick", "click", viewer.mesh.material ); }, 250);
+			interval = setTimeout( 
+				function(){ callWatchers( save_button, "onclick", "click", viewer.mesh.material.toJSON() ); 
+			}, 250);
 		}
 
 	//	Parses material viewer mesh material to watcher.
 		save_button.addEventListener( "click", onSaveButtonClick );
 
-		watch(save_button, "onclick", function(prop, event, material){
-			debugMode && console.log({item:save_button, event:event, material:material});
+		watch(save_button, "onclick", function(prop, event, json){
+		//	debugMode && console.log({item:save_button, event:event, material:material});
 			save_button.removeEventListener( "click", onSaveButtonClick ); // important!
 
-			var meta = {geometries:{},materials:{},textures:{},images:{}};
+		//	var meta = {geometries:{},materials:{},textures:{},images:{}};
+		//	var mapping = THREE.SphericalReflectionMapping; // 305
+		//	var texture = new THREE.Texture( viewer.canvas, mapping );
+		//	debugMode && console.log( "envMap:", texture);
+		//	var matcap = new THREE.MeshStandardMaterial({
+		//		name: name_input.value, 
+		//		envMap: texture, roughness:0, metalness:1, 
+		//	}); debugMode && console.log( "matcap:", matcap);
+		//	var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
+		//	var json = mesh.toJSON(meta); // debugMode && console.log(meta);
 
-			var mapping = THREE.SphericalReflectionMapping; // 305
-			var texture = new THREE.Texture( viewer.canvas, mapping );
-			debugMode && console.log( "envMap:", texture);
+		//	var entry = {}; 
+		//	entry.name = name_input.value;                   // string.
+		//	entry.collection = "environment";                // string.
+		//	entry.images = Object.keys(meta.images);         // uuid array.
+		//	entry.textures = Object.keys(meta.textures);     // uuid array.
+		//	entry.preview = viewer.canvas.toDataURL();       // dataURL.
+		//	entry.uuid = Object.keys(meta.materials).join(); // uuid.
+		//	entry.links = []; entry.imgIds = [];             // urls array.
+		//	debugMode && console.log("meta:", meta);         // debug!
 
-			var matcap = new THREE.MeshStandardMaterial({
-				name: name_input.value, 
-				envMap: texture, roughness:0, metalness:1, 
-			}); 
-
-			debugMode && console.log( "matcap:", matcap);
-
-			var mesh = new THREE.Mesh(new THREE.Geometry(), matcap);
-			var json = mesh.toJSON(meta); // debugMode && console.log(meta);
+			debugMode && console.log( "json:", json);
 
 			var entry = {}; 
 			entry.name = name_input.value;                   // string.
-			entry.collection = "environment";                // string.
-			entry.images = Object.keys(meta.images);         // uuid array.
-			entry.textures = Object.keys(meta.textures);     // uuid array.
+			entry.collection = collection_droplist.value;    // string.
 			entry.preview = viewer.canvas.toDataURL();       // dataURL.
-			entry.uuid = Object.keys(meta.materials).join(); // uuid.
-			entry.links = []; entry.imgIds = [];
+			entry.uuid = json.uuid;                          // uuid.
+			entry.material = json;                           // json (material).
 
-			debugMode && console.log("meta:", meta);     // debug!
-			debugMode && console.log("entry:", entry);   // debug!
+			return debugMode && console.log("entry:", entry); // breakpoint!
 
 			var images = []; for ( var uuid in meta.images ) {
 				images.push( meta.images[uuid] );
