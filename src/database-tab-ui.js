@@ -217,6 +217,27 @@
 
 	})( TabUI.Database.tab );
 
+//	load-object-ui.js
+
+	(function( tab ){
+
+	//	Document Load button.
+	//	var tab = TabUI.Database.tab;
+
+		var row = document.createElement("h3");
+		row.style.cssText = "height:40px;margin-bottom:20px;"
+
+		var button = document.createElement("div");
+		button.id = "doc-load-button";
+		button.textContent = "Load document";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+
+		row.appendChild( button );
+		tab.appendChild( row );
+
+	})( TabUI.Database.tab );
+
 //	key-droplist-ui.js
 
 	(function( tab ){
@@ -344,27 +365,6 @@
 		var button = document.createElement("div");
 		button.id = "doc-remove-button";
 		button.textContent = "Remove document";
-		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
-		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-
-		row.appendChild( button );
-		tab.appendChild( row );
-
-	})( TabUI.Database.tab );
-
-//	load-object-ui.js
-
-	(function( tab ){
-
-	//	Document Load button.
-	//	var tab = TabUI.Database.tab;
-
-		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "doc-load-button";
-		button.textContent = "Load document";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
 
