@@ -674,9 +674,7 @@
 			switch ( value ) {
 
 				case "objects":
-
-					return collection.find().skip(skip).limit(1).toArray()
-					.then(function(docs){ return docs[0]; }).then(function(doc){
+					return (function(){
 
 					//	Create json.
 
@@ -690,214 +688,217 @@
 							generator: "Object3D.toJSON"
 						}
 
-						json.object = doc; // important!
+						return collection.find().skip(skip).limit(1).toArray()
+						.then(function(docs){ return docs[0]; }).then(function(doc){
 
-					//	Collect geometry, material.
+							json.object = doc; // important!
 
-						var promises = [];
+						//	Collect geometry, material.
 
-						if ( doc.type === "Group" && doc.children !== undefined && doc.children.length ) {
+							var promises = [];
 
-							doc.children.forEach(function(child){
+							if ( doc.type === "Group" && doc.children !== undefined && doc.children.length ) {
 
-								if ( child.geometry ) promises.push( 
+								doc.children.forEach(function(child){
+
+									if ( child.geometry ) promises.push( 
+										db.collection("geometries")
+										.findOne({uuid:child.geometry})
+										.then(function(doc){
+											return json.geometries.push(doc); 
+										}).catch(function(err){
+											console.error(err);
+										})
+									);
+
+									if ( child.material ) promises.push( 
+										db.collection("materials")
+										.findOne({uuid:child.material})
+										.then(function(doc){
+											return json.materials.push(doc); 
+										}).catch(function(err){
+											console.error(err);
+										})
+									);
+
+								});
+
+							} else {
+
+								if ( doc.geometry ) promises.push( 
+
 									db.collection("geometries")
-									.findOne({uuid:child.geometry})
+									.findOne({uuid:doc.geometry})
 									.then(function(doc){
-										return json.geometries.push(doc); 
+										json.geometries.push(doc); 
+									//	return json.geometries; 
 									}).catch(function(err){
 										console.error(err);
 									})
 								);
 
-								if ( child.material ) promises.push( 
+								if ( doc.material ) promises.push( 
+
 									db.collection("materials")
-									.findOne({uuid:child.material})
+									.findOne({uuid:doc.material})
 									.then(function(doc){
-										return json.materials.push(doc); 
+										json.materials.push(doc); 
+									//	return json.materials; 
 									}).catch(function(err){
 										console.error(err);
 									})
+
 								);
 
+							}
+
+							debugMode && console.log("promises:", promises);
+
+							return Promise.all(promises).then(function(){ 
+								return [json.geometries, json.materials]; 
 							});
 
-						} else {
+						}).then(function([geometries, materials]){
+							debugMode && console.log(geometries, materials);
 
-							if ( doc.geometry ) promises.push( 
+						//	Collect textures, images.
 
-								db.collection("geometries")
-								.findOne({uuid:doc.geometry})
-								.then(function(doc){
-									json.geometries.push(doc); 
-								//	return json.geometries; 
-								}).catch(function(err){
-									console.error(err);
-								})
-							);
+							var texture_uuids = [];
+							materials.forEach(function(material){
+								if (material.map) texture_uuids.push(material.map);
+								if (material.aoMap) texture_uuids.push(material.aoMap);
+								if (material.envMap) texture_uuids.push(material.envMap);
+								if (material.lightMap) texture_uuids.push(material.lightMap);
+								if (material.bumpMap) texture_uuids.push(material.bumpMap);
+								if (material.alphaMap) texture_uuids.push(material.alphaMap);
+								if (material.normalMap) mtexture_uuids.push(material.normalMap);
+								if (material.specularMap) texture_uuids.push(material.specularMap);
+								if (material.gradiendMap) texture_uuids.push(material.gradiendMap);
+								if (material.emissiveMap) texture_uuids.push(material.emissiveMap);
+								if (material.metalnessMap) texture_uuids.push(material.metalnessMap);
+								if (material.roughnessMap) texture_uuids.push(material.roughnessMap);
+								if (material.displacementMap) texture_uuids.push(material.displacementMap);
+							}); 
 
-							if ( doc.material ) promises.push( 
+							debugMode && console.log("texture_uuids:", texture_uuids);
 
-								db.collection("materials")
-								.findOne({uuid:doc.material})
-								.then(function(doc){
-									json.materials.push(doc); 
-								//	return json.materials; 
-								}).catch(function(err){
-									console.error(err);
-								})
+							var promises = [];
 
-							);
+							texture_uuids.forEach(function(uuid){ 
+								promises.push(
+									(function(){
 
-						}
-
-						debugMode && console.log("promises:", promises);
-
-						return Promise.all(promises).then(function(){ 
-							return [json.geometries, json.materials]; 
-						});
-
-					}).then(function([geometries, materials]){
-						debugMode && console.log(geometries, materials);
-
-					//	Collect textures, images.
-
-						var texture_uuids = [];
-						materials.forEach(function(material){
-							if (material.map) texture_uuids.push(material.map);
-							if (material.aoMap) texture_uuids.push(material.aoMap);
-							if (material.envMap) texture_uuids.push(material.envMap);
-							if (material.lightMap) texture_uuids.push(material.lightMap);
-							if (material.bumpMap) texture_uuids.push(material.bumpMap);
-							if (material.alphaMap) texture_uuids.push(material.alphaMap);
-							if (material.normalMap) mtexture_uuids.push(material.normalMap);
-							if (material.specularMap) texture_uuids.push(material.specularMap);
-							if (material.gradiendMap) texture_uuids.push(material.gradiendMap);
-							if (material.emissiveMap) texture_uuids.push(material.emissiveMap);
-							if (material.metalnessMap) texture_uuids.push(material.metalnessMap);
-							if (material.roughnessMap) texture_uuids.push(material.roughnessMap);
-							if (material.displacementMap) texture_uuids.push(material.displacementMap);
-						}); 
-
-						debugMode && console.log("texture_uuids:", texture_uuids);
-
-						var promises = [];
-
-						texture_uuids.forEach(function(uuid){ 
-							promises.push(
-								(function(){
-
-									return db.collection("textures")
-									.findOne({uuid:uuid})
-									.then(function(doc){
-
-										if (!doc) return;
-										doc && json.textures.push(doc); 
-										return doc; 
-
-									}).then(function(doc){
-										if (!doc) return;
-
-										return db.collection("images")
-										.findOne({uuid:doc.image})
+										return db.collection("textures")
+										.findOne({uuid:uuid})
 										.then(function(doc){
-											doc && json.images.push(doc); 
+
+											if (!doc) return;
+											doc && json.textures.push(doc); 
+											return doc; 
+
+										}).then(function(doc){
+											if (!doc) return;
+
+											return db.collection("images")
+											.findOne({uuid:doc.image})
+											.then(function(doc){
+												doc && json.images.push(doc); 
+											}).catch(function(err){
+												console.error(err);
+											});
+
 										}).catch(function(err){
 											console.error(err);
 										});
 
-									}).catch(function(err){
-										console.error(err);
-									});
+									})()
+								);
+							});
 
-								})()
-							);
-						});
+							debugMode && console.log("promises:", promises);
 
-						debugMode && console.log("promises:", promises);
+							if (!promises.length ) return json;
 
-						if (!promises.length ) return json;
+							return Promise.all(promises)
+							.catch(function(err){
+								console.error(err);
+							}).then(function(){ return json; });
 
-						return Promise.all(promises)
-						.catch(function(err){
+						}).then(function(json){
+							debugMode && console.log("json:", json);
+
+						//	Parse json.
+
+							var loader = new THREE.ObjectLoader();
+							return loader.parse( json );
+
+						}).then(function(object){
+
+						//	Replace uuids.
+							object.traverse( function(mesh){
+
+								if ( !mesh.isMesh ) return;
+
+								mesh.geometry.uuid = THREE.Math.generateUUID();
+								mesh.material.uuid = THREE.Math.generateUUID();
+
+								var material = mesh.material;
+								if (material.map) mesh.material.map.uuid = THREE.Math.generateUUID();
+								if (material.aoMap) mesh.material.aoMap.uuid = THREE.Math.generateUUID();
+								if (material.envMap) mesh.material.envMap.uuid = THREE.Math.generateUUID();
+								if (material.lightMap) mesh.material.lightMap.uuid = THREE.Math.generateUUID();
+								if (material.bumpMap) mesh.material.bumpMap.uuid = THREE.Math.generateUUID();
+								if (material.alphaMap) mesh.material.alphaMap.uuid = THREE.Math.generateUUID();
+								if (material.normalMap) mesh.material.normalMap.uuid = THREE.Math.generateUUID();
+								if (material.specularMap) mesh.material.specularMap.uuid = THREE.Math.generateUUID();
+								if (material.gradiendMap) mesh.material.gradiendMap.uuid = THREE.Math.generateUUID();
+								if (material.emissiveMap) mesh.material.emissiveMap.uuid = THREE.Math.generateUUID();
+								if (material.metalnessMap) mesh.material.metalnessMap.uuid = THREE.Math.generateUUID();
+								if (material.roughnessMap) mesh.material.roughnessMap.uuid = THREE.Math.generateUUID();
+								if (material.displacementMap) mesh.material.displacementMap.uuid = THREE.Math.generateUUID();
+
+							});
+
+							return object;
+
+						}).then(function( object ){
+							debugMode && console.log("object:", object);
+
+						//	Add to scene.
+
+							scene.add( object );
+
+						//	Add to entity managers.
+
+							entities.add( object );
+
+							object.traverse( function( mesh ){
+
+								if ( !mesh.material ) return;
+
+								material_entities.add(mesh.material);
+
+								var material = mesh.material;
+								if (material.map) textures_entities.add( mesh.material.map );
+								if (material.aoMap) textures_entities.add( mesh.material.aoMap );
+								if (material.envMap) textures_entities.add( mesh.material.envMap );
+								if (material.lightMap) textures_entities.add( mesh.material.lightMap );
+								if (material.bumpMap) textures_entities.add( mesh.material.bumpMap );
+								if (material.alphaMap) textures_entities.add( mesh.material.alphaMap );
+								if (material.normalMap) textures_entities.add( mesh.material.normalMap );
+								if (material.specularMap) textures_entities.add( mesh.material.specularMap );
+								if (material.gradiendMap) textures_entities.add( mesh.material.gradiendMap );
+								if (material.emissiveMap) textures_entities.add( mesh.material.emissiveMap );
+								if (material.metalnessMap) textures_entities.add( mesh.material.metalnessMap );
+								if (material.roughnessMap) textures_entities.add( mesh.material.roughnessMap );
+								if (material.displacementMap) textures_entities.add( mesh.material.displacementMap );
+
+							});
+
+						}).catch(function(err){
 							console.error(err);
-						}).then(function(){ return json; });
-
-					}).then(function(json){
-						debugMode && console.log("json:", json);
-
-					//	Parse json.
-
-						var loader = new THREE.ObjectLoader();
-						return loader.parse( json );
-
-					}).then(function(object){
-
-					//	Replace uuids.
-						object.traverse( function(mesh){
-
-							if ( !mesh.isMesh ) return;
-
-							mesh.geometry.uuid = THREE.Math.generateUUID();
-							mesh.material.uuid = THREE.Math.generateUUID();
-
-							var material = mesh.material;
-							if (material.map) mesh.material.map.uuid = THREE.Math.generateUUID();
-							if (material.aoMap) mesh.material.aoMap.uuid = THREE.Math.generateUUID();
-							if (material.envMap) mesh.material.envMap.uuid = THREE.Math.generateUUID();
-							if (material.lightMap) mesh.material.lightMap.uuid = THREE.Math.generateUUID();
-							if (material.bumpMap) mesh.material.bumpMap.uuid = THREE.Math.generateUUID();
-							if (material.alphaMap) mesh.material.alphaMap.uuid = THREE.Math.generateUUID();
-							if (material.normalMap) mesh.material.normalMap.uuid = THREE.Math.generateUUID();
-							if (material.specularMap) mesh.material.specularMap.uuid = THREE.Math.generateUUID();
-							if (material.gradiendMap) mesh.material.gradiendMap.uuid = THREE.Math.generateUUID();
-							if (material.emissiveMap) mesh.material.emissiveMap.uuid = THREE.Math.generateUUID();
-							if (material.metalnessMap) mesh.material.metalnessMap.uuid = THREE.Math.generateUUID();
-							if (material.roughnessMap) mesh.material.roughnessMap.uuid = THREE.Math.generateUUID();
-							if (material.displacementMap) mesh.material.displacementMap.uuid = THREE.Math.generateUUID();
-
 						});
-
-						return object;
-
-					}).then(function( object ){
-						debugMode && console.log("object:", object);
-
-					//	Add to scene.
-
-						scene.add( object );
-
-					//	Add to entity managers.
-
-						entities.add( object );
-
-						object.traverse( function( mesh ){
-
-							if ( !mesh.material ) return;
-
-							material_entities.add(mesh.material);
-
-							var material = mesh.material;
-							if (material.map) textures_entities.add( mesh.material.map );
-							if (material.aoMap) textures_entities.add( mesh.material.aoMap );
-							if (material.envMap) textures_entities.add( mesh.material.envMap );
-							if (material.lightMap) textures_entities.add( mesh.material.lightMap );
-							if (material.bumpMap) textures_entities.add( mesh.material.bumpMap );
-							if (material.alphaMap) textures_entities.add( mesh.material.alphaMap );
-							if (material.normalMap) textures_entities.add( mesh.material.normalMap );
-							if (material.specularMap) textures_entities.add( mesh.material.specularMap );
-							if (material.gradiendMap) textures_entities.add( mesh.material.gradiendMap );
-							if (material.emissiveMap) textures_entities.add( mesh.material.emissiveMap );
-							if (material.metalnessMap) textures_entities.add( mesh.material.metalnessMap );
-							if (material.roughnessMap) textures_entities.add( mesh.material.roughnessMap );
-							if (material.displacementMap) textures_entities.add( mesh.material.displacementMap );
-
-						});
-
-					}).catch(function(err){
-						console.error(err);
-					});
-
+					})();
 				break;
 
 				case "geometries":
