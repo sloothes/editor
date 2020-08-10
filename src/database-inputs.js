@@ -697,7 +697,7 @@
 
 							var promises = [];
 
-							if ( doc.type === "Group" && doc.children !== undefined && doc.children.length ) {
+							if ( doc.children !== undefined && doc.children.length ) {
 
 								doc.children.forEach(function(child){
 
@@ -722,35 +722,32 @@
 									);
 
 								});
-
-							} else {
-
-								if ( doc.geometry ) promises.push( 
-
-									db.collection("geometries")
-									.findOne({uuid:doc.geometry})
-									.then(function(doc){
-										json.geometries.push(doc); 
-									//	return json.geometries; 
-									}).catch(function(err){
-										console.error(err);
-									})
-								);
-
-								if ( doc.material ) promises.push( 
-
-									db.collection("materials")
-									.findOne({uuid:doc.material})
-									.then(function(doc){
-										json.materials.push(doc); 
-									//	return json.materials; 
-									}).catch(function(err){
-										console.error(err);
-									})
-
-								);
-
 							}
+
+							if ( doc.geometry ) promises.push( 
+
+								db.collection("geometries")
+								.findOne({uuid:doc.geometry})
+								.then(function(doc){
+									json.geometries.push(doc); 
+								//	return json.geometries; 
+								}).catch(function(err){
+									console.error(err);
+								})
+							);
+
+							if ( doc.material ) promises.push( 
+
+								db.collection("materials")
+								.findOne({uuid:doc.material})
+								.then(function(doc){
+									json.materials.push(doc); 
+								//	return json.materials; 
+								}).catch(function(err){
+									console.error(err);
+								})
+
+							);
 
 							debugMode && console.log("promises:", promises);
 
