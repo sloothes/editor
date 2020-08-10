@@ -15,7 +15,7 @@
 		select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys  = "trees,scopia,reallusion,katorlegaz,contributions,lucapresidente,blendswap-cc-0,blendswap-cc-by"; // debug!
+		var keys  = "trees,people,scopia,katorlegaz,contributions,lucapresidente,blendswap-cc-0,blendswap-cc-by"; // debug!
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
