@@ -836,7 +836,8 @@
 
 								if ( !mesh.isMesh ) return;
 
-								mesh.geometry.uuid = THREE.Math.generateUUID();
+								mesh.uuid = THREE.Math.generateUUID();
+							//	mesh.geometry.uuid = THREE.Math.generateUUID();
 								mesh.material.uuid = THREE.Math.generateUUID();
 
 								var material = mesh.material;
