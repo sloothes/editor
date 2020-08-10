@@ -661,52 +661,103 @@
 		watch( load_button, "onclick", function( prop, event, value ){ 
 			debugMode && console.log({item:load_button,property:prop,event:event,value:value});
 
-			var skip = parseInt(skip_input.value); if ( isNaN(skip) ) return;
+			var skip = parseInt(skip_input.value); if ( isNaN(skip) ) return; if ( !value ) return;
+
 			var collection = db.collection(collection_droplist.value); if ( !collection ) return; 
 
-			if ( skip !== undefined && collection.name === "objects" ) {
+		//	if ( skip !== undefined && collection.name === "objects" ) {}
+		//	if ( skip !== undefined && collection.name === "geometries" ) {}
+		//	if ( skip !== undefined && collection.name === "materials" ) {}
+		//	if ( skip !== undefined && collection.name === "textures" ) {}
+		//	if ( skip !== undefined && collection.name === "images" ) {}
 
-				return collection.find().skip(skip).limit(1).toArray()
-				.then(function(docs){ return docs[0]; }).then(function(doc){
+			switch ( value ) {
 
-				//	Create json.
+				case "objects":
 
-					var json = {};
-				//	json.shapes = [];
-					json.images = [];
-					json.textures = [];
-					json.materials = [];
-					json.geometries = [];
-					json.metadata = {
-						version: 4.5, type: "Object",
-						generator: "Object3D.toJSON"
-					}
+					return collection.find().skip(skip).limit(1).toArray()
+					.then(function(docs){ return docs[0]; }).then(function(doc){
 
-					json.object = doc; // important!
+					//	Create json.
 
-				//	Collect geometry, material.
+						var json = {};
+						json.images = [];
+						json.textures = [];
+						json.materials = [];
+						json.geometries = [];
+						json.metadata = {
+							version: 4.5, type: "Object",
+							generator: "Object3D.toJSON"
+						}
 
-					return Promise.all([
+						json.object = doc; // important!
 
-						db.collection("geometries")
-						.findOne({uuid:doc.geometry})
-						.then(function(doc){
-							json.geometries.push(doc); 
-							return json.geometries; 
-						}).catch(function(err){
-							console.error(err);
-						}),
+					//	Collect geometry, material.
 
-						db.collection("materials")
-						.findOne({uuid:doc.material})
-						.then(function(doc){
-							json.materials.push(doc); 
-							return json.materials; 
-						}).catch(function(err){
-							console.error(err);
-						}),
+						var promises = [];
 
-					]).then(function([geometries, materials]){
+						if ( doc.type === "Group" && doc.children !== undefined && doc.children.length ) {
+
+							doc.children.forEach(function(child){
+
+								if ( child.geometry ) promises.push( 
+									db.collection("geometries")
+									.findOne({uuid:child.geometry})
+									.then(function(doc){
+										return json.geometries.push(doc); 
+									}).catch(function(err){
+										console.error(err);
+									})
+								);
+
+								if ( child.material ) promises.push( 
+									db.collection("materials")
+									.findOne({uuid:child.material})
+									.then(function(doc){
+										return json.materials.push(doc); 
+									}).catch(function(err){
+										console.error(err);
+									})
+								);
+
+							});
+
+						} else {
+
+							if ( doc.geometry ) promises.push( 
+
+								db.collection("geometries")
+								.findOne({uuid:doc.geometry})
+								.then(function(doc){
+									json.geometries.push(doc); 
+								//	return json.geometries; 
+								}).catch(function(err){
+									console.error(err);
+								})
+							);
+
+							if ( doc.material ) promises.push( 
+
+								db.collection("materials")
+								.findOne({uuid:doc.material})
+								.then(function(doc){
+									json.materials.push(doc); 
+								//	return json.materials; 
+								}).catch(function(err){
+									console.error(err);
+								})
+
+							);
+
+						}
+
+						debugMode && console.log("promises:", promises);
+
+						return Promise.all(promises).then(function(){ 
+							return [json.geometries, json.materials]; 
+						});
+
+					}).then(function([geometries, materials]){
 						debugMode && console.log(geometries, materials);
 
 					//	Collect textures, images.
@@ -780,63 +831,88 @@
 						var loader = new THREE.ObjectLoader();
 						return loader.parse( json );
 
-					}).then(function(mesh){
+					}).then(function(object){
 
 					//	Replace uuids.
+						object.traverse( function(mesh){
 
-						mesh.geometry.uuid = THREE.Math.generateUUID();
-						mesh.material.uuid = THREE.Math.generateUUID();
+							if ( !mesh.isMesh ) return;
 
-						var material = mesh.material;
-						if (material.map) mesh.material.map.uuid = THREE.Math.generateUUID();
-						if (material.aoMap) mesh.material.aoMap.uuid = THREE.Math.generateUUID();
-						if (material.envMap) mesh.material.envMap.uuid = THREE.Math.generateUUID();
-						if (material.lightMap) mesh.material.lightMap.uuid = THREE.Math.generateUUID();
-						if (material.bumpMap) mesh.material.bumpMap.uuid = THREE.Math.generateUUID();
-						if (material.alphaMap) mesh.material.alphaMap.uuid = THREE.Math.generateUUID();
-						if (material.normalMap) mesh.material.normalMap.uuid = THREE.Math.generateUUID();
-						if (material.specularMap) mesh.material.specularMap.uuid = THREE.Math.generateUUID();
-						if (material.gradiendMap) mesh.material.gradiendMap.uuid = THREE.Math.generateUUID();
-						if (material.emissiveMap) mesh.material.emissiveMap.uuid = THREE.Math.generateUUID();
-						if (material.metalnessMap) mesh.material.metalnessMap.uuid = THREE.Math.generateUUID();
-						if (material.roughnessMap) mesh.material.roughnessMap.uuid = THREE.Math.generateUUID();
-						if (material.displacementMap) mesh.material.displacementMap.uuid = THREE.Math.generateUUID();
+							mesh.geometry.uuid = THREE.Math.generateUUID();
+							mesh.material.uuid = THREE.Math.generateUUID();
 
-						return mesh;
+							var material = mesh.material;
+							if (material.map) mesh.material.map.uuid = THREE.Math.generateUUID();
+							if (material.aoMap) mesh.material.aoMap.uuid = THREE.Math.generateUUID();
+							if (material.envMap) mesh.material.envMap.uuid = THREE.Math.generateUUID();
+							if (material.lightMap) mesh.material.lightMap.uuid = THREE.Math.generateUUID();
+							if (material.bumpMap) mesh.material.bumpMap.uuid = THREE.Math.generateUUID();
+							if (material.alphaMap) mesh.material.alphaMap.uuid = THREE.Math.generateUUID();
+							if (material.normalMap) mesh.material.normalMap.uuid = THREE.Math.generateUUID();
+							if (material.specularMap) mesh.material.specularMap.uuid = THREE.Math.generateUUID();
+							if (material.gradiendMap) mesh.material.gradiendMap.uuid = THREE.Math.generateUUID();
+							if (material.emissiveMap) mesh.material.emissiveMap.uuid = THREE.Math.generateUUID();
+							if (material.metalnessMap) mesh.material.metalnessMap.uuid = THREE.Math.generateUUID();
+							if (material.roughnessMap) mesh.material.roughnessMap.uuid = THREE.Math.generateUUID();
+							if (material.displacementMap) mesh.material.displacementMap.uuid = THREE.Math.generateUUID();
 
-					}).then(function(mesh){
-						debugMode && console.log("mesh:", mesh);
+						});
+
+						return object;
+
+					}).then(function( object ){
+						debugMode && console.log("object:", object);
 
 					//	Add to scene.
-						scene.add(mesh);
 
-					//	Add to entities managers.
-						entities.add(mesh);
-						material_entities.add(mesh.material);
+						scene.add( object );
 
-						var material = mesh.material;
-						if (material.map) textures_entities.add( mesh.material.map );
-						if (material.aoMap) textures_entities.add( mesh.material.aoMap );
-						if (material.envMap) textures_entities.add( mesh.material.envMap );
-						if (material.lightMap) textures_entities.add( mesh.material.lightMap );
-						if (material.bumpMap) textures_entities.add( mesh.material.bumpMap );
-						if (material.alphaMap) textures_entities.add( mesh.material.alphaMap );
-						if (material.normalMap) textures_entities.add( mesh.material.normalMap );
-						if (material.specularMap) textures_entities.add( mesh.material.specularMap );
-						if (material.gradiendMap) textures_entities.add( mesh.material.gradiendMap );
-						if (material.emissiveMap) textures_entities.add( mesh.material.emissiveMap );
-						if (material.metalnessMap) textures_entities.add( mesh.material.metalnessMap );
-						if (material.roughnessMap) textures_entities.add( mesh.material.roughnessMap );
-						if (material.displacementMap) textures_entities.add( mesh.material.displacementMap );
+					//	Add to entity managers.
 
+						entities.add( object );
+
+						object.traverse( function( mesh ){
+
+							if ( !mesh.material ) return;
+
+							material_entities.add(mesh.material);
+
+							var material = mesh.material;
+							if (material.map) textures_entities.add( mesh.material.map );
+							if (material.aoMap) textures_entities.add( mesh.material.aoMap );
+							if (material.envMap) textures_entities.add( mesh.material.envMap );
+							if (material.lightMap) textures_entities.add( mesh.material.lightMap );
+							if (material.bumpMap) textures_entities.add( mesh.material.bumpMap );
+							if (material.alphaMap) textures_entities.add( mesh.material.alphaMap );
+							if (material.normalMap) textures_entities.add( mesh.material.normalMap );
+							if (material.specularMap) textures_entities.add( mesh.material.specularMap );
+							if (material.gradiendMap) textures_entities.add( mesh.material.gradiendMap );
+							if (material.emissiveMap) textures_entities.add( mesh.material.emissiveMap );
+							if (material.metalnessMap) textures_entities.add( mesh.material.metalnessMap );
+							if (material.roughnessMap) textures_entities.add( mesh.material.roughnessMap );
+							if (material.displacementMap) textures_entities.add( mesh.material.displacementMap );
+
+						});
 
 					}).catch(function(err){
 						console.error(err);
 					});
 
-				}).catch(function(err){
-					console.error(err);
-				});
+				break;
+
+				case "geometries":
+				//	TODO:
+				break;
+				case "materials":
+				//	TODO:
+				break;
+				case "textures":
+				//	TODO:
+				break;
+				case "images":
+				//	TODO:
+				break;
+
 			}
 
 		});
