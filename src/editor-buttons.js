@@ -152,7 +152,7 @@
 
 			}
 
-		//	object.
+		//	children.
 
 			(function(object){
 
@@ -186,6 +186,9 @@
 
 			})( json.object );
 
+		//	exit edit.
+
+			return exitEditMode(entity_droplist);
 		});
 
 	})( 
