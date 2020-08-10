@@ -922,7 +922,7 @@
 		load_button.addEventListener( "click", function(){ 
 			clearTimeout( interval );
 			interval = setTimeout(function(button){
-				callWatchers( button, "onclick", "click" );
+				callWatchers( button, "onclick", "click", collection_droplist.value );
 			}, 250, this); 
 		});
 
