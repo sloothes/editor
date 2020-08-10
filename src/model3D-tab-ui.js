@@ -15,7 +15,7 @@
 		select.style.cssText = "width:150px;color:#000;float:right;border:1px solid;border-radius:4px;";
 		select.style.cssText += "padding:2px 4px 4px 4px;font-size:20px;margin-left:10px;margin-right:15px;";
 
-		var keys  = "bathroom,bedroom,doors,windows,,walls,floor,exterior,kitchen,lights,characters,livingroom,miscellaneous,office,staircases,vehicles,trees";
+		var keys  = "bathroom,bedroom,doors,windows,walls,floor,exterior,kitchen,lights,characters,livingroom,miscellaneous,office,staircases,vehicles,trees";
 
 		keys.split(",").forEach(function( name ){
 			var option = document.createElement("option");
