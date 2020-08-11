@@ -402,7 +402,7 @@
 				if ( key === "_id" ) value_input.value = _doc[ key ];
 				if ( key === "uuid" ) value_input.value = _doc[ key ];
 
-				if ( doc.url !== undefined ) (function(doc){
+				if ( _doc.url !== undefined ) (function(doc){
 
 					if ( Array.isArray(doc.url) && doc.url.length ) {
 
