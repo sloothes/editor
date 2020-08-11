@@ -171,8 +171,7 @@
 			select.appendChild( option );
 		});
 
-		row.appendChild( select );
-		tab.appendChild( row );
+		row.appendChild( select ); tab.appendChild( row );
 
 	})( TabUI.Database.tab );
 
