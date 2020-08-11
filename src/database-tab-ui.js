@@ -195,7 +195,7 @@
 	//	Document skip input.
 
 		var row = document.createElement("h3"); 
-		row.textContent = "skip:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
+		row.textContent = "skip:"; row.style.cssText = "height:30px;margin:20px 15px 20px 0;";
 
 		var vect = document.createElement("div"); vect.style.cssText = "width:200px;height:30px;float:right;";
 		var prev = document.createElement("li"); prev.id = "doc-skip-decrease"; prev.innerHTML = "&#9668;";
@@ -219,7 +219,7 @@
 	//	Document skip input.
 
 		var row = document.createElement("h3"); 
-		row.textContent = "limit:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
+		row.textContent = "limit:"; row.style.cssText = "height:40px;margin:0px 15px 20px 0px;";
 
 		var vect = document.createElement("div"); vect.style.cssText = "width:200px;height:40px;float:right;";
 		var prev = document.createElement("li"); prev.id = "doc-limit-decrease"; prev.innerHTML = "&#9668;";
