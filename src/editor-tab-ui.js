@@ -397,19 +397,24 @@
 	(function( tab ){
 
 	//	Matrix World Needs Update button.
-	//	var tab = TabUI.Editor.tab;
-
-		var row = document.createElement("h3");
-		row.style.cssText = "height:30px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "matrix-needs-update";
-		button.textContent = "Matrix needs Update";
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); button.id = "matrix-needs-update"; button.textContent = "Matrix needs Update";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
 
-		row.appendChild( button );
-		tab.appendChild( row );
+	})( TabUI.Editor.tab );
+
+//	apply-matrix-ui.js
+
+	(function( tab ){
+
+	//	Apply Editor Matrix button.
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); button.id = "apply-editor-matrix"; button.textContent = "Apply Editor Matrix";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Editor.tab );
 
@@ -418,19 +423,11 @@
 	(function( tab ){
 
 	//	Exit edit mode button.
-	//	var tab = TabUI.Editor.tab;
-
-		var row = document.createElement("h3");
-		row.style.cssText = "height:40px;margin-bottom:20px;"
-
-		var button = document.createElement("div");
-		button.id = "editor-exit-mode";
-		button.textContent = "Exit Edit Mode";
+		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
+		var button = document.createElement("div"); button.id = "editor-exit-mode"; button.textContent = "Exit Edit Mode";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
-
-		row.appendChild( button );
-		tab.appendChild( row );
+		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Editor.tab );
 
