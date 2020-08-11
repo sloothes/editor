@@ -80,16 +80,36 @@
 	(function( tab ){
 
 	//	ModelLoader Load button.
-
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
 		var button = document.createElement("div"); button.id = "model-loader-load-button"; 
 		button.textContent = "Load Model"; button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-left:15px;margin-right:15px;";
-
 		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.ModelLoader.tab );
 
+//	model-loader-scale-ui.js
+
+	(function( tab ){
+
+	//	ModelLoader Scale input.
+
+		var row = document.createElement("h3"); row.textContent = "scale:"; row.style.cssText = "margin:10px 15px;height:40px;";
+		var vect = document.createElement("div"); vect.style.cssText = "width:170px;height:40px;float:right;";
+
+		var prev = document.createElement("li"); prev.id = "model-loader-scale-decrease"; prev.innerHTML = "&#9668;"; 
+		prev.style.display = "inline"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
+		var next = document.createElement("li"); next.id = "model-loader-scale-increase"; next.innerHTML = "&#9658;"; 
+		next.style.display = "inline"; next.classList.add("btn","btn-primary","get-next-btn","pull-right");
+
+		var input = document.createElement("input"); input.id = "model-loader-scale-input"; 
+		input.setAttribute("placeholder", "xyz" ); input.classList.add("form-control","text-center");
+		input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;"
+		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
+
+		vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
+
+	})( TabUI.Editor.tab );
 
 
 
@@ -109,9 +129,16 @@
 
 
 
+	(function( tab ){
 
+	//	ModelLoader Save button.
+		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
+		var button = document.createElement("div"); button.id = "model-loader-load-button"; 
+		button.textContent = "Save model to database"; button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-left:15px;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
 
-
+	})( TabUI.ModelLoader.tab );
 
 /*
 
