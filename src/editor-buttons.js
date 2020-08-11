@@ -96,7 +96,7 @@
 
 //	entity-save-button.js
 
-	(function(db,save_button,entity_droplist,exitEditMode){
+	(function(db,editor,save_button,entity_droplist,exitEditMode){
 
 	//	var Objects, Geometries, Materials, Textures, Images; // collections.
 	//	var meta = { geometries:{}, materials:{}, textures:{}, images:{}, shapes:{} };
@@ -113,12 +113,21 @@
 			var Materials = db.collection("materials"); if ( !Materials ) return;
 			var Geometries = db.collection("geometries"); if ( !Geometries ) return;
 
-		//	json.
+			try { // apply editor matrix to save object with scale:1.
 
-			var json; var meta = { geometries:{}, materials:{}, textures:{}, images:{} };
+				var object = getObjectByEntityId();  if ( !object ) throw "object not defined!";
 
-			try { json = getObjectByEntityId().toJSON( meta ); } 
-			catch(err){ return exitEditMode( entity_droplist ); }
+				object.traverse(function(child){
+					if ( child.geometry ) child.geometry.applyMatrix( editor.matrix );
+				}); object.position.set(0,0,0); object.rotation.set(0,0,0); object.scale.set(1,1,1);
+
+			//	json.
+
+				var meta = { images:{}, textures:{}, materials:{}, geometries:{} }; 
+
+				var json = object.toJSON( meta ); 
+
+			} catch(err){ console.error(err); return exitEditMode( entity_droplist ); }
 
 			debugMode && console.log( json, meta );
 
@@ -230,7 +239,8 @@
 		});
 
 	})( 
-		metadB, TabUI.Editor.tab.querySelector("div#editor-save-button"), // db, save_button,
+		metadB, objectEditor, // db, editor,
+		TabUI.Editor.tab.querySelector("div#editor-save-button"), // save_button,
 		TabUI.Editor.tab.querySelector("select#editor-entities-droplist"), // entity_droplist,
 		exitEditMode // exit function.
 	);
