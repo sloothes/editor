@@ -111,6 +111,14 @@
 
 	})( TabUI.Model3D.tab );
 
+
+
+
+
+
+
+
+/*
 //	model3D-obj-upload-droplist-ui.js
 
 	(function( tab ){
@@ -241,3 +249,4 @@
 		row.appendChild( button ); tab.appendChild( row );
 
 	})( TabUI.Model3D.tab );
+*/
