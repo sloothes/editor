@@ -176,6 +176,8 @@
 
 	})( TabUI.Database.tab );
 
+//	find-input-ui.js
+
 	(function( tab ){
 
 	//	Document find input.
