@@ -88,6 +88,7 @@
 		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-exit-mode"), entity_droplist );            // exit_mode,
 		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-vectors-reset"), vector_droplist );        // vector_reset,
 		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#matrix-needs-update"), entity_droplist );         // needs_update,
+		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#apply-editor-matrix"), entity_droplist );         // apply_button,
 		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#rigid-remove-button"), entity_droplist );         // rigid_remove,
 		onMouseClickWatchersCall( TabUI.Editor.tab.querySelector("div#editor-save-button"), entity_droplist );          // object_save,
 	//	geometry-tab.
