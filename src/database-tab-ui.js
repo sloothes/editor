@@ -109,7 +109,7 @@
 
 	//	Image upload button.
 
-		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;display:none;"
 		var button = document.createElement("div"); button.id = "upload-image-data"; button.textContent = "Upload Image Data";
 		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
@@ -157,7 +157,7 @@
 
 	//	Document Find droplist.
 
-		var row = document.createElement("h3"); row.textContent = "key:"; row.style.cssText = "height:40px;margin:10px 0px;";
+		var row = document.createElement("h3"); row.textContent = "find:"; row.style.cssText = "height:40px;margin:10px 0px;";
 
 		var select = document.createElement("select"); select.id = "doc-find-droplist";
 		select.style.cssText = "width:200px;color:#000;float:right;border:1px solid;border-radius:4px;";
@@ -197,7 +197,7 @@
 		var row = document.createElement("h3"); 
 		row.textContent = "skip:"; row.style.cssText = "height:40px;margin:30px 15px 20px 0;";
 
-		var vect = document.createElement("div"); vect.style.cssText = "width:200px;height:40px;float:right;";
+		var vect = document.createElement("div"); vect.style.cssText = "width:200px;height:30px;float:right;";
 		var prev = document.createElement("li"); prev.id = "doc-skip-decrease"; prev.innerHTML = "&#9668;";
 		prev.style.display = "inline"; prev.classList.add("btn","btn-primary","get-prev-btn","pull-left");
 		var next = document.createElement("li"); next.id = "doc-skip-increase"; next.innerHTML = "&#9658;";
