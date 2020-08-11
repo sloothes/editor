@@ -1,6 +1,6 @@
 //	database-tab-ui.js
 
-	TabUI.add( "Database", "database-tab" ); TabUI.append( "Database" );
+	TabUI.add( "Database", "database-tab" ); TabUI.append( "Database" ); TabUI.Database.pill.innerHTML = "Database";
 
 	const database_droplist = (function( tab ){
 
