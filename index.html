@@ -394,8 +394,8 @@
 							scene.add( group ); entities.add( group );
 						//	group.traverse(function(mesh){ entities.add(object); })
 
-							var entity_droplist = document.querySelector("select#editor-entities-droplist");
-							entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
+						//	var entity_droplist = document.querySelector("select#editor-entities-droplist");
+						//	entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
 
 						}); // end obj loader.
 
@@ -413,13 +413,13 @@
 				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
 
 			})( 
-				TabUI.Model3D.tab.querySelector("canvas#model-3d-viewer"),    // canvas,
-				TabUI.Model3D.tab.querySelector("li#model-3d-doc-next"),      // next_doc,
-				TabUI.Model3D.tab.querySelector("li#model-3d-doc-previous"),  // prev_doc,
-				TabUI.Model3D.tab.querySelector("input#model-3d-name-input"), // name_input,
-				TabUI.Model3D.tab.querySelector("div#model-3d-load-button"),  // load_button,
-				TabUI.Model3D.tab.querySelector("img#model-3d-image-viewer"), // img_viewer,
-				TabUI.Model3D.tab.querySelector("select#model-3d-collection-droplist") // collection_droplist,
+				TabUI.Model3D.tab.querySelector("canvas#model-loader-viewer"),    // canvas,
+				TabUI.Model3D.tab.querySelector("li#model-loader-doc-next"),      // next_doc,
+				TabUI.Model3D.tab.querySelector("li#model-loader-doc-previous"),  // prev_doc,
+				TabUI.Model3D.tab.querySelector("input#model-loader-name-input"), // name_input,
+				TabUI.Model3D.tab.querySelector("div#model-loader-load-button"),  // load_button,
+				TabUI.Model3D.tab.querySelector("img#model-loaderimage-viewer"), // img_viewer,
+				TabUI.Model3D.tab.querySelector("select#model-loader-collection-droplist") // collection_droplist,
 			);
 
 		</script>
