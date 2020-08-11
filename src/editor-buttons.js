@@ -1,4 +1,42 @@
 
+//	apply-editor-matrix.js
+
+	(function( editor,apply_button,vector_droplist,entity_droplist ){
+
+	//	var interval;
+
+		watch( apply_button, "onclick", function( property, event, value ){
+
+			var object = getObjectByEntityId( value ); if ( !object ) return;
+		//	if ( !(object.children && object.children.length) ) return;
+
+			object.traverse(function(child){
+				if ( child.geometry ) child.geometry.applyMatrix( editor.matrix );
+			});
+
+			setTimeout( function(){
+				editor.position.set(0,0,0); editor.rotation.set(0,0,0); 
+				editor.scale.set(1,1,1); editor.matrixWorldNeedsUpdate = true; 
+				callWatchers( vector_droplist, "onchange", "change", vector_droplist.value );
+			});
+
+		});
+
+	//	Call watchers.
+
+	//	apply_button.addEventListener( "click", function(){ 
+	//		clearTimeout( interval ); interval = setTimeout(function( button ){
+	//			callWatchers( button, "onclick", "click", entity_droplist.value );
+	//		}, 250, this); 
+	//	});
+
+	})(
+		objectEditor, // editor,
+		TabUI.Editor.tab.querySelector("div#apply-editor-matrix"),        // apply_button,
+		TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),  // vector_droplist,
+		TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
+	);
+
 //	matrix-needs-update.js
 
 	(function( editor,matrix_button ){
@@ -10,42 +48,6 @@
 
 	})(
 		objectEditor, TabUI.Editor.tab.querySelector("div#matrix-needs-update") // matrix_button,
-	);
-
-//	apply-editor-matrix.js
-
-	(function( editor,apply_button,vector_droplist,entity_droplist ){
-
-		var interval;
-
-		watch( apply_button, "onclick", function( property, event, value ){
-
-			var object = getObjectByEntityId( value ); if ( !object ) return;
-			if ( !(object.children && object.children.length) ) return;
-
-			object.traverse(function(child){
-				if ( child.geometry ) child.geometry.applyMatrix( editor.matrix );
-			});
-
-			editor.position.set(0,0,0); editor.rotation.set(0,0,0); 
-			editor.scale.set(1,1,1); editor.matrixWorldNeedsUpdate = true; 
-			callWatchers( vector_droplist, "onchange", "change", vector_droplist.value );
-
-		});
-
-	//	Call watchers.
-
-		apply_button.addEventListener( "click", function(){ 
-			clearTimeout( interval ); interval = setTimeout(function( button ){
-				callWatchers( button, "onclick", "click", entity_droplist.value );
-			}, 250, this); 
-		});
-
-	})(
-		objectEditor, // editor,
-		TabUI.Editor.tab.querySelector("div#apply-editor-matrix"),        // apply_button,
-		TabUI.Editor.tab.querySelector("select#editor-vector-droplist"),  // vector_droplist,
-		TabUI.Editor.tab.querySelector("select#editor-entities-droplist") // entity_droplist.
 	);
 
 //	exit-edit-mode.js
