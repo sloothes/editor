@@ -397,27 +397,45 @@
 
 		//	images collection.
 
-			if ( collection.name === "images" && key === "url" ) {
+			if ( collection.name === "images" ) {
 
-				if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+				if ( key === "_id" ) value_input.value = _doc[ key ];
+				if ( key === "uuid" ) value_input.value = _doc[ key ];
 
-					var i = 0; image.src = _doc[key][i]; 
-					value_input.value = i; return;
-				}
+				if ( doc.url !== undefined ) (function(doc){
 
-				image.src = _doc[key]; 
+					if ( Array.isArray(doc.url) && doc.url.length ) {
 
-				if ( validator && validator.isURL(_doc[key]) )
-					value_input.value = _doc[key]
-					.replace("https://i.imgur.com/","");
-				else 
-					value_input.value = ""; return;
+						var i = 0; image.src = doc.url[i]; 
+						value_input.value = i; return;
+					}
+
+					image.src = doc.url; 
+
+					if ( validator && validator.isURL(doc.url) )
+						value_input.value = doc.url
+						.replace("https://i.imgur.com/","");
+					else 
+						value_input.value = ""; return;
+
+				})(_doc); else image.src = ":error.png";
+
 			}
 
-			value_input.value = _doc[ key ]; // JSON.stringify(_doc[key]);
-
-			if ( image.src !== dummy_src ) image.src = dummy_src;
 		});
+
+		//	if ( collection.name === "images" && key === "url" ) {
+		//		if ( Array.isArray(_doc[key]) && _doc[key].length ) {
+		//			var i = 0; image.src = _doc[key][i]; 
+		//			value_input.value = i; return;
+		//		}
+		//		image.src = _doc[key]; 
+		//		if ( validator && validator.isURL(_doc[key]) )
+		//			value_input.value = _doc[key]
+		//			.replace("https://i.imgur.com/","");
+		//		else 
+		//			value_input.value = ""; return;
+		//	}
 
 	//	Collection droplist.
 
