@@ -405,18 +405,28 @@
 				if ( _doc.url !== undefined ) (function(doc){
 
 					if ( Array.isArray(doc.url) && doc.url.length ) {
-
-						var i = 0; image.src = doc.url[i]; 
-						value_input.value = i; return;
+						var i = 0; value_input.value = i; 
+						image.src = doc.url[i];   return;
 					}
 
-					image.src = doc.url; 
+					if ( validator ) {
 
-					if ( validator && validator.isURL(doc.url) )
-						value_input.value = doc.url
-						.replace("https://i.imgur.com/","");
-					else 
+						if ( validator.isDataURI(doc.url) ) {
+							image.src = doc.url; 
+							value_input.value = ""; return;
+						} 
+
+						if ( validator.isURL(doc.url) ) {
+							value_input.value = doc.url
+							.replace("https://i.imgur.com/","");
+							image.src = doc.url; return;
+						} 
+
 						value_input.value = ""; return;
+					} 
+
+					value_input.value = ""; return;
+
 
 				})(_doc); else image.src = ":error.png";
 
