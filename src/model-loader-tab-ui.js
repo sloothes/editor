@@ -103,7 +103,7 @@
 		next.style.display = "inline"; next.classList.add("btn","btn-primary","get-next-btn","pull-right");
 
 		var input = document.createElement("input"); input.id = "model-loader-scale-input"; 
-		input.setAttribute("placeholder", "xyz" ); input.classList.add("form-control","text-center");
+		input.setAttribute("placeholder", "scale" ); input.classList.add("form-control","text-center");
 		input.style.cssText = "color:#000;border:none;display:inline;width:80px;margin:0px 5px;"
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 
