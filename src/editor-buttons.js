@@ -1,4 +1,3 @@
-
 //	apply-editor-matrix.js
 
 	(function( editor,apply_button,vector_droplist,entity_droplist ){
@@ -118,7 +117,7 @@
 				var object = getObjectByEntityId();  if ( !object ) throw "object not defined!";
 
 				object.traverse(function(child){
-					if ( child.geometry ) child.geometry.applyMatrix( editor.matrix );
+					if ( child.geometry ) child.geometry.applyMatrix( editor.matrix );  // important!
 				}); object.position.set(0,0,0); object.rotation.set(0,0,0); object.scale.set(1,1,1);
 
 			//	json.
