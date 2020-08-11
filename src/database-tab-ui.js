@@ -182,11 +182,9 @@
 	//	Document find input.
 
 		var row = document.createElement("h3"); row.style.cssText = "height:30px;text-align:center;margin:10px 15px;";
-		var input = document.createElement("input"); input.id = "doc-find-input";
-		input.setAttribute("placeholder", "name" ); input.classList.add("form-control","text-center");
-		input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
-		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
-		row.appendChild(input); tab.appendChild( row );
+		var input = document.createElement("input"); input.id = "doc-find-input"; input.classList.add("form-control","text-center");
+		input.style.cssText = "color:#000;border:none;display:inline;text-align:center;font-size:large;font-weigth:bold;background:none;";
+		input.setAttribute("placeholder", "name" ); row.appendChild(input); tab.appendChild( row );
 
 	})( TabUI.Database.tab );
 
