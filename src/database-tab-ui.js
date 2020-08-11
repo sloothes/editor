@@ -82,24 +82,12 @@
 		img.style.cssText = "width:256px;height:256px;margin:auto;background-repeat:repeat;";
 		img.style.cssText += "background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
-		watch( img, "onload", function(prop, event, value){
-		//	debugMode && console.log({item:img,event:event,src:value});
-		});
+		watch( img, "onload", function(prop, event, value){ ; }); //	debugMode && console.log({item:img,event:event,src:value});
+		watch( img, "onerror", function(prop, event, value){ img.src = value; }); // debugMode && console.log({item:img,event:event,src:value}); 
+		img.addEventListener("load", function(event){ callWatchers( this, "onload", "load", this.src ); })
+		img.addEventListener("error", function(err){ callWatchers( this, "onerror", "error", dummy_src ); })
 
-		watch( img, "onerror", function(prop, event, value){
-			img.src = value; // debugMode && console.log({item:img,event:event,src:value}); 
-		});
-
-		img.addEventListener("load", function(event){
-			callWatchers( this, "onload", "load", this.src );
-		})
-
-		img.addEventListener("error", function(err){
-			callWatchers( this, "onerror", "error", dummy_src );
-		})
-
-		row.appendChild( img );
-		tab.appendChild( row );
+		row.appendChild( img ); tab.appendChild( row );
 
 	})( TabUI.Database.tab );
 
