@@ -68,7 +68,7 @@
 
 		var input = document.createElement("input"); input.id = "model-3d-name-input";
 		input.setAttribute("placeholder", "name" ); input.classList.add("form-control","text-center");
-		input.style.cssText = "color:#000;border:none;display:inline;width:180px;margin:0px 10px 0px 10px;";
+		input.style.cssText = "color:#000;border:none;display:inline;width:170px;"; // margin:0px 10px 0px 10px;
 		input.style.cssText += "text-align:center;font-size:large;font-weigth:bold;background:none;";
 
 		row.appendChild(prev); row.appendChild(input); row.appendChild(next); tab.appendChild( row );
