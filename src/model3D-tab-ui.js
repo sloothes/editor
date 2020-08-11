@@ -1,6 +1,6 @@
 //	model3D-tab-ui.js
 
-	TabUI.add( "Model3D", "model-3d-tab" ); TabUI.append( "Model3D" ); TabUI.Model3D.pill.innerHTML = "3D&nbsp;Models";
+	TabUI.add( "ModelLoader", "model-3d-tab" ); TabUI.append( "ModelLoader" ); TabUI.ModelLoader.pill.innerHTML = "Model&nbsp;Loader";
 
 //	model3D-collection-droplist-ui.js
 
@@ -24,7 +24,7 @@
 
 		row.appendChild( select ); tab.appendChild( row );
 
-	})( TabUI.Model3D.tab );
+	})( TabUI.ModelLoader.tab );
 
 //	model3D-viewer-ui.js
 
@@ -48,7 +48,7 @@
 
 		row.appendChild( img ); row.appendChild( canvas ); tab.appendChild( row );
 
-	})( TabUI.Model3D.tab );
+	})( TabUI.ModelLoader.tab );
 
 //	model3D-name-input-ui.js
 
@@ -73,7 +73,7 @@
 
 		row.appendChild(prev); row.appendChild(input); row.appendChild(next); tab.appendChild( row );
 
-	})( TabUI.Model3D.tab );
+	})( TabUI.ModelLoader.tab );
 
 //	model3D-load-button-ui.js
 
@@ -88,8 +88,32 @@
 
 		row.appendChild( button ); tab.appendChild( row );
 
-	})( TabUI.Model3D.tab );
+	})( TabUI.ModelLoader.tab );
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 //	model3D-obj-uploader-header-ui.js
 
@@ -111,14 +135,6 @@
 
 	})( TabUI.Model3D.tab );
 
-
-
-
-
-
-
-
-/*
 //	model3D-obj-upload-droplist-ui.js
 
 	(function( tab ){
