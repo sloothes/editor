@@ -250,48 +250,18 @@
 				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
 				var names = {}; 
+
 				names.animals = "bulldog,cat,chicken,dog,";
-				names.walls  = "wall10,wall10Arc,";
+
 				names.trees  = "blackTupelo,fanPalm,lombardyPoplar,palm,quakingAspen,sassafras,weepingWillow";
 				names.characters = "female01,female02,female03,male01,male02,male03,holdingMale01,holdingFemale01,holdingFemale02,holdingFemale03,";
 				names.characters += "sitMale03,lyingDownFemale01,lyingDownMale01,lyingDownMale02,sitFemale01,sitFemale02,sitFemale03,sitMale01,sitMale02,";
 				names.characters += "boyLying,boySitting,boyStanding,girlSittingGround,girlSittingTable,girlStanding";
-//
-//				names.scopia  = "bathroom3,bathroom4,bed1,iron_bed,wardrobe1,ext_chair,parque,farola1,littlebank,";
-//				names.scopia += "ext_table,silla_teca,wood_bank,bowl,old_jar,pottery,sushi_tray,kitchen_tool1,";
-//				names.scopia += "kitchen_tool2,kitchen_tool3,kitchen_tool4,tray,wine_bottle,armchair3,armchair,";
-//				names.scopia += "armchair1,black_table,dining_room,box_room,chair3,chair4,chair,clear_sofa,saloon_table,";
-//				names.scopia += "coffee_table,dvd,maceta,simple_sofa,table3,table4,tv,vase1,vase2,vase3,jar,";
-//				names.scopia += "office_furniture1,office_box,office_chair,desk_lamp1,pencil1,apple_pc,com_bath3,";
-//				names.scopia += "puerta,complements2,desk_lamp2,little_lamp1,little_lamp2,little_lamp3,saloon_lamp,";
-//				names.scopia += "seat_leon,vase5,wooden_table_office,tubular_chair,table_lamp,metal_glass_table,";
-//				names.scopia += "livingroom_lamp1,glass_table_office,desk_table,bathroom1,armchair2,apples,bar_chair,";
-//				names.scopia += "bar_table,bathroom_vanity,beige_sofa_2seats,beige_sofa,burlap_sofa,children_bed,";
-//				names.scopia += "contemp_living_room,crib,double_vanity,kids_desk_chair,kids_desk_table,kids_shelves,";
-//				names.scopia += "kids_wooden_desk,kitchen_stool,leather_sofa,living_lamp,living_room_table,modern_armchair,";
-//				names.scopia += "plastic_chair,table_wood_and_iron,white_kitchen_chair,wooden_office_alder_table,";
-//				names.scopia += "wooden_office_pear_table_rect,wooden_office_pear_table,wooden_office_teak_table,";
-//				names.scopia += "white_kitchen_table,bandeja,beach_chair,calla_lily_with_roses,chandelier-lamp,";
-//				names.scopia += "coffee_machine,com_bath,com_bath2_cepillo,com_bath2_esponja,com_bath2_jabon_pijo,";
-//				names.scopia += "com_bath2_peineta,#com_bath2_soap,com_bath3_toalla,corner_bathtub,creamer,cup,";
-//				names.scopia += "frame1,frame2,glasses,medicoscopia_bottle,medicoscopia_bottle2,medicoscopia_box,";
-//				names.scopia += "penbox,phone,small_lavatory,sugar,teapot,pencil2,sofa_white_beige,baby_high_chair,";
-//				names.scopia += "basic_camera,birthday_cake,child_swing,christmas_tree,clothes_washing_machine,";
-//				names.scopia += "dryer_machine,electric_water_heater_big,electric_water_heater,external-unity-air-conditioning,";
-//				names.scopia += "folded_clothes,gaz_water_heater,inkjet_and_scanner_printer,intercom_with_screen,intercom,";
-//				names.scopia += "internal-unity-air-conditioning,letters_box,mini_stereo,mp3_base_for_ipad,puff,reflex_camera,";
-//				names.scopia += "sneakers,stereo_amplifier,water_cooler,woman_shoes,japanese_style_screen,basketball_net_and_board,";
-//				names.scopia += "broom,curtain,dart_game,shovel,ficus,flipper,jacuzzi,wood_logs,cat,dog,elevator-door,elevator,";
-//				names.scopia += "fireplace1,fireplace2,indoor-bike,peugeot-308,rectangle-swimming-pool,renault-scenic,round-swimming-pool,";
-//				names.scopia += "sandpit,yamaha-yzr-r6,cardboard-box,chest-freezer,clothes-horse,coffee-table2,dog-house,garden-faucet,";
-//				names.scopia += "open-cardboard-box,punching-ball,scooter,shopping-basket,squeezer,step-ladder-metal,step-ladder-wood,";
-//				names.scopia += "stroller,trampoline,tricycle,wall-hanger,aquarium,bonsai-tree,changing-table,clothes-basket,";
-//				names.scopia += "diving-board,oll-house,doll,furnace,garage-door,hospital-bed,induction-cooker-2-zones,";
-//				names.scopia += "induction-cooker-4-zones,mocassin,mower,rabbit,roasted-chicken,round-carpet,swimming-pool,";
-//				names.scopia += "video-projector,wall-flat-tv,air-mattress,truck,ceiling-lamp,turn-window,tablet,door,double_door_2,";
-//				names.scopia += "double_door_with_little_part,double_door,window_2x1_medium_with_large_pane,window_2x1_with_sliders,";
-//				names.scopia += "window_2x3_arched,window_2x3_regular,window_2x3,window_2x4_arched,window_2x4,window_2x6,window_3x1,";
-//				names.scopia += "window_4x1,window_4x3_arched,window_4x3,window_4x5,iron-railing-1,iron-railing-2,iron-railing-3";
+
+				names.vehicles = "bicycle,childBike,";
+
+				names.walls  = "wall10,wall10Arc,";
+
 
 			//	Collection droplist.
 
@@ -622,7 +592,7 @@
 
 				upload_button.addEventListener( "click", function(){ 
 					clearTimeout(interval);
-					interval = setTimeout(function(){
+					interval = setTimeout(function(button){
 						callWatchers(button, "onclick", "click"); 
 					}, 250, this);
 				});
@@ -643,9 +613,49 @@
 
 		<script>
 
-			TabUI.NewMatcap.role.classList.add("active");
-			TabUI.NewMatcap.tab.classList.add("in","active");
-			TabUI.NewMatcap.pill.scrollIntoViewIfNeeded(false);
+//				names.scopia  = "bathroom3,bathroom4,bed1,iron_bed,wardrobe1,ext_chair,parque,farola1,littlebank,";
+//				names.scopia += "ext_table,silla_teca,wood_bank,bowl,old_jar,pottery,sushi_tray,kitchen_tool1,";
+//				names.scopia += "kitchen_tool2,kitchen_tool3,kitchen_tool4,tray,wine_bottle,armchair3,armchair,";
+//				names.scopia += "armchair1,black_table,dining_room,box_room,chair3,chair4,chair,clear_sofa,saloon_table,";
+//				names.scopia += "coffee_table,dvd,maceta,simple_sofa,table3,table4,tv,vase1,vase2,vase3,jar,";
+//				names.scopia += "office_furniture1,office_box,office_chair,desk_lamp1,pencil1,apple_pc,com_bath3,";
+//				names.scopia += "puerta,complements2,desk_lamp2,little_lamp1,little_lamp2,little_lamp3,saloon_lamp,";
+//				names.scopia += "seat_leon,vase5,wooden_table_office,tubular_chair,table_lamp,metal_glass_table,";
+//				names.scopia += "livingroom_lamp1,glass_table_office,desk_table,bathroom1,armchair2,apples,bar_chair,";
+//				names.scopia += "bar_table,bathroom_vanity,beige_sofa_2seats,beige_sofa,burlap_sofa,children_bed,";
+//				names.scopia += "contemp_living_room,crib,double_vanity,kids_desk_chair,kids_desk_table,kids_shelves,";
+//				names.scopia += "kids_wooden_desk,kitchen_stool,leather_sofa,living_lamp,living_room_table,modern_armchair,";
+//				names.scopia += "plastic_chair,table_wood_and_iron,white_kitchen_chair,wooden_office_alder_table,";
+//				names.scopia += "wooden_office_pear_table_rect,wooden_office_pear_table,wooden_office_teak_table,";
+//				names.scopia += "white_kitchen_table,bandeja,beach_chair,calla_lily_with_roses,chandelier-lamp,";
+//				names.scopia += "coffee_machine,com_bath,com_bath2_cepillo,com_bath2_esponja,com_bath2_jabon_pijo,";
+//				names.scopia += "com_bath2_peineta,#com_bath2_soap,com_bath3_toalla,corner_bathtub,creamer,cup,";
+//				names.scopia += "frame1,frame2,glasses,medicoscopia_bottle,medicoscopia_bottle2,medicoscopia_box,";
+//				names.scopia += "penbox,phone,small_lavatory,sugar,teapot,pencil2,sofa_white_beige,baby_high_chair,";
+//				names.scopia += "basic_camera,birthday_cake,child_swing,christmas_tree,clothes_washing_machine,";
+//				names.scopia += "dryer_machine,electric_water_heater_big,electric_water_heater,external-unity-air-conditioning,";
+//				names.scopia += "folded_clothes,gaz_water_heater,inkjet_and_scanner_printer,intercom_with_screen,intercom,";
+//				names.scopia += "internal-unity-air-conditioning,letters_box,mini_stereo,mp3_base_for_ipad,puff,reflex_camera,";
+//				names.scopia += "sneakers,stereo_amplifier,water_cooler,woman_shoes,japanese_style_screen,basketball_net_and_board,";
+//				names.scopia += "broom,curtain,dart_game,shovel,ficus,flipper,jacuzzi,wood_logs,cat,dog,elevator-door,elevator,";
+//				names.scopia += "fireplace1,fireplace2,indoor-bike,peugeot-308,rectangle-swimming-pool,renault-scenic,round-swimming-pool,";
+//				names.scopia += "sandpit,yamaha-yzr-r6,cardboard-box,chest-freezer,clothes-horse,coffee-table2,dog-house,garden-faucet,";
+//				names.scopia += "open-cardboard-box,punching-ball,scooter,shopping-basket,squeezer,step-ladder-metal,step-ladder-wood,";
+//				names.scopia += "stroller,trampoline,tricycle,wall-hanger,aquarium,bonsai-tree,changing-table,clothes-basket,";
+//				names.scopia += "diving-board,oll-house,doll,furnace,garage-door,hospital-bed,induction-cooker-2-zones,";
+//				names.scopia += "induction-cooker-4-zones,mocassin,mower,rabbit,roasted-chicken,round-carpet,swimming-pool,";
+//				names.scopia += "video-projector,wall-flat-tv,air-mattress,truck,ceiling-lamp,turn-window,tablet,door,double_door_2,";
+//				names.scopia += "double_door_with_little_part,double_door,window_2x1_medium_with_large_pane,window_2x1_with_sliders,";
+//				names.scopia += "window_2x3_arched,window_2x3_regular,window_2x3,window_2x4_arched,window_2x4,window_2x6,window_3x1,";
+//				names.scopia += "window_4x1,window_4x3_arched,window_4x3,window_4x5,iron-railing-1,iron-railing-2,iron-railing-3";
+
+		</script>
+
+		<script>
+
+			TabUI.Skydome.role.classList.add("active");
+			TabUI.Skydome.tab.classList.add("in","active");
+			TabUI.Skydome.pill.scrollIntoViewIfNeeded(false);
 
 		//	scene.add(ground);
 		//	mirror.visible = !mirror.visible; 
