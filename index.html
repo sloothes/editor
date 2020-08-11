@@ -213,8 +213,9 @@
 		//	modeldB.js
 
 			const modeldB = new zango.Db( "model", [
-				"imgur","objects","geometries","materials","textures","images", // data collections.
-				"models"  // entry collections.
+				"imgur", // meta-data collection,
+				"groups",objects","geometries","materials","textures","images", // data collections,
+				"models"  // entry collection,
 			]);
 
 			(function(db){
@@ -241,8 +242,7 @@
 
 		<script>
 
-		//	sweethome models loader (admin).
-		//	Imports .obj model to database.
+		//	sweethome models loader (admin). Imports .obj model to database.
 
 			(function(canvas,next_doc,prev_doc,name_input,load_button,img_viewer,collection_droplist){
 
@@ -413,13 +413,13 @@
 				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
 
 			})( 
-				TabUI.Model3D.tab.querySelector("canvas#model-loader-viewer"),    // canvas,
-				TabUI.Model3D.tab.querySelector("li#model-loader-doc-next"),      // next_doc,
-				TabUI.Model3D.tab.querySelector("li#model-loader-doc-previous"),  // prev_doc,
-				TabUI.Model3D.tab.querySelector("input#model-loader-name-input"), // name_input,
-				TabUI.Model3D.tab.querySelector("div#model-loader-load-button"),  // load_button,
-				TabUI.Model3D.tab.querySelector("img#model-loaderimage-viewer"), // img_viewer,
-				TabUI.Model3D.tab.querySelector("select#model-loader-collection-droplist") // collection_droplist,
+				TabUI.ModelLoader.tab.querySelector("canvas#model-loader-viewer"),    // canvas,
+				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-next"),      // next_doc,
+				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-previous"),  // prev_doc,
+				TabUI.ModelLoader.tab.querySelector("input#model-loader-name-input"), // name_input,
+				TabUI.ModelLoader.tab.querySelector("div#model-loader-load-button"),  // load_button,
+				TabUI.ModelLoader.tab.querySelector("img#model-loaderimage-viewer"), // img_viewer,
+				TabUI.ModelLoader.tab.querySelector("select#model-loader-collection-droplist") // collection_droplist,
 			);
 
 		</script>
