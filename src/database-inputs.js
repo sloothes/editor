@@ -465,7 +465,8 @@
 			count(collection)
 				.then(function(k){ max = k; })
 				.then(function(){ get_doc( skip ); })
-				.then(function(){ skip_input.value = skip; });
+				.then(function(){ skip_input.value = skip; })
+				.catch(function(err){ console.error(err); });
 
 		});
 
