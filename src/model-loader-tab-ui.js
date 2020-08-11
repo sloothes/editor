@@ -109,7 +109,7 @@
 
 		vect.appendChild(prev); vect.appendChild(input); vect.appendChild(next); row.appendChild(vect); tab.appendChild( row );
 
-	})( TabUI.Editor.tab );
+	})( TabUI.ModelLoader.tab );
 
 
 
