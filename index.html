@@ -379,8 +379,8 @@
 							objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
 							objLoader.load( objfile, function ( group ) {
 
-								var s = 0.01; group.position.set(s,s,s); // important!
-								group.traverse(function(child){ // apply group matrix to geometry children.
+							//	scale and apply matrix to children geometries.
+								var s = 0.01; group.scale.set(s,s,s); group.traverse(function(child){ 
 									if ( child.geometry ) child.geometry.applyMatrix( group.matrix );
 								}); group.scale.set(1,1,1); // group.position.set(0,0,0); group.rotation.set(0,0,0);
 
