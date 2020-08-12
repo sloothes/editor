@@ -110,28 +110,11 @@
 	})( TabUI.ModelLoader.tab );
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	(function( tab ){
 
 	//	ModelLoader Save button.
 		var row = document.createElement("h3"); row.style.cssText = "height:40px;margin-bottom:20px;"
-		var button = document.createElement("div"); button.id = "model-loader-load-button"; 
+		var button = document.createElement("div"); button.id = "model-loader-save-button"; 
 		button.textContent = "Save model to database"; button.classList.add( "form-control","btn", "btn-primary","btn-white-outline","gradient-btn" );
 		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-left:15px;margin-right:15px;";
 		row.appendChild( button ); tab.appendChild( row );
