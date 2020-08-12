@@ -358,32 +358,31 @@
 
 			//	Load button.
 
-				watch( load_button, "onclick", function(prop, event, value){
+				watch( load_button, "onclick", function(prop, event, name){
 
-					var baseUrl = "/"+"models"+"/"+collection_droplist.value+"/"+value+"/";
-					var mtlfilename = value + ".mtl"; var objfilename = value + ".obj";
+					var mtlfile = name + ".mtl"; var objfile = name + ".obj";
+					var baseUrl = "/"+"models"+"/"+name+"/";    // important!
 
 					var mtlLoader = new THREE.MTLLoader(); 
 					mtlLoader.setCrossOrigin("anonymous"); mtlLoader.setPath( baseUrl ); 
-					mtlLoader.load( mtlfilename, function onLoad( materials ) {
+					mtlLoader.load( mtlfile, function onLoad( materials ) {
 
 						materials.preload(); debugMode && console.log( materials ); 
 
 					//	add material entities.
-						for ( var name in materials.materials ) {
-							material_entities.add( materials.materials[ name ] );
+						for ( var key in materials.materials ) {
+							material_entities.add( materials.materials[key] );
 						}
 
 						var objLoader = new THREE.OBJLoader();
 						objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
-						objLoader.load( objfilename, function ( group ) {
+						objLoader.load( objfile, function ( group ) {
 
-							group.name = value;
-							group.position.set(0,0,0); 
+							group.name = name; group.position.set(0,0,0); 
+							scene.add( group ); entities.add( group ); 
 							debugMode && console.log( group ); 
-							scene.add( group ); entities.add( group );
-						//	group.traverse(function(mesh){ entities.add(object); })
 
+						//	group.traverse(function(mesh){ entities.add(object); })
 						//	var entity_droplist = document.querySelector("select#editor-entities-droplist");
 						//	entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
 
