@@ -304,7 +304,7 @@
 						interval = setTimeout(function increase(){
 
 							var i = index = THREE.Math.clamp(++index, 0, max);
-							var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+							var src = "/"+"models"+"/"+items[index]+".png";
 							canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
 							name_input.value = items[index]; // img_viewer.src = src; 
 
@@ -319,7 +319,7 @@
 						interval = setTimeout(function decrease(){
 
 							var i = index = THREE.Math.clamp(--index, 0, max);
-							var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+							var src = "/"+"models"+"/"+items[index]+".png";
 							canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
 							name_input.value = items[index]; // img_viewer.src = src; 
 
@@ -336,7 +336,7 @@
 						var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
 
 						var folder = collection_droplist.value;
-						var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+						var src = "/"+"models"+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
 						name_input.value = items[index]; img_viewer.src = src; 
 
@@ -350,7 +350,7 @@
 						var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
 
 						var folder = collection_droplist.value;
-						var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+						var src = "/"+"models"+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
 						name_input.value = items[index]; img_viewer.src = src; 
 
