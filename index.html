@@ -463,14 +463,13 @@
 					var interval; 
 
 					watch( apply_button, "onclick", function( prop, event ){
+						debugMode && console.log({item:apply_button,event:event,model:model});
 
 						if ( !model ) return; model.traverse(function(child){
 							if ( child.geometry ) child.geometry.applyMatrix( model.matrix );
 						});
 
-					//	setTimeout( function(){
 						model.position.set(0,0,0); model.rotation.set(0,0,0); model.scale.set(1,1,1);
-					//	});
 
 					});
 
