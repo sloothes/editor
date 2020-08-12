@@ -178,7 +178,6 @@
 					function(doc){
 
 						result = doc.uuid; // important!
-
 						collection.update({_id:doc._id}, {$set:data}, function(err){
 							if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
 						}).catch(function(err){ console.error(err); });
