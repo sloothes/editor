@@ -109,6 +109,20 @@
 
 	})( TabUI.ModelLoader.tab );
 
+//	model-loader-apply-matrix-ui.js
+
+	(function( tab ){
+
+	//	ModelLoader Apply Matrix button.
+		var row = document.createElement("h3"); row.style.cssText = "height:30px;margin-bottom:20px;"
+		var button = document.createElement("div"); button.id = "model-loader-apply-matrix"; button.textContent = "Apply Model Matrix";
+		button.classList.add( "form-control", "btn", "btn-primary", "btn-white-outline", "gradient-btn" );
+		button.style.cssText = "width:-webkit-fill-available;float:right;height:40px;font-size:large;margin-right:15px;";
+		row.appendChild( button ); tab.appendChild( row );
+
+	})( TabUI.ModelLoader.tab );
+
+//	model-loader-save-ui.js
 
 	(function( tab ){
 
