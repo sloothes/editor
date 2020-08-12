@@ -171,13 +171,13 @@
 
 			function saveto( collection, data, keyword ){
 
-				var result;
+				var result; // important!
 
 				collection.find({uuid:data.uuid}).forEach(
 
 					function(doc){
 
-						result = doc.uuid;
+						result = doc.uuid; // important!
 
 						collection.update({_id:doc._id}, {$set:data}, function(err){
 							if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
@@ -188,7 +188,6 @@
 					function(err){
 
 						if (err) throw err; // debugMode && console.log( "result:", result );
-
 						if ( !result ) return collection.insert(data, function(err){ 
 							if (err) throw err; console.log(keyword, data.uuid, "saved!" )
 						}).catch(function(err){ console.error(err); });
