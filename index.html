@@ -505,7 +505,7 @@
 
 							function(err){
 
-								if (err) throw err;  
+								if (err) throw err; console.log( "result:", result );
 
 								if (!result) return collection.insert(data, function(err){ 
 									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
@@ -542,7 +542,7 @@
 						var meta = { images:{}, textures:{}, materials:{}, geometries:{} }; 
 						var json = group.toJSON( meta );  debugMode && console.log( json, meta );
 						var object = json.object; debugMode && console.log( "object:", object );
-						var children = json.children; debugMode && console.log( "children:", children );
+						var children = json.object.children; debugMode && console.log( children );
 
 
 
