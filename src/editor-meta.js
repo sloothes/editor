@@ -1,14 +1,18 @@
 //	editor-meta.js
 
-	const metadB = new zango.Db( "meta", {
+	const metadB = new zango.Db( "meta", [
+		"images",
+		"objects",
+		"textures",
+		"materials",
+		"geometries"
+	]);
 
-		images:     ["uuid"],
-		objects:	["uuid"],
-		textures:   ["uuid"],
-		materials:  ["uuid"],
-		geometries: ["uuid"]
-
-	});
+	//	images:     ["uuid"],
+	//	objects:	["uuid"],
+	//	textures:   ["uuid"],
+	//	materials:  ["uuid"],
+	//	geometries: ["uuid"]
 
 	metadB.open(function(err, database){
 		if (err) console.error(err);
