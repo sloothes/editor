@@ -522,9 +522,9 @@
 					//	"materials","textures","images", // data collections,
 					//	"models"                         // entry collections,
 
-					watch( save_button, "onclick", function( prop, event, object ){
+					watch( save_button, "onclick", function( prop, event, group ){
 
-						if ( !db ) return; if ( !object ) return;
+						if ( !db ) return; if ( !group ) return;
 
 					//	collections.
 
@@ -541,7 +541,9 @@
 					//	json.
 
 						var meta = { images:{}, textures:{}, materials:{}, geometries:{} }; 
-						var json = object.toJSON( meta );  debugMode && console.log( json, meta );
+						var json = group.toJSON( meta );  debugMode && console.log( json, meta );
+						var object = json.object; debugMode && console.log( "object:", object );
+						var children = json.children; debugMode && console.log( "children:", children );
 
 
 
