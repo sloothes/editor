@@ -529,7 +529,9 @@
 
 					//	collections.
 
+						var Names = db.collection("names"); if ( !Names ) return;
 						var Groups = db.collection("groups"); if ( !Groups ) return;
+						var Models = db.collection("models"); if ( !Models ) return;
 
 						var Images = db.collection("images"); if ( !Images ) return;
 						var Objects = db.collection("objects"); if ( !Objects ) return;
