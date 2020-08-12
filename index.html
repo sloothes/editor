@@ -492,30 +492,6 @@
 					//	"materials","textures","images", // data collections,
 					//	"models"                         // entry collections,
 
-					function saveto( collection, data, keyword ){
-
-						var result; // important!
-
-						collection.find({uuid:data.uuid}).forEach(
-
-							function(doc){
-								result = doc.uuid; // important!
-								collection.update({_id:doc._id}, {$set:data}, function(err){
-									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
-								}).catch(function(err){ console.error(err); });
-							},
-
-							function(err){
-								if (err) throw err; debugMode && console.log( "result:", result );
-								if (!result) return collection.insert(data, function(err){ 
-									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
-								}).catch(function(err){ console.error(err); });
-							}
-
-						).catch(function(err){ console.error(err); });
-
-					}
-
 					watch( save_button, "onclick", function( prop, event, object ){
 
 						if ( !db ) return; if ( !object ) return;
@@ -540,6 +516,40 @@
 						var group = json.object; debugMode && console.log( "group:", group );
 						var children = json.object.children; debugMode && console.log( "children:", children );
 
+						var inserts = []; var updates = [];
+
+						function saveto( collection, data, keyword ){
+
+							var result; // important!
+
+							collection.find({uuid:data.uuid}).forEach(
+
+								function(doc){
+									result = doc.uuid; // important!
+									updates.push( new Promise(function(resolve,reject){
+										collection.update({_id:doc._id}, {$set:data}, function(err){
+											if (err) reject( err ); 
+										}).then(function(){
+											console.log(keyword,doc.uuid,"updated!"); resolve();
+										});
+									}));
+								},
+
+								function(err){
+									if (err) throw err; debugMode && console.log( "result:", result );
+									if (!result) inserts.push( new Promise(function(resolve,reject){
+										collection.insert(data, function(err){ 
+											if (err) reject ( err ); 
+										}).then(function(){
+											console.log(keyword, data.uuid, "saved!" ); resolve();
+										});
+									}));
+								}
+
+							).catch(function(err){ console.error(err); });
+
+						}
+
 					//	save meta.
 
 						for (var key in meta.images){ saveto(Images, meta.images[key], "image"); }
@@ -548,13 +558,12 @@
 						for (var key in meta.geometries){ saveto(Geometries, meta.geometries[key], "geometry"); }
 
 					//	save children.
-						for ( var i = 0; i < children.length; i++ ) { 
-							saveto(Objects, children[i], "mesh"); 
-						}
+						for ( var i = 0; i < children.length; i++ ) { saveto(Objects, children[i], "mesh"); }
 
 					//	save group (model).
 						saveto( Groups, group, "model" );
 
+						debugMode && console.log({"updates":updates,"inserts":inserts});
 
 					//	scene.remove(model); scale_input.value = "";
 					//	at the very end: model = undefined; // important!
