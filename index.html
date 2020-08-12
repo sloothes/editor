@@ -213,9 +213,10 @@
 		//	modeldB.js
 
 			const modeldB = new zango.Db( "model", [
-				"imgur", // meta-data collection,
-				"groups",objects","geometries","materials","textures","images", // data collections,
-				"models"  // entry collection,
+				"names",imgur",                  // meta-data collections,
+				"groups",objects","geometries",  // data collections,
+				"materials","textures","images", // data collections,
+				"models"                         // entry collections,
 			]);
 
 			(function(db){
@@ -244,16 +245,15 @@
 
 		//	sweethome models loader (admin). Imports .obj model to database.
 
-			(function(canvas,next_doc,prev_doc,name_input,load_button,img_viewer,collection_droplist){
+			(function( canvas,next_doc,prev_doc,name_input,increase,decrease,
+				scale_input,load_button,save_button,img_viewer,collection_droplist ){
 
-				var interval; var index = 0, limit = 100, items = []; var names = {};
-				window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+				var model; var index = 0, limit = 100, items = []; var names = {};
 
 			//	collections: "animals,bathroom,bedroom,doors,walls,windows,floor,kitchen,lights,"
 			//	"office,livingroom,staircases,vehicles,exterior,trees,characters,miscellaneous,"
-			
-				names.vehicles = "corceptSedan01,";
 
+				names.vehicles = "corceptSedan01,";
 
 			//	Collection droplist.
 
@@ -277,136 +277,214 @@
 
 				});
 
-				watch( next_doc, "onclick", function( prop, event, value ){
-				//	debugMode && console.log({item:next_doc,event:event,index:value});
+			//	Name input.
 
-				});
+				(function(){
 
-				watch( prev_doc, "onclick", function( prop, event, value ){
-				//	debugMode && console.log({item:prev_doc,event:event,index:value});
-				});
+					var interval; window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
 
-				watch( name_input, "onchange", function( prop, event, value ){ 
-					debugMode && console.log({item:name_input,event:event,index:value});
-				});
+					watch( next_doc, "onclick", function( prop, event, value ){
+					//	debugMode && console.log({item:next_doc,event:event,index:value});
+					});
 
-			//	on mouse down.
+					watch( prev_doc, "onclick", function( prop, event, value ){
+					//	debugMode && console.log({item:prev_doc,event:event,index:value});
+					});
 
-				next_doc.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
-					var folder = collection_droplist.value; var max = items.length - 1; 
-					interval = setTimeout(function increase(){
+					watch( name_input, "onchange", function( prop, event, value ){ 
+						debugMode && console.log({item:name_input,event:event,index:value});
+					});
 
-						var i = index = THREE.Math.clamp(++index, 0, max);
+				//	on mouse down.
+
+					next_doc.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
+						var folder = collection_droplist.value; var max = items.length - 1; 
+						interval = setTimeout(function increase(){
+
+							var i = index = THREE.Math.clamp(++index, 0, max);
+							var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+							canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
+							name_input.value = items[index]; // img_viewer.src = src; 
+
+							interval = setTimeout(increase, 100);
+						}, 500);
+					});
+
+					prev_doc.addEventListener( "mousedown", function(){
+						clearTimeout( interval ); // important!
+						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
+						var folder = collection_droplist.value; var max = items.length - 1; 
+						interval = setTimeout(function decrease(){
+
+							var i = index = THREE.Math.clamp(--index, 0, max);
+							var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
+							canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
+							name_input.value = items[index]; // img_viewer.src = src; 
+
+							interval = setTimeout(decrease, 100);
+						}, 500);
+					});
+
+				//	on mouse click.
+
+					next_doc.addEventListener( "click", function(){
+						clearTimeout( interval ); // important!
+
+						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
+						var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
+
+						var folder = collection_droplist.value;
 						var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-						name_input.value = items[index]; // img_viewer.src = src; 
+						name_input.value = items[index]; img_viewer.src = src; 
 
-						interval = setTimeout(increase, 100);
-					}, 500);
-				});
+						callWatchers( this, "onclick", "click", index ); // important!
+					});
 
-				prev_doc.addEventListener( "mousedown", function(){
-					clearTimeout( interval ); // important!
-					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
-					var folder = collection_droplist.value; var max = items.length - 1; 
-					interval = setTimeout(function decrease(){
+					prev_doc.addEventListener( "click", function(){
+						clearTimeout( interval ); // important!
 
-						var i = index = THREE.Math.clamp(--index, 0, max);
+						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
+						var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
+
+						var folder = collection_droplist.value;
 						var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-						name_input.value = items[index]; // img_viewer.src = src; 
+						name_input.value = items[index]; img_viewer.src = src; 
 
-						interval = setTimeout(decrease, 100);
-					}, 500);
-				});
+						callWatchers( this, "onclick", "click", index ); // important!
+					});
 
-			//	on mouse click.
+					collection_droplist.addEventListener( "change", function(){
+						this.blur(); callWatchers( this, "onchange", "change", this.value );
+					});
 
-				next_doc.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
-
-					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
-					var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
-
-					var folder = collection_droplist.value;
-					var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
-					canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-					name_input.value = items[index]; img_viewer.src = src; 
-
-					callWatchers( this, "onclick", "click", index ); // important!
-				});
-
-				prev_doc.addEventListener( "click", function(){
-					clearTimeout( interval ); // important!
-
-					if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
-					var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
-
-					var folder = collection_droplist.value;
-					var src = "/"+"models"+"/"+folder+"/"+items[index]+".png";
-					canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-					name_input.value = items[index]; img_viewer.src = src; 
-
-					callWatchers( this, "onclick", "click", index ); // important!
-				});
-
-				collection_droplist.addEventListener( "change", function(){
-					this.blur(); callWatchers( this, "onchange", "change", this.value );
-				});
+				})();
 
 			//	Load button.
 
-				watch( load_button, "onclick", function(prop, event, name){
+				(function(){
 
-					var mtlfile = name + ".mtl"; var objfile = name + ".obj";
-					var baseUrl = "/"+"models"+"/"+name+"/";    // important!
+					var interval;
 
-					var mtlLoader = new THREE.MTLLoader(); 
-					mtlLoader.setCrossOrigin("anonymous"); mtlLoader.setPath( baseUrl ); 
-					mtlLoader.load( mtlfile, function onLoad( materials ) {
+					watch( load_button, "onclick", function(prop, event, name){
 
-						materials.preload(); debugMode && console.log( materials ); 
+						var mtlfile = name + ".mtl"; var objfile = name + ".obj";
+						var baseUrl = "/"+"models"+"/"+name+"/";    // important!
 
-					//	add material entities.
-						for ( var key in materials.materials ) {
-							material_entities.add( materials.materials[key] );
-						}
+						var mtlLoader = new THREE.MTLLoader(); 
+						mtlLoader.setCrossOrigin("anonymous"); mtlLoader.setPath( baseUrl ); 
+						mtlLoader.load( mtlfile, function onLoad( materials ) {
 
-						var objLoader = new THREE.OBJLoader();
-						objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
-						objLoader.load( objfile, function ( group ) {
+							materials.preload(); debugMode && console.log( materials ); 
 
-							group.name = name; group.position.set(0,0,0); 
-							scene.add( group ); entities.add( group ); 
-							debugMode && console.log( group ); 
+						//	add material entities.
+							for ( var key in materials.materials ) {
+								material_entities.add( materials.materials[key] );
+							}
 
-						//	group.traverse(function(mesh){ entities.add(object); })
-						//	var entity_droplist = document.querySelector("select#editor-entities-droplist");
-						//	entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
+							var objLoader = new THREE.OBJLoader();
+							objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
+							objLoader.load( objfile, function ( group ) {
 
-						}); // end obj loader.
+								group.name = name; group.position.set(0,0,0); 
+								scene.add( group ); model = group; // important!
+								entities.add( group ); debugMode && console.log( group );
 
-					}); // end mtl loader.
+							//	group.traverse(function(mesh){ entities.add(object); })
+							//	var entity_droplist = document.querySelector("select#editor-entities-droplist");
+							//	entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
 
-				}); // end watch.
+							}); // end obj loader.
 
-				load_button.addEventListener("click", function(){
-					clearTimeout( interval );
-					interval = setTimeout(function(button){
-						callWatchers( button, "onclick", "click", items[index] );
-					}, 250, this);
-				});
+						}); // end mtl loader.
 
-				callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
+					}); // end watch.
+
+					load_button.addEventListener("click", function(){
+						clearTimeout( interval );
+						interval = setTimeout(function(button){
+							callWatchers( button, "onclick", "click", items[index] );
+						}, 250, this);
+					});
+
+					callWatchers(collection_droplist, "onchange", "change", collection_droplist.value);
+
+				})();
+
+			//	Scale inputs.
+
+				(function(){
+
+					var interval; window.addEventListener( "mouseup", function (){ clearTimeout( interval ); }); // important!
+
+				//	on mouse down.
+
+					function onMouseDown(){ 
+						clearTimeout( interval ); 
+						if ( !model ) return; var button = this;
+						interval = setTimeout( function update() {
+							var step = 0.001; 
+							var value = round(model.scale.y, 3); // copy.
+							if ( button === increase ) value += step;
+							if ( button === decrease ) value -= step;
+							model.scale.set(value,value,value);
+							scale_input.value = value.toFixed(3);
+							interval = setTimeout( update, 20 );
+						}, 500);
+					}
+
+				//	on mouse click.
+
+					function onMouseClick(){
+						clearTimeout( interval ); 
+						if ( !model ) return; var step = 0.001; 
+						var value = round(model.scale.y, 3); // copy.
+						if ( this === increase ) value += step;
+						if ( this === decrease ) value -= step;
+						model.scale.set(value,value,value);
+						scale_input.value = value.toFixed(3);
+					}
+
+				})();
+
+			//	Save to database button.
+
+				(function(){
+
+					var interval; 
+
+					watch( save_button, "onclick", function( prop, event, group ){
+
+						if ( !group ) return;
+
+						model = undefined; // last, important!
+
+					});
+
+					save_button.addEventListener( "click", function(){
+						clearTimeout( interval ); interval = setTimeout(function(){
+							callWatchers( save_button, "onclick", "click", model );
+						}, 250);
+					})
+
+				})();
 
 			})( 
 				TabUI.ModelLoader.tab.querySelector("canvas#model-loader-viewer"),    // canvas,
 				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-next"),      // next_doc,
 				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-previous"),  // prev_doc,
 				TabUI.ModelLoader.tab.querySelector("input#model-loader-name-input"), // name_input,
+
+				TabUI.ModelLoader.tab.querySelector("li#model-loader-scale-increase"), // increase,
+				TabUI.ModelLoader.tab.querySelector("li#model-loader-scale-decrease"), // decrease,
+				TabUI.ModelLoader.tab.querySelector("input#model-loader-scale-input"), // scale_input,
+
+
 				TabUI.ModelLoader.tab.querySelector("div#model-loader-load-button"),  // load_button,
+				TabUI.ModelLoader.tab.querySelector("div#model-loader-save-button"),  // save_button,
 				TabUI.ModelLoader.tab.querySelector("img#model-loader-image-viewer"), // img_viewer,
 				TabUI.ModelLoader.tab.querySelector("select#model-loader-collection-droplist") // collection_droplist,
 			);
