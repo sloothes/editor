@@ -379,8 +379,12 @@
 							objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
 							objLoader.load( objfile, function ( group ) {
 
-								group.name = name; group.position.set(0,0,0); 
-								scene.add( group ); model = group; // important!
+								var s = 0.01; group.position.set(s,s,s); // important!
+								group.traverse(function(child){ // apply group matrix to geometry children.
+									if ( child.geometry ) child.geometry.applyMatrix( group.matrix );
+								}); group.scale.set(1,1,1); // group.position.set(0,0,0); group.rotation.set(0,0,0);
+
+								group.name = name; scene.add( group ); model = group;
 								entities.add( group ); debugMode && console.log( group );
 
 							//	group.traverse(function(mesh){ entities.add(object); })
