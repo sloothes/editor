@@ -209,7 +209,7 @@
 		<script src="/editor/src/create-matcap-buttons.js"></script>
 
 		<script>
-/*
+
 		//	modeldB.js
 
 			const modeldB = new zango.Db( "model", [
@@ -225,7 +225,7 @@
 					"Database", db.name, "(v"+db.version+")", "ready for use.");
 				}).catch(function(err){ console.error(err); });
 			})( modeldB );
-*/
+
 		</script>
 
 		<script>
@@ -245,7 +245,7 @@
 
 		//	sweethome models loader (admin). Imports .obj model to database.
 
-			(function( 
+			(function( db, 
 				canvas,next_doc,prev_doc,name_input,increase,decrease,scale_input,
 				load_button,apply_button,save_button,img_viewer,collection_droplist 
 			){
@@ -484,13 +484,81 @@
 
 			//	Save to database button.
 
+			//	"names",imgur",                  // meta-data collections,
+			//	"groups",objects","geometries",  // data collections,
+			//	"materials","textures","images", // data collections,
+			//	"models"                         // entry collections,
+
 				(function(){
 
 					var interval; 
 
-					watch( save_button, "onclick", function( prop, event ){
+					function saveto( collection, data, keyword ){
 
-						if ( !model ) return;
+						var result;
+
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+
+								result = doc.uuid;
+
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
+							},
+
+							function(err){
+
+								if (err) throw err;  
+
+								if (!result) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
+								}).catch(function(err){ console.error(err); });
+							}
+
+						).catch(function(err){ console.error(err); });
+
+					}
+
+
+					watch( save_button, "onclick", function( prop, event, group ){
+
+						if ( !db ) return; if ( !group ) return;
+
+					//	collections.
+
+						var Groups = db.collection("groups"); if ( !Groups ) return;
+
+						var Images = db.collection("images"); if ( !Images ) return;
+						var Objects = db.collection("objects"); if ( !Objects ) return;
+						var Textures = db.collection("textures"); if ( !Textures ) return;
+						var Materials = db.collection("materials"); if ( !Materials ) return;
+						var Geometries = db.collection("geometries"); if ( !Geometries ) return;
+
+					//	json.
+
+						var meta = { images:{}, textures:{}, materials:{}, geometries:{} }; 
+						var json = object.toJSON( meta ); debugMode && console.log( json, meta );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 						scene.remove(model); scale_input.value = ""; // update scale_input.
 
@@ -500,13 +568,14 @@
 
 					save_button.addEventListener( "click", function(){
 						clearTimeout( interval ); interval = setTimeout(function(){
-							callWatchers( save_button, "onclick", "click" );
+							callWatchers( save_button, "onclick", "click", model );
 						}, 250);
 					})
 
 				})();
 
 			})( 
+				modeldB, // db,
 				TabUI.ModelLoader.tab.querySelector("canvas#model-loader-viewer"),     // canvas,
 				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-next"),       // next_doc,
 				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-previous"),   // prev_doc,
