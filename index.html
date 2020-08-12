@@ -496,7 +496,7 @@
 
 						var result; // important!
 
-						return collection.find({uuid:data.uuid}).forEach(
+						collection.find({uuid:data.uuid}).forEach(
 
 							function(doc){
 								result = doc.uuid; // important!
@@ -542,54 +542,18 @@
 
 					//	save meta.
 
-						var promises = [];
+						for (var key in meta.images){ saveto(Images, meta.images[key], "image"); }
+						for (var key in meta.textures){ saveto(Textures, meta.textures[key], "texture"); }
+						for (var key in meta.materials){ saveto(Materials, meta.materials[key], "material"); }
+						for (var key in meta.geometries){ saveto(Geometries, meta.geometries[key], "geometry"); }
 
-					//	images.
-
-						for (var key in meta.images){
-
-							promises.push( saveto(Images, meta.images[key], "image") );
-
+					//	save children.
+						for ( var i = 0; i < children.length; i++ ) { 
+							saveto(Objects, children[i], "mesh"); 
 						}
 
-					//	textures.
-
-						for (var key in meta.textures){
-
-							promises.push( saveto(Textures, meta.textures[key], "texture") );
-
-						}
-
-					//	materials.
-
-						for (var key in meta.materials){
-
-							promises.push( saveto(Materials, meta.materials[key], "material") );
-
-						}
-
-					//	geometries.
-
-						for (var key in meta.geometries){
-
-							promises.push( saveto(Geometries, meta.geometries[key], "geometry") );
-
-						}
-
-					//	save objects.
-
-					//	children.
-
-						for ( var i = 0; i < children.length; i++ ) {
-
-							promises.push( saveto(Objects, children[i], "mesh") );
-
-						}
-
-					//	object.
-
-						promises.push( saveto(Groups, object, "group") );
-						debugMode && console.log( "promises:", promises );
+					//	save group (model).
+						saveto( Groups, group, "model" );
 
 
 					//	scene.remove(model); scale_input.value = "";
