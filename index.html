@@ -300,30 +300,22 @@
 					next_doc.addEventListener( "mousedown", function(){
 						clearTimeout( interval ); // important!
 						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
-						var folder = collection_droplist.value; var max = items.length - 1; 
-						interval = setTimeout(function increase(){
-
+						var max = items.length - 1; interval = setTimeout(function increase(){
 							var i = index = THREE.Math.clamp(++index, 0, max);
-							var src = "/"+"models"+"/"+items[index]+".png";
 							canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-							name_input.value = items[index]; // img_viewer.src = src; 
-
-							interval = setTimeout(increase, 100);
+							name_input.value = items[index]; interval = setTimeout(increase, 100);
+						//	img_viewer.src = "/"+"models"+"/"+items[index]+".png"; 
 						}, 500);
 					});
 
 					prev_doc.addEventListener( "mousedown", function(){
 						clearTimeout( interval ); // important!
 						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
-						var folder = collection_droplist.value; var max = items.length - 1; 
-						interval = setTimeout(function decrease(){
-
+						var max = items.length - 1; interval = setTimeout(function decrease(){
 							var i = index = THREE.Math.clamp(--index, 0, max);
-							var src = "/"+"models"+"/"+items[index]+".png";
 							canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-							name_input.value = items[index]; // img_viewer.src = src; 
-
-							interval = setTimeout(decrease, 100);
+							name_input.value = items[index]; interval = setTimeout(decrease, 100);
+						//	img_viewer.src = "/"+"models"+"/"+items[index]+".png";
 						}, 500);
 					});
 
@@ -335,10 +327,8 @@
 						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
 						var max = items.length - 1; var i = index = THREE.Math.clamp(++index, 0, max);
 
-						var folder = collection_droplist.value;
-						var src = "/"+"models"+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-						name_input.value = items[index]; img_viewer.src = src; 
+						name_input.value = items[index]; img_viewer.src = "/"+"models"+"/"+items[index]+".png";
 
 						callWatchers( this, "onclick", "click", index ); // important!
 					});
@@ -349,10 +339,8 @@
 						if ( !items.length ) { name_input.value = ""; img_viewer.src = ":error.png"; return; }
 						var max = items.length - 1; var i = index = THREE.Math.clamp(--index, 0, max);
 
-						var folder = collection_droplist.value;
-						var src = "/"+"models"+"/"+items[index]+".png";
 						canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height );
-						name_input.value = items[index]; img_viewer.src = src; 
+						name_input.value = items[index]; img_viewer.src = "/"+"models"+"/"+items[index]+".png";
 
 						callWatchers( this, "onclick", "click", index ); // important!
 					});
