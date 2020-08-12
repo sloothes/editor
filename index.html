@@ -379,7 +379,7 @@
 							objLoader.setMaterials( materials ); objLoader.setPath( baseUrl ); 
 							objLoader.load( objfile, function ( group ) {
 
-								var s = 0.001; group.scale.set(s,s,s); // scale.
+								var s = 0.01; group.scale.set(s,s,s); // scale.
 								group.name = name; scene.add( group ); model = group;
 
 								setTimeout(function(){
