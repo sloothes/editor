@@ -1,0 +1,52 @@
+# PluginFurnitureCatalog.txt
+#
+# Copyright (c) 2008-2016 Emmanuel PUYBARET / eTeks <info@eteks.com>.
+#
+# This file is free software; you can redistribute it and/or modify
+# it under the terms of the Creative Commons 3.0 Unported license.
+# 
+# 3D models created by Scopia  
+
+TREES: blackTupelo,fanPalm,lombardyPoplar,palm,quakingAspen,sassafras,weepingWillow.
+
+CHARACTERS: female01,female02,female03,male01,male02,male03,holdingMale01,holdingFemale01,
+holdingFemale02,holdingFemale03,sitMale03,lyingDownFemale01,lyingDownMale01,lyingDownMale02,
+sitFemale01,sitFemale02,sitFemale03,sitMale01,sitMale02,boyLying,boySitting,boyStanding,
+girlSittingGround,girlSittingTable,girlStanding.
+
+SCOPIA: bathroom3,bathroom4,bed1,iron_bed,wardrobe1,ext_chair,parque,farola1,littlebank,
+ext_table,silla_teca,wood_bank,bowl,old_jar,pottery,sushi_tray,kitchen_tool1,
+kitchen_tool2,kitchen_tool3,kitchen_tool4,tray,wine_bottle,armchair3,armchair,
+armchair1,black_table,dining_room,box_room,chair3,chair4,chair,clear_sofa,saloon_table,
+coffee_table,dvd,maceta,simple_sofa,table3,table4,tv,vase1,vase2,vase3,jar,
+office_furniture1,office_box,office_chair,desk_lamp1,pencil1,apple_pc,com_bath3,
+puerta,complements2,desk_lamp2,little_lamp1,little_lamp2,little_lamp3,saloon_lamp,
+seat_leon,vase5,wooden_table_office,tubular_chair,table_lamp,metal_glass_table,
+livingroom_lamp1,glass_table_office,desk_table,bathroom1,armchair2,apples,bar_chair,
+bar_table,bathroom_vanity,beige_sofa_2seats,beige_sofa,burlap_sofa,children_bed,
+contemp_living_room,crib,double_vanity,kids_desk_chair,kids_desk_table,kids_shelves,
+kids_wooden_desk,kitchen_stool,leather_sofa,living_lamp,living_room_table,modern_armchair,
+plastic_chair,table_wood_and_iron,white_kitchen_chair,wooden_office_alder_table,
+wooden_office_pear_table_rect,wooden_office_pear_table,wooden_office_teak_table,
+white_kitchen_table,bandeja,beach_chair,calla_lily_with_roses,chandelier-lamp,
+coffee_machine,com_bath,com_bath2_cepillo,com_bath2_esponja,com_bath2_jabon_pijo,
+com_bath2_peineta,#com_bath2_soap,com_bath3_toalla,corner_bathtub,creamer,cup,
+frame1,frame2,glasses,medicoscopia_bottle,medicoscopia_bottle2,medicoscopia_box,
+penbox,phone,small_lavatory,sugar,teapot,pencil2,sofa_white_beige,baby_high_chair,
+basic_camera,birthday_cake,child_swing,christmas_tree,clothes_washing_machine,
+dryer_machine,electric_water_heater_big,electric_water_heater,external-unity-air-conditioning,
+folded_clothes,gaz_water_heater,inkjet_and_scanner_printer,intercom_with_screen,intercom,
+internal-unity-air-conditioning,letters_box,mini_stereo,mp3_base_for_ipad,puff,reflex_camera,
+sneakers,stereo_amplifier,water_cooler,woman_shoes,japanese_style_screen,basketball_net_and_board,
+broom,curtain,dart_game,shovel,ficus,flipper,jacuzzi,wood_logs,cat,dog,elevator-door,elevator,
+fireplace1,fireplace2,indoor-bike,peugeot-308,rectangle-swimming-pool,renault-scenic,round-swimming-pool,
+sandpit,yamaha-yzr-r6,cardboard-box,chest-freezer,clothes-horse,coffee-table2,dog-house,garden-faucet,
+open-cardboard-box,punching-ball,scooter,shopping-basket,squeezer,step-ladder-metal,step-ladder-wood,
+stroller,trampoline,tricycle,wall-hanger,aquarium,bonsai-tree,changing-table,clothes-basket,
+diving-board,oll-house,doll,furnace,garage-door,hospital-bed,induction-cooker-2-zones,
+induction-cooker-4-zones,mocassin,mower,rabbit,roasted-chicken,round-carpet,swimming-pool,
+video-projector,wall-flat-tv,air-mattress,truck,ceiling-lamp,turn-window,tablet,door,double_door_2,
+double_door_with_little_part,double_door,window_2x1_medium_with_large_pane,window_2x1_with_sliders,
+window_2x3_arched,window_2x3_regular,window_2x3,window_2x4_arched,window_2x4,window_2x6,window_3x1,
+window_4x1,window_4x3_arched,window_4x3,window_4x5,iron-railing-1,iron-railing-2,iron-railing-3.
+
