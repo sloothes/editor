@@ -245,8 +245,10 @@
 
 		//	sweethome models loader (admin). Imports .obj model to database.
 
-			(function( canvas,next_doc,prev_doc,name_input,increase,decrease,
-				scale_input,load_button,save_button,img_viewer,collection_droplist ){
+			(function( 
+				canvas,next_doc,prev_doc,name_input,increase,decrease,scale_input,
+				load_button,apply_button,save_button,img_viewer,collection_droplist 
+			){
 
 				var model; var index = 0, limit = 100, items = []; var names = {};
 
@@ -438,6 +440,37 @@
 						scale_input.value = value.toFixed(3);
 					}
 
+					increase.addEventListener( "click", onMouseClick );
+					decrease.addEventListener( "click", onMouseClick );
+					increase.addEventListener( "mousedown", onMouseDown );
+					decrease.addEventListener( "mousedown", onMouseDown );
+
+				})();
+
+			//	Apply Model Matrix button.
+
+				(function(){
+
+					var interval; 
+
+					watch( apply_button, "onclick", function( prop, event ){
+
+						if ( !model ) return; model.traverse(function(child){
+							if ( child.geometry ) child.geometry.applyMatrix( model.matrix );
+						});
+
+					//	setTimeout( function(){
+						model.position.set(0,0,0); model.rotation.set(0,0,0); model.scale.set(1,1,1);
+					//	});
+
+					});
+
+					apply_button.addEventListener( "click", function(){
+						clearTimeout( interval ); interval = setTimeout(function(){
+							callWatchers( apply_button, "onclick", "click" );
+						}, 250);
+					})
+
 				})();
 
 			//	Save to database button.
@@ -450,9 +483,10 @@
 
 						if ( !model ) return;
 
-						scene.remove(model); model = undefined; // last, important!
-						scale_input.value = ""; // update scale_input.
+						scene.remove(model); scale_input.value = ""; // update scale_input.
 
+					//	at the very end.
+						model = undefined; // important!
 					});
 
 					save_button.addEventListener( "click", function(){
@@ -464,16 +498,17 @@
 				})();
 
 			})( 
-				TabUI.ModelLoader.tab.querySelector("canvas#model-loader-viewer"),    // canvas,
-				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-next"),      // next_doc,
-				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-previous"),  // prev_doc,
-				TabUI.ModelLoader.tab.querySelector("input#model-loader-name-input"), // name_input,
+				TabUI.ModelLoader.tab.querySelector("canvas#model-loader-viewer"),     // canvas,
+				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-next"),       // next_doc,
+				TabUI.ModelLoader.tab.querySelector("li#model-loader-doc-previous"),   // prev_doc,
+				TabUI.ModelLoader.tab.querySelector("input#model-loader-name-input"),  // name_input,
 				TabUI.ModelLoader.tab.querySelector("li#model-loader-scale-increase"), // increase,
 				TabUI.ModelLoader.tab.querySelector("li#model-loader-scale-decrease"), // decrease,
 				TabUI.ModelLoader.tab.querySelector("input#model-loader-scale-input"), // scale_input,
-				TabUI.ModelLoader.tab.querySelector("div#model-loader-load-button"),  // load_button,
-				TabUI.ModelLoader.tab.querySelector("div#model-loader-save-button"),  // save_button,
-				TabUI.ModelLoader.tab.querySelector("img#model-loader-image-viewer"), // img_viewer,
+				TabUI.ModelLoader.tab.querySelector("div#model-loader-load-button"),   // load_button,
+				TabUI.ModelLoader.tab.querySelector("div#model-loader-apply-matrix"),  // apply_button,
+				TabUI.ModelLoader.tab.querySelector("div#model-loader-save-button"),   // save_button,
+				TabUI.ModelLoader.tab.querySelector("img#model-loader-image-viewer"),  // img_viewer,
 				TabUI.ModelLoader.tab.querySelector("select#model-loader-collection-droplist") // collection_droplist,
 			);
 
