@@ -187,7 +187,7 @@
 
 					function(err){
 
-						if (err) throw err;
+						if (err) throw err; // debugMode && console.log( "result:", result );
 
 						if ( !result ) return collection.insert(data, function(err){ 
 							if (err) throw err; console.log(keyword, data.uuid, "saved!" )
