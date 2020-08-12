@@ -456,17 +456,17 @@
 
 					var interval; 
 
-					watch( save_button, "onclick", function( prop, event, group ){
+					watch( save_button, "onclick", function( prop, event ){
 
-						if ( !group ) return;
+						if ( !model ) return;
 
-						model = undefined; // last, important!
+						scene.remove(model); model = undefined; // last, important!
 
 					});
 
 					save_button.addEventListener( "click", function(){
 						clearTimeout( interval ); interval = setTimeout(function(){
-							callWatchers( save_button, "onclick", "click", model );
+							callWatchers( save_button, "onclick", "click" );
 						}, 250);
 					})
 
