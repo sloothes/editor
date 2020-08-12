@@ -381,17 +381,22 @@
 
 								var s = 0.001; group.scale.set(s,s,s); // scale.
 								group.name = name; scene.add( group ); model = group;
-							//  when add to scene apply matrix to children geometries.
-								group.traverse(function(child){ 
-									if ( child.geometry ) child.geometry.applyMatrix( group.matrix );
-								}); group.scale.set(1,1,1); // group.position.set(0,0,0); group.rotation.set(0,0,0);
 
-							//	group.traverse(function(mesh){ entities.add(object); })
-							//	var entity_droplist = document.querySelector("select#editor-entities-droplist");
-							//	entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
+								setTimeout(function(){
+								//  when add to scene apply matrix to children geometries.
+									group.traverse(function(child){ 
+										if ( child.geometry ) child.geometry.applyMatrix( group.matrix );
+									}); 
+								});
 
-								entities.add( group ); debugMode && console.log( group );
-								scale_input.value = group.scale.y.toFixed(3); // update scale_input.
+								setTimeout(function(){
+									group.scale.set(1,1,1); // group.position.set(0,0,0); group.rotation.set(0,0,0);
+								//	group.traverse(function(mesh){ entities.add(object); })
+								//	var entity_droplist = document.querySelector("select#editor-entities-droplist");
+								//	entity_droplist && callWatchers( entity_droplist, "onchange", "change", entity_droplist.value = group.id );
+									entities.add( group ); debugMode && console.log( group );
+									scale_input.value = group.scale.y.toFixed(3); // update scale_input.
+								});
 
 							}); // end obj loader.
 
