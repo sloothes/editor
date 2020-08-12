@@ -487,20 +487,51 @@
 
 					var interval; 
 
-					//	"names",imgur",                  // meta-data collections,
+					//	"models",                        // entry collection,
+					//	"names",imgur",                  // meta collections,
 					//	"groups",objects","geometries",  // data collections,
 					//	"materials","textures","images", // data collections,
-					//	"models"                         // entry collections,
+
+					function saveto( collection, data, keyword ){
+
+						var result; // important!
+
+						collection.find({uuid:data.uuid}).forEach(
+
+							function(doc){
+
+								result = doc.uuid; // important!
+								collection.update({_id:doc._id}, {$set:data}, function(err){
+									if (err) throw err; console.log(keyword, doc.uuid, "updated!" )
+								}).catch(function(err){ console.error(err); });
+
+							},
+
+							function(err){
+
+								if (err) throw err; // debugMode && console.log( "result:", result );
+								if ( !result ) return collection.insert(data, function(err){ 
+									if (err) throw err; console.log(keyword, data.uuid, "saved!" )
+								}).catch(function(err){ console.error(err); });
+							}
+
+						).catch(function(err){ console.error(err); });
+
+					}
 
 					watch( save_button, "onclick", function( prop, event, object ){
 
-						if ( !db ) return; if ( !object ) return;
+					//	apply model matrix to children geometries.
+						if ( !object ) return; object.traverse(function(child){
+							if ( child.geometry ) child.geometry.applyMatrix( object.matrix );
+						}); object.position.set(0,0,0); object.rotation.set(0,0,0); object.scale.set(1,1,1);
 
 					//	collections.
 
+						if ( !db ) return;
+
 						var Names = db.collection("names"); if ( !Names ) return;
 						var Models = db.collection("models"); if ( !Models ) return;
-
 						var Groups = db.collection("groups"); if ( !Groups ) return;
 						var Objects = db.collection("objects"); if ( !Objects ) return;
 
@@ -510,48 +541,12 @@
 						var Geometries = db.collection("geometries"); if ( !Geometries ) return;
 
 					//	json.
-
 						var meta = { images:{}, textures:{}, materials:{}, geometries:{} }; 
 						var json = object.toJSON( meta );  debugMode && console.log( json, meta );
 						var group = json.object; debugMode && console.log( "group:", group );
 						var children = json.object.children; debugMode && console.log( "children:", children );
 
-						var inserts = []; var updates = [];
-
-						function saveto( collection, data, keyword ){
-
-							var result; // important!
-
-							collection.find({uuid:data.uuid}).forEach(
-
-								function(doc){
-									result = doc.uuid; // important!
-									updates.push( new Promise(function(resolve,reject){
-										collection.update({_id:doc._id}, {$set:data}, function(err){
-											if (err) reject( err ); 
-										}).then(function(){
-											console.log(keyword,doc.uuid,"updated!"); resolve();
-										});
-									}));
-								},
-
-								function(err){
-									if (err) throw err; debugMode && console.log( "result:", result );
-									if (!result) inserts.push( new Promise(function(resolve,reject){
-										collection.insert(data, function(err){ 
-											if (err) reject ( err ); 
-										}).then(function(){
-											console.log(keyword, data.uuid, "saved!" ); resolve();
-										});
-									}));
-								}
-
-							).catch(function(err){ console.error(err); });
-
-						}
-
 					//	save meta.
-
 						for (var key in meta.images){ saveto(Images, meta.images[key], "image"); }
 						for (var key in meta.textures){ saveto(Textures, meta.textures[key], "texture"); }
 						for (var key in meta.materials){ saveto(Materials, meta.materials[key], "material"); }
