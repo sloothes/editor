@@ -32,19 +32,16 @@
 	(function( tab ){
 
 	//	ModelLoader viewer.
-
-		const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
+	//	const dummy_src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
 		var row = document.createElement("h3"); row.style.cssText = "height:260px;border:none;text-align:center;"; // margin-right:15px;
-
 		var canvas = document.createElement("canvas"); canvas.width = 256; canvas.height = 256; canvas.id = "model-loader-viewer";
 		canvas.style.cssText = "width:256px;height:256px;margin:auto;";
 	//	canvas.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
-
 		var img = new Image(256,256); img.id = "model-loader-image-viewer"; img.src = dummy_src; img.style.cssText = "margin:0 30px;display:none;"; 
 		watch( img, "onload",  function(prop, event, value){ canvas.getContext( "2d" ).drawImage( img, 0, 0, canvas.width, canvas.height ); });
 		watch( img, "onerror", function(prop, event, value){ canvas.getContext( "2d" ).clearRect( 0, 0, canvas.width, canvas.height ); });
 		img.addEventListener("load",function(event){ callWatchers( this, "onload", "load", this.src ); })
-		img.addEventListener("error",function(err){ callWatchers( this, "onerror", "error", dummy_src ); })
+		img.addEventListener("error", function(err){ callWatchers( this, "onerror", "error", ":error.png" ); })
 	//	img.style.cssText += "background-repeat:repeat;background-image:url('https://i.imgur.com/rnZZU0i.png') !important;";
 
 		row.appendChild( img ); row.appendChild( canvas ); tab.appendChild( row );
