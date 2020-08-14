@@ -235,15 +235,16 @@
 
 				elexis = group; entities.add( elexis ); 
 
-			//	animationController = new MW.AnimationController( group );
-			//	animationController.play("mixamo.com");
-			//	debugMode && console.log( animationController );
-			//	var clock = new THREE.Clock();
-			//	(function update(){
-			//		requestAnimationFrame( update );
-			//		var delta = clock.getDelta();
-			//		animationController.update( delta );
-			//	})();
+				animationController = new MW.AnimationController( group );
+				animationController.play("mixamo.com");
+				debugMode && console.log( animationController );
+
+				var clock = new THREE.Clock();
+				(function update(){
+					requestAnimationFrame( update );
+					var delta = clock.getDelta();
+					animationController.update( delta );
+				})();
 
 			}, function(e){
 
