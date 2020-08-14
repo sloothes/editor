@@ -214,10 +214,11 @@
 		<script>
 			
 			var loader = new THREE.FBXLoader();
-			loader.load( "/characters/sexygirl/HotGirl.fbx", function( group ){
+			loader.load( "/characters/sexygirl/Idle.fbx", function( group ){
 
 				scene.add( group ); debugMode && console.log( group );
 				animationController = new MW.AnimationController( group );
+				animationController.play("mixamo.com");
 				debugMode && console.log( animationController );
 
 				var clock = new THREE.Clock();
@@ -236,7 +237,7 @@
 
 
 			}, function(e){
-				
+
 			}, function(err){
 				console.error(err);
 			});
