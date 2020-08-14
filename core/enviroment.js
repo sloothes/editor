@@ -145,12 +145,14 @@
 
 
 //	Ground Helper (component).
+
 	const groundHelper = new THREE.GridHelper( 300, 300, 0x444444, 0x444444 );
 	groundHelper.name = "ground helper";
 	scene.add( groundHelper );
 
 
 //	Ground Raycast Helper (component).
+
 	const raycastHelper = new THREE.Mesh(
 		new THREE.CircleBufferGeometry( 0.5, 32 ).rotateX(-Math.PI/2),
 		new THREE.MeshBasicMaterial( { color:0xffff00, wireframe:true} )
