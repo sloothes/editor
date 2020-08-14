@@ -228,7 +228,7 @@
 				var s = 0.45; group.scale.set(s,s,s); 
 
 				group.children.forEach(function(mesh){
-					if ( mesh.isMesh ) mesh.material = new THREE.MeshStandardMaterial();
+					if ( mesh.isMesh ) mesh.material = new THREE.MeshStandardMaterial({skinning:true});
 				});
 
 				scene.add( group ); debugMode && console.log( group );
