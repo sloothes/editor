@@ -153,21 +153,23 @@
 
 //	Ground Raycast Helper (component).
 
-	const raycastHelper = new THREE.Mesh(
-		new THREE.CircleBufferGeometry( 0.5, 32 ).rotateX(-Math.PI/2),
-		new THREE.MeshBasicMaterial( { color:0xffff00, wireframe:true} )
-	);  raycastHelper.name = "raycast helper"; scene.add(raycastHelper);
+	const raycastObject = new THREE.Object3D();
 
 	setTimeout( function(){
 
 		var raycaster = new THREE.Raycaster();
+
+	//	var raycastHelper = new THREE.Mesh(
+	//		new THREE.CircleBufferGeometry( 0.5, 32 ).rotateX(-Math.PI/2),
+	//		new THREE.MeshBasicMaterial( { color:0xffff00, wireframe:true} )
+	//	);  raycastHelper.name = "raycast helper"; scene.add(raycastHelper);
 
 		renderer.domElement.addEventListener("mousemove", function(e) {
 			camera.updateMatrixWorld(); // important!
 			raycaster.setFromCamera( mouse, camera );
 			var intersects = raycaster.intersectObject( ground );
 			if ( !intersects.length ) return;
-			raycastHelper.position.copy( intersects[0].point );
+			raycastObject.position.copy( intersects[0].point );
 		});
 
 	});
