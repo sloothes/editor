@@ -121,12 +121,12 @@
 
 	const clock = new THREE.Clock();
 
-	(function update(){
+	setTimeout(function update(){
 		requestFrameID = requestAnimationFrame( update );
 		var delta = clock.getDelta();
 		var elapsed = clock.getElapsedTime();
 		world.step( Math.min( delta, 0.02 ) );
-	})();
+	});
 
 
 //	Ground (component).
@@ -143,9 +143,32 @@
 	ground.position.y = 0;
 	octree.importThreeMesh( ground ); // important!
 
+
 //	Ground Helper (component).
 	const groundHelper = new THREE.GridHelper( 300, 300, 0x444444, 0x444444 );
 	groundHelper.name = "ground helper";
 	scene.add( groundHelper );
 
+
+//	Ground Raycast Helper (component).
+	const raycastHelper = new THREE.Mesh(
+		new THREE.CircleBufferGeometry( 0.5, 32 ).rotateX(-Math.PI/2),
+		new THREE.MeshBasicMaterial( { color:0xffff00, wireframe:true} )
+	);  
+
+	raycastHelper.visible = false; raycastHelper.name = "raycast helper";
+
+	setTimeout( function(){
+
+		var raycaster = new THREE.Raycaster();
+
+		renderer.domElement.addEventListener("mousemove", function(e) {
+			camera.updateMatrixWorld(); // important!
+			raycaster.setFromCamera( mouse, camera );
+			var intersects = raycaster.intersectObject( ground );
+			if ( !intersects.length ) return;
+			raycastHelper.position.copy( intersects[0].point );
+		});
+
+	});
 
