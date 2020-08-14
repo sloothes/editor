@@ -217,7 +217,7 @@
 			THREE.Loader.Handlers.add( /.tga/, new THREE.TGALoader() );
 
 			var loader = new THREE.FBXLoader();
-			loader.load( "/characters/sexygirl/Idle.fbx", function( group ){
+			loader.load( "/characters/elexis/Idle.fbx", function( group ){
 
 				scene.add( group ); debugMode && console.log( group );
 				animationController = new MW.AnimationController( group );
@@ -230,14 +230,6 @@
 					var delta = clock.getDelta();
 					animationController.update( delta );
 				})();
-
-
-
-
-
-
-
-
 
 			}, function(e){
 
