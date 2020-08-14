@@ -213,6 +213,19 @@
 
 		<script>
 
+			
+			var loader = new THREE.FBXLoader();
+			loader.load( "/characters/sexygirl/HotGirl.fbx", function( group ){
+
+				scene.add( group ); debugMode && console.log( group );
+				animationController = new MW.AnimationController( group );
+
+				var clock = new THREE.Clock();
+				(function update(){
+					requestAnimationFrame( update );
+					var delta = clock.getDelta();
+					animationController.update( delta );
+				})();
 
 
 
@@ -222,11 +235,7 @@
 
 
 
-
-
-
-
-
+			});
 
 		</script>
 
