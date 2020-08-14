@@ -229,9 +229,8 @@
 
 				group.children.forEach(function(mesh){
 					if ( mesh.isMesh ) {
-					//	var material = new THREE.MeshStandardMaterial({skinning:true});
-					//	mesh.material = material; 
-						material_entities.add( mesh.material );
+					//	mesh.material = new THREE.MeshStandardMaterial({skinning:true});
+						entities.add( mesh ); material_entities.add( mesh.material );
 					}
 				});
 
