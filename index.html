@@ -213,7 +213,9 @@
 		<script src="/editor/src/model-loader-inputs.js"></script>
 
 		<script>
-			
+
+			THREE.Loader.Handlers.add( /.tga/, new THREE.TGALoader() );
+
 			var loader = new THREE.FBXLoader();
 			loader.load( "/characters/sexygirl/Idle.fbx", function( group ){
 
