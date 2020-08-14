@@ -225,8 +225,15 @@
 			var loader = new THREE.FBXLoader();
 			loader.load( "/characters/elexis/ElexisStandingPose.fbx", function( group ){
 
-				var s = 0.45; group.scale.set(s,s,s); elexis = group;
+				var s = 0.45; group.scale.set(s,s,s); 
+
+				group.children.forEach(function(mesh){
+					if ( mesh.isMesh ) mesh.material = new THREE.MeshStandardMaterial();
+				});
+
 				scene.add( group ); debugMode && console.log( group );
+
+				elexis = group; entities.add( elexis ); 
 
 			//	animationController = new MW.AnimationController( group );
 			//	animationController.play("mixamo.com");
