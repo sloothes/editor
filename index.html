@@ -212,13 +212,13 @@
 		<script src="/editor/src/model-loader-inputs.js"></script>
 
 		<script>
-
 			
 			var loader = new THREE.FBXLoader();
 			loader.load( "/characters/sexygirl/HotGirl.fbx", function( group ){
 
 				scene.add( group ); debugMode && console.log( group );
 				animationController = new MW.AnimationController( group );
+				debugMode && console.log( animationController );
 
 				var clock = new THREE.Clock();
 				(function update(){
@@ -235,6 +235,10 @@
 
 
 
+			}, function(e){
+				
+			}, function(err){
+				console.error(err);
 			});
 
 		</script>
