@@ -827,7 +827,7 @@
 		//	mirror.visible = !mirror.visible; 
 		//	ground.visible = !ground.visible; 
 			groundHelper.visible = !groundHelper.visible; 
-
+			raycastHelper.visible = !raycastHelper.visible;
 
 		//	Add entities.
 		//	entities.add(scene);
@@ -835,6 +835,7 @@
 		//	entities.add(ground);
 		//	entities.add(localPlayer);
 			entities.add(groundHelper);
+			entities.add(raycastHelper);
 			entities.add(localPlayer.getObjectByName("local helper"));
 
 			cameraControls.setLatLon(5.128, 270.675);
