@@ -156,9 +156,7 @@
 	const raycastHelper = new THREE.Mesh(
 		new THREE.CircleBufferGeometry( 0.5, 32 ).rotateX(-Math.PI/2),
 		new THREE.MeshBasicMaterial( { color:0xffff00, wireframe:true} )
-	);  
-
-	raycastHelper.visible = false; raycastHelper.name = "raycast helper";
+	);  raycastHelper.name = "raycast helper"; scene.add(raycastHelper);
 
 	setTimeout( function(){
 
