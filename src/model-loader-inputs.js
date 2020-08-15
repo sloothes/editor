@@ -21,6 +21,7 @@
 	//	collections: "animals,bathroom,bedroom,doors,walls,windows,floor,kitchen,lights,"
 	//	"office,livingroom,staircases,vehicles,exterior,trees,characters,miscellaneous,"
 
+		names.bathroom = "";
 		names.trees = "palm";
 		names.vehicles = "conceptSedan01,peugeot308cc";
 		names.characters = "blondeElexisNude";
